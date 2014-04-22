@@ -1,0 +1,35 @@
+.genlist-list li {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+    padding: 0.75em 15px;
+    position: relative;
+}
+
+.genlist-list li.genlist-item {
+    opacity: 0.5;
+    transition: opacity 0.3s ease-out 0s;
+}
+
+.genlist-list li.genlist-item:hover {
+    opacity: 1;
+}
+
+.genlist-active.genlist-item, .genlist-active.genlist-item *, .genlist-active .hris-item-icon i {
+    color: #333333;
+    font-weight: bold;
+    opacity: 1 !important;
+}
+
+.genlist-active {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+}
+
+.gen-btn-list { position: relative; margin: 15px 30px 15px 15px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 15px; height: 50px; }
+.gen-btn-list ul { float: right; border-left: 0 !important; }
+.gen-btn-list ul li { margin: 0; padding: 0; }
+.gen-btn-list ul li:hover { background: transparent; border: 0; }
+.gen-btn-list .active-btn, .gen-btn-list .active-btn a { opacity: 1; }

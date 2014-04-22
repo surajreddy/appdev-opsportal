@@ -1,0 +1,25 @@
+.sidr {
+    display: none;
+    position: absolute;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    z-index: 999999;
+    width: 200px;
+    overflow-x: none;
+    overflow-y: auto;
+    background: #333;
+    color: #fff;
+}
+
+.sidr.right {
+    left: auto;
+    right: -500px;
+}
+
+.sidr.left {
+    left: -200px;
+    right: auto;
+}
+
+.sidr-newitem { background: #f0f0f0; color: #333; width: 500px; border-left: 1px solid rgba(0, 0, 0, 0.1); }

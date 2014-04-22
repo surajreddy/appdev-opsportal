@@ -1,0 +1,27 @@
+{
+    "name": "appdev-opsportal",
+    "version": "0.0.1",
+    "description": "(plugin) A portal for our common operation functions.",
+    "main": "module.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "make test",
+        "postinstall": "node setup/setup.js",
+        "postupdate": "node setup/setup.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/appdevdesigns/appdev-opsportal.git"
+    },
+    "author": "Johnny Hausman",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/appdevdesigns/appdev-opsportal/issues"
+    },
+    "homepage": "https://github.com/appdevdesigns/appdev-opsportal",
+    "dependencies": {
+        "ad-utils": "git://github.com/appdevdesigns/ad-utils"
+    }
+}

@@ -1,0 +1,13 @@
+steal(
+<%
+// we are given an array of tools to load:  ToolName
+// we need to convert this list into a series of steal commands to load the 
+// setup.js file for the tool:
+
+var listCommands = [];
+for (var t=0; t< listTools.length; t++) {
+    listCommands.push( 'opstools/'+listTools[t]+'/setup.js');
+}
+var list = '    "' + listCommands.join('",\n    "') + '"';
+%><%- list %>
+);
