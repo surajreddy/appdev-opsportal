@@ -12,11 +12,18 @@ module.exports = {
      ],
 
 /*
+     // list any directories that need to be created in the base sails path
+     directories:[
+         '/data/[moduleName]'
+     ],
+
+
      // list the directories to create symbolic links to:
      //     format:  [desiredSailsDir] : [current/plugin/dir]
      links:{
          'api/models/[moduleName]' : 'api/models'
      },
+     
 
      // List the directories that contain files that need to become linked
      // to in Sails
@@ -39,6 +46,30 @@ module.exports = {
          { path:'config/policies.js', append:true, text:'require(\'[moduleName]\').policies(policies);\n'},
 
      ],
+
+
+     // list the files that should be added to the above defaults
+     additions:{
+
+        // ex: create a [sailsRoot]/data/[moduleName]/templates_email/  -> [pluginDir]/data/templates_email
+        links:{
+            'data/[moduleName]/templates_email': 'data/templates_email'  
+        }
+    },
+
+
+     // list the files that should be excluded from the above default actions
+     // if you want to keep
+     ignore:{
+
+        // this is the default config/local.js  merge with all the non standard config files
+        // in your config directory.  If you don't want one of those files merged into
+        // config/local.js, then list the file name here.  It needs to be a key in the object
+        // definition.
+        configLocal:{
+            'opsportal.js':1    // don't include our config/opsportal.js file in our config/local.js mash up
+        }
+    }
 
  */
 

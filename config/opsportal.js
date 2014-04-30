@@ -65,23 +65,24 @@ module.exports.opsportal = {
       },
 
  */
-//      {
-//          // User Profile Tool
-//          icon:'fa-user',
-//          key:'profile',
-//          label:'Profile',
-//          isDefault:false,
-//          tools:[{
-//              // Hris User Profile Tool
-//              controller:'HrisUserProfile',
-//              label:'Profile',
-//              isDefault: true,
-//              permissions:[
-//                  'hris.profile'
-//                  , 'developer'
-//              ]
-//          }]
-//      },
+      {
+          // User Profile Tool
+          icon:'fa-user',
+          key:'profile',
+          label:'Profile',
+          isDefault:false,
+          tools:[{
+              // Hris User Profile Tool
+              controller:'HrisUserProfile',
+              label:'Profile',
+              isDefault: true,
+              permissions:[
+                  'hris.profile'
+                  , 'developer'
+              ]
+          }]
+      },
+
       {
           // HR Admin Tools
           icon:'fa-wrench',
@@ -101,38 +102,38 @@ module.exports.opsportal = {
               }
           ]
       },
-//      {
-//          // Balance Report Tool
-//          icon:'fa-user',
-//          key:'balancereporttool',
-//          label:'Balance Report Tool',
-//          isDefault:true,
-//          tools:[{
-//              // Balance Report Tool
-//              controller:'BalanceReportTool',
-//              label:'Balance Report Tool',
-//              isDefault: true,
-//              permissions:[
-//                  //'hris.profile'
-//                  //, 'developer'
-//				'developer'
-//              ]
-//          }]
-//      },
-//      {
-//          icon:'fa-cogs',
-//          key:'opsleader',
-//          label:'Ops Leader',
-//          tools:[{
-//              // GMA Matrix Entry tool
-//              controller:'GMAMatrix',
-//              label:'GMA Matrix',
-//              isDefault: true,
-//              permissions:[
-//                  'gma.matrix'
-//                  , 'developer'
-//              ]
-//          }]
-//      }
+      {
+          // MPD Report Tool
+          icon:'fa-user',
+          key:'mpdreporttool',
+          label:'MPD Report Tool',
+          isDefault:true,
+          tools:[{
+              // Balance Report Tool
+              controller:'MPDReport',
+              label:'MPD Report Tool',
+              isDefault: true,
+              permissions:[
+                'mpdreports.balancereports',
+				'developer'
+              ]
+          }]
+      },
+      {
+          // GMA Matrix Tool
+          icon:'fa-cogs',
+          key:'opsleader',
+          label:'Ops Leader',
+          tools:[{
+              // GMA Matrix Entry tool
+              controller:'GMAMatrix',
+              label:'GMA Matrix',
+              isDefault: true,
+              permissions:[
+                  'gma.matrix'
+                  , 'developer'
+              ]
+          }]
+      }
   ]
 };
