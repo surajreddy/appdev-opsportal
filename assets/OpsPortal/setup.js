@@ -8,7 +8,6 @@ steal(
 ).then(
 		'js/jquery.sidr.min.js',
         'styles/jquery.sidr.dark.css',
-
 		'bootstrap/js/bootstrap-datepicker.js',
 
 //        'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20133.20.min.js',
