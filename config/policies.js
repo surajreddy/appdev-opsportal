@@ -15,8 +15,8 @@
 module.exports = {
 
     'appdev-opsportal/OpsPortalController': {
-        config:['isAuthenticated', 'initUser', 'canOpsPortal', 'opsPortalUserConfig'],
-        requirements:['isAuthenticated', 'initUser', 'canOpsPortal', 'opsPortalUserConfig']
+        config:['sessionAuth', 'initUser', 'canOpsPortal', 'opsPortalUserConfig'],
+        requirements:['sessionAuth', 'initUser', 'canOpsPortal', 'opsPortalUserConfig']
     }
 
 };
