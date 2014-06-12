@@ -42,7 +42,8 @@ function(){
             $(document).ready(sizeContent);
             $(window).resize(sizeContent);
 
-
+			// display progress bar as tools load
+			//this.progress(80, $('#opsportal-loading'));
 
             // OK, one of the problems with resizing our tools comes when
             // they are currently not displayed.  Some widgets (GenLists.js)
@@ -171,6 +172,10 @@ AD.comm.hub.subscribe('**', function(key, data){
             AD.comm.hub.publish('opsportal.menu.toggle', { width: width });
         }
 */
+		'progress': function(percent, $element) {
+		    var progressBarWidth = percent * $element.width() / 100;
+			$element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "%&nbsp;");
+		}
 
     });
 
