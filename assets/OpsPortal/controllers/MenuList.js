@@ -41,6 +41,7 @@ function(){
         createArea: function( area) {
             console.log(area);
 
+            var $el = this.element.find('.opsportal-nav-list > ul');
             this.element.find('.opsportal-nav-list > ul')
                 .append(can.view(this.options.templateItem, {area:area}));
 
