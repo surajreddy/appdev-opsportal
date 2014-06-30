@@ -1,6 +1,6 @@
 {
   "name": "appdev-opsportal",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "(plugin) A portal for our common operation functions.",
   "main": "module.js",
   "directories": {
