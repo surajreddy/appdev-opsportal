@@ -26,12 +26,18 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs'
+                    templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
+                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;
 
-            this.initDOM();
+
+            this.hiddenElements = [];           // used to track which elements we have hidden
+
+
+            this.initDOM();                     // embedded list view
+            this.initPortal();                  // popup portal view
             this.requestConfiguration();
 
 
@@ -42,7 +48,8 @@ function(){
             $(document).ready(sizeContent);
             $(window).resize(sizeContent);
 
-
+			// display progress bar as tools load
+			//this.progress(80, $('#opsportal-loading'));
 
             // OK, one of the problems with resizing our tools comes when
             // they are currently not displayed.  Some widgets (GenLists.js)
@@ -69,21 +76,79 @@ function(){
 
 
 
+        displayPortal: function() {
+
+            var self = this;
+            this.hiddenElements = [];
+
+            // take all the body.children  && hide them.
+            $('body').children().each(function(indx){
+                var $el = $(this);
+                if ($el != self.portalPopup) {
+                    $el.hide();
+                    self.hiddenElements.push($el);
+                }
+            });
+
+            // Now show our Portal:
+            this.portalPopup.show();
+
+        },
+
+
+
+        hidePortal: function() {
+
+            var self = this;
+            this.hiddenElements.forEach(function($el) {
+                $el.show();
+            });
+
+            // Now show our Portal:
+            this.portalPopup.hide();
+        },
+
+
+
         initDOM: function() {
 
-            this.element.html(can.view(this.options.templateDOM, {} ));
+            this.element.html(can.view(this.options.templateList, {} ));
 
-            this.menu = new AD.controllers.OpsPortal.MenuList(this.element.find('.opsportal-menu-widget'));
-            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.element.find('.opsportal-content'));
 
-            this.element.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+//// TODO: determine size of el
+//// TODO: if large enough, display .list-content
+//// TODO: create 'bootstrap' routine to insert resources into web page
+
+//// FEATURE: Notifications : create mechanism for opstools to indicate how many tasks/todo's they want to register
+//// FEATURE: SubMenu's : display additional tools in an area using SubMenu's
+
+
+//            this.element.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+        },
+
+
+
+        // this is the popup Ops Portal that takes over the page:
+        initPortal:function() {
+
+            this.portalPopup = $('<div class="opsportal-portal-popup">');
+            this.portalPopup.hide();
+            this.portalPopup.html(can.view(this.options.templateDOM, {} ));
+
+            this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.opsportal-menu-widget'));
+            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.opsportal-content'));
+//            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+
+
+            $('body').append(this.portalPopup);
+
         },
 
 
 
         resize: function() {
 
-            var newHeight = $(window).height()  - this.element.find(".opsportal-container-masthead").outerHeight(true);
+            var newHeight = $(window).height()  - this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
 
             // notify of a resize action.
             // -1px to ensure sub tools don't cause page scrolling.
@@ -150,10 +215,23 @@ AD.comm.hub.subscribe('**', function(key, data){
                         });
                     }
 
+
+                    self.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+
                 }
 
             });
 
+        },
+
+
+
+        '.opsportal-menu-trigger-text click' : function( $el, ev) {
+
+            // this should show the Portal Popup
+            this.displayPortal();
+
+            ev.preventDefault();
         },
 
 
@@ -171,6 +249,10 @@ AD.comm.hub.subscribe('**', function(key, data){
             AD.comm.hub.publish('opsportal.menu.toggle', { width: width });
         }
 */
+		'progress': function(percent, $element) {
+		    var progressBarWidth = percent * $element.width() / 100;
+			$element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "%&nbsp;");
+		}
 
     });
 

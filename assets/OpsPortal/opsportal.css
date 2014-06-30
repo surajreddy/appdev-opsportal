@@ -139,3 +139,7 @@ div { position: relative; }
 .opsportal-filter ul li.opsportal-filter-label { border: 0; font-weight: bold; text-transform: uppercase; color: #999999; }
 .opsportal-filter ul li a { display: inline-block; }
 .opsportal-filter .filter-on { background: #333 !important; border-radius: 0 !important; color: #fff; opacity: 0.75; }
+
+/* =OpsPortal Avatar */
+.opsportal-user-avatar { border: 1px solid rgba(0, 0, 0, 0.1); display: block; height: auto; margin: 10px 0; width: 125px; }
+.opsportal-user-avatar-th { display: inline-block; margin: 0 10px 0 0; width: 65px; }
