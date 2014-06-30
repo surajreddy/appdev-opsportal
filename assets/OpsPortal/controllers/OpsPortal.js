@@ -92,6 +92,20 @@ function(){
 
             // Now show our Portal:
             this.portalPopup.show();
+
+        },
+
+
+
+        hidePortal: function() {
+
+            var self = this;
+            this.hiddenElements.forEach(function($el) {
+                $el.show();
+            });
+
+            // Now show our Portal:
+            this.portalPopup.hide();
         },
 
 
