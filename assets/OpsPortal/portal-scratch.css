@@ -1,5 +1,7 @@
 /* =Development */
 .rb { border: 1px solid #f00; }
+.rbg { background-color: rgba(255,0,0,0.8); }
+.gbg { background-color: #aaa; }
 
 .opsportal-checkbox { margin-top: 10px !important; }
 
@@ -86,3 +88,7 @@
     color: #FFFFFF;
     text-decoration: none;
 }
+
+.opsportal-widget-container-divider { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px; margin-top: 30px; }
+
+.opsportal-showhide { display: block; position: relative; }
