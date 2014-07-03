@@ -23,10 +23,10 @@
 .modal-dialog { width: 750px; }
 
 /* =General Global Styles */
-html, body { height: 100% !important; margin: 0; padding: 0; /*overflow: hidden; overflow-x: hidden; overflow-y: hidden; */}
+html, body { height: 100% !important; margin: 0; padding: 0; overflow: hidden; overflow-x: hidden; overflow-y: hidden; }
 body { font-family: 'proxima-nova','Helvetica Neue',Helvetica,Arial,sans-serif; color: #333; }
-a { color: #333333; text-decoration: none; opacity: 0.5; -webkit-transition:opacity .3s ease-out;-moz-transition:opacity .3s ease-out;-o-transition:opacity .3s ease-out;transition:opacity .3s ease-out; outline: 0; border: 0;}
-a:hover, a:visited { color: #333333; opacity: 1; outline: 0; border: 0;}
+a { color: #333333; text-decoration: none; opacity: 0.5; -webkit-transition:opacity .3s ease-out;-moz-transition:opacity .3s ease-out;-o-transition:opacity .3s ease-out;transition:opacity .3s ease-out; border: 0; }
+a:hover, a:visited { color: #333333; opacity: 1; border: 0;}
 div { position: relative; }
 
 .opsportal-col-centered { float: none !important; margin: 0 auto !important; }
@@ -55,6 +55,11 @@ div { position: relative; }
 .opsportal-btn-dk:hover, .opsportal-btn-dk:focus { color: #fff; }
 .opsportal-btn-lt { color: #333333; background-color: #f0f0f0; }
 .opsportal-btn-lt:hover, .opsportal-btn-lt:focus { color: #333; }
+.opsportal-btn-wj { color: #333333 !important; background-color: transparent; border: 1px solid #c0c0c0 !important; }
+.opsportal-btn-wj:hover, .opsportal-btn-wj:focus { background-color: rgb(220,220,220); color: #333 !important; border: 1px solid #c0c0c0 !important; }
+.opsportal-btn-full { width: 100%; }
+.opsportal-btn-caret { float: right; margin-top: 10px; }
+
 
 /* = OpsPortal Tables */
 .opsportal-table { border: 1px solid #cccccc; margin-top: 15px; }
