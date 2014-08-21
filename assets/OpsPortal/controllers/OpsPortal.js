@@ -15,6 +15,9 @@ steal(
 function(){
 
 
+    // make sure $ is defined:
+    if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
+    
     // create our opstools namespace for our tools.
     if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
 
@@ -45,8 +48,8 @@ function(){
             var sizeContent = function () {
                 self.resize();
             };
-            $(document).ready(sizeContent);
-            $(window).resize(sizeContent);
+            AD.ui.jQuery(document).ready(sizeContent);
+            AD.ui.jQuery(window).resize(sizeContent);
 
 			// display progress bar as tools load
 			//this.progress(80, $('#opsportal-loading'));
@@ -131,7 +134,7 @@ function(){
         // this is the popup Ops Portal that takes over the page:
         initPortal:function() {
 
-            this.portalPopup = $('<div class="opsportal-portal-popup">');
+            this.portalPopup = AD.ui.jQuery('<div class="opsportal-portal-popup">');
             this.portalPopup.hide();
             this.portalPopup.html(can.view(this.options.templateDOM, {} ));
 
@@ -140,7 +143,7 @@ function(){
 //            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
 
 
-            $('body').append(this.portalPopup);
+            AD.ui.jQuery('body').append(this.portalPopup);
 
         },
 
