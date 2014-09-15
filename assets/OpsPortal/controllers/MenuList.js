@@ -57,12 +57,12 @@ function(){
 
 
 
-        toggle: function( width ) {
+        // toggle: function( width ) {
 
-            this.element.animate({
-                left: parseInt(this.element.css('left'),10) == 0 ? -width : 0
-              });
-        },
+        //     this.element.animate({
+        //         left: parseInt(this.element.css('left'),10) == 0 ? -width : 0
+        //       });
+        // },
 
 
 
@@ -82,6 +82,7 @@ function(){
 
             var area = $el.attr('area');
             AD.comm.hub.publish('opsportal.area.show', {area:area});
+            AD.ui.jQuery.sidr( 'close', 'opsportal-menu-widget' );
             ev.preventDefault();
         }
 
