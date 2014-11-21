@@ -56,8 +56,10 @@ module.exports = {
           tools.push( data.tools[d].controller)
       }
 
+console.log('sails.config:', sails.config);
 
       res.view({
+          environment:sails.config.environment,
           listTools:tools,
           layout:false
       });

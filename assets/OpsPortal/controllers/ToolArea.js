@@ -3,8 +3,7 @@ steal(
         // List your Controller's dependencies here:
         'appdev',
         'OpsPortal/controllers/Tool.js',
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-//        'OpsPortal/views/ToolArea/ToolArea.ejs',
+        'OpsPortal/views/ToolArea/tool.ejs',
 function(){
 
 
@@ -15,7 +14,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    template_tool: '//OpsPortal/views/ToolArea/tool.ejs',
+                    template_tool: '//OpsPortal/views/ToolArea/tool.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;
@@ -105,7 +104,7 @@ function(){
         '.ad-item-add click': function($el, ev) {
 
             ev.preventDefault();
-        },
+        }
 
 
     });

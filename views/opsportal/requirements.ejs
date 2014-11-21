@@ -5,9 +5,13 @@ steal(
 // setup.js file for the tool:
 
 var listCommands = [];
-for (var t=0; t< listTools.length; t++) {
-    listCommands.push( 'opstools/'+listTools[t]+'/setup.js');
-}
+var file = '';
+if (sails.config.environment === 'production') { file = '/production.js' };
+listTools.forEach(function(tool){
+
+	listCommands.push( 'opstools/'+tool+file);
+
+})
 var list = '    "' + listCommands.join('",\n    "') + '"';
 %><%- list %>
 );

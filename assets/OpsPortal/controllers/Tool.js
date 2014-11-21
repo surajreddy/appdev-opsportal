@@ -2,6 +2,7 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
+        'OpsPortal/views/Tool/Tool.ejs',
 function(){
 
 
@@ -13,7 +14,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    templateDOM: '//OpsPortal/views/Tool/Tool.ejs',
+                    templateDOM: '//OpsPortal/views/Tool/Tool.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;
@@ -124,7 +125,7 @@ function(){
         '.ad-item-add click': function($el, ev) {
 
             ev.preventDefault();
-        },
+        }
 
 
     });

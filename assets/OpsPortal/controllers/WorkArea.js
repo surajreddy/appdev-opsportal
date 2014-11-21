@@ -3,6 +3,7 @@ steal(
         // List your Controller's dependencies here:
         'appdev',
         'OpsPortal/controllers/ToolArea.js',
+        'OpsPortal/views/WorkArea/area.ejs',
 function(){
 
 
@@ -14,7 +15,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    template_area: '//OpsPortal/views/WorkArea/area.ejs',
+                    template_area: '//OpsPortal/views/WorkArea/area.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;
@@ -81,7 +82,7 @@ function(){
         '.ad-item-add click': function($el, ev) {
 
             ev.preventDefault();
-        },
+        }
 
 
     });
