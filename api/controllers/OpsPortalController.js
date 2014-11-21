@@ -58,6 +58,7 @@ module.exports = {
 
 
       res.view({
+          environment:sails.config.environment,
           listTools:tools,
           layout:false
       });

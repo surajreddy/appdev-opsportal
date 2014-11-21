@@ -6,17 +6,20 @@ steal(
 		'OpsPortal/opsportal.css',
         'OpsPortal/controllers/MenuList.js',
         'OpsPortal/controllers/WorkArea.js',
-        'OpsPortal/classes/OpsTool.js'
+        'OpsPortal/classes/OpsTool.js',
+        'jquery',
+        'can'
 ).then(
+        'js/jquery.sidr.min.js',
         'opsportal/requirements.js'
 ).then(
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-//        'OpsPortal/views/Portal/Portal.ejs',
+       '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
+       '//OpsPortal/views/OpsPortal/taskList.ejs',
 function(){
 
 
     // make sure $ is defined:
-    if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
+   if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
     
     // create our opstools namespace for our tools.
     if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
@@ -167,6 +170,7 @@ AD.comm.hub.subscribe('**', function(key, data){
     console.log('pub:'+key);
     console.log(data);
 });
+
             AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
 
                 if (err) {

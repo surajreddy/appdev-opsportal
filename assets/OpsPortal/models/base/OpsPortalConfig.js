@@ -11,9 +11,9 @@ steal(
 //        destroy: 'DELETE /opsportalconfig/destroy/{id}.json',
         describe: function() {
             return {
-          "areas": "String",
-          "tools": "String"
-};
+              "areas": "String",
+              "tools": "String"
+            };
         },
         fieldId:'id',
         fieldLabel:'areas'

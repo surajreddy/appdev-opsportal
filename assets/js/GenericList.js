@@ -3,9 +3,8 @@ steal(
         // List your Controller's dependencies here:
         'appdev',
         '//styles/genericList.css',
-//        'HrisUI/models/Projects.js',
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-//        'HrisUI/views/ObjectList/ObjectList.ejs',
+        '//js/GenListDOM.ejs',
+        '//js/GenListItem.ejs',
 function(){
 
 
@@ -173,7 +172,7 @@ function(){
             }
 
             ev.preventDefault();
-        },
+        }
 
 
     });

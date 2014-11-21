@@ -48,4 +48,66 @@ function(){
     });
 
 
+
+    // Create an AD.Control.OpsTool.extend()  function:
+    if (typeof AD.Control.OpsTool == 'undefined') {
+
+        AD.Control.OpsTool = {
+            /**
+             * @function extend
+             *
+             * Create a AD.classes.opsportal.OpsTool object namespaced under 
+             * AD.controllers.opstools.* 
+             * 
+             * @param [string] name      The name of the controller.  The
+             *        name can be namespaced like so: 'application.info.list'.
+             *        This will create a: AD.controllers.application.info.list
+             *        controller, that you would then attach to the DOM like:
+             *        AD.controllers.application.info.list('#infoList', {
+             *          options:true
+             *        });
+             *
+             * @param [object] static    [optioinal] The static method 
+             *        definitions
+             * @param [object] instance  The instance definition
+             */
+            extend:function(name, staticDef, instanceDef) {
+
+
+                // Namespacing conventions:
+                // AD.controllers.opstools.[Tool].Tool  --> main controller for tool
+                // AD.controllers.opstools.[Tool].[controller] --> sub controllers for tool
+
+
+                // make sure our base opstools exists.
+                if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
+                
+
+                // first lets figure out our namespacing:
+                // Question: do we actually allow namespacing? 'HrisUserProfile.subTool.subsubTool'
+                var nameList = name.split('.');
+
+                // for each remaining name segments, make sure we have a 
+                // namespace container for it:
+                var curr = AD.controllers.opstools;
+                nameList.forEach(function(name) {
+
+                    if (typeof curr[name] == 'undefined' ) {
+                        curr[name] = {};
+                    }
+                    curr = curr[name];
+                })
+
+
+                // now let's create our final control:
+                // We subclass the UIController here so our UI controllers have
+                // built in translation capabilities.
+                curr.Tool = AD.classes.opsportal.OpsTool.extend(staticDef, instanceDef);
+
+            }
+        }
+
+    }
+
+
 });

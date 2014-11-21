@@ -4,7 +4,8 @@ steal(
         'appdev',
 //        'OpsPortal/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-//        'OpsPortal/views/MenuList/MenuList.ejs',
+'OpsPortal/views/MenuList/MenuList.ejs',
+'OpsPortal/views/MenuList/menuItem.ejs',
 function(){
 
 
@@ -16,7 +17,7 @@ function(){
             var self = this;
             this.options = AD.defaults({
                     templateDOM: '//OpsPortal/views/MenuList/MenuList.ejs',
-                    templateItem: '//OpsPortal/views/MenuList/menuItem.ejs',
+                    templateItem: '//OpsPortal/views/MenuList/menuItem.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;
