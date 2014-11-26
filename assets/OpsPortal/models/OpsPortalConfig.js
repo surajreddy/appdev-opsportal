@@ -4,7 +4,7 @@ steal(
 ).then( function(){
 
 
-    AD.models.OpsPortalConfig = AD.models_base.OpsPortalConfig.extend({
+    AD.Model.extend('OpsPortalConfig', { 
 /*
          findAll: 'GET /opsportalconfig',
         findOne: 'GET /opsportalconfig/{id}',
