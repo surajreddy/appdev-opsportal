@@ -11,7 +11,7 @@ steal(
         'can'
 ).then(
         'js/jquery.sidr.min.js',
-        'opsportal/requirements.js'
+        'opsportal/requirements.js'     // this returns the steal() for loading each OpsTool
 ).then(
        '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
        '//OpsPortal/views/OpsPortal/taskList.ejs',
@@ -25,8 +25,9 @@ function(){
     if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
 
     // create our OpsPortal namespace for our controllers.
-    if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-    AD.controllers.OpsPortal.OpsPortal = can.Control.extend({
+    // if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
+    // AD.controllers.OpsPortal.OpsPortal = can.Control.extend({
+    AD.Control.extend('OpsPortal.OpsPortal', { 
 
 
         init: function( element, options ) {

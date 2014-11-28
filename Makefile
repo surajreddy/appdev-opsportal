@@ -5,4 +5,8 @@ test:
     --reporter $(REPORTER) \
     test/*.js
 
+	@NODE_ENV=test mocha-phantomjs \
+    -R $(REPORTER) \
+    assets/opstools/RBAC/tests/test-all.html 
+
 .PHONY: test

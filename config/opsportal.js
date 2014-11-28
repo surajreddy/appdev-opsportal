@@ -65,6 +65,30 @@ module.exports.opsportal = {
       },
 
  */
+      ////
+      //// Administration Tools packaged with OpsPortal:
+      //// 
+      {
+          // Define the Administration Area
+          icon:'fa-cogs',
+          key:'PortalAdmin',
+          label:'Administration',
+          tools:[{
+              // Roles and Permissions
+              controller:'RBAC',
+              label:'Permissions',
+              isDefault: true,
+              permissions:[
+                  'opstool.rbac.view'
+                  , 'developer'
+              ]
+          }
+
+          // User management Interface here...
+          ]
+      },
+
+
       {
           // User Profile Tool
           icon:'fa-user',
