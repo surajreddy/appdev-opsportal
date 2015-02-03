@@ -11,12 +11,13 @@
  * http://sailsjs.org/#documentation
  */
 
+var serviceStack = ['sessionAuth', 'initUser', 'initSession', 'canOpsPortal', 'opsPortalUserConfig']
 
 module.exports = {
 
     'appdev-opsportal/OpsPortalController': {
-        config:['sessionAuth', 'initUser', 'canOpsPortal', 'opsPortalUserConfig'],
-        requirements:['sessionAuth', 'initUser', 'canOpsPortal', 'opsPortalUserConfig']
+        config: serviceStack,
+        requirements:serviceStack
     }
 
 };
