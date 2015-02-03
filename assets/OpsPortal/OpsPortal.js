@@ -16,6 +16,7 @@ steal(
         'js/jquery.sidr.min.js',
         'bootstrap/js/bootstrap-datepicker.js',
         'styles/bootstrap-wijmo.css',
+        'styles/datepicker.css',
         'jquery-wijmo.css',
         'wijmo-pro.css',
         'wijmo-open.js',
@@ -34,6 +35,14 @@ steal(
     // attach our OpsPortal to this ID :
     new AD.controllers.OpsPortal.OpsPortal('#portal');
 
+    // register our socket connection
+    AD.comm.socket.get({ url:'/opsportal/socket/register'})
+    .fail(function(err){
+        console.error(err);
+    })
+    .then(function(){
+        console.log('... OPSPORTAL:  socket registered.')
+    })
 
 });
 

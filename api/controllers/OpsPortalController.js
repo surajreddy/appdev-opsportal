@@ -15,6 +15,8 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+var AD = require('ad-utils');
+
 module.exports = {
 
 
@@ -62,6 +64,26 @@ module.exports = {
           listTools:tools,
           layout:false
       });
+  },
+
+
+  /**
+   * @function registerSocket
+   *
+   * simply calling this service using a socket connection will 
+   * register the current socket connection with this session.
+   *
+   * NOTE: the actual work happens in the policy: ADCore/api/policy/initSession.js
+   */
+  registerSocket: function(req, res) {
+
+      var id = ADCore.socket.id(req);
+      if (id) {
+        AD.log('<green>registered:</green> socket.id:'+id);
+      } else {
+        AD.log('<yellow>warn:</yellow> socket.id not registered. ');
+      }
+      ADCore.comm.success(res, { session:'registered'});
   }
 
 
