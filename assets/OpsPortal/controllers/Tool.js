@@ -30,7 +30,11 @@ function(){
             var controllerName = this.options.data.controller;
 
             if (AD.controllers.opstools[controllerName]) {
-                this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
+                if( AD.controllers.opstools[controllerName].Tool) {
+                    this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
+                } else {
+                    console.error('controller ('+controllerName+').Tool()   not found!');
+                }
             } else {
                 console.error('controller ('+controllerName+') not found!');
             }

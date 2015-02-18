@@ -16,7 +16,10 @@ module.exports={
         "wijmo-pro.js" : "js/jquery.wijmo-pro.all.3.20142.45.min.js",       // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.js'
         "jquery-wijmo.css" : "styles/jquery-wijmo.css", // 'http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css'
         "font-awesome.css" : "styles/font-awesome.css",  // "http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
-        "GenericList.js"   : "js/GenericList.js"
+        "GenericList.js"   : "js/GenericList.js",
+
+        "dropzone.js"  : "js/dropzone/dropzone.min.js",
+        "dropzone.css" : "js/dropzone/dropzone.min.css"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },
@@ -30,7 +33,11 @@ module.exports={
         'js/jquery.sidr.min.js' : { packaged:false },
         'bootstrap/js/bootstrap-datepicker.js': {packaged:false },
         'opsportal/requirements.js' : { ignore:true },
-        'site/labels/OpsPortal.js' : { packaged:false, ignore:true },
+
+        'dropzone.js'  : { packaged:false },
+        'dropzone.css' : { packaged:false },
+
+        'site/labels/OpsPortal.js' : { packaged:false, ignore:true }
     },
     // ext: {
     //     js: "js",
