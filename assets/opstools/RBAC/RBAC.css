@@ -771,7 +771,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 	padding-left:.75em;
 	}		
 #crumbs li a {
-	background:url(./images/crumbs.gif) no-repeat right center;
+	background:url(../../images/opsportal/crumbs.gif) no-repeat right center;
 	display:block;
 	padding:0 15px 0 0;
 	}							

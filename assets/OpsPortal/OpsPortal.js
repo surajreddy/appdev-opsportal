@@ -14,9 +14,9 @@ steal(
         'styles/jquery.sidr.dark.css'
 ).then(
         'js/jquery.sidr.min.js',
-        'bootstrap/js/bootstrap-datepicker.js',
+        'bootstrap-datepicker.js',
+        'bootstrap-datepicker.css',
         'styles/bootstrap-wijmo.css',
-        'styles/datepicker.css',
         'jquery-wijmo.css',
         'wijmo-pro.css',
         'wijmo-open.js',

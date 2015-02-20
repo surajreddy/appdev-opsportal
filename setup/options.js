@@ -82,6 +82,16 @@ module.exports = {
      // if you want to keep
      ignore:{
 
+        // do any of the files/directories in your assets/ directory need to be ignored?
+        assets:{
+            "path/to/file.js":1,
+            "path/to/dir":1
+
+            // eg: 
+            'mockups':1,   // ignores the assets/mockups/  directory
+    
+        },
+
 
         // do any of the above files that get linked to in dirLinks need to be ignored?
         dirLinks:{
@@ -103,8 +113,13 @@ module.exports = {
 
         ignore:{
 
+            assets: {
+                'mockups':1 // ignore the assets/mockups/  directory
+            },
+
             dirLinks: {
-                'config/opsportal.js':1
+                'config/opsportal.js':1,
+                'assets/mockups':1
             },
 
             //

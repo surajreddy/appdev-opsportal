@@ -93,7 +93,7 @@ License URI: http://www.opensource.org/licenses/mit-license.php
 }
 
 #polyglotLanguageSwitcher a.current:link span.trigger, #polyglotLanguageSwitcher a.current:visited span.trigger {
-	background: url(../images/arrow-down.gif) no-repeat left top;	
+	background: url(../../images/opsportal/arrow-down.gif) no-repeat left top;	
 }
 
 #polyglotLanguageSwitcher a.current:hover span.trigger, #polyglotLanguageSwitcher a.current:active span.trigger, #polyglotLanguageSwitcher a.active span.trigger {
@@ -124,21 +124,21 @@ License URI: http://www.opensource.org/licenses/mit-license.php
 /* Flags */
 
 #en { 
-	background-image: url(../images/gb.png);
+	background-image: url(../../images/opsportal/gb.png);
 }
 
 #fr { 
-	background-image: url(../images/fr.png);	
+	background-image: url(../../images/opsportal/fr.png);	
 }
 
 #de { 
-	background-image: url(../images/de.png);	
+	background-image: url(../../images/opsportal/de.png);	
 }
 
 #it { 
-	background-image: url(../images/it.png);	
+	background-image: url(../../images/opsportal/it.png);	
 }
 
 #es { 
-	background-image: url(../images/es.png);	
+	background-image: url(../../images/opsportal/es.png);	
 }

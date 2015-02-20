@@ -7,7 +7,7 @@ module.exports={
     // paths: {
     // },
     shim : {
-        'site/labels/opstools/RBAC.js' : { packaged:false, ignore:true }
+        'site/labels/opstool-RBAC.js' : { packaged:false, ignore:true }
     },
     // ext: {
     // }
