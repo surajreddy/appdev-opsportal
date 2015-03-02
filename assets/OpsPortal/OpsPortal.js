@@ -20,6 +20,8 @@ steal(
         'jquery-wijmo.css',
         'wijmo-pro.css',
         'wijmo-open.js',
+        "bootstrap-table.js",
+        "bootstrap-table.css",
         'GenericList.js'        // located:  js/GenericList.js
 ).then(
         'wijmo-pro.js'

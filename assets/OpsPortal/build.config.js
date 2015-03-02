@@ -25,7 +25,10 @@ module.exports={
         "GenericList.js"   : "js/GenericList.js",
 
         "dropzone.js"  : "js/dropzone/dropzone.min.js",
-        "dropzone.css" : "js/dropzone/dropzone.min.css"
+        "dropzone.css" : "js/dropzone/dropzone.min.css",
+
+        "bootstrap-table.js" : "js/bootstraptable/bootstrap-table.js",
+        "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },
@@ -45,6 +48,9 @@ module.exports={
 
         'dropzone.js'  : { packaged:false },
         'dropzone.css' : { packaged:false },
+
+        "bootstrap-table.js" : { packaged:false },
+        "bootstrap-table.css" : { packaged:false },
 
 
         // this is a special call that configures which opstools are loaded:
