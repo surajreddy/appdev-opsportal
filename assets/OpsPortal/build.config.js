@@ -28,7 +28,9 @@ module.exports={
         "dropzone.css" : "js/dropzone/dropzone.min.css",
 
         "bootstrap-table.js" : "js/bootstraptable/bootstrap-table.js",
-        "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css"
+        "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css",
+        
+        "bootbox.js" : "js/bootbox.min.js"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },
@@ -51,6 +53,8 @@ module.exports={
 
         "bootstrap-table.js" : { packaged:false },
         "bootstrap-table.css" : { packaged:false },
+
+        "bootbox.js" : { packaged:false },
 
 
         // this is a special call that configures which opstools are loaded:
