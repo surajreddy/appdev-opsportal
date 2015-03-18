@@ -13,8 +13,8 @@ module.exports={
         
         "bootstrap.js" : "js/bootstrap/js/bootstrap.js",   // "bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
         "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
-        "bootstrap-datepicker.js" : "js/bootstrap/js/bootstrap-datepicker.js",
-        "bootstrap-datepicker.css" : "styles/datepicker.css",
+        "bootstrap-datepicker.js" : "js/bootstrap/js/bootstrap-datepicker.min.js",
+        "bootstrap-datepicker.css" : "styles/bootstrap-datepicker.min.css",
         
         "wijmo-open.js"   : "js/jquery.wijmo-open.all.3.20142.45.min.js",   // 'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js'
         "wijmo-pro.css": "styles/jquery.wijmo-pro.all.3.20142.45.min.css",  // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.css'

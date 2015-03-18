@@ -6,6 +6,7 @@ steal(
 		'OpsPortal/opsportal.css',
         'OpsPortal/controllers/MenuList.js',
         'OpsPortal/controllers/WorkArea.js',
+        'OpsPortal/controllers/SubLinks.js',
         'OpsPortal/classes/OpsTool.js',
         'jquery',
         'can'
@@ -146,7 +147,12 @@ function(){
             this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.opsportal-content'));
 //            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
 
-
+            var SubLinks = AD.Control.get('OpsPortal.SubLinks');
+            this.subLinks = new SubLinks(this.portalPopup.find('.opsportal-nav-sub-list'));
+            
+            this.dom = {};
+            this.dom.resize = {};
+            this.dom.resize.masthead = this.portalPopup.find(".opsportal-container-masthead");
             AD.ui.jQuery('body').append(this.portalPopup);
 
         },
@@ -154,8 +160,12 @@ function(){
 
 
         resize: function() {
+            var hWindow = $(window).height();
+            var hMasthead = this.dom.resize.masthead.outerHeight(true);
 
-            var newHeight = $(window).height()  - this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
+console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
+
+            var newHeight = $(window).height()  - hMasthead;  //this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
 
             // notify of a resize action.
             // -1px to ensure sub tools don't cause page scrolling.
