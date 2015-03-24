@@ -30,7 +30,9 @@ module.exports={
         "bootstrap-table.js" : "js/bootstraptable/bootstrap-table.js",
         "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css",
         
-        "bootbox.js" : "js/bootbox.min.js"
+        "bootbox.js" : "js/bootbox.min.js",
+
+        "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },

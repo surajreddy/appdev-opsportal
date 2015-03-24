@@ -25,7 +25,8 @@ steal(
         'bootbox.js',
         'GenericList.js'        // located:  js/GenericList.js
 ).then(
-        'wijmo-pro.js'
+        'wijmo-pro.js',
+        'FilteredBootstrapTable.js'
 ).then(
         'OpsPortal/controllers/OpsPortal.js',
         'site/labels/OpsPortal.js',
