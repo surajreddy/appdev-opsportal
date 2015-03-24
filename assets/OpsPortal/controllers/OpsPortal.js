@@ -20,14 +20,41 @@ function(){
 
 
     // make sure $ is defined:
-   if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
+    if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
     
     // create our opstools namespace for our tools.
     if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
 
-    // create our OpsPortal namespace for our controllers.
-    // if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-    // AD.controllers.OpsPortal.OpsPortal = can.Control.extend({
+    //
+    // OpsPortal 
+    // 
+    // The OpsPortal is a Single Page Application (SPA) that contains the tools
+    // a user is allowed to see.
+    //
+    // It is designed to start out on an existing Web Page (Drupal, WordPress, 
+    // etc...) and display a mini summary/ simple header + link.  Once clicked
+    // it expands to fill up the whole browser area and allows you to work on 
+    // the tools contained inside.
+    //
+    // The OpsPortal begins by attaching itself to it's provided DOM element
+    // and show a 'taskList' view.
+    //
+    // It then requests from the server a configuration intended for this user.
+    //
+    // The configuration defines a set of Areas, and a set of Tools for each 
+    // Area.
+    //
+    // The OpsPortal then loads the required Tool resources and then configures
+    // them in the DOM accordingly.
+    //
+    // The OpsPortal has 3 Main Sections:
+    //  - The Masthead:  the controller over the top of the page
+    //  - The Menu:  A slide in Menu allowing you to switch to different Areas
+    //  - The WorkArea: the place that displays the currently active Tool
+    //
+    // 
+    //
+    //
     AD.Control.extend('OpsPortal.OpsPortal', { 
 
 
@@ -37,8 +64,6 @@ function(){
                     templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
                     templateList: '//OpsPortal/views/OpsPortal/taskList.ejs'
             }, options);
-
-            this.dataSource = this.options.dataSource; // AD.models.Projects;
 
 
             this.hiddenElements = [];           // used to track which elements we have hidden
@@ -55,6 +80,8 @@ function(){
             };
             AD.ui.jQuery(document).ready(sizeContent);
             AD.ui.jQuery(window).resize(sizeContent);
+
+
 
 			// display progress bar as tools load
 			//this.progress(80, $('#opsportal-loading'));
@@ -74,46 +101,6 @@ function(){
 
             });
 
-        },
-
-
-
-        createTool: function( tool) {
-            console.log(tool);
-        },
-
-
-
-        displayPortal: function() {
-
-            var self = this;
-            this.hiddenElements = [];
-
-            // take all the body.children  && hide them.
-            $('body').children().each(function(indx){
-                var $el = $(this);
-                if ($el != self.portalPopup) {
-                    $el.hide();
-                    self.hiddenElements.push($el);
-                }
-            });
-
-            // Now show our Portal:
-            this.portalPopup.show();
-
-        },
-
-
-
-        hidePortal: function() {
-
-            var self = this;
-            this.hiddenElements.forEach(function($el) {
-                $el.show();
-            });
-
-            // Now show our Portal:
-            this.portalPopup.hide();
         },
 
 
@@ -159,12 +146,46 @@ function(){
 
 
 
+        portalDisplay: function() {
+
+            var self = this;
+            this.hiddenElements = [];
+
+            // take all the body.children  && hide them.
+            $('body').children().each(function(indx){
+                var $el = $(this);
+                if ($el != self.portalPopup) {
+                    $el.hide();
+                    self.hiddenElements.push($el);
+                }
+            });
+
+            // Now show our Portal:
+            this.portalPopup.show();
+
+        },
+
+
+
+        portalHide: function() {
+
+            var self = this;
+            this.hiddenElements.forEach(function($el) {
+                $el.show();
+            });
+
+            // Now hide our Portal:
+            this.portalPopup.hide();
+        },
+
+
+
         resize: function() {
+
+            // The size we report to our Tools is window.height - masthead.height
             var hWindow = $(window).height();
             var hMasthead = this.dom.resize.masthead.outerHeight(true);
-
 console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
-
             var newHeight = $(window).height()  - hMasthead;  //this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
 
             // notify of a resize action.
@@ -176,6 +197,7 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
 
         requestConfiguration: function() {
             var self = this;
+            
 //// For debugging:
 AD.comm.hub.subscribe('**', function(key, data){
     console.log('pub:'+key);
@@ -234,6 +256,7 @@ AD.comm.hub.subscribe('**', function(key, data){
                     }
 
 
+                    // once everything is created, tell the menu slider to attach itself
                     self.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
 
                 }
@@ -247,7 +270,7 @@ AD.comm.hub.subscribe('**', function(key, data){
         '.opsportal-menu-trigger-text click' : function( $el, ev) {
 
             // this should show the Portal Popup
-            this.displayPortal();
+            this.portalDisplay();
 
             ev.preventDefault();
         },

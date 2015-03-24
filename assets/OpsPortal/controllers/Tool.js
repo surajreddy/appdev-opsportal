@@ -7,9 +7,31 @@ function(){
 
 
 
-    if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-    AD.controllers.OpsPortal.Tool = can.Control.extend({
-
+    //
+    // Tool 
+    // 
+    // This controller manages the actual opstool/Controller application that
+    // is being shown to the user.
+    //
+    // This controller is responsible for:
+    //  1) creating the instance of the Application and inserting it in the DOM
+    //  2) deciding if the Tool should be shown 
+    //  3) deciding if a Tool should be resized()
+    //
+    // Resizing: 
+    // The OpsPortal is intended to work in the maximum area of your browser 
+    // display.  It is possible that the browser window is resized and in some
+    // cases your Tool might want to respond to the new screen size.
+    //
+    // This Tool controller is responsible for figuring out when an Application
+    // should be notified of a new resize action.
+    //
+    // Performing a resize when a tool is not actually shown, can cause the tool
+    // to misalign it's view due to dom elements not actually being show at the 
+    // moment and reporting 0 heights when they do take up space when shown.
+    //
+    //
+    AD.Control.extend('OpsPortal.Tool', { 
 
         init: function( element, options ) {
             var self = this;
@@ -17,18 +39,16 @@ function(){
                     templateDOM: '//OpsPortal/views/Tool/Tool.ejs'
             }, options);
 
-            this.dataSource = this.options.dataSource; // AD.models.Projects;
 
-//            this.initDOM();
-            this.controller = null;
-            this.sizeData = null;
-            this.isActive = false;
-            this.isAreaActive = false;
+            this.controller = null;     // our Application controller
+            this.sizeData = null;       // the last reported resize() height
+            this.isActive = false;      // is our tool the active one?
+            this.isAreaActive = false;  // is our area the active area?
 
 
-            //// TODO: attach the controller here
+            // we were provided the Application's Controller name
+            // if it exists, then create an instance of it on the DOM:
             var controllerName = this.options.data.controller;
-
             if (AD.controllers.opstools[controllerName]) {
                 if( AD.controllers.opstools[controllerName].Tool) {
                     this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
@@ -39,6 +59,8 @@ function(){
                 console.error('controller ('+controllerName+') not found!');
             }
 
+
+            // listen to resize notifications
             AD.comm.hub.subscribe('opsportal.resize', function(message, data){
                 self.sizeData = data;
 
@@ -54,16 +76,29 @@ function(){
                 }
             });
 
+
+            // listen to notifications to show a particular area
             AD.comm.hub.subscribe('opsportal.area.show', function(message, data){
                 self.areaShow(data);
             });
 
+
+            // listen to notification to show a particular tool
             AD.comm.hub.subscribe('opsportal.tool.show', function(message, data){
                 self.toolShow(data);
             });
         },
 
 
+
+        /**
+         * areaShow
+         *
+         * Determines if it is our area and then decide if our tool should be
+         * told to resize itself.
+         *
+         * @param {obj} data  the notification packet: { area: 'AreaString' }
+         */
         areaShow:function(data){
             // if it is our area
             if (this.options.areaKey == data.area) {
@@ -101,6 +136,15 @@ function(){
 
 
 
+        /**
+         * toolShow
+         *
+         * Determines if it is our Tool and then decide if our tool should be
+         * told to resize itself.
+         *
+         * @param {obj} data  the notification packet: 
+         *                    { area: 'AreaString', tool:'ControllerName' }
+         */
         toolShow:function(data) {
 
             if (this.options.areaKey == data.area) {
@@ -108,7 +152,12 @@ function(){
                 if (data.tool == this.options.key) {
 
                     if(!this.isActive) {
+
+                        //// this is a switch TO our tool
+
                         this.isActive = true;
+
+                        // remember: show() first then resize()
                         this.element.show();
                         this.controller.resize(this.sizeData);
                     }
@@ -116,19 +165,15 @@ function(){
                 } else {
 
                     if (this.isActive){
+
+                        //// this is a switch AWAY from our tool
+                        
                         this.isActive = false;
                         this.element.hide();
                     }
 
                 }
             }
-        },
-
-
-
-        '.ad-item-add click': function($el, ev) {
-
-            ev.preventDefault();
         }
 
 

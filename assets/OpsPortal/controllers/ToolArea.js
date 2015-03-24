@@ -7,9 +7,24 @@ steal(
 function(){
 
 
-    if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-    AD.controllers.OpsPortal.ToolArea = can.Control.extend({
-
+    //
+    // ToolArea 
+    // 
+    // This controller manages one of the areas within the WorkArea.
+    //
+    // It provides a simple container that houses several Tools that can be
+    // displayed for the user.
+    //
+    // When it is created, it is assigned an Area.key.
+    //
+    // This controller is responsible for 
+    //   1) creating new instances of Tools that are intended for it's Area.key
+    //   2) listening for 'opsportal.area.show' notifications and properly
+    //      show(), or hide() based upon the Area.key that was provided in the
+    //      notification.
+    //
+    //
+    AD.Control.extend('OpsPortal.ToolArea', { 
 
         init: function( element, options ) {
             var self = this;
@@ -38,38 +53,30 @@ function(){
             // listen for area show notifications.
             AD.comm.hub.subscribe('opsportal.area.show', function(key, data) {
 
-                // if this tool is for my area, then create it.
+                // if this area is for my area, then show it.
                 if (self.options.key == data.area) {
                     self.element.show();
-/*
-                    // for each of our tools
-                    for (var t in self.listTools) {
-                        var tool = self.listTools[t];
-
-                        // if it is the active tool
-                        if (tool.isActive()) {
-
-                            // recall it's resize()
-                            // ?? do we remember the last resize value and
-                            //    send that in here?
-                            tool.resize();
-                        }
-                    }
-*/
                 } else {
+
+                    // else hide
                     self.element.hide();
                 }
 
             });
 
-
-            // default to hide this element
-//            this.element.hide();
-
         },
 
 
 
+        /**
+         * createTool
+         *
+         * Creates a new Tool within our ToolArea for each announced 'Tool' from
+         * the OpsPortal controller.
+         *
+         * @param {obj} tool   the announced tool definition.
+         *                      { controller:'ToolControllerName' }
+         */
         createTool: function(tool) {
 
             // add a new tool area div
@@ -88,7 +95,7 @@ function(){
             });
 
 
-            // remember this area.
+            // remember this tool.
             this.listTools[tool.controller] = newTool;
         },
 
@@ -97,13 +104,6 @@ function(){
         initDOM: function() {
 
             this.element.html(can.view(this.options.templateDOM, {} ));
-        },
-
-
-
-        '.ad-item-add click': function($el, ev) {
-
-            ev.preventDefault();
         }
 
 
