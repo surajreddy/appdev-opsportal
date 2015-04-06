@@ -173,6 +173,14 @@ function(){
             this.dataHash = {};       // term :  { data }
             this.posHash = {};        // term :  # position (0 - data.length -1)
 
+            this.hasTableTemplate = false; // is there a tr.template in our table?
+                                      // if so, then we load the table according to 
+                                      // the template, else we simply let 
+                                      // bootstraptable.load() 
+            this.templateID = '';     // if hasTableTemplate == true, then this is the
+                                      // templateID to reference the template for this 
+                                      // instance.
+
 
             this.selectedModel = null;  // {obj} keeps track of which model is considered selected
             this.selectionField = null; // {string} which field of .selectedModel is used for comparison
@@ -301,21 +309,43 @@ function(){
 
 
 
-
             this.table = this.element.find(this.options.tagBootstrapTable);
+            var template = this.table.find('tr.template');
+            if (template.length) {
+
+                // template provided, so grab template:
+                this.templateID = 'FBT'+AD.util.uuid();
+                this.hasTableTemplate = true;
+                var tableTemplate = this.domToTemplate(template.parent());
+                can.view.ejs(this.templateID, tableTemplate);
+
+
+            } else {
+
+                // no template, so just apply bootstrapTable()
+                this.tableAttach();
+
+            }
+
+
+
+
+        },
+
+
+        tableAttach:function() {
+            var _this = this;
+
             this.table.bootstrapTable(this.options.tableOptions);
             this.table
             .on('click-row.bs.table', function (e, row, $element) {
-                self.selected($element);
-                self.options.rowClicked(row);
+                _this.selected($element);
+                _this.options.rowClicked(row);
             })
             .on('dbl-click-row.bs.table', function (e, row, $element) {
-                self.selected($element);
-                self.options.rowDblClicked(row);
+                _this.selected($element);
+                _this.options.rowDblClicked(row);
             });
-
-
-
         },
 
 
@@ -405,8 +435,23 @@ function(){
             this.listData  = list;
 
 
-            // tell bootstrap-table to load this list of data
-            this.table.bootstrapTable('load', list);
+            if (this.hasTableTemplate) {
+
+                // remove the existing rows:
+                this.table.find('tbody>tr').remove();
+
+                // add these new ones:
+                this.table.find('tbody').append(can.view(this.templateID, {rows:list}));
+
+                // attach bootstrapTable to the current table:
+                this.tableAttach();
+
+            } else {
+
+                // tell bootstrap-table to load this list of data
+                this.table.bootstrapTable('load', list);
+
+            }
 
 
             // now figure out each of our hashes:
@@ -484,15 +529,17 @@ function(){
 
 
                 var listData = this.table.bootstrapTable('getData');
-                var indx = -1;
-                listData.forEach(function(data){
-                    indx++;
-                    if (typeof data[field] != 'undefined') {
-                        if (data[field] == model[field]) {
+                if (listData) {
+                    var indx = -1;
+                    listData.forEach(function(data){
+                        indx++;
+                        if (typeof data[field] != 'undefined') {
+                            if (data[field] == model[field]) {
 
+                            }
                         }
-                    }
-                })
+                    })
+                }
 
             } else {
                 console.error('FilteredBootstrapTable.select(): model did not contain the given field ['+field+']  model:', model);
