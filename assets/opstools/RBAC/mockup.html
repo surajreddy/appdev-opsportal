@@ -142,9 +142,9 @@
 
                     <div id="menu_wrapper">
                       <ul class="art-hmenu">  
-                        <li><a href="#users" rbac-show="rbac-users" ><i class="fa fa-users" ></i> Users</a></li>
-                        <li><a href="#roles" rbac-show="rbac-roles"><i class="fa fa-graduation-cap"></i> Roles</a></li>
-                        <li><a href="#scopes" rbac-show="rbac-scopes"><i class="fa fa-sitemap"></i> Scopes</a></li>   
+                        <li><a href="" class="rbac-menu" portal="users" rbac-show="rbac-users" ><i class="fa fa-users" ></i> Users</a></li>
+                        <li><a href="" class="rbac-menu" portal="roles" rbac-show="rbac-roles"><i class="fa fa-graduation-cap"></i> Roles</a></li>
+                        <li><a href="" class="rbac-menu" portal="scopes" rbac-show="rbac-scopes"><i class="fa fa-sitemap"></i>Scopes</a></li>   
                       </ul>
                     </div>                    
                   </div>
@@ -164,6 +164,7 @@
                                     <!--Search and Filter-->
                                     <div class="row">
                                       <!--Filter-->
+                                      <!--
                                       <div class="col-xs-6 col-sm-6 col-md-6">
                                           <form class="normalform" role="search">
                                             <div class="">
@@ -177,6 +178,7 @@
                                             </div>
                                           </form>                                      
                                       </div>
+                                      -->
                                       <!--/Filter-->
                                       <!--Search-->
                                       <div class="searchbar col-xs-6 col-sm-6 col-md-6">
@@ -192,8 +194,6 @@
                                       <!--/Search-->
                                     </div>
                                     <!--/Search and Filter-->  
-
-
                                 </div>
 
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-right">
@@ -201,7 +201,7 @@
                                 </div>          
                             </div>
                             <div class="col-md-12">  
-                              <table id="userlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                              <table id="userList" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                   <thead>
                                     <tr class="tbhead">
                                       <th class="align-center"># Assignment</th>
@@ -211,16 +211,18 @@
                                     </tr>
                                   </thead> 
                                   <tbody> 
+                                      <!-- users.forEach(function(user) { --> 
                                       <tr>
-                                        <td>0</td>
-                                        <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Linel Sedillo</a></td>
+                                        <td>[[= user.numAssignments() ]]</td>
+                                        <td><a href="" rbac-show="rbac-permissionlist" style="display:block;">[[= user.attr('username') ]]</a></td>
                                         <td>
-                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"></a></span>
-                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2"></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  obj-embed="user" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2" obj-embed="user" ></a></span>
                                         </td>
                                         <td><div class="img-thumbnail stats-red"></div></td>
                                       </tr>
-                                      <tr>
+                                      <!-- }) -->
+                                      <tr class="mockup" >
                                         <td>2</td>
                                         <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Rammel Olasiman</a></td>
                                         <td>
@@ -229,7 +231,7 @@
                                         </td>
                                         <td><div class="img-thumbnail stats-green"></div></td>
                                       </tr>
-                                      <tr>
+                                      <tr class="mockup" >
                                         <td>3</td>
                                         <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Lucci Baldez</a></td>
                                         <td>
@@ -275,19 +277,20 @@
                             </div>
                             <!--/Pagination-->                         
                         </div>
-                            <!--Modal for view assignment in user-->
-                            <div class="modalcenter modal fade view-assignment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                <table class="table table-bordered table-hover box-shadow">
-                                    <thead>
-                                      <tr class="tbhead">
-                                        <th>Role</th>
-                                        <th>Scope</a></th>
-                                        <th>Status</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
+
+                        <!--Modal for view assignment in user-->
+                        <div class="modalcenter modal fade view-assignment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <table class="rbac-user-table-assignments table table-bordered table-hover box-shadow">
+                                  <thead>
+                                    <tr class="tbhead">
+                                      <th>Role</th>
+                                      <th>Scope</a></th>
+                                      <th>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
                                     <tr>
                                       <td>HR Admin</td>
                                       <td>Region 10 | Marketing Dept.</td>
@@ -298,16 +301,16 @@
                                       <td>I.T Dept. | M.I.Ss Dept.</td>
                                       <td>Disabled</td>
                                     </tr>
-                                    </tbody>
-                                </table>
-                                  <div class="modal-footer">
-                                  <button type="button" class="btn" data-dismiss="modal">Close</button>
-                                </div>  
-                                </div>
-                              
-                              </div>
-                            </div>    
-                            <!--/Modal for view assignment in user-->
+                                  </tbody>
+                              </table>
+                                <div class="modal-footer">
+                                <button type="button" class="btn" data-dismiss="modal">Close</button>
+                              </div>  
+                            </div>
+                          
+                          </div>
+                        </div>    
+                        <!--/Modal for view assignment in user-->
                       </div>  
                       <!--  ================= /End Users ================  -->
 

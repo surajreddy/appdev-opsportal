@@ -7,10 +7,24 @@ steal(
 function(){
 
 
-
-        if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-        AD.controllers.OpsPortal.WorkArea = can.Control.extend({
-
+    //
+    // WorkArea 
+    // 
+    // This controller manages the area below the OpsPortal Menu
+    //
+    // Each entry in the menu represents an "Area" within the OpsPortal.
+    //
+    // An "Area" is a collection of related tools that can be displayed
+    // to the user.
+    //
+    // When the main OpsPortal controller receives it's configuration 
+    // information from the server, the OpsPortal will fire off a 
+    // 'opsportal.area.new' notification for each Area defined.
+    //
+    // This WorkArea controller listens for each of those notifications and
+    // creates a new ToolArea instance for each Area it is told about.
+    //
+    AD.Control.extend('OpsPortal.WorkArea', { 
 
         init: function( element, options ) {
             var self = this;
@@ -22,24 +36,27 @@ function(){
 
             this.initDOM();
 
-            this.listAreas = {};
-
+            this.listAreas = {};    // a list of all the created ToolAreas as
+                                    // { 'areaKey' : {ToolAreaController} }
 
             // listen for new area notifications.
             AD.comm.hub.subscribe('opsportal.area.new', function(key, data) {
                 self.createArea(data);
             });
 
-
-            // listen for menu toggle notifications
-            AD.comm.hub.subscribe('opsportal.menu.toggle', function (key, data) {
-                self.toggle(data.width);
-            })
-
         },
 
 
 
+        /**
+         * createArea
+         *
+         * Creates a new ToolArea within our Workspace for each announced 'Area' from
+         * the OpsPortal controller.
+         *
+         * @param {obj} area   the announced area definition.
+         *                      { key:'AreaString' }
+         */
         createArea: function(area) {
 
             // add a new tool area div
@@ -67,22 +84,6 @@ function(){
  //           this.element.html(can.view(this.options.templateDOM, {} ));
 
         },
-
-
-
-        toggle: function( width ) {
-
-            this.element.animate({
-                left: parseInt(this.element.css('left'),10) == 0 ? width : 0
-              });
-        },
-
-
-
-        '.ad-item-add click': function($el, ev) {
-
-            ev.preventDefault();
-        }
 
 
     });

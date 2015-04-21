@@ -13,8 +13,8 @@ module.exports={
         
         "bootstrap.js" : "js/bootstrap/js/bootstrap.js",   // "bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
         "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
-        "bootstrap-datepicker.js" : "js/bootstrap/js/bootstrap-datepicker.js",
-        "bootstrap-datepicker.css" : "styles/datepicker.css",
+        "bootstrap-datetimepicker.js" : "js/bootstrap/js/bootstrap-datetimepicker.min.js",
+        "bootstrap-datetimepicker.css" : "styles/bootstrap-datetimepicker.min.css",
         
         "wijmo-open.js"   : "js/jquery.wijmo-open.all.3.20142.45.min.js",   // 'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js'
         "wijmo-pro.css": "styles/jquery.wijmo-pro.all.3.20142.45.min.css",  // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.css'
@@ -28,15 +28,24 @@ module.exports={
         "dropzone.css" : "js/dropzone/dropzone.min.css",
 
         "bootstrap-table.js" : "js/bootstraptable/bootstrap-table.js",
-        "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css"
+        "bootstrap-table.css" : "js/bootstraptable/bootstrap-table.css",
+
+        "bootstrapValidator.js" : "js/bootstrapValidator.min.js",
+        "bootstrapValidator.css" : "styles/bootstrapValidator.min.css",
+        
+        "bootbox.js" : "js/bootbox.min.js",
+
+        "notify.js" : "js/notify.min.js",
+
+        "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },
         
         'bootstrap.js' : { packaged:false },
         // 'bootstrap.css' : { packaged:false },
-        'bootstrap-datepicker.js': {packaged:false },
-        'bootstrap-datepicker.css': {packaged:false },
+        'bootstrap-datetimepicker.js': {packaged:false },
+        'bootstrap-datetimepicker.css': {packaged:false },
 
         'wijmo-open.js' : { packaged:false },
         'wijmo-pro.css' : { packaged:false },
@@ -51,6 +60,13 @@ module.exports={
 
         "bootstrap-table.js" : { packaged:false },
         "bootstrap-table.css" : { packaged:false },
+
+        "bootstrapValidator.js"  : { packaged:false },
+        "bootstrapValidator.css" : { packaged:false },
+
+        "bootbox.js" : { packaged:false },
+
+        "notify.js" : { packaged:false },
 
 
         // this is a special call that configures which opstools are loaded:
