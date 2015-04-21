@@ -19,6 +19,8 @@
     .then(
         // [appdev-cli] : leave this next comment! 
         // load our tests here
+        "opstools/RBAC/tests/controller_Roles.js",
+        "opstools/RBAC/tests/controller_Users.js",
         "opstools/RBAC/tests/controller_RBAC.js",
         "opstools/RBAC/tests/app.js"
     )

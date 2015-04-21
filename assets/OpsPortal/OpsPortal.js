@@ -11,18 +11,23 @@ steal(
         'jquery-ui.js',
         'bootstrap.js',
         'bootstrap.css',
-        'styles/jquery.sidr.dark.css'
+        'styles/bootstrap-theme.min.css',
+        'styles/jquery.sidr.dark.css',
+        'js/moment.min.js'
 ).then(
         'js/jquery.sidr.min.js',
-        'bootstrap-datepicker.js',
-        'bootstrap-datepicker.css',
+        'bootstrap-datetimepicker.js',
+        'bootstrap-datetimepicker.css',
         'styles/bootstrap-wijmo.css',
         'jquery-wijmo.css',
         'wijmo-pro.css',
         'wijmo-open.js',
         "bootstrap-table.js",
         "bootstrap-table.css",
+        "bootstrapValidator.js",
+        "bootstrapValidator.css",
         'bootbox.js',
+        'notify.js',
         'GenericList.js'        // located:  js/GenericList.js
 ).then(
         'wijmo-pro.js',
