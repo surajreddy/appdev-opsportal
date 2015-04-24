@@ -67,25 +67,32 @@
                                 </div>          
                             </div>
                             <div class="col-md-12">  
-                              <table id="userList" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                              <table id="userList" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                   <thead>
                                     <tr class="tbhead">
-                                      <th class="align-center"># Assignment</th>
-                                      <th>User ID</th>
+                                      <th data-field="username" class="align-center"># Assignment</th>
+                                      <th data-field="username" >User ID</th>
                                       <th class="align-center">Option</th>
                                       <th class="align-center">Status</th>
                                     </tr>
                                   </thead> 
                                   <tbody> 
                                   	  <!-- users.forEach(function(user) { --> 
-                                      <tr>
+                                      <tr class="template">
                                         <td>[[= user.numAssignments() ]]</td>
                                         <td><a href="" rbac-show="rbac-permissionlist" style="display:block;">[[= user.attr('username') ]]</a></td>
-                                        <td>
+                                        <td class="options" >
                                           <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  obj-embed="user" ></a></span>
-                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2" obj-embed="user" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="" rbac-show="rbac-addassignments" class="fa fa-plus fa-2 rbac-user-perm-add" obj-embed="user" ></a></span>
                                         </td>
-                                        <td><div class="img-thumbnail stats-red"></div></td>
+                                        <!-- 
+
+                                          var status = 'stats-red';
+                                          if (user.permission.length > 0) {
+                                            status = 'stats-green';
+                                          }
+                                        -->
+                                        <td><div class="img-thumbnail [[= status ]]"></div></td>
                                       </tr>
                                       <!-- }) -->
                                       <tr class="mockup" >
@@ -111,6 +118,7 @@
                             </div>
 
                              <!--Pagination-->
+                             <!-- 
                             <div class="col-md-12 padtop10">
                               <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
@@ -141,6 +149,7 @@
                                 </div>
                               </div>
                             </div>
+                            -->
                             <!--/Pagination-->                         
                         </div>
 
@@ -157,12 +166,51 @@
 	                                  </tr>
 	                                </thead>
 	                                <tbody>
+                                    <!-- if (list.length > 0) {
+
+                                      list.forEach(function(perm){ 
+
+                                        var currRole = "no role found";
+                                        var listScopeIDs = [];
+
+                                        listRoles.forEach(function(role){
+                                            if (role.id == perm.role) {
+                                                currRole = role.role_label;
+                                            }
+                                        })
+
+                                        // now use the proper permission entry to gather all the scopes.
+                                        listPermissions.forEach(function(p){
+                                            if (p.id == perm.id) {
+                                                p.scope.forEach(function(scope){
+                                                    listScopeIDs.push(scope.id);
+                                                })
+                                            }
+                                        })
+
+                                        var listScopeNames = [];
+                                        listScopes.forEach(function(scope){
+                                            if (listScopeIDs.indexOf(scope.id) != -1) {
+                                                listScopeNames.push(scope.label)
+                                            }
+                                        })
+
+                                    -->
 		                                <tr>
-		                                  <td>HR Admin</td>
-		                                  <td>Region 10 | Marketing Dept.</td>
+		                                  <td>[[= currRole ]]</td>
+		                                  <td>[[= listScopeNames.join(' | ') ]]</td>
 		                                  <td>Enabled</td>
 		                                </tr>
-		                                <tr>
+                                    <!--  })
+
+                                    } else {
+
+                                    -->
+                                    <tr>
+                                      <td colspan="3"> No Assignments </td>
+                                    </tr>
+                                    <!-- }  -->
+		                                <tr class="mockup" >
 		                                  <td>System Admin</td>
 		                                  <td>I.T Dept. | M.I.Ss Dept.</td>
 		                                  <td>Disabled</td>
@@ -183,7 +231,7 @@
 
                       <!--  ================= Add Assignments ================  -->
                       <div class="rbac-display rbac-addassignments"  style="display:none;">
-                          <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span>Linel Sedillo</span></h5>
+                          <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span class="rbac-addassignments-userID">Linel Sedillo</span></h5>
                           <div class="opsportal-panel container">
                             <ul id="crumbs">
                                 <li><a href="#" rbac-show="rbac-users">Users</a></li>
@@ -191,31 +239,39 @@
                                 <li><a href="#" class="disabled">Add Assignment</a></li>
                             </ul>                                                      
                             <div class="row off-botm10 padtop20">
-                              <div class="col-md-12">  
+                              <div class="col-md-12 rbac-addassignments-form">  
                                     <!--Role-->
                                     <div class="col-sm-6 col-md-6">
                                       <h3>Role</h3>
                                       <p>Select Role from the list</p>
-                                        <select class="rslist" name="availableRoles" multiple="multiple">
-                                          <option value="1">HR Admin</option>
-                                          <option value="2">System Admin</option>
-                                          <option value="3">Crisis Manager</option>
-                                          <option value="3">Marketing Manager</option>
-                                          <option value="3">Crisis Manager</option>
-                                          <option value="3">Sales Manager</option>
-                                          <option value="3">Lorem Manager</option>
+                                      <div class="form-group">
+                                        <select class="rslist rbac-addassignments-roleList" name="role" multiple="multiple">
+                                          <!-- roles.forEach(function(role){ --> 
+                                          <option value="[[= role.id ]]">[[= role.role_label ]]</option>
+                                          <!-- }) -->
+                                          <option class="mockup" value="2">System Admin</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Marketing Manager</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Sales Manager</option>
+                                          <option class="mockup" value="3">Lorem Manager</option>
                                         </select>
+                                      </div>
                                     </div>
                                     <!--Scope-->
-                                    <div class="col-sm-6 col-md-6">
+                                    <div class="col-sm-6 col-md-6 form-group">
                                       <h3>Scope</h3>
                                       <p>To Edit Scope to this user, select Scope from the list</p>
-                                      <div class="rslist">
-                                        <input type="checkbox">Region SW</input><br>
-                                        <input type="checkbox">Region NE</input><br>
-                                        <input type="checkbox">Region SR</input><br>
-                                        <input type="checkbox">Region 10</input><br>
-                                        <input type="checkbox">Region 10</input><br>
+                                      <div class="form-group rbac-addassignments-scopeList">
+                                        <!-- scopes.forEach(function(scope){ -->
+                                        <div class="checkbox">
+                                          <label><input type="checkbox" name="scope" value="[[= scope.id ]]"> [[= scope.attr('label') ]]</input></label>
+                                        </div>
+                                        <!-- }) -->
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region NE</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region SR</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
                                       </div>        
                                     </div>
                               </div>      
@@ -225,7 +281,8 @@
                             
                             <div class="col-sm-4 col-md-4 pull-right">
                                   <div class="input-group-btn">
-                                      <button class="off-botm20 btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                      <button class="off-botm20 btn float-right btn-primary rbac-addassignments-save" ><i class="fa fa-save offset-5"></i>Save</button>
+                                      <button class="off-botm20 btn btn-default float-right rbac-addassignments-cancel" ><i class="fa fa-save offset-5"></i>Cancel</button>
                                   </div>    
                             </div>
                           </div>

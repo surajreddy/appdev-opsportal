@@ -26,6 +26,17 @@ steal(
         },
         getLabel: function() {
             return this.attr(this.model().fieldLabel) || 'unknown label field';
+        },
+        translate:function( lang_code ) {
+            var _this = this;
+            lang_code = lang_code || AD.lang.currentLanguage;
+            if (this.translations) {
+                this.translations.forEach(function(trans){ 
+                    if (trans.language_code == lang_code) {
+                        _this.role_label = trans.role_label;
+                    }
+                });
+            }
         }
     });
 

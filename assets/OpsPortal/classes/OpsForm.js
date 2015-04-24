@@ -31,10 +31,26 @@ steal(
                 this.hashElements = {};     // { field : $(el) }
                 this.listFields = [];
 
+                this.hashTypes = {};        // { field : "text", 'array', ... }
+                this.hashValidations = {};  // { field : { validators:validations } }
+
                 this.validator = null;
                 this.isValidated = false;
 
                 
+            },
+
+
+            // sometimes formValidator doesn't clear the messages, 
+            // this will manually attempt to clear them:
+            _clearMessages: function() {
+                var _this = this;
+
+                this.listFields.forEach(function(field){
+
+                    _this.element.find('[data-bv-icon-for="'+field+'"]').hide();
+                    _this.element.find('[data-bv-for="'+field+'"]').hide();
+                })
             },
 
 
@@ -234,6 +250,7 @@ steal(
                 this.isValidated = false;
                 this.validator.resetForm(true);
 
+                this._clearMessages();
                 // this.element.find(':input:not(:checkbox)').val('');
                 // this.element.find(':checkbox').prop('checked', false);
             },
@@ -430,6 +447,8 @@ console.log(err);
             reset:function() {
                 this.isValidated = false;
                 this.validator.resetForm(false);
+
+                this._clearMessages();
             },
 
 
@@ -460,6 +479,19 @@ console.log(err);
                     }
                     
                 })
+
+
+                // make sure anything designated as an array is returned 
+                // as an array:
+                for(var f in this.hashTypes) {
+                    if (obj[f]) {
+                        if (this.hashTypes[f] == 'array') {
+                            if (!$.isArray(obj[f])) {
+                                obj[f] = [ obj[f] ];
+                            }
+                        }
+                    }
+                }
 
 
                 return obj;
@@ -531,13 +563,6 @@ console.log(err);
             
         });
 
-
-
-
-        //// 
-        //// server validation
-        ////
-        //// At this point in the game, bootstrapValidator has already been l
 
 
         
