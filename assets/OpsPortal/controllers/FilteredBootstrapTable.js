@@ -203,6 +203,15 @@ function(){
 
 
 
+        newFormatterFN : function( templateID )  {
+
+            return function(v, r, i) { 
+                return $('<div/>').append(can.view(templateID, { value:v, row:r, index:i } )).html(); 
+            }
+        },
+
+
+
         attachDOM: function() {
             var self = this;
 
@@ -310,22 +319,68 @@ function(){
 
 
             this.table = this.element.find(this.options.tagBootstrapTable);
-            var template = this.table.find('tr.template');
-            if (template.length) {
 
-                // template provided, so grab template:
-                this.templateID = 'FBT'+AD.util.uuid();
-                this.hasTableTemplate = true;
-                var tableTemplate = this.domToTemplate(template.parent());
-                can.view.ejs(this.templateID, tableTemplate);
+            //// check .tableOptions to see if there are any columns:[ { formatter:'string' }]
+            //// references.  If they are, then replace them with a template based upon 
+            //// the contents of $('string') element.
+
+            var shouldClearTemplate = false;
+
+            if (this.options.tableOptions.columns) {
+                this.options.tableOptions.columns.forEach(function(column){
+                    if (column.formatter) {
+                        if ($.type(column.formatter) == 'string') {
 
 
-            } else {
+                            // now find the dom reference for the formatter:
+                            var elTemplate = self.element.find(column.formatter)
+
+                            if (elTemplate.length == 0) {
+
+                                console.err("*** column.formatter provided, but no template found!");
+                                console.warn('   column.formatter=['+column.formatter+']');
+
+                            } else {
+
+                                // template found, so grab template:
+                                var templateID = 'FBT'+AD.util.uuid();
+                                var template = self.domToTemplate(elTemplate);
+                                can.view.ejs(templateID, template);
+
+                                column.formatter = self.newFormatterFN( templateID );
+
+                                shouldClearTemplate = true;
+                            }
+
+
+                        }
+                    }
+                })
+            }
+
+
+            // if we had an embedded template, then remove it before attaching the table.
+            if (shouldClearTemplate) {
+                this.table.find('tbody').html(' ');
+            }
+
+
+            // var template = this.table.find('tr.template');
+            // if (template.length) {
+
+            //     // template provided, so grab template:
+            //     this.templateID = 'FBT'+AD.util.uuid();
+            //     this.hasTableTemplate = true;
+            //     var tableTemplate = this.domToTemplate(template.parent());
+            //     can.view.ejs(this.templateID, tableTemplate);
+
+
+            // } else {
 
                 // no template, so just apply bootstrapTable()
                 this.tableAttach();
 
-            }
+            // }
 
 
 
@@ -435,23 +490,23 @@ function(){
             this.listData  = list;
 
 
-            if (this.hasTableTemplate) {
+            // if (this.hasTableTemplate) {
 
-                // remove the existing rows:
-                this.table.find('tbody>tr').remove();
+            //     // remove the existing rows:
+            //     this.table.find('tbody>tr').remove();
 
-                // add these new ones:
-                this.table.find('tbody').append(can.view(this.templateID, {rows:list}));
+            //     // add these new ones:
+            //     this.table.find('tbody').append(can.view(this.templateID, {rows:list}));
 
-                // attach bootstrapTable to the current table:
-                this.tableAttach();
+            //     // attach bootstrapTable to the current table:
+            //     this.tableAttach();
 
-            } else {
+            // } else {
 
                 // tell bootstrap-table to load this list of data
                 this.table.bootstrapTable('load', list);
 
-            }
+            // }
 
 
             // now figure out each of our hashes:
