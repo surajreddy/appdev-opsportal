@@ -65,7 +65,7 @@ function(){
             // remove the template from the DOM
             this.dom.listUsers = this.element.find('#userList');
             this.dom.listUsersTbody = this.dom.listUsers.find('tbody');
-            this.dom.listUsersTbody.html(' ');
+            // this.dom.listUsersTbody.html(' ');
 
 
 
@@ -80,7 +80,7 @@ function(){
             // attach the FilteredBootstrapTable Controller
             var Filter = AD.Control.get('OpsPortal.FilteredBootstrapTable');
             this.Filter = new Filter(this.element, {
-                tagFilter: '.searchbar',
+                tagFilter: '.autocomplete-filter',
                 tagBootstrapTable: '#userList',
                 scrollToSelect:true,
 
@@ -89,20 +89,15 @@ function(){
                 tableOptions:{
 
                     columns: [
-                        { formatter: function(value, row, index){ return row.numAssignments(); } },
-                        // {},
-                        // { formatter:'.options' },
-                        // {}
+                        { title:'# Assignments', formatter: '.numAssignments' },  // function(value, row, index){ return row.numAssignments(); }
+                        { title:'Username',      field:'username'             },
+                        { title:'Options',       formatter:'.options'         },
+                        { title:'Status',        formatter:'.status'          }
                     ]
                 },
 
 
 ///// LEFT OFF:
-/////   add tr.template  td.options  as a template
-/////   add '.options' as a formatter for that column
-/////   configure filteredBootstrapTable to search for formatter:'string' entries and 
-/////       convert those to a function to pull in the template and return it.
-
 /////   Figure out why we are missing the # Assignments column header for above... 
 
                 // filterTable:true,
@@ -139,6 +134,9 @@ function(){
                     }
                 }
             });
+
+
+// this.dom.listUsersTbody.html(' ');
 
 
         },
@@ -286,10 +284,25 @@ function(){
 
 
 
+        userForID: function(id) {
+            var found = null;
+            for (var i=0; i<this.data.users.length; i++) {
+
+                if (this.data.users[i].id == id) {
+                    return this.data.users[i];
+                }
+            }
+            return null;
+        },
+
+
+
         // when the user clicks on the [quickview] icon:
         '.rbac-user-perm-quickview click': function($el, ev) {
 
-            var user = $el.data('user');
+            // var user = $el.data('user');
+            var id = parseInt($el.attr('user-id'));
+            var user = this.userForID(id);
             this.quickviewShow(user.permission);
 
         },
@@ -299,7 +312,8 @@ function(){
         // when the user clicks on the [add] icon:
         '.rbac-user-perm-add click': function($el, ev) {
 
-            var user = $el.data('user');
+            var id = parseInt($el.attr('user-id'));
+            var user = this.userForID(id);
             
             // emit the AssignmentAdd event:
             this.element.trigger(this.options.eventAssignmentAdd, user );

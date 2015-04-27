@@ -48,14 +48,12 @@
                                       <!--/Filter-->
                                       <!--Search-->
                                       <div class="searchbar col-xs-6 col-sm-6 col-md-6">
-                                        <form class="normalform" role="search">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
-                                                <div class="input-group-btn">
-                                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                          <div class="form-group">
+                                              <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter typeahead" placeholder="Search for User">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                             </div> 
+                                          </div>
                                       </div>
                                       <!--/Search-->
                                     </div>
@@ -77,24 +75,24 @@
                                     </tr>
                                   </thead> 
                                   <tbody> 
-                                  	  <!-- users.forEach(function(user) { --> 
                                       <tr class="template">
-                                        <td>[[= user.numAssignments() ]]</td>
+                                        <td class="numAssignments" >[[= row.numAssignments() ]]</td>
                                         <td><a href="" rbac-show="rbac-permissionlist" style="display:block;">[[= user.attr('username') ]]</a></td>
                                         <td class="options" >
-                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  obj-embed="user" ></a></span>
-                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="" rbac-show="rbac-addassignments" class="fa fa-plus fa-2 rbac-user-perm-add" obj-embed="user" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  user-id="[[= row.id ]]" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="" rbac-show="rbac-addassignments" class="fa fa-plus fa-2 rbac-user-perm-add" user-id="[[= row.id ]]" ></a></span>
                                         </td>
-                                        <!-- 
+                                        <td class="status" ><!-- 
 
-                                          var status = 'stats-red';
-                                          if (user.permission.length > 0) {
-                                            status = 'stats-green';
-                                          }
-                                        -->
-                                        <td><div class="img-thumbnail [[= status ]]"></div></td>
+                                            var user = row;
+                                            var status = 'stats-red';
+                                            if (user.permission.length > 0) {
+                                              status = 'stats-green';
+                                            }
+                                          -->
+                                          <div class="img-thumbnail [[= status ]]"></div></td>
                                       </tr>
-                                      <!-- }) -->
+
                                       <tr class="mockup" >
                                         <td>2</td>
                                         <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Rammel Olasiman</a></td>
