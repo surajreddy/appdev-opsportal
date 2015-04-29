@@ -80,8 +80,15 @@ $( document ).ready(function() {
     	for (var i=1; i<=20; i++) {
     		tBody.append(lastRow.clone());
     	} 
+
+        $table.bootstrapTable({
+            pagination: true,
+        })
+        
     })
 	
+
+
 
 //Responsiveness of table scroll
     $(window).resize(function () {
