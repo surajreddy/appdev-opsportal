@@ -88,6 +88,8 @@ function(){
 
                 tableOptions:{
 
+                    pagination: true,
+
                     columns: [
                         { title:'# Assignments', formatter: '.numAssignments' },  // function(value, row, index){ return row.numAssignments(); }
                         { title:'Username',      field:'username'             },
