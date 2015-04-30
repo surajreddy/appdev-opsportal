@@ -479,48 +479,47 @@ function(){
          * reset our terms and BootstrapTable according to the given array of data items.
          */
         load:function(list) {
-            var self = this;
+            var _this = this;
 
+            this.listData  = list;
+
+            this._load();
+
+            // if our list is of type can.List 
+            if (list.bind) { 
+
+                // reload our FilteredBootstrapTable if our given list changes.
+                this.listData.bind('change', function() { 
+                    _this._load();
+                });
+            }
+
+        },
+        _load:function() {
+            var _this = this;
+            
 
             this.searchTerms = [];  // 'searchable text'
             this.dataHash = {};       // term : $tr of matching row
             this.posHash = {};
 
 
-            this.listData  = list;
-
-
-            // if (this.hasTableTemplate) {
-
-            //     // remove the existing rows:
-            //     this.table.find('tbody>tr').remove();
-
-            //     // add these new ones:
-            //     this.table.find('tbody').append(can.view(this.templateID, {rows:list}));
-
-            //     // attach bootstrapTable to the current table:
-            //     this.tableAttach();
-
-            // } else {
-
-                // tell bootstrap-table to load this list of data
-                this.table.bootstrapTable('load', list);
-
-            // }
+            // tell bootstrap-table to load this list of data
+            this.table.bootstrapTable('load', this.listData);
 
 
             // now figure out each of our hashes:
             var i = 0;
-            list.forEach(function(data) { 
+            this.listData.forEach(function(data) { 
             // list.each(function(data, i){
 
                 // what is the search tearm for this data item?
-                var term = self.options.dataToTerm(data);
-                self.searchTerms.push(term);
+                var term = _this.options.dataToTerm(data);
+                _this.searchTerms.push(term);
 
                 // use term to create hashes:
-                self.dataHash[term] = data;
-                self.posHash[term] = i;
+                _this.dataHash[term] = data;
+                _this.posHash[term] = i;
 
                 i++;
 

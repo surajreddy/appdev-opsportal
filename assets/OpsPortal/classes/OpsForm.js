@@ -365,6 +365,7 @@ steal(
             errorHandle: function(err) {
                 var _this = this;
 
+
                 // maybe err is an appdev response packet:
                 if (err.status) err = err.data || err;
 
@@ -388,6 +389,19 @@ steal(
                             }
 
                             return true;
+                            break;
+
+
+                        case "E_UNKNOWN" : 
+
+                            // there might be an embedded E_Validation error...
+                            if (err.raw) {
+                                if (err.raw[0].err) {
+                                    return _this.errorHandle(err.raw[0].err);
+                                } 
+                            }
+                            // if we get here ... return false
+                            return false;
                             break;
                     }
                 }
