@@ -11,6 +11,7 @@ steal(
         'opstools/RBAC/controllers/Users.js',
         'opstools/RBAC/controllers/UserAssignmentAdd.js',
         'opstools/RBAC/controllers/Roles.js',
+        'opstools/RBAC/controllers/RoleAdd.js',
         '//opstools/RBAC/views/RBAC/RBAC.ejs',
 function(){
 
@@ -31,7 +32,12 @@ function(){
 
         CONST: {
             ASSIGNMENTADD   : 'Assignment.Add',
-            ASSIGNMENTADDED : 'Assignment.Added'
+            ASSIGNMENTADDED : 'Assignment.Added',
+
+            ROLEADD         : 'Role.Add',
+            ROLEADDED       : 'Role.Added',
+
+            CANCEL          : 'Cancel'
         }, 
 
 
@@ -79,7 +85,12 @@ function(){
 
             // attach the Roles Controller
             var Roles = AD.Control.get('opstools.RBAC.Roles');
-            this.portals.Roles = new Roles(this.element.find('.rbac-roles'));
+            this.portals.Roles = new Roles(this.element.find('.rbac-roles'), { eventRoleAdd:this.CONST.ROLEADD });
+
+            // attach the RoleAdd Controller
+            var RoleAdd = AD.Control.get('opstools.RBAC.RoleAdd');
+            this.portals.RoleAdd = new RoleAdd(this.element.find('.rbac-role-addroles'), { eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL });
+
 
         },
 
@@ -95,9 +106,6 @@ function(){
                 console.log(' ... User Assignment Add : ', user);
                 _this.portals.UserAssignmentAdd.loadUser(user);
                 _this.portals.UserAssignmentAdd.__from = 'Users';  // mark the portal/controller we came from
-
-//// LEFT OFF:
-//// update display for given user,
 
                 _this.portalShow('UserAssignmentAdd');
             })
@@ -120,6 +128,33 @@ function(){
 
                 // return us to the controller we came from
                 _this.portalShow(_this.portals.UserAssignmentAdd.__from);
+            });
+
+
+            // The Roles Controller will publish a RoleAdd 
+            // event when that [Add] button is pressed.
+            this.portals.Roles.element.on(this.CONST.ROLEADD, function(event, role) {
+
+                _this.portalShow('RoleAdd');
+            })
+
+
+            //// RoleAdd Controller
+
+            // event: Cancel  
+            // when that [Cancel] button is pressed.
+            this.portals.RoleAdd.element.on(this.CONST.CANCEL, function(event, role) {
+
+                _this.portalShow('Roles');
+            })
+
+            // event: RoleAdded  
+            // when a role is successfully created
+            this.portals.RoleAdd.element.on(this.CONST.ROLEADDED, function(event, role) {
+
+                // current role object 
+                _this.data.roles.push(role);
+                _this.portalShow('Roles');
             })
 
         },
@@ -151,6 +186,7 @@ function(){
                 })
                 _this.portals.Users.loadRoles(list);
                 _this.portals.UserAssignmentAdd.loadRoles(list);
+                _this.portals.Roles.loadRoles(list);
                 _this.data.roles = list;    
             })
 

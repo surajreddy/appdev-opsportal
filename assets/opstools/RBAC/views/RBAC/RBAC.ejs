@@ -172,7 +172,8 @@
                                         var listScopeIDs = [];
 
                                         listRoles.forEach(function(role){
-                                            if (role.id == perm.role) {
+                                            if ((role.id == perm.role)
+                                                || (role.id == perm.role.id)) {
                                                 currRole = role.role_label;
                                             }
                                         })
@@ -483,6 +484,7 @@
                                     <!--Container of Search and Filter-->
                                     <div class="row">
                                       <!--Filter-->
+                                      <!-- 
                                       <div class="col-xs-6 col-sm-6 col-md-6">
                                           <form class="normalform" role="search">
                                             <div class="offset-10">
@@ -496,6 +498,7 @@
                                             </div>
                                           </form>                                      
                                       </div>
+                                      -->
                                       <!--/Filter-->
                                       <!--Search-->
                                       <div class="searchbar col-xs-6 col-sm-6 col-md-6">
@@ -517,7 +520,7 @@
                                     <!--Add Button-->
                                     <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
                                           <div class="input-group-btn">
-                                            <a class="col-xs-12 col-sm-12 btn" rbac-show="rbac-addroles" href="#add-roles"><i class="fa fa-plus"></i> Add</a>
+                                            <a class="col-xs-12 col-sm-12 btn rbac-role-addButton" rbac-show="rbac-addroles" href=""><i class="fa fa-plus"></i> Add</a>
                                           </div>
                                     </div> 
                                     <!--/Add Button-->
@@ -537,10 +540,10 @@
                                   <tr>
                                     <td>HR Admin</td>
                                     <td>Edit Information | Add Employee | Approve Edit Info</td>
-                                    <td>
-                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-roles" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" ></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    <td class="actions" >
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2" role-id="[[= row.id ]]"></a></span>
                                     </td>
                                   </tr>
                                   <tr>
@@ -567,6 +570,7 @@
                             </div>     
                           
                             <!--Pagination-->   
+                            <!--
                               <div class="col-md-12 padtop10">
                                 <div class="row">
                                   <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
@@ -597,6 +601,7 @@
                                   </div>
                                 </div>
                               </div>
+                            -->
                             <!--/Pagination-->  
 
                           </div>
@@ -604,7 +609,7 @@
                       <!--  ================= /END Roles  ================  -->
                       
                       <!--  ================= /Add Roles  ================  -->
-                      <div class="rbac-display rbac-addroles" style="display:none">
+                      <div class="rbac-display rbac-role-addroles" style="display:none">
                         <div class="opsportal-panel container">
                         <ul id="crumbs">
                             <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
@@ -613,12 +618,12 @@
                           <div class="col-md-12 padtop20 off-top10">
                               <form>
                                 <div class="form-group">
-                                <label for="exampleInputEmail1">Role Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names">
+                                <label for="role_label">Role Name</label>
+                                <input type="text" class="form-control" name="role_label" placeholder="Enter Role Name">
                                 </div>
                                 <div class="form-group">
-                                <label for="exampleInputPassword1">Description</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <label for="role_description">Description</label>
+                                <textarea class="form-control" rows="3" name="role_description"></textarea>
                                 </div>
                               </form> 
 
@@ -789,10 +794,10 @@
                                       <!--SAVE AND SAVE RETURN-->
                                       <div class="sns">
                                         <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
-                                        </div>
-                                        <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save and return</button>
+                                          <button class="btn btn-primary float-right rbac-roles-addrole-create" type="submit"><i class="fa fa-save offset-5"></i>Create</button>
+                                          <button class="btn float-right rbac-roles-addrole-cancel" type="submit"><i class="fa fa-cancel offset-5"></i>Cancel</button>
+
+                                          
                                         </div>  
                                       </div>
                                       <!--SAVE AND SAVE RETURN-->  
