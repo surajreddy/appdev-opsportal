@@ -4,27 +4,20 @@ steal(
         'appdev',
 //        'opstools/RBAC/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-        // '//opstools/RBAC/views/RoleAdd/RoleAdd.ejs',
+        // '//opstools/RBAC/views/RoleEdit/RoleEdit.ejs',
 function(){
-
-    //
-    // RoleAdd 
-    // 
-    // This is the interface for managing the form for adding a new Role
-    //
-    //
 
     // Namespacing conventions:
     // AD.Control.extend('[application].[controller]', [{ static },] {instance} );
-    AD.Control.extend('opstools.RBAC.RoleAdd', {  
+    AD.Control.extend('opstools.RBAC.RoleEdit', {  
 
 
         init: function (element, options) {
             var self = this;
             options = AD.defaults({
-                    // templateDOM: '//opstools/RBAC/views/RoleAdd/RoleAdd.ejs'
-                    eventCancel:'cancel',
-                    eventRoleAdded: 'role.added'
+                    // templateDOM: '//opstools/RBAC/views/RoleEdit/RoleEdit.ejs'
+                    eventDone: 'no.done.given',
+                    eventCancel: 'no.cancel.given'
             }, options);
             this.options = options;
 
@@ -32,9 +25,8 @@ function(){
             this._super(element, options);
 
             this.data = {};
-            this.data.actions = [];
+            this.data.role = null;
 
-            this.dataSource = this.options.dataSource; // AD.models.Projects;
 
             this.initDOM();
 
@@ -46,12 +38,12 @@ function(){
         initDOM: function () {
 
             // this.element.html(can.view(this.options.templateDOM, {} ));
-            
+
             // attach the FilteredBootstrapTable Controller
             var Filter = AD.Control.get('OpsPortal.FilteredBootstrapTable');
             this.Filter = new Filter(this.element, {
-                tagFilter: '.rbac-role-add-actionsearch',
-                tagBootstrapTable: '#permissionlist',
+                tagFilter: '.rbac-role-edit-actionsearch',
+                tagBootstrapTable: '#roleEditPermissionlist',
                 scrollToSelect:true,
 
                 cssSelected:'orange',
@@ -68,32 +60,6 @@ function(){
                     ]
                 },
 
-                // filterTable:true,
-
-                rowClicked:function(data) {
-
-                    if (data) {
-                        console.log('... clicked action:', data);
-                        // self.selectedActivity = data;
-                        // self.nextEnable();
-                    }
-
-                },
-                rowDblClicked: function(data) {
-                    // if they dbl-click a row,
-                    // just continue on as if they clicked [next]
-                    if (data) {
-                        console.log('... dbl.clicked action:', data);
-                    }
-                },
-                termSelected:function(data) {
-
-                    // if they select a term in the typeahead filter,
-                    // just continue on as if they clicked [next]
-                    if (data) {
-                        console.log('... search selected action:', data);
-                    }
-                },
                 dataToTerm: function(data) {  
                     if (data) {
                         return data.action_key;
@@ -104,13 +70,11 @@ function(){
             });
 
 
-
-            //// Create a Form for our Add Role
+            //// Create a Form for our Edit Role
             this.form = new AD.op.Form(this.element);
             this.form.bind( AD.Model.get('opstools.RBAC.PermissionRole'));
-            this.form.addField('actions', 'array', {});
+            // this.form.addField('actions', 'array', {});
             this.form.attach();
-
         },
         
         
@@ -122,25 +86,25 @@ function(){
 
 
 
-        show:function() {
-            this._super();
-            this.form.clear(true);
+        loadRole:function(role) {
+            this.data.role = role;
+            this.form.values( role.attr() );
         },
 
 
 
         // they click on the [cancel] button
-        '.rbac-roles-addrole-cancel click': function ($el, ev) {
+        '.rbac-roles-editrole-cancel click': function ($el, ev) {
 
-            // emit the RoleAdd event:
+            // emit the Cancel event:
             this.element.trigger( this.options.eventCancel );
             ev.preventDefault();
         },
 
 
 
-        // they click on the [create] button
-        '.rbac-roles-addrole-create click': function ($el, ev) {
+        // they click on the [save] button
+        '.rbac-roles-editrole-save click': function ($el, ev) {
             var _this = this;
 
             if (this.form.isValid()) {
@@ -165,8 +129,11 @@ function(){
                 })
 // console.log('... submitting data:', data);
 
-                var Role = AD.Model.get('opstools.RBAC.PermissionRole');
-                Role.create(data)
+                var role = this.data.role;
+                role.attr(obj);
+                role.actions = data.actions;
+
+                role.save()
                 .fail(function(err){
                     if (!_this.form.errorHandle(err)) {
 //// TODO: handle unknown Error event:
@@ -179,19 +146,9 @@ function(){
                     // and associated role info.  So, perform a .findOne to get
                     // all that data filled out:
 
-                    Role.findOne({id:newRole.id})
-                    .then(function(fullRole) {
+console.log('... edit role: newRole:', newRole);
 
-                        fullRole.translate();   // translate it!
-
-                        // now it should look like all the others
-
-                        console.log('*** new Role:', fullRole);
-                        // emit the RoleAdd event:
-                        _this.element.trigger( _this.options.eventRoleAdded, fullRole );
-
-                    })
-
+                    _this.element.trigger( _this.options.eventDone );
 
                 })
 

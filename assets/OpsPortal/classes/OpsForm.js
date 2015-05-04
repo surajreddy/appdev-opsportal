@@ -470,12 +470,19 @@ console.log(err);
             /**
              * @function values
              *
-             * Return an object representing the current values of the form 
-             * elements
-             *
-             * @return {obj}
+             * Set or Return the current values of the form elements
+             * @param {obj} values  (optional) obj of key:value pairs
+             * @return {obj} if getting the values, otherwise null 
              */
-            values:function() {
+            values:function(vals) {
+
+                if (vals) {
+                    return this._valuesSet(vals);
+                } else {
+                    return this._valuesGet();
+                }
+            },
+            _valuesGet:function() {
 
                 var values = this.element.find(':input').serializeArray();
                 var obj = {};
@@ -509,6 +516,24 @@ console.log(err);
 
 
                 return obj;
+            },
+            _valuesSet:function(vals) {
+                var _this = this;
+
+                this.clear();
+
+                this.listFields.forEach(function(field){
+
+                    if (vals[field]) {
+
+                        var el = _this.element.find("[name='"+field+"']");
+                        if (el.length > 0) {
+                            el.val( vals[field] );
+                        }
+                    }
+                })
+
+                return null;
             },
 
 

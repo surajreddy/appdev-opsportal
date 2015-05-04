@@ -4,27 +4,27 @@ steal(
 
     // Namespacing conventions:
     // AD.Model.Base.extend("[application].[Model]" , { static }, {instance} );  --> Object
-    AD.Model.Base.extend("opstools.RBAC.PermissionRole", {
-        findAll: 'GET /appdev-core/permissionrole',
-        findOne: 'GET /appdev-core/permissionrole/{id}',
-        create:  'POST /appdev-core/permissionrole',
-        update:  'PUT /appdev-core/permissionrole/{id}',
-        destroy: 'DELETE /appdev-core/permissionrole/{id}',
+    AD.Model.Base.extend("opstools.RBAC.PermissionAction", {
+        findAll: 'GET /appdev-core/permissionaction',
+        findOne: 'GET /appdev-core/permissionaction/{id}',
+        create:  'POST /appdev-core/permissionaction',
+        update:  'PUT /appdev-core/permissionaction/{id}',
+        destroy: 'DELETE /appdev-core/permissionaction/{id}',
         describe: function() {
             return {
-                role_label : 'string',
-                role_description : 'text'
+                action_key:'string',
+                action_description: 'text'
             };
         },
         validations: {
-            "role_label" : [ 'notEmpty' ],
-            "role_description" : [ 'notEmpty' ]
+            "action_key" : [ 'notEmpty' ],
+            "action_description" : [ 'notEmpty' ]
         },
         fieldId:'id',
-        fieldLabel:'role_label'
+        fieldLabel:'null'
     },{
         model: function() {
-            return AD.Model.get('opstools.RBAC.PermissionRole'); 
+            return AD.Model.get('opstools.RBAC.PermissionAction');
         },
         getID: function() {
             return this.attr(this.model().fieldId) || 'unknown id field';
@@ -35,13 +35,12 @@ steal(
         translate:function( lang_code ) {
             var _this = this;
             lang_code = lang_code || AD.lang.currentLanguage;
-            var fields = ['role_label', 'role_description'];
+            var fields = ['action_description'];
             if (this.translations) {
                 this.translations.forEach(function(trans){ 
                     if (trans.language_code == lang_code) {
                         fields.forEach(function(f){
-                            // _this[f] = trans[f];
-                            _this.attr(f, trans[f]);
+                            _this[f] = trans[f];
                         })
                     }
                 });

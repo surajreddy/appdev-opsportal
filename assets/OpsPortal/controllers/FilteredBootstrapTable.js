@@ -337,7 +337,7 @@ function(){
 
                             if (elTemplate.length == 0) {
 
-                                console.err("*** column.formatter provided, but no template found!");
+                                console.error("*** column.formatter provided, but no template found!");
                                 console.warn('   column.formatter=['+column.formatter+']');
 
                             } else {
@@ -364,31 +364,9 @@ function(){
                 this.table.find('tbody').html(' ');
             }
 
-
-            // var template = this.table.find('tr.template');
-            // if (template.length) {
-
-            //     // template provided, so grab template:
-            //     this.templateID = 'FBT'+AD.util.uuid();
-            //     this.hasTableTemplate = true;
-            //     var tableTemplate = this.domToTemplate(template.parent());
-            //     can.view.ejs(this.templateID, tableTemplate);
-
-
-            // } else {
-
-                // no template, so just apply bootstrapTable()
-                this.tableAttach();
-
-            // }
-
-
-
-
+            this._tableAttach();
         },
-
-
-        tableAttach:function() {
+        _tableAttach:function() {
             var _this = this;
 
             this.table.bootstrapTable(this.options.tableOptions);
@@ -486,6 +464,7 @@ function(){
             this._load();
 
             // if our list is of type can.List 
+            // (or just offers a .bind() method )
             if (list.bind) { 
 
                 // reload our FilteredBootstrapTable if our given list changes.
@@ -497,7 +476,7 @@ function(){
         },
         _load:function() {
             var _this = this;
-            
+
 
             this.searchTerms = [];  // 'searchable text'
             this.dataHash = {};       // term : $tr of matching row
@@ -602,6 +581,7 @@ function(){
         },
 
 
+
         /*
          * selected()
          *
@@ -618,6 +598,19 @@ function(){
                 this.table.find('.'+this.options.cssSelected).removeClass(this.options.cssSelected);
                 $el.addClass(this.options.cssSelected);
             }
+        },
+
+
+
+        /*
+         * values()
+         *
+         * returns an array of selected items.
+         *
+         * @return {array}
+         */
+        values: function() {
+            return this.table.bootstrapTable('getSelections');
         }
 
 

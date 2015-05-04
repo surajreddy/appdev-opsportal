@@ -98,10 +98,6 @@ function(){
                     ]
                 },
 
-
-///// LEFT OFF:
-/////   Figure out why we are missing the # Assignments column header for above... 
-
                 // filterTable:true,
 
                 rowClicked:function(data) {

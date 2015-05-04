@@ -28,7 +28,7 @@
                             <div class="opsportal-panel-heading container">
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
                                       <!--Filter-->
                                       <!--
                                       <div class="col-xs-6 col-sm-6 col-md-6">
@@ -298,7 +298,7 @@
                             <div class="opsportal-panel-heading container">
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Container of Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
                                       <!--Filter-->
                                       <div class="col-xs-12 col-sm-6 col-md-6">
                                           <form class="normalform" role="search">
@@ -482,7 +482,7 @@
                             <div class="opsportal-panel-heading container">                            
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Container of Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
                                       <!--Filter-->
                                       <!-- 
                                       <div class="col-xs-6 col-sm-6 col-md-6">
@@ -520,7 +520,7 @@
                                     <!--Add Button-->
                                     <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
                                           <div class="input-group-btn">
-                                            <a class="col-xs-12 col-sm-12 btn rbac-role-addButton" rbac-show="rbac-addroles" href=""><i class="fa fa-plus"></i> Add</a>
+                                            <a class="col-xs-12 col-sm-12 btn rbac-role-addButton" rbac-show="rbac-role-addroles" href=""><i class="fa fa-plus"></i> Add</a>
                                           </div>
                                     </div> 
                                     <!--/Add Button-->
@@ -541,9 +541,9 @@
                                     <td>HR Admin</td>
                                     <td>Edit Information | Add Employee | Approve Edit Info</td>
                                     <td class="actions" >
-                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" role-id="[[= row.id ]]"></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9" role-id="[[= row.id ]]"></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9 rbac-role-list-edit" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9 rbac-role-list-clone" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2 rbac-role-list-delete" role-id="[[= row.id ]]"></a></span>
                                     </td>
                                   </tr>
                                   <tr>
@@ -641,6 +641,7 @@
                               <div class="tab-content">
                                 <!--Action Permission-->
                                 <div role="tabpanel" class="tab-pane active" id="ap">
+                                  <!-- 
                                   <div class="col-sm-6 col-md-6 pull-right">
                                     <form class="navbar-form" role="search" style="text-align:right">
                                       <div class="input-group col-md-6">
@@ -654,8 +655,25 @@
                                       </div>
                                     </form>    
                                   </div>
+                                  -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-add-actionsearch" placeholder="Search" name="q">
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
                                   <div class="clear"></div>    
-                                  <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <table id="permissionlist"  data-cache="false" data-height="299" class="table table-bordered table-hover">
                                       <thead>
                                       <tr class="tbhead">
                                         <th></th>
@@ -669,7 +687,7 @@
                                         <td><input type="checkbox"></td>
                                         <td>HR Admin</td>
                                         <td>Region 10 | Marketing Dept</td>
-                                        <td><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
+                                        <td class="action" ><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
                                       </tr>
                                       <tr>
                                         <td><input type="checkbox"></td>
@@ -730,7 +748,7 @@
                                           </form>    
                                         </div>        
                                       
-                                        <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="clear table table-bordered table-hover">
+                                        <table id="dataFieldPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="clear table table-bordered table-hover">
                                           <thead>
                                           <tr class="tbhead">
                                             <th></th>
@@ -796,8 +814,6 @@
                                         <div class="input-group-btn">
                                           <button class="btn btn-primary float-right rbac-roles-addrole-create" type="submit"><i class="fa fa-save offset-5"></i>Create</button>
                                           <button class="btn float-right rbac-roles-addrole-cancel" type="submit"><i class="fa fa-cancel offset-5"></i>Cancel</button>
-
-                                          
                                         </div>  
                                       </div>
                                       <!--SAVE AND SAVE RETURN-->  
@@ -809,7 +825,7 @@
                       <!--  ================= /END Add Roles  ================  -->
 
                       <!--  ================= Edit Roles  ================  -->
-                      <div class="rbac-display rbac-editroles" style="display:none">
+                      <div class="rbac-display rbac-role-editrole" style="display:none">
                         <div class="opsportal-panel container">
                           <ul id="crumbs">
                               <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
@@ -819,11 +835,11 @@
                               <form>
                                 <div class="form-group">
                                 <label for="exampleInputEmail1">Role Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names" value="HR Admin">
+                                <input class="form-control" name="role_label" >
                                 </div>
                                 <div class="form-group">
                                 <label for="exampleInputPassword1">Description</label>
-                                <textarea class="form-control" rows="3">Everyone in the SW and Conference Fee 2014</textarea>
+                                <textarea class="form-control" rows="3" name="role_description" >Everyone in the SW and Conference Fee 2014</textarea>
                                 </div>
                               </form> 
 
@@ -842,6 +858,7 @@
 
                                 <!--Action Permission-->
                                 <div role="tabpanel" class="tab-pane active" id="editap">
+                                  <!--
                                   <div class="col-sm-6 col-md-6 pull-right">
                                     <form class="navbar-form" role="search" style="text-align:right">
                                       <div class="input-group col-md-6">
@@ -855,8 +872,25 @@
                                       </div>
                                     </form>    
                                   </div>
+                                -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-edit-actionsearch" placeholder="Search" >
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
                                   <div class="clear"></div>    
-                                  <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <table id="roleEditPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                       <thead>
                                       <tr class="tbhead">
                                         <th></th>
@@ -870,7 +904,7 @@
                                         <td><input type="checkbox" checked></td>
                                         <td contenteditable="false">HR Admin</td>
                                         <td contenteditable="false">Region 10 | Marketing Dept</td>
-                                        <td><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
+                                        <td class="action"><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
                                       </tr>
                                       <tr>
                                         <td><input type="checkbox" checked></td>
@@ -991,10 +1025,8 @@
                                       <!--SAVE AND SAVE RETURN-->
                                       <div class="sns">
                                         <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
-                                        </div>
-                                        <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save and return</button>
+                                          <button class="btn btn-primary float-right rbac-roles-editrole-save" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                          <button class="btn float-right rbac-roles-editrole-cancel" ><i class="fa fa-cancel offset-5"></i>Cancel</button>
                                         </div>  
                                       </div>
                                       <!--SAVE AND SAVE RETURN-->  

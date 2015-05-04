@@ -24,7 +24,8 @@ function(){
             var self = this;
             options = AD.defaults({
                     // templateDOM: '//opstools/RBAC/views/Roles/Roles.ejs'
-                    eventRoleAdd: 'role.add.clicked'
+                    eventRoleAdd: 'role.add.clicked',
+                    eventRoleEdit: 'role.edit.clicked'
             }, options);
             this.options = options;
 
@@ -130,6 +131,20 @@ function(){
 
 
 
+        roleForID:function(id) {
+
+            var foundRole = null;
+            this.data.roles.forEach(function(role){
+                if (role.id == id) {
+                    foundRole = role;
+                }
+            });
+
+            return foundRole;
+        },
+
+
+
         // when the user clicks the [ADD] button:
         '.rbac-role-addButton click':function($el, ev) {
 
@@ -138,6 +153,17 @@ function(){
 
             ev.preventDefault();
 
+        },
+
+
+        // when the user clicks on the [edit] icon of an entry
+        '.rbac-role-list-edit click':function($el, ev) {
+
+            var id = $el.attr('role-id');
+            var role = this.roleForID(id);
+
+            this.element.trigger(this.options.eventRoleEdit, role);
+            ev.preventDefault();
         },
 
 
