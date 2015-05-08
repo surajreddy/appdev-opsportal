@@ -32,10 +32,9 @@ function(){
 
 //// LEFT OFF: 
 // add another action and see if update to only 1 action removes link to other action.
-//// Role.delete  ---->  make sure multilingual translations are removed too!
 
 //// ALSO: implement manual name validation without letting server do it.
-//// AD.comm.service() if CSRF error, then auto request and resend operation.
+
 
 
     // Namespacing conventions:

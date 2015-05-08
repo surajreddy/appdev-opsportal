@@ -79,6 +79,9 @@ function(){
             this.form.addField('scope', 'array', { notEmpty: {} });
             // this.form.attach();
 
+
+            this.buttonSave = new AD.op.ButtonBusy(this.element.find('.rbac-addassignments-save'));
+
         },
 
 
@@ -193,6 +196,8 @@ function(){
             var obj = this.form.values();   // get form values
             obj.user = this.data.user.id;   // manually store the current user.id
 
+            this.buttonSave.busy();
+
             var Permission = AD.Model.get('opstools.RBAC.Permission');
             var entry = new Permission(obj);
             entry.save()
@@ -213,6 +218,8 @@ console.error('... unknown error! :', err);
 
                 // update the current user's permission entry with this new entry:
                 _this.data.user.permission.push(savedEntry);
+
+                _this.buttonSave.ready();
                 
                 // return the saved permission entry
                 _this.element.trigger(_this.options.eventAssignmentAdded, savedEntry);

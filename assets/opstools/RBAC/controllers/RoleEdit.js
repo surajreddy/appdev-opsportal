@@ -55,7 +55,7 @@ function(){
                     columns: [
                         { title:'',              checkbox:true               },  
                         { title:'Key',           field:'action_key'          },
-                        { title:'Description',   field:'action_description'  },
+                        { title:'Description',   field:'action_description', class:'rbac-role-edit-action-description'  },
                         { title:'Action',        formatter:'.action'         }
                     ]
                 },
@@ -78,6 +78,29 @@ function(){
 
 
             this.buttonSave = new AD.op.ButtonBusy(this.element.find('.rbac-roles-editrole-save'));
+        },
+
+
+        actionForID: function(id) {
+
+            var foundAction =  null;
+            this.data.actions.forEach(function(action){
+                if (action.id == id) {
+                    foundAction = action;
+                }
+            })
+
+            return foundAction;
+        },
+
+
+
+        iconBusy: function($el) {
+            $el.addClass(' fa-spinner fa-pulse');
+        },
+
+        iconReady:function($el) {
+            $el.removeClass(' fa-spinner fa-pulse');
         },
         
         
@@ -107,6 +130,80 @@ function(){
             this._super();
             this.Filter.resetView();
         },
+
+
+        '.rbac-roles-editrole-action-edit click': function($el, ev) {
+
+            var $tr = $el.closest('tr');
+
+
+            var descriptionEl = $tr.find('.rbac-role-edit-action-description');
+            descriptionEl.attr('contentEditable', true);
+
+            $tr.find('.toEdit').hide();
+            $tr.find('.toSave').show().removeClass('hidden');
+
+            ev.preventDefault();
+
+        },
+
+
+
+
+
+        '.rbac-roles-editrole-action-cancel click': function($el, ev) {
+
+            var id = parseInt($el.attr('assignment-id'));
+            var action = this.actionForID(id);
+
+
+            var $tr = $el.closest('tr');
+
+            // this is a cancel so let's return the contents to match the action description:
+            var descriptionEl = $tr.find('.rbac-role-edit-action-description');
+            descriptionEl.attr('contentEditable', false);
+            descriptionEl.html(action.attr('action_description'));
+
+
+            // return to display the edit icon:
+            $tr.find('.toSave').hide();
+            $tr.find('.toEdit').show();
+
+            ev.preventDefault();
+        },
+
+
+
+        '.rbac-roles-editrole-action-save click': function($el, ev) {
+            var _this = this;
+
+            var id = parseInt($el.attr('assignment-id'));
+            var action = this.actionForID(id);
+
+            this.iconBusy($el);
+
+            var $tr = $el.closest('tr');
+
+            
+            var descriptionEl = $tr.find('.rbac-role-edit-action-description');
+
+            // update our action with the new text
+            action.attr('action_description', descriptionEl.html() );
+            action.save()
+            .fail(function(err){
+
+                _this.iconReady($el);
+            })
+            .then(function(newAction){
+                descriptionEl.attr('contentEditable', false);
+                _this.iconReady($el);
+
+                // return to display the edit icon:
+                $tr.find('.toSave').hide();
+                $tr.find('.toEdit').show();
+            })
+        },
+
 
 
 

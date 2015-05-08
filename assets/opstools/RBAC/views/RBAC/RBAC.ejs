@@ -904,7 +904,12 @@
                                         <td><input type="checkbox" checked></td>
                                         <td contenteditable="false">HR Admin</td>
                                         <td contenteditable="false">Region 10 | Marketing Dept</td>
-                                        <td class="action"><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
+                                        <td class="action">
+                                            <span data-toggle="tooltip" data-placement="left" title="Edit" class="toEdit"><a href="#" class="editbtn fa fa-edit fa-2 rbac-roles-editrole-action-edit"></a>
+                                            </span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Save" class="toSave hidden"><a class="fa fa-save fa-2 rbac-roles-editrole-action-save" assignment-id="[[= row.id ]]"></a></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Cancel" class="toSave hidden"><a class="fa fa-close fa-2 rbac-roles-editrole-action-cancel" assignment-id="[[= row.id ]]"></a></span>
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td><input type="checkbox" checked></td>
