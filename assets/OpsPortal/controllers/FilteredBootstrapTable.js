@@ -383,6 +383,24 @@ function(){
 
 
 
+        checkEntries:function(list) {
+            var _this = this;
+
+            if (list) {
+
+                this.table.bootstrapTable("uncheckAll");
+
+                var listIDs = [];
+                list.forEach(function(l){
+                    listIDs.push(l[_this.options.modelID])
+                })
+
+                this.table.bootstrapTable("checkBy", {field:this.options.modelID, values:listIDs});
+            }
+        },
+
+
+
 
         filter: function(q,cb) {
 
@@ -484,7 +502,13 @@ function(){
 
 
             // tell bootstrap-table to load this list of data
-            this.table.bootstrapTable('load', this.listData);
+            // v1.7 doesn't allow can.List to be the data:
+            this.table.bootstrapTable('load', []);
+            var list = [];
+            this.listData.forEach(function(e){
+                list.push(e);
+            })
+            this.table.bootstrapTable('load', list);
 
 
             // now figure out each of our hashes:
@@ -542,6 +566,7 @@ function(){
         },
 
 
+
         /*
          * select()
          *
@@ -553,6 +578,7 @@ function(){
         select:function(model, field) {
 
             field = field || this.options.modelID;  // default to 'id' for typical Models
+      
 
             // make sure calling model has a field value:
             if (typeof model[field] != 'undefined') {
@@ -560,19 +586,20 @@ function(){
                 this.selectedModel = model;
                 this.selectionField = field;
 
+                this._load();   // reload the current data so this entry get's shown as selected
 
-                var listData = this.table.bootstrapTable('getData');
-                if (listData) {
-                    var indx = -1;
-                    listData.forEach(function(data){
-                        indx++;
-                        if (typeof data[field] != 'undefined') {
-                            if (data[field] == model[field]) {
+                // var listData = this.table.bootstrapTable('getData');
+                // if (listData) {
+                //     var indx = -1;
+                //     listData.forEach(function(data){
+                //         indx++;
+                //         if (typeof data[field] != 'undefined') {
+                //             if (data[field] == model[field]) {
 
-                            }
-                        }
-                    })
-                }
+                //             }
+                //         }
+                //     })
+                // }
 
             } else {
                 console.error('FilteredBootstrapTable.select(): model did not contain the given field ['+field+']  model:', model);

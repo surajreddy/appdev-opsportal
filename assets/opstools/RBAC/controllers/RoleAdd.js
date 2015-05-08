@@ -111,6 +111,9 @@ function(){
             this.form.addField('actions', 'array', {});
             this.form.attach();
 
+
+            this.buttonSave = new AD.op.ButtonBusy(this.element.find('.rbac-roles-addrole-create'));
+
         },
         
         
@@ -122,9 +125,20 @@ function(){
 
 
 
+        /** 
+         * show()
+         *
+         * when this controller is shown, make sure the bootstrap-table gets properly
+         * refreshed().
+         *
+         * Also, this is an Add form, so make sure the values are cleared.
+         */
         show:function() {
             this._super();
             this.form.clear(true);
+            this.Filter.resetView();
+            this.buttonSave.ready();
+            this.Filter.checkEntries([]);
         },
 
 
@@ -144,6 +158,8 @@ function(){
             var _this = this;
 
             if (this.form.isValid()) {
+
+                this.buttonSave.busy();
 
                 var obj = this.form.values();
                 var actions = this.Filter.values();
@@ -172,6 +188,7 @@ function(){
 //// TODO: handle unknown Error event:
 // console.error('... unknown error! (Role Add Create) :', err);
                     }
+                    _this.buttonSave.ready();
                 })
                 .then(function(newRole){
 
@@ -187,6 +204,9 @@ function(){
                         // now it should look like all the others
 
                         console.log('*** new Role:', fullRole);
+
+                        _this.buttonSave.ready();
+
                         // emit the RoleAdd event:
                         _this.element.trigger( _this.options.eventRoleAdded, fullRole );
 
@@ -194,6 +214,7 @@ function(){
 
 
                 })
+
 
             }
             

@@ -16,6 +16,8 @@ steal(
                 role_description : 'text'
             };
         },
+        associations:['actions', 'permissions'],
+        multilingualFields:['role_label', 'role_description'],
         validations: {
             "role_label" : [ 'notEmpty' ],
             "role_description" : [ 'notEmpty' ]
@@ -23,30 +25,7 @@ steal(
         fieldId:'id',
         fieldLabel:'role_label'
     },{
-        model: function() {
-            return AD.Model.get('opstools.RBAC.PermissionRole'); 
-        },
-        getID: function() {
-            return this.attr(this.model().fieldId) || 'unknown id field';
-        },
-        getLabel: function() {
-            return this.attr(this.model().fieldLabel) || 'unknown label field';
-        },
-        translate:function( lang_code ) {
-            var _this = this;
-            lang_code = lang_code || AD.lang.currentLanguage;
-            var fields = ['role_label', 'role_description'];
-            if (this.translations) {
-                this.translations.forEach(function(trans){ 
-                    if (trans.language_code == lang_code) {
-                        fields.forEach(function(f){
-                            // _this[f] = trans[f];
-                            _this.attr(f, trans[f]);
-                        })
-                    }
-                });
-            }
-        }
+        //// instance definitions 
     });
 
 

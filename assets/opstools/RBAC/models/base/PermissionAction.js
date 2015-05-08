@@ -16,36 +16,15 @@ steal(
                 action_description: 'text'
             };
         },
+        multilingualFields:['action_description'],
         validations: {
             "action_key" : [ 'notEmpty' ],
             "action_description" : [ 'notEmpty' ]
         },
         fieldId:'id',
-        fieldLabel:'null'
+        fieldLabel:'action_key'
     },{
-        model: function() {
-            return AD.Model.get('opstools.RBAC.PermissionAction');
-        },
-        getID: function() {
-            return this.attr(this.model().fieldId) || 'unknown id field';
-        },
-        getLabel: function() {
-            return this.attr(this.model().fieldLabel) || 'unknown label field';
-        },
-        translate:function( lang_code ) {
-            var _this = this;
-            lang_code = lang_code || AD.lang.currentLanguage;
-            var fields = ['action_description'];
-            if (this.translations) {
-                this.translations.forEach(function(trans){ 
-                    if (trans.language_code == lang_code) {
-                        fields.forEach(function(f){
-                            _this[f] = trans[f];
-                        })
-                    }
-                });
-            }
-        }
+
     });
 
 

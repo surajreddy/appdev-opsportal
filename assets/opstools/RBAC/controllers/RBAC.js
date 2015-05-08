@@ -31,12 +31,11 @@ function(){
 
 
 //// LEFT OFF: 
-//// RoleEdit:save()    : make sure Multilingual labels get properly updated!  and Actions properly updated.
+// add another action and see if update to only 1 action removes link to other action.
+//// Role.delete  ---->  make sure multilingual translations are removed too!
 
-//// AD.Model.extend()  : look for multilingualFields:['fieldName'] and add a translate() to the instance definition
-//// AD.Model.extend()  : if multilingualFields, then create() push values into translations:[] 
 //// ALSO: implement manual name validation without letting server do it.
-
+//// AD.comm.service() if CSRF error, then auto request and resend operation.
 
 
     // Namespacing conventions:
@@ -74,6 +73,9 @@ function(){
             this.data.permissions = [];  // all permission fields
             this.data.roles = [];   // all the roles in the system
             this.data.scopes = [];  // all the scopes in the db
+
+            this.data.hasBeenShown  = false;     // has this controller been shown yet?
+            this.data.lastPortalShown = 'Users'; // what was the last portal displayed?
 
 
             this.initDOM();
@@ -241,7 +243,7 @@ function(){
 
             // event: Done  
             // when a role is successfully edited
-            this.portals.RoleEdit.element.on(this.CONST.DONE, function(event) {
+            this.portals.RoleEdit.element.on(this.CONST.DONE, function(event, role) {
                 _this.portalShow('Roles');
             })
 
@@ -329,11 +331,31 @@ function(){
                 if (p.toLowerCase() == portalKey.toLowerCase()) {
 
                     this.portals[p].show();
+                    this.data.lastPortalShown = p;
+
                 } else {
                     this.portals[p].hide();
                 }
             }
 
+        },
+
+
+
+        resize:function() {
+            this._super();
+
+            if (this.element.is(':visible')) {
+                if (!this.data.hasBeenShown) {
+
+                    // tell our portal to show() itself:
+                    this.portalShow(this.data.lastPortalShown);
+                    this.data.hasBeenShown = true;
+                }
+            }
+
+
+            
         },
 
 

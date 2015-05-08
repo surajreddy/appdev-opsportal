@@ -75,6 +75,9 @@ function(){
             this.form.bind( AD.Model.get('opstools.RBAC.PermissionRole'));
             // this.form.addField('actions', 'array', {});
             this.form.attach();
+
+
+            this.buttonSave = new AD.op.ButtonBusy(this.element.find('.rbac-roles-editrole-save'));
         },
         
         
@@ -89,6 +92,20 @@ function(){
         loadRole:function(role) {
             this.data.role = role;
             this.form.values( role.attr() );
+            this.Filter.checkEntries(role.actions);
+        },
+
+
+
+        /** 
+         * show()
+         *
+         * when this controller is shown, make sure the bootstrap-table gets properly
+         * refreshed().
+         */
+        show:function() {
+            this._super();
+            this.Filter.resetView();
         },
 
 
@@ -109,30 +126,15 @@ function(){
 
             if (this.form.isValid()) {
 
+                this.buttonSave.busy();
+
                 var obj = this.form.values();
                 var actions = this.Filter.values();
 
-                // repackage into server side format:
-                var data = {};
-
-                data.translations = [
-                    { 
-                        language_code: AD.lang.currentLanguage,
-                        role_label:obj.role_label, 
-                        role_description:obj.role_description
-                    }
-                ]
-
-                data.actions = [];
-                actions.forEach(function(a){
-                    data.actions.push(a.id);
-                })
-// console.log('... submitting data:', data);
 
                 var role = this.data.role;
                 role.attr(obj);
-                role.actions = data.actions;
-
+                role.attr('actions', actions);
                 role.save()
                 .fail(function(err){
                     if (!_this.form.errorHandle(err)) {
@@ -142,13 +144,11 @@ function(){
                 })
                 .then(function(newRole){
 
-                    // ok, the newRole doesn't have the embedded translations
-                    // and associated role info.  So, perform a .findOne to get
-                    // all that data filled out:
-
 console.log('... edit role: newRole:', newRole);
 
-                    _this.element.trigger( _this.options.eventDone );
+                    _this.buttonSave.ready();
+
+                    _this.element.trigger( _this.options.eventDone, newRole );
 
                 })
 

@@ -196,3 +196,10 @@ div { position: relative; }
 .gist {
     font-size: 14px;
 }
+
+
+/*  =Busy Button */
+.fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8);
+}

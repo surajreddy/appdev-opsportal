@@ -258,12 +258,19 @@ function(){
          * Redraw the list of users
          */
         refresh: function() {
-
+this.Filter.ready();
             this.Filter.load(this.data.users);
-            this.Filter.ready();
+            
 
             // this.dom.listUsersTbody.html(' ');
             // this.dom.listUsersTbody.append(can.view('RBAC_User_UserList', {users: this.data.users }));
+        },
+
+
+
+        show:function() {
+            this._super();
+            this.Filter.resetView();
         },
 
 
