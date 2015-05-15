@@ -14,7 +14,7 @@ steal(
         findOne: 'GET /appdev-core/permission/{id}',
         create:  'POST /appdev-core/permission',
         update:  'PUT /appdev-core/permission/{id}',
-        destroy: 'DELETE /permission/{id}',
+        destroy: 'DELETE /appdev-core/permission/{id}',
         define: {
             role:{
                 Type:Role
@@ -27,7 +27,8 @@ steal(
             return {
                       "user": "string",
                       "role": "string",
-                      "scope": "string"
+                      "scope": "string",
+                      "enabled": "bool"
             };
         },
         fieldId:'id',

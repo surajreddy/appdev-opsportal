@@ -27,6 +27,8 @@ function(){
             var self = this;
             options = AD.defaults({
                     // templateDOM: '//opstools/RBAC/views/Users/Users.ejs'
+                    eventAssignmentAdd : 'assign.add',
+                    eventPermissionList: 'perm.list'
             }, options);
             this.options = options;
 
@@ -112,17 +114,10 @@ function(){
                 rowDblClicked: function(data) {
                     // if they dbl-click a row,
                     // just continue on as if they clicked [next]
-                    if (data) {
-                        console.log('... dbl.clicked user:', data);
-                    }
+                    _this.element.trigger(_this.options.eventPermissionList, data);
                 },
                 termSelected:function(data) {
-
-                    // if they select a term in the typeahead filter,
-                    // just continue on as if they clicked [next]
-                    if (data) {
-                        console.log('... search selected user:', data);
-                    }
+                    _this.element.trigger(_this.options.eventPermissionList, data);
                 },
                 dataToTerm: function(data) {  
                     if (data) {
@@ -182,35 +177,41 @@ function(){
 //                 _this.data.scopes = list;    // all the 
 //             })
 
-            var Permissions = AD.Model.get('opstools.RBAC.Permission');
+//             var Permissions = AD.Model.get('opstools.RBAC.Permission');
 
-            // if an id is provided, then we are loading a new entry and 
-            // adding it to our current list.
-            if (id) {
+//             // if an id is provided, then we are loading a new entry and 
+//             // adding it to our current list.
+//             if (id) {
 
-                Permissions.findOne({ id: id })
-                .fail(function(err){
-//// TODO: handle Error properly!
-                })
-                .then(function(entry){
-                    _this.data.permissions.push( entry );
-                })
+//                 Permissions.findOne({ id: id })
+//                 .fail(function(err){
+// //// TODO: handle Error properly!
+//                 })
+//                 .then(function(entry){
+//                     _this.data.permissions.push( entry );
+//                 })
 
-            } else {
+//             } else {
 
-                // else we are loading the initial list!
-                Permissions.findAll()
-                .fail(function(err){
-//// TODO: handle Error properly!
-                })
-                .then(function(list){
-                    _this.data.permissions = list;
-                })
+//                 // else we are loading the initial list!
+//                 Permissions.findAll()
+//                 .fail(function(err){
+// //// TODO: handle Error properly!
+//                 })
+//                 .then(function(list){
+//                     _this.data.permissions = list;
+//                 })
 
-            }
+//             }
             
             
 
+        },
+
+
+
+        loadPermissions: function(list) {
+            this.data.permissions = list;
         },
 
 
@@ -264,6 +265,18 @@ this.Filter.ready();
 
             // this.dom.listUsersTbody.html(' ');
             // this.dom.listUsersTbody.append(can.view('RBAC_User_UserList', {users: this.data.users }));
+        },
+
+
+
+        /**
+         * @function resize
+         *
+         * this is called when the Role controller is displayed and the window is
+         * resized.  
+         */
+        resize: function() {
+            this.Filter.resetView();
         },
 
 

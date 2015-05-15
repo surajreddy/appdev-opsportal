@@ -137,6 +137,8 @@ function(){
                 dataCursorOn:function(el) {},   // fn() called when typeahead cursor is on an option
                 rowClicked:function(el) {},     // fn() called when table row clicked
                 rowDblClicked:function(el) {},  // fn() called when table row double clicked
+                rowChecked:function(row) {},    // fn() called when a row's checkbox was clicked
+                rowUnChecked:function(row){},   // fn() called when a row's checkbox was unclicked
                 termSelected:function(el) {},   // fn() called when a typeahead term is selected
 
                 // 
@@ -378,6 +380,12 @@ function(){
             .on('dbl-click-row.bs.table', function (e, row, $element) {
                 _this.selected($element);
                 _this.options.rowDblClicked(row);
+            })
+            .on('check.bs.table', function(e, row) {
+                _this.options.rowChecked(row);
+            })
+            .on('uncheck.bs.table', function(e, row){
+                _this.options.rowUnChecked(row);
             });
         },
 

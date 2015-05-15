@@ -26,7 +26,7 @@ function(){
         init: function (element, options) {
             var self = this;
             options = AD.defaults({
-                eventAssignmentAdded : 'added'
+                eventDone : 'added'
                     // templateDOM: '//opstools/RBAC/views/UserAssignmentAdd/UserAssignmentAdd.ejs'
             }, options);
             this.options = options;
@@ -121,7 +121,7 @@ function(){
             this.data.hashPermissions = {};
             if (this.data.user.permission) {
                 this.data.user.permission.forEach(function(perm){
-                    _this.data.hashPermissions[perm.role] = perm;
+                    _this.data.hashPermissions[perm.role.id || perm.role] = perm;
                 })
             }
 
@@ -184,7 +184,7 @@ function(){
 
         '.rbac-addassignments-cancel click': function ($el, ev) {
 
-            this.element.trigger(this.options.eventAssignmentAdded);
+            this.element.trigger(this.options.eventDone);
             ev.preventDefault();
         },
 
@@ -195,6 +195,7 @@ function(){
 
             var obj = this.form.values();   // get form values
             obj.user = this.data.user.id;   // manually store the current user.id
+            obj.enabled = true;             // assumed since you just created it!
 
             this.buttonSave.busy();
 
@@ -222,7 +223,7 @@ console.error('... unknown error! :', err);
                 _this.buttonSave.ready();
                 
                 // return the saved permission entry
-                _this.element.trigger(_this.options.eventAssignmentAdded, savedEntry);
+                _this.element.trigger(_this.options.eventDone, savedEntry);
 
             });
             ev.preventDefault();

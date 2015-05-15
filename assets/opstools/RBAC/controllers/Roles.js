@@ -25,7 +25,8 @@ function(){
             options = AD.defaults({
                     // templateDOM: '//opstools/RBAC/views/Roles/Roles.ejs'
                     eventRoleAdd: 'role.add.clicked',
-                    eventRoleEdit: 'role.edit.clicked'
+                    eventRoleEdit: 'role.edit.clicked',
+                    eventRoleDeleted: 'role.deleted'
             }, options);
             this.options = options;
 
@@ -157,6 +158,18 @@ function(){
 
 
 
+        /**
+         * @function resize
+         *
+         * this is called when the Role controller is displayed and the window is
+         * resized.  
+         */
+        resize: function() {
+            this.Filter.resetView();
+        },
+
+
+
         roleForID:function(id) {
 
             var foundRole = null;
@@ -271,7 +284,7 @@ console.error('... error looking up full cloned entry:', err);
             var _this = this;
 
             var id = $el.attr('role-id');
-            var role = this.roleForID(id);
+            var role = this.entryForID(this.data.roles, id); // this.roleForID(id);
             var roleIndex = this.data.roles.indexOf(role);
 
             this.iconBusy($el);
@@ -287,6 +300,8 @@ console.error('*** error deleting role:', err);
                     .then(function(){
                         _this.data.roles.splice(roleIndex, 1);
                         _this.iconReady($el);
+
+                        _this.element.trigger(_this.options.eventRoleDeleted, role);
                     })
 
                 },

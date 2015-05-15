@@ -12,6 +12,7 @@ steal(
 
         'opstools/RBAC/controllers/Users.js',
         'opstools/RBAC/controllers/UserAssignmentAdd.js',
+        'opstools/RBAC/controllers/UserPermissionList.js',
         'opstools/RBAC/controllers/Roles.js',
         'opstools/RBAC/controllers/RoleAdd.js',
         'opstools/RBAC/controllers/RoleEdit.js',
@@ -31,10 +32,15 @@ function(){
 
 
 //// LEFT OFF: 
-// add another action and see if update to only 1 action removes link to other action.
 
+//// * User:PermissionList:ADD : scopes not recorded properly on client.
+//// + iconBusy(), iconReady()  into OpsPortal  (Roles, UserPermissions)
+//// + [].__init() routine to check for a project's action definitions & route+action requirements
+//// + service Permission.hasPermission() to check the current url and see if it has a match
+////   and if the user has the requested action
 //// ALSO: implement manual name validation without letting server do it.
-
+//// + add .init() check for action definitions
+//// 
 
 
     // Namespacing conventions:
@@ -44,10 +50,12 @@ function(){
 
         CONST: {
             ASSIGNMENTADD   : 'Assignment.Add',
-            ASSIGNMENTADDED : 'Assignment.Added',
+            USERPERMISSIONLIST: 'User.PermissionList',
+            EDITPERMISSION  : 'Permission.Edit',
 
             ROLEADD         : 'Role.Add',
             ROLEADDED       : 'Role.Added',
+            ROLEDELETED     : 'Role.Deleted',
             ROLEEDIT        : 'Role.Edit',
 
             DONE            : 'Done',       // generic Done event
@@ -69,6 +77,7 @@ function(){
             this.portals = {};  // a hash of portals managed by RBAC:
 
             this.data = {};     // hold any data we are working with.
+            this.data.users = [];
             this.data.permissions = [];  // all permission fields
             this.data.roles = [];   // all the roles in the system
             this.data.scopes = [];  // all the scopes in the db
@@ -95,11 +104,12 @@ function(){
 
             
             var controllers = {
-                'opstools.RBAC.Users'               : { el: '.rbac-users',          opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD } },
-                'opstools.RBAC.UserAssignmentAdd'   : { el: '.rbac-addassignments', opt:{ eventAssignmentAdded:this.CONST.ASSIGNMENTADDED } },
-                'opstools.RBAC.Roles'               : { el: '.rbac-roles',          opt:{ eventRoleAdd:this.CONST.ROLEADD, eventRoleEdit:this.CONST.ROLEEDIT }},
-                'opstools.RBAC.RoleAdd'             : { el: '.rbac-role-addroles',  opt:{ eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL }},
-                'opstools.RBAC.RoleEdit'            : { el: '.rbac-role-editrole',  opt:{ eventDone:this.CONST.DONE, eventCancel:this.CONST.CANCEL }}
+                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD, eventPermissionList:this.CONST.USERPERMISSIONLIST } },
+                'opstools.RBAC.UserAssignmentAdd'   : { el: '.rbac-addassignments',  opt:{ eventDone:this.CONST.DONE } },
+                'opstools.RBAC.UserPermissionList'  : { el: '.rbac-permissionlist',  opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD,  eventDone:this.CONST.DONE } },
+                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{ eventRoleAdd:this.CONST.ROLEADD, eventRoleEdit:this.CONST.ROLEEDIT, eventRoleDeleted:this.CONST.ROLEDELETED }},
+                'opstools.RBAC.RoleAdd'             : { el: '.rbac-role-addroles',   opt:{ eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL }},
+                'opstools.RBAC.RoleEdit'            : { el: '.rbac-role-editrole',   opt:{ eventDone:this.CONST.DONE, eventCancel:this.CONST.CANCEL }}
             }
 
             var initPortal = function(key, ref, el, options) {
@@ -162,6 +172,19 @@ function(){
 
 
 
+            // event: UserPermissionList 
+            // when a user entry is double clicked on.
+            // @param: {obj} user  The user that will have an assignment added to.
+            this.portals.Users.element.on(this.CONST.USERPERMISSIONLIST, function(event, user) {
+
+                console.log(' ... User Permissions for : ', user);
+                _this.portals.UserPermissionList.loadUser(user);
+
+                _this.portalShow('UserPermissionList');
+            });
+
+
+
             ////
             //// UserAssignmentAdd
             ////
@@ -169,21 +192,57 @@ function(){
             // event: AssignmentAdded 
             // event either [Save] or [Cancel] is processed.
             // @param: {model} permission  the newly created permission entry.
-            this.portals.UserAssignmentAdd.element.on(this.CONST.ASSIGNMENTADDED, function(event, permission) {
+            this.portals.UserAssignmentAdd.element.on(this.CONST.DONE, function(event, permission) {
 
                 console.log(' ... User Assignment Add Return ');
 
                 // if a permission was created, then
                 if (permission) {
 
+
+                    // add the full permission definition to our permissions list.
+                    var Permissions = AD.Model.get('opstools.RBAC.Permission');
+                    Permissions.findOne({ id: permission.id })
+                    .fail(function(err){
+//// TODO: handle Error properly!
+                    })
+                    .then(function(entry){
+                        _this.data.permissions.push( entry );
+                    })
+
                     // load the new permission
-                    _this.portals.Users.loadData( permission.id ); 
-                    _this.portals.Users.refresh();                  
+                    // _this.portals.Users.loadData( permission.id ); 
+                    // _this.portals.Users.refresh();                  
 
                 }
 
                 // return us to the controller we came from
                 _this.portalShow(_this.portals.UserAssignmentAdd.__from);
+            });
+
+
+
+            ////
+            //// User Permission List
+            ////
+
+            // event: AssignmentAdd 
+            // when the [+ Add] button is pressed, so we can add an assignment to this user.
+            // @param: {obj} user  The user that will have an assignment added to.
+            this.portals.UserPermissionList.element.on(this.CONST.ASSIGNMENTADD, function(event, user) {
+
+                console.log(' ... User Assignment Add : ', user);
+                _this.portals.UserAssignmentAdd.loadUser(user);
+                _this.portals.UserAssignmentAdd.__from = 'UserPermissionList';  // mark the portal/controller we came from
+
+                _this.portalShow('UserAssignmentAdd');
+            });
+
+            // event: PermissionEdit 
+            // when the [+ Add] button is pressed, so we can add an assignment to this user.
+            // @param: {obj} user  The user that will have an assignment added to.
+            this.portals.UserPermissionList.element.on(this.CONST.DONE, function(event, permission) {
+                _this.portalShow('Users');
             });
 
 
@@ -206,6 +265,24 @@ function(){
                 _this.portalShow('RoleEdit');
             })
 
+            // event: RoleDeleted
+            // when a role is deleted.
+            this.portals.Roles.element.on(this.CONST.ROLEDELETED, function(event, role) {
+
+                // NOTE: in portal.Users we manually insert a permission into the User.permission
+                // association. Here we scan a User's .permission settings to see if they contain
+                // the role we just deleted.  If so, manually remove that permission from this user.
+                _this.data.users.forEach(function(user){
+                    user.permission.forEach(function(perm){
+                        if ((perm.role == role.id) 
+                            || (perm.role.id == role.id)) {
+                            // we need to remove this perm from this user:
+                            var index = user.permission.indexOf(perm);
+                            user.permission.splice(index,1);
+                        }
+                    })
+                })
+            })
 
 
             ////
@@ -249,19 +326,29 @@ function(){
         },
 
 
-
-        loadData: function() {
+        loadUsers:function() {
             var _this = this;
 
+            console.log('... loading Users');
             var User = AD.Model.get('opstools.RBAC.SiteUser');
             User.findAll()
             .fail(function(err){
 //// TODO: handle Error properly!
             })
             .then(function(list){
+                _this.data.users = list;
                 _this.portals.Users.loadUsers(list);
             });
 
+        },
+
+
+
+        loadData: function() {
+            var _this = this;
+
+
+            this.loadUsers();
 
             var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
             Actions.findAll()
@@ -290,6 +377,7 @@ function(){
                 })
                 _this.portals.Users.loadRoles(list);
                 _this.portals.UserAssignmentAdd.loadRoles(list);
+                _this.portals.UserPermissionList.loadRoles(list);
                 _this.portals.Roles.loadRoles(list);
                 _this.data.roles = list;    
             });
@@ -307,18 +395,24 @@ function(){
                 // })
                 _this.portals.Users.loadScopes(list);
                 _this.portals.UserAssignmentAdd.loadScopes(list);
+                _this.portals.UserPermissionList.loadScopes(list);
+
                 _this.data.scopes = list;    // all the 
             });
 
 
-//             var Permissions = AD.Model.get('opstools.RBAC.Permission');
-//             Permissions.findAll()
-//             .fail(function(err){
-// //// TODO: handle Error properly!
-//             })
-//             .then(function(list){
-//                 _this.data.permissions = list;
-//             })
+            var Permissions = AD.Model.get('opstools.RBAC.Permission');
+            Permissions.findAll()
+            .fail(function(err){
+//// TODO: handle Error properly!
+            })
+            .then(function(list){
+                _this.portals.Users.loadPermissions(list);
+                _this.portals.UserPermissionList.loadPermissions(list);
+                _this.portals.UserPermissionEdit.loadPermissions(list);
+                _this.data.permissions = list;
+            })
+
 
         },
 
@@ -351,6 +445,13 @@ function(){
                     this.portalShow(this.data.lastPortalShown);
                     this.data.hasBeenShown = true;
                 }
+            }
+
+
+            // pass a resize() call to the currently shown portal:
+            var portal = this.portals[this.data.lastPortalShown];
+            if (portal.resize) {
+                portal.resize();
             }
 
 
