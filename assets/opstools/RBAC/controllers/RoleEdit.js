@@ -36,7 +36,8 @@ function(){
 
 
         initDOM: function () {
-
+            var _this = this;
+            
             // this.element.html(can.view(this.options.templateDOM, {} ));
 
             // attach the FilteredBootstrapTable Controller
@@ -58,6 +59,14 @@ function(){
                         { title:'Description',   field:'action_description', class:'rbac-role-edit-action-description'  },
                         { title:'Action',        formatter:'.action'         }
                     ]
+                },
+
+                rowDblClicked: function(data) {
+
+                    var editIcon = _this.element.find('.rbac-roles-editrole-action-edit[assignment-id="'+data.id+'"]');
+                    if (editIcon.length) {
+                        editIcon.click();
+                    }
                 },
 
                 dataToTerm: function(data) {  

@@ -87,6 +87,13 @@ function(){
                 rowUnChecked:function(row){
                     _this.validateApply();
                 },
+                rowDblClicked: function(data) {
+
+                    var editIcon = _this.element.find('.rbac-permissionlist-edit[perm-id="'+data.id+'"]');
+                    if (editIcon.length) {
+                        editIcon.click();
+                    }
+                },
                 dataToTerm: function(data) {  
                     if (data) {
                         return data.role_name;

@@ -41,6 +41,7 @@ function(){
 //// ALSO: implement manual name validation without letting server do it.
 //// + add .init() check for action definitions
 //// 
+//// + appdev cas  : add in the guidKey to the install script(s)
 
 
     // Namespacing conventions:
@@ -409,7 +410,6 @@ function(){
             .then(function(list){
                 _this.portals.Users.loadPermissions(list);
                 _this.portals.UserPermissionList.loadPermissions(list);
-                _this.portals.UserPermissionEdit.loadPermissions(list);
                 _this.data.permissions = list;
             })
 

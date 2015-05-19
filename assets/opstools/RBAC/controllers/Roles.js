@@ -45,6 +45,9 @@ function(){
 
         initDOM: function () {
 
+            var _this = this;
+
+
             // this.element.html(can.view(this.options.templateDOM, {} ));
 
 
@@ -79,10 +82,10 @@ function(){
 
                 },
                 rowDblClicked: function(data) {
-                    // if they dbl-click a row,
-                    // just continue on as if they clicked [next]
-                    if (data) {
-                        console.log('... dbl.clicked role:', data);
+
+                    var editIcon = _this.element.find('.rbac-role-list-edit[role-id="'+data.id+'"]');
+                    if (editIcon.length) {
+                        editIcon.click();
                     }
                 },
                 termSelected:function(data) {
