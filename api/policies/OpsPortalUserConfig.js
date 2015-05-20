@@ -71,6 +71,8 @@ function processPermission(user, permission) {
 
     return ok;
 }
+
+
 function processTool( areaHash, tools, user, area, tool ) {
 
     // for this tool, check each possible permission settings

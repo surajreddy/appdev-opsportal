@@ -120,9 +120,6 @@ function(){
 
 
 
-
-
-
         iconBusy: function($el) {
             $el.addClass(' fa-spinner fa-pulse');
         },
@@ -154,9 +151,23 @@ function(){
 
 
             // if we are ready to display then refresh()
-            if ((this.data.user) && (this.data.scopes)) {
-                this.refresh();
-            }
+            this.refresh();
+
+
+
+            // if a new role is added to the list:
+            this.data.roles.bind('change', function() { 
+
+                // recalc our hash
+                _this.hashRoles = {};
+                _this.data.roles.forEach(function(role){
+                    _this.hashRoles[role.id] = role;
+                })
+
+                // refresh the display:
+                _this.refresh();
+            });
+
         },
 
 
@@ -174,9 +185,8 @@ function(){
 
 
             // if we are ready to display then refresh()
-            if ((this.data.user) && (this.data.roles)) {
-                this.refresh();
-            }
+            this.refresh();
+
 
             // update permission editor with these scopes
             this.dom.scopeList.html(can.view('RBAC_PermissionList_ScopeList', { scopes:this.data.scopes } ));
@@ -202,9 +212,7 @@ function(){
 
 
             // if we are ready to display then refresh()
-            if ((this.data.user) && (this.data.roles)) {
-                this.refresh();
-            }
+            this.refresh();
 
 
             // if a new permission is added to the list:
@@ -226,47 +234,54 @@ function(){
         refresh:function(){
             var _this = this;
 
-            this.dom.username.html( this.data.user.attr('username'));
+            // if our important data has been set
+            if ((this.data.user) 
+                && (this.data.roles)
+                && (this.data.scopes)) {
 
-            var displayData = [];
-            this.data.user.permission.forEach(function(userPerm){
+                this.dom.username.html( this.data.user.attr('username'));
 
-                var perm = _this.hashPermissions[userPerm.id];
-                if (perm) {
+                var displayData = [];
+                this.data.user.permission.forEach(function(userPerm){
 
-                    var data = {};
+                    var perm = _this.hashPermissions[userPerm.id];
+                    if (perm) {
 
-                    data.id = perm.id;
+                        var data = {};
 
-                    var rid = perm.role.id || perm.role;
-                    if (_this.hashRoles[rid]) {
-                        data.role_name = _this.hashRoles[rid].role_label;
-                    } else {
-                        data.role_name = ' *** role not found ***';
-                    }
+                        data.id = perm.id;
 
-                    var scopeList = [];
-                    perm.scope.forEach(function(s){
-
-                        var sid = s.id || s;
-
-                        if (_this.hashScopes[sid]) {
-
-                            scopeList.push( _this.hashScopes[sid].getLabel())
-
+                        var rid = perm.role.id || perm.role;
+                        if (_this.hashRoles[rid]) {
+                            data.role_name = _this.hashRoles[rid].role_label;
+                        } else {
+                            data.role_name = ' *** role not found ***';
                         }
-                    })
 
-                    data.scope_list = scopeList.join(' | ');
+                        var scopeList = [];
+                        perm.scope.forEach(function(s){
 
-                    data.enabled = perm.enabled;
+                            var sid = s.id || s;
 
-                    displayData.push(data);
-                }
-            })
+                            if (_this.hashScopes[sid]) {
+
+                                scopeList.push( _this.hashScopes[sid].getLabel())
+
+                            }
+                        })
+
+                        data.scope_list = scopeList.join(' | ');
+
+                        data.enabled = perm.enabled;
+
+                        displayData.push(data);
+                    }
+                })
 
 
-            this.Filter.load(displayData);
+                this.Filter.load(displayData);
+
+            }
 
 
         },

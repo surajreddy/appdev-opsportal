@@ -9,5 +9,5 @@
  */
 module.exports = function(req, res, next) {
 
-  return ADCore.hasPermission(req, res, next, 'opsportal');
+  return ADCore.hasPermission(req, res, next, 'opsportal.view');
 };

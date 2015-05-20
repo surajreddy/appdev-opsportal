@@ -274,13 +274,17 @@ function(){
                 // association. Here we scan a User's .permission settings to see if they contain
                 // the role we just deleted.  If so, manually remove that permission from this user.
                 _this.data.users.forEach(function(user){
+                    var toRemove = [];
                     user.permission.forEach(function(perm){
                         if ((perm.role == role.id) 
                             || (perm.role.id == role.id)) {
                             // we need to remove this perm from this user:
-                            var index = user.permission.indexOf(perm);
-                            user.permission.splice(index,1);
+                            toRemove.push(perm);
                         }
+                    });
+                    toRemove.forEach(function(remove) {
+                        var index = user.permission.indexOf(remove);
+                        user.permission.splice(index,1);
                     })
                 })
             })
