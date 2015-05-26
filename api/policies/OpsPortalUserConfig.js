@@ -8,8 +8,7 @@
  *
  */
 module.exports = function(req, res, next) {
-    // only continue if current user has an actionKey in one of their
-    // permissions.
+
 
     var areaHash = {};
     var tools = [];

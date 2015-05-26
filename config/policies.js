@@ -10,8 +10,9 @@
  * For more information on policies, check out:
  * http://sailsjs.org/#documentation
  */
-
-var serviceStack = ['sessionAuth', 'initUser', 'initSession', 'canOpsPortal', 'opsPortalUserConfig']
+var path = require('path');
+var ADCore = require(path.join(process.cwd(), 'api', 'services', 'ADCore.js'));
+var serviceStack = ADCore.policy.serviceStack([ 'opsPortalUserConfig' ]);
 
 module.exports = {
 
