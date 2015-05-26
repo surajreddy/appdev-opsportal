@@ -24,8 +24,9 @@ $( document ).ready(function() {
 
 		// when it is clicked, then make sure only that div is shown
 		var $el = $(el);
-		$el.click(function(){
+		$el.click(function(ev){
 			showIt($el.attr('rbac-show'));
+            ev.preventDefault();
 		})
 	})
 
