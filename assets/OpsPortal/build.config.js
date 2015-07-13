@@ -37,7 +37,9 @@ module.exports={
 
         "notify.js" : "js/notify.min.js",
 
-        "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js"
+        "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js",
+
+        "OpsButtonBusy.js" : "OpsPortal/classes/OpsButtonBusy.js"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },

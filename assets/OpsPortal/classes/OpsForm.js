@@ -31,10 +31,26 @@ steal(
                 this.hashElements = {};     // { field : $(el) }
                 this.listFields = [];
 
+                this.hashTypes = {};        // { field : "text", 'array', ... }
+                this.hashValidations = {};  // { field : { validators:validations } }
+
                 this.validator = null;
                 this.isValidated = false;
 
                 
+            },
+
+
+            // sometimes formValidator doesn't clear the messages, 
+            // this will manually attempt to clear them:
+            _clearMessages: function() {
+                var _this = this;
+
+                this.listFields.forEach(function(field){
+
+                    _this.element.find('[data-bv-icon-for="'+field+'"]').hide();
+                    _this.element.find('[data-bv-for="'+field+'"]').hide();
+                })
             },
 
 
@@ -234,6 +250,7 @@ steal(
                 this.isValidated = false;
                 this.validator.resetForm(true);
 
+                this._clearMessages();
                 // this.element.find(':input:not(:checkbox)').val('');
                 // this.element.find(':checkbox').prop('checked', false);
             },
@@ -348,6 +365,7 @@ steal(
             errorHandle: function(err) {
                 var _this = this;
 
+
                 // maybe err is an appdev response packet:
                 if (err.status) err = err.data || err;
 
@@ -371,6 +389,19 @@ steal(
                             }
 
                             return true;
+                            break;
+
+
+                        case "E_UNKNOWN" : 
+
+                            // there might be an embedded E_Validation error...
+                            if (err.raw) {
+                                if (err.raw[0].err) {
+                                    return _this.errorHandle(err.raw[0].err);
+                                } 
+                            }
+                            // if we get here ... return false
+                            return false;
                             break;
                     }
                 }
@@ -430,6 +461,8 @@ console.log(err);
             reset:function() {
                 this.isValidated = false;
                 this.validator.resetForm(false);
+
+                this._clearMessages();
             },
 
 
@@ -437,12 +470,19 @@ console.log(err);
             /**
              * @function values
              *
-             * Return an object representing the current values of the form 
-             * elements
-             *
-             * @return {obj}
+             * Set or Return the current values of the form elements
+             * @param {obj} values  (optional) obj of key:value pairs
+             * @return {obj} if getting the values, otherwise null 
              */
-            values:function() {
+            values:function(vals) {
+
+                if (vals) {
+                    return this._valuesSet(vals);
+                } else {
+                    return this._valuesGet();
+                }
+            },
+            _valuesGet:function() {
 
                 var values = this.element.find(':input').serializeArray();
                 var obj = {};
@@ -462,7 +502,38 @@ console.log(err);
                 })
 
 
+                // make sure anything designated as an array is returned 
+                // as an array:
+                for(var f in this.hashTypes) {
+                    if (obj[f]) {
+                        if (this.hashTypes[f] == 'array') {
+                            if (!$.isArray(obj[f])) {
+                                obj[f] = [ obj[f] ];
+                            }
+                        }
+                    }
+                }
+
+
                 return obj;
+            },
+            _valuesSet:function(vals) {
+                var _this = this;
+
+                this.clear();
+
+                this.listFields.forEach(function(field){
+
+                    if (vals[field]) {
+
+                        var el = _this.element.find("[name='"+field+"']");
+                        if (el.length > 0) {
+                            el.val( vals[field] );
+                        }
+                    }
+                })
+
+                return null;
             },
 
 
@@ -531,13 +602,6 @@ console.log(err);
             
         });
 
-
-
-
-        //// 
-        //// server validation
-        ////
-        //// At this point in the game, bootstrapValidator has already been l
 
 
         

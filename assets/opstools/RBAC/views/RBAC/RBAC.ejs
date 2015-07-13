@@ -28,7 +28,7 @@
                             <div class="opsportal-panel-heading container">
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
                                       <!--Filter-->
                                       <!--
                                       <div class="col-xs-6 col-sm-6 col-md-6">
@@ -46,16 +46,15 @@
                                       </div>
                                   	  -->
                                       <!--/Filter-->
+
                                       <!--Search-->
                                       <div class="searchbar col-xs-6 col-sm-6 col-md-6">
-                                        <form class="normalform" role="search">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
-                                                <div class="input-group-btn">
-                                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </form>
+                         
+                                              <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search for User">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                             </div> 
+                               
                                       </div>
                                       <!--/Search-->
                                     </div>
@@ -67,27 +66,34 @@
                                 </div>          
                             </div>
                             <div class="col-md-12">  
-                              <table id="userList" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                              <table id="userList" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                   <thead>
                                     <tr class="tbhead">
-                                      <th class="align-center"># Assignment</th>
-                                      <th>User ID</th>
+                                      <th data-field="username" class="align-center"># Assignment</th>
+                                      <th data-field="username" >User ID</th>
                                       <th class="align-center">Option</th>
                                       <th class="align-center">Status</th>
                                     </tr>
                                   </thead> 
                                   <tbody> 
-                                  	  <!-- users.forEach(function(user) { --> 
-                                      <tr>
-                                        <td>[[= user.numAssignments() ]]</td>
+                                      <tr class="template">
+                                        <td class="numAssignments" >[[= row.numAssignments() ]]</td>
                                         <td><a href="" rbac-show="rbac-permissionlist" style="display:block;">[[= user.attr('username') ]]</a></td>
-                                        <td>
-                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  obj-embed="user" ></a></span>
-                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2" obj-embed="user" ></a></span>
+                                        <td class="options" >
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  user-id="[[= row.id ]]" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="" rbac-show="rbac-addassignments" class="fa fa-plus fa-2 rbac-user-perm-add" user-id="[[= row.id ]]" ></a></span>
                                         </td>
-                                        <td><div class="img-thumbnail stats-red"></div></td>
+                                        <td class="status" ><!-- 
+
+                                            var user = row;
+                                            var status = 'stats-red';
+                                            if (user.permission.length > 0) {
+                                              status = 'stats-green';
+                                            }
+                                          -->
+                                          <div class="img-thumbnail [[= status ]]"></div></td>
                                       </tr>
-                                      <!-- }) -->
+
                                       <tr class="mockup" >
                                         <td>2</td>
                                         <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Rammel Olasiman</a></td>
@@ -111,6 +117,7 @@
                             </div>
 
                              <!--Pagination-->
+                             <!-- 
                             <div class="col-md-12 padtop10">
                               <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
@@ -141,6 +148,7 @@
                                 </div>
                               </div>
                             </div>
+                            -->
                             <!--/Pagination-->                         
                         </div>
 
@@ -157,12 +165,52 @@
 	                                  </tr>
 	                                </thead>
 	                                <tbody>
+                                    <!-- if (list.length > 0) {
+
+                                      list.forEach(function(perm){ 
+
+                                        var currRole = "no role found";
+                                        var listScopeIDs = [];
+
+                                        listRoles.forEach(function(role){
+                                            if ((role.id == perm.role)
+                                                || (role.id == perm.role.id)) {
+                                                currRole = role.role_label;
+                                            }
+                                        })
+
+                                        // now use the proper permission entry to gather all the scopes.
+                                        listPermissions.forEach(function(p){
+                                            if (p.id == perm.id) {
+                                                p.scope.forEach(function(scope){
+                                                    listScopeIDs.push(scope.id);
+                                                })
+                                            }
+                                        })
+
+                                        var listScopeNames = [];
+                                        listScopes.forEach(function(scope){
+                                            if (listScopeIDs.indexOf(scope.id) != -1) {
+                                                listScopeNames.push(scope.label)
+                                            }
+                                        })
+
+                                    -->
 		                                <tr>
-		                                  <td>HR Admin</td>
-		                                  <td>Region 10 | Marketing Dept.</td>
+		                                  <td>[[= currRole ]]</td>
+		                                  <td>[[= listScopeNames.join(' | ') ]]</td>
 		                                  <td>Enabled</td>
 		                                </tr>
-		                                <tr>
+                                    <!--  })
+
+                                    } else {
+
+                                    -->
+                                    <tr>
+                                      <td colspan="3"> No Assignments </td>
+                                    </tr>
+                                    <!-- }  -->
+		                                <tr class="mockup" >
 		                                  <td>System Admin</td>
 		                                  <td>I.T Dept. | M.I.Ss Dept.</td>
 		                                  <td>Disabled</td>
@@ -183,7 +231,7 @@
 
                       <!--  ================= Add Assignments ================  -->
                       <div class="rbac-display rbac-addassignments"  style="display:none;">
-                          <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span>Linel Sedillo</span></h5>
+                          <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span class="rbac-addassignments-userID">Linel Sedillo</span></h5>
                           <div class="opsportal-panel container">
                             <ul id="crumbs">
                                 <li><a href="#" rbac-show="rbac-users">Users</a></li>
@@ -191,31 +239,39 @@
                                 <li><a href="#" class="disabled">Add Assignment</a></li>
                             </ul>                                                      
                             <div class="row off-botm10 padtop20">
-                              <div class="col-md-12">  
+                              <div class="col-md-12 rbac-addassignments-form">  
                                     <!--Role-->
                                     <div class="col-sm-6 col-md-6">
                                       <h3>Role</h3>
                                       <p>Select Role from the list</p>
-                                        <select class="rslist" name="availableRoles" multiple="multiple">
-                                          <option value="1">HR Admin</option>
-                                          <option value="2">System Admin</option>
-                                          <option value="3">Crisis Manager</option>
-                                          <option value="3">Marketing Manager</option>
-                                          <option value="3">Crisis Manager</option>
-                                          <option value="3">Sales Manager</option>
-                                          <option value="3">Lorem Manager</option>
+                                      <div class="form-group">
+                                        <select class="rslist rbac-addassignments-roleList" name="role" multiple="multiple">
+                                          <!-- roles.forEach(function(role){ --> 
+                                          <option value="[[= role.id ]]">[[= role.role_label ]]</option>
+                                          <!-- }) -->
+                                          <option class="mockup" value="2">System Admin</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Marketing Manager</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Sales Manager</option>
+                                          <option class="mockup" value="3">Lorem Manager</option>
                                         </select>
+                                      </div>
                                     </div>
                                     <!--Scope-->
-                                    <div class="col-sm-6 col-md-6">
+                                    <div class="col-sm-6 col-md-6 form-group">
                                       <h3>Scope</h3>
                                       <p>To Edit Scope to this user, select Scope from the list</p>
-                                      <div class="rslist">
-                                        <input type="checkbox">Region SW</input><br>
-                                        <input type="checkbox">Region NE</input><br>
-                                        <input type="checkbox">Region SR</input><br>
-                                        <input type="checkbox">Region 10</input><br>
-                                        <input type="checkbox">Region 10</input><br>
+                                      <div class="form-group rbac-addassignments-scopeList">
+                                        <!-- scopes.forEach(function(scope){ -->
+                                        <div class="checkbox">
+                                          <label><input type="checkbox" name="scope" value="[[= scope.id ]]"> [[= scope.attr('label') ]]</input></label>
+                                        </div>
+                                        <!-- }) -->
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region NE</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region SR</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
                                       </div>        
                                     </div>
                               </div>      
@@ -225,7 +281,8 @@
                             
                             <div class="col-sm-4 col-md-4 pull-right">
                                   <div class="input-group-btn">
-                                      <button class="off-botm20 btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                      <button class="off-botm20 btn float-right btn-primary rbac-addassignments-save" ><i class="fa fa-save offset-5"></i>Save</button>
+                                      <button class="off-botm20 btn btn-default float-right rbac-addassignments-cancel" ><i class="fa fa-save offset-5"></i>Cancel</button>
                                   </div>    
                             </div>
                           </div>
@@ -233,17 +290,19 @@
                       <!--  ================= /End Add Assignments ================  -->
                       <!--  ================= Permission List ================  -->
                       <div class="rbac-display rbac-permissionlist"  style="display:none;">
-                        <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span>Linel Sedillo</span></h5>
+                        <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span class="rbac-permissionlist-username">userName here</span></h5>
                         <div class="opsportal-panel container">
                             <ul id="crumbs">
-                                <li><a href="#" rbac-show="rbac-users">Users</a></li>
+                                <li><a class="rbac-permission-users" rbac-show="rbac-users">Users</a></li>
                                 <li><a class="disabled">Permission List</a></li>
                             </ul>                          
                             <div class="opsportal-panel-heading container">
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Container of Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
+
                                       <!--Filter-->
+                                      <!--
                                       <div class="col-xs-12 col-sm-6 col-md-6">
                                           <form class="normalform" role="search">
                                             <div class="">
@@ -257,17 +316,16 @@
                                             </div>
                                           </form>                                      
                                       </div>
+                                      -->
                                       <!--/Filter-->
                                       <!--Search-->
-                                      <div class="searchbar col-xs-12 col-sm-6 col-md-6">
-                                        <form class="normalform align-right" role="search">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
-                                                <div class="input-group-btn">
-                                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                      <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+                                          <div class="form-group">
+                                              <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter typeahead" placeholder="Search for role">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                             </div> 
+                                          </div>
                                       </div>
                                       <!--/Search-->
                                     </div>
@@ -278,7 +336,7 @@
                                     <!--Add Button-->
                                     <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
                                           <div class="input-group-btn">
-                                            <a class="col-xs-12 col-sm-12 btn" rbac-show="rbac-addassignments" href="#add-assignment"><i class="fa fa-plus"></i> Add</a>
+                                            <a class="col-xs-12 col-sm-12 btn btn-primary  rbac-permissionlist-add" ><i class="fa fa-plus"></i> Add</a>
                                           </div>
                                     </div> 
                                     <!--/Add Button-->
@@ -286,7 +344,7 @@
                             </div>
 
                             <div class="col-md-12">
-                              <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                              <table id="permissionlist" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                   <thead>
                                     <tr class="tbhead">
                                       <th></th>
@@ -302,11 +360,16 @@
                                       <td><input type="checkbox"></td>
                                       <td>HR Admin</td>
                                       <td>Region 10 | Marketing Dept</td>
-                                      <td>
-                                        <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-assignment" class="fa fa-edit fa-2 offset-9"  data-toggle="modal" data-target=".add-assignment"></a></span>
-                                        <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                      <td class="actions">
+                                        <span data-toggle="tooltip" data-placement="left" title="Edit"><a class="fa fa-edit fa-2 offset-9 rbac-permissionlist-edit" perm-id="[[= row.id ]]" data-toggle="modal" data-target=".rbac-permission-edit" ></a></span>
+                                        <span data-toggle="tooltip" data-placement="left" title="Delete"><a perm-id="[[= row.id ]]" class="fa fa-close fa-2 rbac-permissionlist-delete"></a></span>
                                       </td>
-                                      <td>Enabled</td>
+                                      <td class="status"><!-- 
+                                        var status = 'enabled';
+                                        if (!row.enabled) {
+                                          status = 'disabled';
+                                        }  
+                                      --> [[= status ]] </td>
                                     </tr>
                                     <tr>
                                       <td><input type="checkbox"></td>
@@ -324,6 +387,7 @@
                             </div>
 
                              <!--Pagination-->
+                             <!--
                             <div class="col-md-12 padtop10">
                               <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
@@ -354,6 +418,7 @@
                                 </div>
                               </div>
                             </div>
+                            -->
                             <!--/Pagination-->
                             <div class="opsportal-divider"></div>
                             <!--Enable and Disable Action-->
@@ -364,16 +429,16 @@
                                       <div class="input-group col-md-12">
                                       <div class="row">  
                                         <div class="col-xs-6 col-md-4 col-sm-6">
-                                        <select class="form-control">
-                                          <option value="one">-- Enable or Disable --</option>
-                                          <option value="two">Enable</option>
-                                          <option value="two">Disable</option>
+                                        <select class="form-control rbac-permission-selectOption">
+                                          <option value="choose">-- Enable or Disable --</option>
+                                          <option value="enable">Enable</option>
+                                          <option value="disable">Disable</option>
                                         </select>
                                         </div>
 
                                         <div class="col-xs-6 col-sm-6 col-md-6">
                                             <div class="input-group-btn">
-                                              <button class="btn" type="submit">Apply</button>
+                                              <button class="btn btn-primary rbac-permission-apply" ><i class="fa fa-edit"></i>Apply</button>
                                             </div>
                                         </div>
                                       </div>
@@ -383,37 +448,46 @@
                                     </div>
                             </div>                            
                             <!--/Enable and Disable Action-->
-                        </div>             
-                      </div>
+                        </div> 
+
 
                         <!--Modal Edit for Assignment-->
-                        <div class="modal fade add-assignment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal fade rbac-permission-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg">
                             <div class="modal-content">
-                            <div class="row">
-                                    <!--Scope-->
-                                    <div class="col-sm-12 col-md-12 off-botm20">
+                              <div class="row">
+                                <!--Scope-->
+                                <div class="col-sm-12 col-md-12 off-botm20">
                                 <h3>Scope</h3>
-                                        <p>Select Scope from the list</p>
-                                <div class="rslist">
-                                  <input type="checkbox" checked>Region SW</input><br>
-                                  <input type="checkbox" checked>Region NE</input><br>
-                                  <input type="checkbox" checked>Region SR</input><br>
-                                  <input type="checkbox" checked>Region 10</input><br>
-                                  <input type="checkbox" checked>Region 10</input><br>
+                                <p>Select Scope from the list</p>
+                                <div class="form-group rbac-permissionlist-scopes">
+                                  <!-- scopes.forEach(function(scope) { --> 
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" name="scope" value="[[= scope.id ]]"> [[= scope.attr('label') ]]</input></label>
+                                  </div>
+                                  <!-- }) -->
+                                  <span class="mockup"><input type="checkbox" checked>Region NE</input><br></span>
+                                  <span class="mockup"><input type="checkbox" checked>Region SR</input><br></span>
+                                  <span class="mockup"><input type="checkbox" checked>Region 10</input><br></span>
+                                  <span class="mockup"><input type="checkbox" checked>Region 11</input><br></span>
+                                  
                                 </div>        
-                                    </div>
+                              </div>
                               
                               <div class="col-sm-4 col-md-4 pull-right">
                                 <div class="input-group-btn">
-                                  <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                  <button class="off-botm20 btn float-right btn-primary rbac-permission-save" ><i class="fa fa-save offset-5"></i>Save</button>
+                                  <button class="off-botm20 btn btn-default float-right rbac-permission-cancel" ><i class="fa fa-save offset-5"></i>Cancel</button>
                                 </div>
                               </div>
                             </div>
                             </div>  
                           </div>
                         </div>    
-                        <!--/Modal Add/Edit for Assignment-->
+                        <!--/Modal Add/Edit for Assignment-->            
+                      </div>
+
+                      
 
                       <!--  ================= /End Permission List ================  -->
 
@@ -426,8 +500,9 @@
                             <div class="opsportal-panel-heading container">                            
                                 <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
                                     <!--Container of Search and Filter-->
-                                    <div class="row">
+                                    <div class="">
                                       <!--Filter-->
+                                      <!-- 
                                       <div class="col-xs-6 col-sm-6 col-md-6">
                                           <form class="normalform" role="search">
                                             <div class="offset-10">
@@ -441,17 +516,18 @@
                                             </div>
                                           </form>                                      
                                       </div>
+                                      -->
                                       <!--/Filter-->
                                       <!--Search-->
                                       <div class="searchbar col-xs-6 col-sm-6 col-md-6">
-                                        <form class="normalform align-right" role="search">
+                               
                                             <div class="input-group">
                                                 <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
                                                 <div class="input-group-btn">
                                                     <button class="btn" type="submit"><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
-                                        </form>
+                                
                                       </div>
                                       <!--/Search-->
                                     </div>
@@ -462,7 +538,7 @@
                                     <!--Add Button-->
                                     <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
                                           <div class="input-group-btn">
-                                            <a class="col-xs-12 col-sm-12 btn" rbac-show="rbac-addroles" href="#add-roles"><i class="fa fa-plus"></i> Add</a>
+                                            <a class="col-xs-12 col-sm-12 btn rbac-role-addButton" rbac-show="rbac-role-addroles" href=""><i class="fa fa-plus"></i> Add</a>
                                           </div>
                                     </div> 
                                     <!--/Add Button-->
@@ -482,10 +558,10 @@
                                   <tr>
                                     <td>HR Admin</td>
                                     <td>Edit Information | Add Employee | Approve Edit Info</td>
-                                    <td>
-                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-roles" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" ></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
-                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    <td class="actions" >
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9 rbac-role-list-edit" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9 rbac-role-list-clone" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2 rbac-role-list-delete" role-id="[[= row.id ]]"></a></span>
                                     </td>
                                   </tr>
                                   <tr>
@@ -512,6 +588,7 @@
                             </div>     
                           
                             <!--Pagination-->   
+                            <!--
                               <div class="col-md-12 padtop10">
                                 <div class="row">
                                   <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
@@ -542,6 +619,7 @@
                                   </div>
                                 </div>
                               </div>
+                            -->
                             <!--/Pagination-->  
 
                           </div>
@@ -549,7 +627,7 @@
                       <!--  ================= /END Roles  ================  -->
                       
                       <!--  ================= /Add Roles  ================  -->
-                      <div class="rbac-display rbac-addroles" style="display:none">
+                      <div class="rbac-display rbac-role-addroles" style="display:none">
                         <div class="opsportal-panel container">
                         <ul id="crumbs">
                             <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
@@ -558,12 +636,12 @@
                           <div class="col-md-12 padtop20 off-top10">
                               <form>
                                 <div class="form-group">
-                                <label for="exampleInputEmail1">Role Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names">
+                                <label for="role_label">Role Name</label>
+                                <input type="text" class="form-control" name="role_label" placeholder="Enter Role Name">
                                 </div>
                                 <div class="form-group">
-                                <label for="exampleInputPassword1">Description</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <label for="role_description">Description</label>
+                                <textarea class="form-control" rows="3" name="role_description"></textarea>
                                 </div>
                               </form> 
 
@@ -581,6 +659,7 @@
                               <div class="tab-content">
                                 <!--Action Permission-->
                                 <div role="tabpanel" class="tab-pane active" id="ap">
+                                  <!-- 
                                   <div class="col-sm-6 col-md-6 pull-right">
                                     <form class="navbar-form" role="search" style="text-align:right">
                                       <div class="input-group col-md-6">
@@ -594,8 +673,25 @@
                                       </div>
                                     </form>    
                                   </div>
+                                  -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-add-actionsearch" placeholder="Search" name="q">
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
                                   <div class="clear"></div>    
-                                  <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <table id="permissionlist"  data-cache="false" data-height="299" class="table table-bordered table-hover">
                                       <thead>
                                       <tr class="tbhead">
                                         <th></th>
@@ -609,7 +705,7 @@
                                         <td><input type="checkbox"></td>
                                         <td>HR Admin</td>
                                         <td>Region 10 | Marketing Dept</td>
-                                        <td><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
+                                        <td class="action" ><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
                                       </tr>
                                       <tr>
                                         <td><input type="checkbox"></td>
@@ -670,7 +766,7 @@
                                           </form>    
                                         </div>        
                                       
-                                        <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="clear table table-bordered table-hover">
+                                        <table id="dataFieldPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="clear table table-bordered table-hover">
                                           <thead>
                                           <tr class="tbhead">
                                             <th></th>
@@ -734,10 +830,8 @@
                                       <!--SAVE AND SAVE RETURN-->
                                       <div class="sns">
                                         <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
-                                        </div>
-                                        <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save and return</button>
+                                          <button class="btn btn-primary float-right rbac-roles-addrole-create" ><i class="fa fa-save offset-5"></i>Create</button>
+                                          <button class="btn float-right rbac-roles-addrole-cancel" type="submit"><i class="fa fa-cancel offset-5"></i>Cancel</button>
                                         </div>  
                                       </div>
                                       <!--SAVE AND SAVE RETURN-->  
@@ -749,7 +843,7 @@
                       <!--  ================= /END Add Roles  ================  -->
 
                       <!--  ================= Edit Roles  ================  -->
-                      <div class="rbac-display rbac-editroles" style="display:none">
+                      <div class="rbac-display rbac-role-editrole" style="display:none">
                         <div class="opsportal-panel container">
                           <ul id="crumbs">
                               <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
@@ -759,11 +853,11 @@
                               <form>
                                 <div class="form-group">
                                 <label for="exampleInputEmail1">Role Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names" value="HR Admin">
+                                <input class="form-control" name="role_label" >
                                 </div>
                                 <div class="form-group">
                                 <label for="exampleInputPassword1">Description</label>
-                                <textarea class="form-control" rows="3">Everyone in the SW and Conference Fee 2014</textarea>
+                                <textarea class="form-control" rows="3" name="role_description" >Everyone in the SW and Conference Fee 2014</textarea>
                                 </div>
                               </form> 
 
@@ -782,6 +876,7 @@
 
                                 <!--Action Permission-->
                                 <div role="tabpanel" class="tab-pane active" id="editap">
+                                  <!--
                                   <div class="col-sm-6 col-md-6 pull-right">
                                     <form class="navbar-form" role="search" style="text-align:right">
                                       <div class="input-group col-md-6">
@@ -795,8 +890,25 @@
                                       </div>
                                     </form>    
                                   </div>
+                                -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-edit-actionsearch" placeholder="Search" >
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
                                   <div class="clear"></div>    
-                                  <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <table id="roleEditPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
                                       <thead>
                                       <tr class="tbhead">
                                         <th></th>
@@ -810,7 +922,12 @@
                                         <td><input type="checkbox" checked></td>
                                         <td contenteditable="false">HR Admin</td>
                                         <td contenteditable="false">Region 10 | Marketing Dept</td>
-                                        <td><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
+                                        <td class="action">
+                                            <span data-toggle="tooltip" data-placement="left" title="Edit" class="toEdit"><a href="#" class="editbtn fa fa-edit fa-2 rbac-roles-editrole-action-edit" assignment-id="[[= row.id ]]"></a>
+                                            </span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Save" class="toSave hidden"><a class="fa fa-save fa-2 offset-9 rbac-roles-editrole-action-save" assignment-id="[[= row.id ]]"></a></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Cancel" class="toSave hidden"><a class="fa fa-close fa-2 offset-9 rbac-roles-editrole-action-cancel" assignment-id="[[= row.id ]]"></a></span>
+                                        </td>
                                       </tr>
                                       <tr>
                                         <td><input type="checkbox" checked></td>
@@ -931,10 +1048,8 @@
                                       <!--SAVE AND SAVE RETURN-->
                                       <div class="sns">
                                         <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
-                                        </div>
-                                        <div class="input-group-btn">
-                                          <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save and return</button>
+                                          <button class="btn btn-primary float-right rbac-roles-editrole-save" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                          <button class="btn float-right rbac-roles-editrole-cancel" ><i class="fa fa-cancel offset-5"></i>Cancel</button>
                                         </div>  
                                       </div>
                                       <!--SAVE AND SAVE RETURN-->  

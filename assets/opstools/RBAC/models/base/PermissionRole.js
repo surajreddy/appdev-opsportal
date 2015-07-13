@@ -12,21 +12,20 @@ steal(
         destroy: 'DELETE /appdev-core/permissionrole/{id}',
         describe: function() {
             return {
-                role_label : 'string'
+                role_label : 'string',
+                role_description : 'text'
             };
+        },
+        associations:['actions', 'permissions'],
+        multilingualFields:['role_label', 'role_description'],
+        validations: {
+            "role_label" : [ 'notEmpty' ],
+            "role_description" : [ 'notEmpty' ]
         },
         fieldId:'id',
         fieldLabel:'role_label'
     },{
-        model: function() {
-            return AD.Model.get('opstools.RBAC.PermissionRole'); //AD.models.opstool.RBAC.PermissionRole;
-        },
-        getID: function() {
-            return this.attr(this.model().fieldId) || 'unknown id field';
-        },
-        getLabel: function() {
-            return this.attr(this.model().fieldLabel) || 'unknown label field';
-        }
+        //// instance definitions 
     });
 
 

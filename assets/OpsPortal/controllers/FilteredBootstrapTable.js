@@ -137,6 +137,8 @@ function(){
                 dataCursorOn:function(el) {},   // fn() called when typeahead cursor is on an option
                 rowClicked:function(el) {},     // fn() called when table row clicked
                 rowDblClicked:function(el) {},  // fn() called when table row double clicked
+                rowChecked:function(row) {},    // fn() called when a row's checkbox was clicked
+                rowUnChecked:function(row){},   // fn() called when a row's checkbox was unclicked
                 termSelected:function(el) {},   // fn() called when a typeahead term is selected
 
                 // 
@@ -337,7 +339,7 @@ function(){
 
                             if (elTemplate.length == 0) {
 
-                                console.err("*** column.formatter provided, but no template found!");
+                                console.error("*** column.formatter provided, but no template found!");
                                 console.warn('   column.formatter=['+column.formatter+']');
 
                             } else {
@@ -364,31 +366,9 @@ function(){
                 this.table.find('tbody').html(' ');
             }
 
-
-            // var template = this.table.find('tr.template');
-            // if (template.length) {
-
-            //     // template provided, so grab template:
-            //     this.templateID = 'FBT'+AD.util.uuid();
-            //     this.hasTableTemplate = true;
-            //     var tableTemplate = this.domToTemplate(template.parent());
-            //     can.view.ejs(this.templateID, tableTemplate);
-
-
-            // } else {
-
-                // no template, so just apply bootstrapTable()
-                this.tableAttach();
-
-            // }
-
-
-
-
+            this._tableAttach();
         },
-
-
-        tableAttach:function() {
+        _tableAttach:function() {
             var _this = this;
 
             this.table.bootstrapTable(this.options.tableOptions);
@@ -400,7 +380,31 @@ function(){
             .on('dbl-click-row.bs.table', function (e, row, $element) {
                 _this.selected($element);
                 _this.options.rowDblClicked(row);
+            })
+            .on('check.bs.table', function(e, row) {
+                _this.options.rowChecked(row);
+            })
+            .on('uncheck.bs.table', function(e, row){
+                _this.options.rowUnChecked(row);
             });
+        },
+
+
+
+        checkEntries:function(list) {
+            var _this = this;
+
+            if (list) {
+
+                this.table.bootstrapTable("uncheckAll");
+
+                var listIDs = [];
+                list.forEach(function(l){
+                    listIDs.push(l[_this.options.modelID])
+                })
+
+                this.table.bootstrapTable("checkBy", {field:this.options.modelID, values:listIDs});
+            }
         },
 
 
@@ -479,7 +483,25 @@ function(){
          * reset our terms and BootstrapTable according to the given array of data items.
          */
         load:function(list) {
-            var self = this;
+            var _this = this;
+
+            this.listData  = list;
+
+            this._load();
+
+            // if our list is of type can.List 
+            // (or just offers a .bind() method )
+            if (list.bind) { 
+
+                // reload our FilteredBootstrapTable if our given list changes.
+                this.listData.bind('change', function() { 
+                    _this._load();
+                });
+            }
+
+        },
+        _load:function() {
+            var _this = this;
 
 
             this.searchTerms = [];  // 'searchable text'
@@ -487,40 +509,28 @@ function(){
             this.posHash = {};
 
 
-            this.listData  = list;
-
-
-            // if (this.hasTableTemplate) {
-
-            //     // remove the existing rows:
-            //     this.table.find('tbody>tr').remove();
-
-            //     // add these new ones:
-            //     this.table.find('tbody').append(can.view(this.templateID, {rows:list}));
-
-            //     // attach bootstrapTable to the current table:
-            //     this.tableAttach();
-
-            // } else {
-
-                // tell bootstrap-table to load this list of data
-                this.table.bootstrapTable('load', list);
-
-            // }
+            // tell bootstrap-table to load this list of data
+            // v1.7 doesn't allow can.List to be the data:
+            this.table.bootstrapTable('load', []);
+            var list = [];
+            this.listData.forEach(function(e){
+                list.push(e);
+            })
+            this.table.bootstrapTable('load', list);
 
 
             // now figure out each of our hashes:
             var i = 0;
-            list.forEach(function(data) { 
+            this.listData.forEach(function(data) { 
             // list.each(function(data, i){
 
                 // what is the search tearm for this data item?
-                var term = self.options.dataToTerm(data);
-                self.searchTerms.push(term);
+                var term = _this.options.dataToTerm(data);
+                _this.searchTerms.push(term);
 
                 // use term to create hashes:
-                self.dataHash[term] = data;
-                self.posHash[term] = i;
+                _this.dataHash[term] = data;
+                _this.posHash[term] = i;
 
                 i++;
 
@@ -564,6 +574,7 @@ function(){
         },
 
 
+
         /*
          * select()
          *
@@ -575,6 +586,7 @@ function(){
         select:function(model, field) {
 
             field = field || this.options.modelID;  // default to 'id' for typical Models
+      
 
             // make sure calling model has a field value:
             if (typeof model[field] != 'undefined') {
@@ -582,25 +594,27 @@ function(){
                 this.selectedModel = model;
                 this.selectionField = field;
 
+                this._load();   // reload the current data so this entry get's shown as selected
 
-                var listData = this.table.bootstrapTable('getData');
-                if (listData) {
-                    var indx = -1;
-                    listData.forEach(function(data){
-                        indx++;
-                        if (typeof data[field] != 'undefined') {
-                            if (data[field] == model[field]) {
+                // var listData = this.table.bootstrapTable('getData');
+                // if (listData) {
+                //     var indx = -1;
+                //     listData.forEach(function(data){
+                //         indx++;
+                //         if (typeof data[field] != 'undefined') {
+                //             if (data[field] == model[field]) {
 
-                            }
-                        }
-                    })
-                }
+                //             }
+                //         }
+                //     })
+                // }
 
             } else {
                 console.error('FilteredBootstrapTable.select(): model did not contain the given field ['+field+']  model:', model);
             }
 
         },
+
 
 
         /*
@@ -619,6 +633,19 @@ function(){
                 this.table.find('.'+this.options.cssSelected).removeClass(this.options.cssSelected);
                 $el.addClass(this.options.cssSelected);
             }
+        },
+
+
+
+        /*
+         * values()
+         *
+         * returns an array of selected items.
+         *
+         * @return {array}
+         */
+        values: function() {
+            return this.table.bootstrapTable('getSelections');
         }
 
 

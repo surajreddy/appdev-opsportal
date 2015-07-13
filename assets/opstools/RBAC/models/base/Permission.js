@@ -14,7 +14,7 @@ steal(
         findOne: 'GET /appdev-core/permission/{id}',
         create:  'POST /appdev-core/permission',
         update:  'PUT /appdev-core/permission/{id}',
-        destroy: 'DELETE /permission/{id}',
+        destroy: 'DELETE /appdev-core/permission/{id}',
         define: {
             role:{
                 Type:Role
@@ -27,21 +27,14 @@ steal(
             return {
                       "user": "string",
                       "role": "string",
-                      "scope": "string"
+                      "scope": "string",
+                      "enabled": "bool"
             };
         },
         fieldId:'id',
         fieldLabel:'user'
     },{
-        model: function() {
-            return AD.Model.get('opstools.RBAC.Permission'); //AD.models.delMe.Permission;
-        },
-        getID: function() {
-            return this.attr(this.model().fieldId) || 'unknown id field';
-        },
-        getLabel: function() {
-            return this.attr(this.model().fieldLabel) || 'unknown label field';
-        }
+
     });
 
 

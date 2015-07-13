@@ -31,7 +31,8 @@ steal(
         'GenericList.js'        // located:  js/GenericList.js
 ).then(
         'wijmo-pro.js',
-        'FilteredBootstrapTable.js'
+        'FilteredBootstrapTable.js',
+        'OpsButtonBusy.js'
 ).then(
         'OpsPortal/controllers/OpsPortal.js',
         'site/labels/OpsPortal.js',

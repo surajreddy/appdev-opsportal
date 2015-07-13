@@ -409,3 +409,21 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 .gist {
     font-size: 14px;
 }
+
+/*  == Bootstrap Table == */
+.bootstrap-table div {position: static !important}
+
+/*  =Busy Button */
+.fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8);
+}
+
+
+/***  Fix for Bootstrap-table Pagination: */
+#opsportal-widgets-area div {
+  position: static;
+}
+.modal {
+  position: fixed !important; 
+}

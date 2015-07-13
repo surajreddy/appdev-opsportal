@@ -18,15 +18,7 @@ steal(
         fieldId:'id',
         fieldLabel:'label'
     },{
-        model: function() {
-            return AD.Model.get('opstools.RBAC.PermissionScope'); //AD.models.opstools.RBAC.PermissionScope;
-        },
-        getID: function() {
-            return this.attr(this.model().fieldId) || 'unknown id field';
-        },
-        getLabel: function() {
-            return this.attr(this.model().fieldLabel) || 'unknown label field';
-        }
+
     });
 
 

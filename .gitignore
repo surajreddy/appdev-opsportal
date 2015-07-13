@@ -26,6 +26,8 @@ build/Release
 # ignore any mockup files
 assets/mockups/*
 
+# ignore the marker file created by our setup/install/install.js
+.setup_install
 
 # Dependency directory
 # Deployed apps should consider commenting this line out:
