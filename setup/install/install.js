@@ -20,6 +20,9 @@ var QUESTION_ROLE_DEFAULT = "System Admin";
 var QUESTION_SCOPE = "enter the name for the scope of all users:";
 var QUESTION_SCOPE_DEFAULT = "All Users";
 
+var QUESTION_ENVIRONMENT = "is this a production environment or local development [prod, dev]:";
+var QUESTION_ENVIRONMENT_DEFAULT = "prod";
+
 
 var Data = {};	// contains all our configuration info
 
@@ -37,6 +40,7 @@ var Main = function() {
 		noRepeats,
 	    loadSails,
 	    questions,
+	    verifyLanguages, 
 	    createUser,
 	    createRole,
 	    createScope,
@@ -44,6 +48,7 @@ var Main = function() {
 	    associateRoleToActions,
 	    createPermission,
 	    markComplete
+//// TODO: insert system version in system DB table
 
 	], function(err, results) {
 
@@ -191,6 +196,19 @@ var questions = function(done) {
                 data: 'scopeName',
                 def: QUESTION_SCOPE_DEFAULT,
                 post: function(data) {}
+            },
+            {
+            	question: QUESTION_ENVIRONMENT,
+            	data: 'environment',
+            	def: QUESTION_ENVIRONMENT_DEFAULT,
+            	post: function(data) {
+            		data.environment = data.environment.toLowerCase();
+            		if (( data.environment == 'p') || data.environment == 'prod' || (data.environment == 'production')) {
+            			data.environment = 'prod';
+            		} else {
+            			data.environment = 'dev';
+            		}
+            	}
             }
         ]
     };
@@ -203,6 +221,7 @@ var questions = function(done) {
         	Data.admin = data.adminUserID;
         	Data.role  = data.roleSystemAdmin;
         	Data.scope = data.scopeName;
+        	Data.isProduction = (data.environment == 'prod');
 
     		AD.log();
 
@@ -212,6 +231,132 @@ var questions = function(done) {
     });
 
 }
+
+
+
+/**
+ * @function verifyLanguages
+ * 
+ * an async fn to make sure our expected site languages are installed.
+ */
+var verifyLanguages = function(done) {
+
+
+
+	SiteMultilingualLanguage.find({ })
+	.then(function(list) {
+		if ( (!list) || (list.length < 1)) {
+
+			AD.log();
+			AD.log('There needs to be some languages defined in the system.');
+			AD.log();
+			AD.log('Type in a comma separated list of language definitions to create.');
+			AD.log('Each definition should be in the format: <yellow>i18n code</yellow>:<green>utf8 label</green>');
+			AD.log('')
+			AD.log('    For example, if you wanted to create English, Korean, and Simplified Chinese, ');
+			AD.log('    type: <yellow>en</yellow>:<green>English</green>,<yellow>ko</yellow>:<green>Korean</green>,<yellow>zh-hans</yellow>:<green>中文</green>');
+			AD.log()
+
+			recursiveLanguageInstall(done);
+
+		} else {
+			AD.log('<green>confirm:</green> there are languages installed in the site.');
+			done();
+		}
+	})
+	.catch(function(err){
+
+		if (err.code == 'ER_NO_SUCH_TABLE') {
+			AD.log('<red>bad:</red> it appears the site tables have not been created in our default DB.');
+
+			if (Data.isProduction){
+				AD.log('<yellow>do :</yellow> be sure to properly reference the correct DB, or create the tables in this one.');
+			} else {
+				AD.log('<yellow>do :</yellow> you can have sails create them for you:');
+				AD.log('<yellow>  1:</yellow> cd up/to/your/sails/directory');
+				AD.log('<yellow>  2:</yellow> vi config/models.js');
+				AD.log('<yellow>  3:</yellow> change migrate:<yellow>\'safe\'</yellow> to migrate:<yellow>\'alter\'</yellow>');
+				AD.log('<yellow>  4:</yellow> exit vi');
+				AD.log('<yellow>  5:</yellow> sails lift');
+				AD.log('<yellow>  6:</yellow> quit sails');
+				AD.log('<yellow>  7:</yellow> run this command again');
+			}
+		}
+	})
+}
+
+
+var recursiveLanguageInstall = function(done) {
+
+	var qset =  {
+        question: 'what languages do you want to install :',
+        data: 'lang',
+        def : 'en:English'
+    };
+    AD.cli.questions(qset, function(err, data) {
+
+        if (err) {
+             done(err);
+        } else {
+
+        	var langs = data.lang.split(',');
+        	var numToDo = 0;
+        	var numDone = 0;
+        	langs.forEach(function(def) {
+
+
+        		var parts = def.split(':');
+        		if (parts.length == 2) {
+
+        			numToDo ++;
+
+        			var code = parts[0].trim();
+        			var label = parts[1].trim();
+
+// TODO: verify code doesn't already exist!
+
+        			SiteMultilingualLanguage.create({ language_code: code, language_label:label })
+        			.then(function() {
+        				AD.log('<green>created:</green> language reference <yellow>'+code+'</yellow> : <green>'+label+'</green>');
+        				numDone ++;
+        				if (numDone >= numToDo) {
+
+        					// if we did all the ones entered then we are done
+        					if (numToDo == langs.length) {
+        						done();
+        					} else {
+
+        						// give them a chance to re-enter a language
+        						recursiveLanguageInstall(done);
+        					}
+        					
+        				}
+
+        			})
+        			.catch(function(err){
+        				done(err);
+        			})
+
+        		} else {
+
+        			AD.log('<red>unknown:</red> I didn\'t understand entry: '+ def);
+        		}
+
+
+        	})
+
+
+        	// if none of what they entered was valid
+        	if ((langs.length > 0) && (numToDo == 0)) {
+        		AD.log('<yellow>try that again...</yellow>');
+        		recursiveLanguageInstall(done);
+        	}
+
+         }
+
+    });
+}
+
 
 
 
@@ -230,7 +375,7 @@ var createUser = function(done) {
 // AD.log('... user:', user);
 		if (user.length == 0) {
 
-			AD.log('<green>create:</green> user account: ', Data.admin);
+			AD.log('<green>create :</green> user account: ', Data.admin);
 			SiteUser.create({ username: Data.admin })
 			.then(function(newUser) {
 				AdminUser = newUser;
@@ -301,7 +446,7 @@ var createRole = function(done) {
 
 			var lang = Multilingual.languages.default();
 
-			AD.log('... creating admin role: ', Data.role);
+			AD.log('<green>create :</green> admin role: ', Data.role);
 			Multilingual.model.create({
 				model: PermissionRole,
 				data: { role_label: Data.role, language_code: lang, role_description:"System Wide Administrator Role" }
@@ -384,7 +529,7 @@ var createScope = function(done) {
 
 		if (scope.length == 0) {
 
-			AD.log('<green>create:</green> creating new scope: '+Data.scope);
+			AD.log('<green>create :</green> creating new scope: '+Data.scope);
 			PermissionScope.create({ label: Data.scope })
 			.then(function(newScope){
 				AdminScope = newScope;
@@ -461,6 +606,13 @@ var createScope = function(done) {
 var verifyActions = function(done) {
 
 	var actionKeys = ['opsportal.view', 'adcore.admin'];
+
+	// if environment is not production then make sure 'adcore.developer' exists as well.
+	if (!Data.isProduction) {
+		actionKeys.push('adcore.developer');
+	}
+
+
 	PermissionAction.find({ action_key: actionKeys })
 	.then(function(actions) {
 		if (actions.length < actionKeys.length) {
@@ -572,7 +724,7 @@ var markComplete = function(done) {
 
 	fs.writeFile(CONST_SETUP_FILE, 'done', function (err) {
 		if (err) {
-			AD.log('<red>error  :</red> unable to write .setup_install file.');
+			AD.log('<red>error  :</red> unable to write '+CONST_SETUP_FILE+' file.');
 			done(err);
 		} else {
 			AD.log('<green>marked :</green> complete.');

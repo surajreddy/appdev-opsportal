@@ -74,17 +74,17 @@ module.exports.opsportal = {
           key:'PortalAdmin',
           label:'Administration',
           tools:[{
-              // Roles and Permissions
-              controller:'RBAC',
-              label:'Permissions',
-              isDefault: true,
-              permissions:[
-                  'opstool.rbac.view'
-                  , 'developer'
-              ]
-          }
+                  // Roles and Permissions
+                  controller:'RBAC',
+                  label:'Permissions',
+                  isDefault: true,
+                  permissions:[
+                      'adcore.admin'
+                      , 'adcore.developer'
+                  ]
+              }
 
-          // User management Interface here...
+              // User management Interface here...
           ]
       },
 
@@ -96,36 +96,29 @@ module.exports.opsportal = {
           label:'Profile',
           isDefault:false,
           tools:[{
-              // Hris User Profile Tool
-              controller:'HrisUserProfile',
-              label:'Profile',
-              isDefault: true,
-              permissions:[
-                  'hris.profile'
-                  , 'developer'
-              ]
-          }]
-      },
-
-      {
-          // HR Admin Tools
-          icon:'fa-wrench',
-          key:'hradmin',
-          label:'HR Admin',
-          isDefault: false,
-          tools:[
+                  // Hris User Profile Tool
+                  controller:'HrisUserProfile',
+                  label:'Profile',
+                  isDefault: true,
+                  permissions:[
+                      'hris.profile'
+                      , 'adcore.developer'
+                  ]
+              },
               {
                   // Hris Admin Objects
                   controller:'HrisAdminObjects',
                   label:'Configure Objects',
-                  isDefault: true,
+                  isDefault: false,
                   permissions:[
                       'hrisadmin.objects'
-                      , 'developer'
+                      , 'adcore.developer'
                   ]
               }
+
           ]
       },
+      
       {
           // MPD Report Tool
           icon:'fa-user',
@@ -139,7 +132,7 @@ module.exports.opsportal = {
               isDefault: true,
               permissions:[
                 'mpdreports.balancereports',
-				'developer'
+                'adcore.developer'
               ]
           }]
       },
@@ -155,9 +148,9 @@ module.exports.opsportal = {
               isDefault: true,
               permissions:[
                   'gma.matrix'
-                  , 'developer'
+                  , 'adcore.developer'
               ]
           }]
-      }
+      },
   ]
 };
