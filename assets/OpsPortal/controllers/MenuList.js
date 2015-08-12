@@ -51,7 +51,8 @@ function(){
         createArea: function( area) {
             // console.log(area);
 
-            this.element.find('.opsportal-nav-list > ul')
+            this.element.find('.op-widget-body > ul')
+			//this.element.find('#op-list-menu')
                 .append(can.view(this.options.templateItem, {area:area}));
 
         },
@@ -67,11 +68,12 @@ function(){
 
 
         //  When a menu item is clicked
-        '.opsportal-nav-list-item click' : function($el, ev) {
+        //'.opsportal-nav-list-item click' : function($el, ev) {
+		'#op-list-menu li click' : function($el, ev) {
 
             var area = $el.attr('area');
             AD.comm.hub.publish('opsportal.area.show', {area:area});
-            AD.ui.jQuery.sidr( 'close', 'opsportal-menu-widget' );
+            AD.ui.jQuery.sidr( 'close', 'op-menu-widget' );
             ev.preventDefault();
         }
 

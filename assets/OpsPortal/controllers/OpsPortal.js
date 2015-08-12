@@ -4,6 +4,7 @@ steal(
         'appdev',
         'OpsPortal/portal-scratch.css',
 		'OpsPortal/opsportal.css',
+		'OpsPortal/opsportal-theme.css',
         'OpsPortal/controllers/MenuList.js',
         'OpsPortal/controllers/WorkArea.js',
         'OpsPortal/controllers/SubLinks.js',
@@ -128,20 +129,21 @@ function(){
         // this is the popup Ops Portal that takes over the page:
         initPortal:function() {
 
-            this.portalPopup = AD.ui.jQuery('<div class="opsportal-portal-popup">');
+            this.portalPopup = AD.ui.jQuery('<div class="op-portal-popup">');
             this.portalPopup.hide();
             this.portalPopup.html(can.view(this.options.templateDOM, {} ));
 
-            this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.opsportal-menu-widget'));
-            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.opsportal-content'));
-//            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+            this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.op-menu-widget'));
+            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.op-stage'));
+//            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'op-menu-widget',side:'left'});
 
             var SubLinks = AD.Control.get('OpsPortal.SubLinks');
-            this.subLinks = new SubLinks(this.portalPopup.find('.opsportal-nav-sub-list'));
-            
+            //this.subLinks = new SubLinks(this.portalPopup.find('.opsportal-nav-sub-list'));
+            this.subLinks = new SubLinks(this.portalPopup.find('#op-masthead-nav'));
             this.dom = {};
             this.dom.resize = {};
-            this.dom.resize.masthead = this.portalPopup.find(".opsportal-container-masthead");
+            //this.dom.resize.masthead = this.portalPopup.find(".opsportal-container-masthead");
+			this.dom.resize.masthead = this.portalPopup.find(".op-masthead");
             AD.ui.jQuery('body').append(this.portalPopup);
 
         },
@@ -259,7 +261,7 @@ AD.comm.hub.subscribe('**', function(key, data){
 
 
                     // once everything is created, tell the menu slider to attach itself
-                    self.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+                    self.portalPopup.find('.op-masthead a:first-of-type').sidr({name:'op-menu-widget',side:'left'});
 
                 }
 
@@ -269,8 +271,10 @@ AD.comm.hub.subscribe('**', function(key, data){
 
 
 
-        '.opsportal-menu-trigger-text click' : function( $el, ev) {
-
+        //'.opsportal-menu-trigger-text click' : function( $el, ev) {
+		//'.opsportal-masthead a:first-of-type click' : function( $el, ev) {
+		'.op-masthead a:first-of-type click' : function( $el, ev) {
+		//'.op-launch click' : function( $el, ev) {
             // this should show the Portal Popup
             this.portalDisplay();
 
