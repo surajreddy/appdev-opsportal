@@ -182,7 +182,7 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 .opsportal-content-block { position: relative; border: 1px solid rgba(0, 0, 0, 0.1); background-color: #f0f0f0; margin-top: 3rem; }
 .opsportal-content-block-title { width: 50%; float: left; text-transform: uppercase;  }*/
 
-/* = OpsPortal Tables */
+/* =OpsPortal Tables */
 .op-table { 
 	border: 1px solid #cccccc; 
 	margin-top: 15px; 
@@ -349,6 +349,12 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	opacity: 0.75; 
 }
 
+.op-icon-hidden-right {
+    display: block;
+    float: right;
+    opacity: 0;
+}
+
 /* =OpsPortal Avatar */
 .op-avatar { 
 	border: 1px solid rgba(0, 0, 0, 0.1); 
@@ -361,6 +367,36 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	margin: 0 10px 0 0; 
 	width: 65px; 
 }
+
+.op-edit-avatar {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0 !important;
+    position: relative;
+    width: 127px;
+}
+.op-edit-avatar img {
+    border: 0 none !important;
+    display: block;
+    margin: 0 !important;
+}
+.op-edit-avatar a {
+    background-color: #333333;
+    border: 0 none;
+    color: #FFFFFF !important;
+    display: block;
+    margin: 0;
+    padding: 5px 0;
+    text-align: center;
+    width: 100%;
+}
+.op-edit-avatar a:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
 
 /* =Typeahead searchbar */
 .typeahead, .tt-query, .tt-hint {
