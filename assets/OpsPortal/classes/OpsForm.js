@@ -2,6 +2,7 @@
 steal(
     'jquery',
     'can',
+    'OpsPortal/classes/ValidationDateGreaterThanField.js',
     'OpsPortal/classes/ValidationServer.js',
     function() {
 
@@ -77,6 +78,38 @@ steal(
                     }
                     this.hashTypes[field] = type;
                     this.hashValidations[field] = { validators:validations };
+                }
+
+            },
+
+
+
+            /**
+             * @function addValidation
+             *
+             * add a validation rule to a field.
+             *
+             * Do this before you .attach() the Form.
+             *
+             * @codestart
+             *
+             * @codeend
+             *
+             * @param {string} field  the field name
+             * @param {obj} validation  the validation object
+             */
+            addValidation:function(field, validation ) {
+
+                var existingValidations = this.hashValidations[field];
+
+                if (existingValidations) {
+
+                    for (var k in validation) {
+                        existingValidations.validators[k] = validation[k];
+                    }
+
+                } else {
+                    console.warn('*** OpsForm.addValidation() field['+field+'] not found.');
                 }
 
             },

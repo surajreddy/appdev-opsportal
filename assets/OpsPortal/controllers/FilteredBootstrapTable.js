@@ -266,7 +266,7 @@ function(){
 
                 var data = self.dataHash[val];
                 if (data) {
-                    self.select(data);          // set which data row should be selected
+                    self.selectRow(data);          // set which data row should be selected
                     self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
 
                     // ## bootstraptable.js has a settimeout() when reloading data
@@ -298,7 +298,7 @@ function(){
                 if (data) {
                     self.textFilter.typeahead('close');
 
-                    self.select(data);          // set which data row should be selected
+                    self.selectRow(data);          // set which data row should be selected
                     self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
 
                     // ## bootstraptable.js has a settimeout() when reloading data
@@ -576,14 +576,14 @@ function(){
 
 
         /*
-         * select()
+         * selectRow()
          *
          * called externally with a given model that should be displayed as selected.
          *
          * @param {obj} model  the Model of the data row that should be selected.
          * @param {string} field  the field to compare in our search.
          */
-        select:function(model, field) {
+        selectRow:function(model, field) {
 
             field = field || this.options.modelID;  // default to 'id' for typical Models
       
@@ -610,7 +610,7 @@ function(){
                 // }
 
             } else {
-                console.error('FilteredBootstrapTable.select(): model did not contain the given field ['+field+']  model:', model);
+                console.error('FilteredBootstrapTable.selectRow(): model did not contain the given field ['+field+']  model:', model);
             }
 
         },

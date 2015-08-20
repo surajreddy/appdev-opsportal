@@ -270,7 +270,7 @@ console.error('... error looking up full cloned entry:', err);
                     _this.data.roles.splice(roleIndex, 1, role, newRole);
 
                     // display as selected
-                    _this.Filter.select(newRole);
+                    _this.Filter.selectRow(newRole);
                     _this.iconReady($el);
                 })
 
