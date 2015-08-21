@@ -49,6 +49,12 @@ function(){
             // listen for new tool notifications.
             AD.comm.hub.subscribe('opsportal.tool.new', function(key, data) {
 
+                // data = { 
+                //     area:'area.key', 
+                //     controller:'RBAC',
+                //     isDefault:true,
+                //     label:"Permissions"
+                // }
                 self.createLink(data);                
             });
 
@@ -56,6 +62,16 @@ function(){
             // listen for area.show notifications.
             AD.comm.hub.subscribe('opsportal.area.show', function(key, data) {
                 self.showArea(data);                
+            });
+
+
+            // listen for tool.show notifications.
+            AD.comm.hub.subscribe('opsportal.tool.show', function(key, data) {
+                // data = {
+                //     area: 'Profile',
+                //     tool: 'GMAMatrix'
+                // }
+                self.updateToolLink(data);                
             });
 
         },
@@ -68,7 +84,6 @@ function(){
             this.element.append(can.view('OpsPortal_SubLinks_Area', {area:area}));
 
             this.areaLinks[area.key] = this.element.find('[area="'+area.key+'"]');
-
 
         },
 
@@ -84,6 +99,7 @@ function(){
         },
 
 
+
         showArea: function( area ) {
 
             for (var k in this.areaLinks) {
@@ -97,6 +113,30 @@ function(){
 
 
 
+        /**
+         * @function updateToolLink
+         *
+         * update the currently shown tool's link to show it is the active tool.
+         *
+         * @param {obj} tool  the message packet from the 'opsportal.tool.show' queue.
+         */
+        updateToolLink: function(tool) {
+
+            // get area for this tool
+            var area = this.areaLinks[tool.area];
+            if (area) {
+
+                // within area, find current active entry and remove it.
+                area.find('.'+this.cssActive).removeClass(this.cssActive);
+
+                // within area, find link for current tool and add active class
+                area.find('[op-tool="'+tool.tool+'"]').addClass(this.cssActive);
+            }
+        
+        },
+
+
+
         initDOM: function() {
 
             // this.element.html(can.view(this.options.templateDOM, {} ));
@@ -104,6 +144,13 @@ function(){
             // register template as :  'OpsPortal_SubLinks_Item'
             //  NOTE:  DON'T USE '.' as seperators here!!!  -> can.ejs thinks they are file names then... doh!
             var item =  this.domToTemplate(this.element.find('ul'));
+
+            // <li class="active"><a href="#" class="" role="button" obj-embed="tool">[[= tool.label ]]</a></li>
+            // we now need to pull the 1st class reference out and use that for our active links class:
+            this.cssActive = $( item ).first().attr('class') || 'active'; // default currently
+            
+            // make sure our template item doesn't have the active class:
+            item = item.replace(this.cssActive, '');
             can.view.ejs('OpsPortal_SubLinks_Item', item);
 
             // remove the template from the DOM
@@ -123,7 +170,7 @@ function(){
 
 
         //  When a menu item is clicked
-        '.opsportal-masthead-link click' : function($el, ev) {
+        '.op-masthead-nav-link click' : function($el, ev) {
 
             var tool = $el.data('tool');
             AD.comm.hub.publish('opsportal.tool.show', {area:tool.area, tool:tool.controller});
