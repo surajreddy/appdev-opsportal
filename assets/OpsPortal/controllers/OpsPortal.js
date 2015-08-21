@@ -11,6 +11,7 @@ steal(
         'OpsPortal/classes/OpsTool.js',
         'OpsPortal/classes/OpsForm.js',
         'OpsPortal/classes/OpsDialog.js',
+        'OpsPortal/classes/OpsWidget.js',
         'jquery',
         'can'
 ).then(

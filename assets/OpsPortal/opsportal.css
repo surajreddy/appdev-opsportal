@@ -244,7 +244,7 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	margin-top: 15px; 
 }
 .op-widget-footer { 
-	position: absolute; 
+/*	position: absolute;  */
 	bottom: 0; 
 	left: 0; 
 	width: 100%; 
