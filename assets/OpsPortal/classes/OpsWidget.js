@@ -2,9 +2,6 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
-//        'OpsPortal/models/Projects.js',
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-        // '//OpsPortal/views/OpsButtonBusy/OpsButtonBusy.ejs',
 function(){
 
 
@@ -17,6 +14,26 @@ function(){
      *
      * This is a generic Ops Widget controller that will handle resizing a section of
      * HTML that conforms to the standard op-widget specification.
+     *
+     * An op-widget looks like:
+     *     <div class="op-container op-widget" id="....t">
+     *         <div class="op-widget-masthead">
+     *         </div>
+     *     
+     *         <div class="op-widget-body">
+     *         </div>
+     *     
+     *         <div class="op-widget-footer">
+     *         </div>
+     *     </div>
+     *
+     * .op-widget-masthead: (optional) defines a header for the widget
+     * .op-widget-footer:  (optional) defines content for a footer of the widget
+     * .op-widget-body:  defines the content of the widget.
+     *
+     * This class is intended to be attached to the outer .op-widget definition, and it will
+     * manage the heights of the inner sections.
+     *
      *
      */
     AD.op.Widget = can.Control.extend({
@@ -52,9 +69,10 @@ function(){
         },
 
 
+
         resize: function( data ) {
 
-            // the outer height of my widget should be: data.height
+            // the outer height of my .op-widget should be: data.height
             this.element.css("height", data.height + "px");
                 
                 
