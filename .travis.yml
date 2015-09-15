@@ -2,6 +2,8 @@ language: node_js
 node_js:
 - "0.12"
 
+sudo: false
+
 before_script:
 - npm install -g  balderdashy/sails appdevdesigns/appdev-cli#develop
 - cd /tmp
@@ -9,7 +11,6 @@ before_script:
 - cd ad-test/node_modules
 - mv /home/travis/build/appdevdesigns/appdev-opsportal .
 - cd appdev-opsportal
-- npm install mocha chai 
 - npm install
 
 script:
