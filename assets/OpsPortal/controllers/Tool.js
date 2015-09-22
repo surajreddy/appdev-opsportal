@@ -87,6 +87,10 @@ function(){
             AD.comm.hub.subscribe('opsportal.tool.show', function(message, data){
                 self.toolShow(data);
             });
+
+
+            // start off hidden until we are told to show ourselves:
+            this.element.hide();
         },
 
 

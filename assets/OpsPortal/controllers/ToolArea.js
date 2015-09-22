@@ -87,7 +87,7 @@ function(){
             this.element.append( can.view(this.options.template_tool, data));
 
 
-            // attach the ToolArea controller to the new div
+            // attach the Tool controller to the new div
             var newTool = new AD.controllers.OpsPortal.Tool(this.element.find('.'+divKey), {
                 key: tool.controller,
                 areaKey:this.options.key,

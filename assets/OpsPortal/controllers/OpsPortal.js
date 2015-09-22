@@ -11,6 +11,7 @@ steal(
         'OpsPortal/classes/OpsTool.js',
         'OpsPortal/classes/OpsForm.js',
         'OpsPortal/classes/OpsDialog.js',
+        'OpsPortal/classes/OpsWidget.js',
         'jquery',
         'can'
 ).then(
@@ -202,11 +203,11 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
         requestConfiguration: function() {
             var self = this;
             
-//// For debugging:
-AD.comm.hub.subscribe('**', function(key, data){
-    console.log('pub:'+key);
-    console.log(data);
-});
+// //// For debugging:
+// AD.comm.hub.subscribe('**', function(key, data){
+//     console.log('pub:'+key);
+//     console.log(data);
+// });
 
             AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
 
@@ -261,7 +262,7 @@ AD.comm.hub.subscribe('**', function(key, data){
 
 
                     // once everything is created, tell the menu slider to attach itself
-                    self.portalPopup.find('.op-masthead a:first-of-type').sidr({name:'op-menu-widget',side:'left'});
+                    self.portalPopup.find('#op-masthead-menu a:first-of-type').sidr({name:'op-menu-widget',side:'left'});
 
                 }
 
