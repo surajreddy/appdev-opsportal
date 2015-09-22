@@ -8,6 +8,14 @@
 /* =0. Bootstrap Overrides */
 /*.opsportal-container-full { min-width: 1170px !important; }*/ /* disable responsive; see http://getbootstrap.com/getting-started/#disable-responsive */
 /*.opsportal-stage-container .row { margin-right: 0 !important; margin-left: 0 !important; }*/
+.container {
+	width: auto !important;
+	padding-right: 0!important;
+	padding-left: 0!important;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 .row { 
 	overflow: hidden; 
 }
@@ -198,13 +206,13 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 
 /* =OpsPortal Margins, Padding, Dividers */
 .op-nopadding { padding: 0 !important; }
-.op-margin-top { margin-top: 15px; }
-.op-margin-top-2x { margin-top: 30px; }
-.op-margin-bottom { margin-bottom: 15px; }
-.op-margin-bottom-2x { margin-bottom: 30px; }
-.op-padding-top { padding-top: 15px; }
-.op-padding-top-2x { padding-top: 30px; }
-.op-padding-bottom { padding-bottom: 15px; }
+.op-margin-top { margin-top: 15px !important; }
+.op-margin-top-2x { margin-top: 30px !important; }
+.op-margin-bottom { margin-bottom: 15px !important; }
+.op-margin-bottom-2x { margin-bottom: 30px !important; }
+.op-padding-top { padding-top: 15px !important; }
+.op-padding-top-2x { padding-top: 30px !important; }
+.op-padding-bottom { padding-bottom: 15px !important; }
 .op-divider-top { border-top: 1px solid rgba(0, 0, 0, 0.1); padding-top: 15px; }
 .op-divider-bottom { border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 15px; }
 
@@ -463,3 +471,28 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 .modal {
   position: fixed !important; 
 }
+
+/* Opsportal Dropzone  with .dropzone overrides */
+.op-dropzone { 
+    background: white none repeat scroll 0 0;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    min-height: 200px;
+    padding: 54px;
+	margin-top: 1.5em;
+}
+
+.dropzone .dz-message, .op-dropzone .dz-message {
+	font-size: 1.5em;
+	font-weight: 400;
+    margin: 1em 0 0 0 !important;
+    text-align: center;
+}
+
+.op-dropzone .dz-message .dz-note {
+    display: block;
+    font-size: 0.6em;
+    font-weight: 200;
+    margin-top: 1.4rem;
+}
+
+.op-dropzone .opsportal-dropzone-icon i { display: block !important; margin: 0 auto !important; text-align: center; }
