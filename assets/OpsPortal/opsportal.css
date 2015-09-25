@@ -258,6 +258,11 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	width: 100%; 
 }
 
+/* FIX : lists have too much padding */
+ul.op-list { 
+	padding-left: 0px;
+}
+
 .op-widget .op-list li.active { 
 	border-top: 1px solid rgba(0, 0, 0, 0.1); 
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
