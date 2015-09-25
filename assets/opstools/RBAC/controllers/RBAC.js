@@ -3,6 +3,7 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
+        'OpsPortal/classes/OpsTool.js',
 
         'opstools/RBAC/models/SiteUser.js',
         // 'opstools/RBAC/models/Permission.js',

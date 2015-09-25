@@ -1,7 +1,6 @@
 
 steal(
-    'jquery',
-    'can',
+    'appdev',
     function() {
 
 

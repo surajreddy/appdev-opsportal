@@ -56,7 +56,7 @@ function(){
                     columns: [
                         { title:'',              checkbox:true               },  
                         { title:'Key',           field:'action_key'          },
-                        { title:'Description',   field:'action_description', class:'rbac-role-edit-action-description'  },
+                        { title:'Description',   field:'action_description', 'class':'rbac-role-edit-action-description'  },
                         { title:'Action',        formatter:'.action'         }
                     ]
                 },

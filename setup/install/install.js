@@ -263,7 +263,7 @@ var verifyLanguages = function(done) {
 			AD.log();
 			AD.log('Type in a comma separated list of language definitions to create.');
 			AD.log('Each definition should be in the format: <yellow>i18n code</yellow>:<green>utf8 label</green>');
-			AD.log('')
+			AD.log('');
 			AD.log('    For example, if you wanted to create English, Korean, and Simplified Chinese, ');
 			AD.log('    type: <yellow>en</yellow>:<green>English</green>,<yellow>ko</yellow>:<green>Korean</green>,<yellow>zh-hans</yellow>:<green>中文</green>');
 			AD.log()

@@ -98,7 +98,7 @@ shouldEcho:true,
                 AD.log('<green>cleaning</green> the opstools/RBAC/production.js file');
 
                 var patches = [
-                    { file:path.join('opstools/RBAC', 'production.js'), tag:'id:"packages/opstools/RBAC-appdev.js",', replace:'id:"appdev/production.js",'}
+                    { file:path.join('opstools/RBAC', 'production.js'), tag:'id:"packages/appdev-RBAC.js",', replace:'id:"appdev/production.js",'}
                 ];
                 builder.patchFile(patches, next);
 

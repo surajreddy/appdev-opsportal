@@ -16,10 +16,10 @@ module.exports={
         "bootstrap-datetimepicker.js" : "js/bootstrap/js/bootstrap-datetimepicker.min.js",
         "bootstrap-datetimepicker.css" : "styles/bootstrap-datetimepicker.min.css",
         
-        "wijmo-open.js"   : "js/jquery.wijmo-open.all.3.20142.45.min.js",   // 'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js'
-        "wijmo-pro.css": "styles/jquery.wijmo-pro.all.3.20142.45.min.css",  // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.css'
-        "wijmo-pro.js" : "js/jquery.wijmo-pro.all.3.20142.45.min.js",       // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.js'
-        "jquery-wijmo.css" : "styles/jquery-wijmo.css", // 'http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css'
+        // "wijmo-open.js"   : "js/jquery.wijmo-open.all.3.20142.45.min.js",   // 'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js'
+        // "wijmo-pro.css": "styles/jquery.wijmo-pro.all.3.20142.45.min.css",  // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.css'
+        // "wijmo-pro.js" : "js/jquery.wijmo-pro.all.3.20142.45.min.js",       // 'http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.js'
+        // "jquery-wijmo.css" : "styles/jquery-wijmo.css", // 'http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css'
         
         "font-awesome.css" : "styles/font-awesome.css",  // "http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
         "GenericList.js"   : "js/GenericList.js",
@@ -35,7 +35,12 @@ module.exports={
         
         "bootbox.js" : "js/bootbox.min.js",
 
-        "notify.js" : "js/notify.min.js",
+        "typeahead.js" : "js/typeahead.jquery.min.js",
+
+        "moment.js" : "js/moment.min.js",
+
+
+        // "notify.js" : "js/notify.min.js",
 
         "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js",
 
@@ -49,16 +54,19 @@ module.exports={
         'bootstrap-datetimepicker.js': {packaged:false },
         'bootstrap-datetimepicker.css': {packaged:false },
 
-        'wijmo-open.js' : { packaged:false },
-        'wijmo-pro.css' : { packaged:false },
-        'wijmo-pro.js' : { packaged:false },
-        'jquery-wijmo.css' : { packaged:false },
+        // 'wijmo-open.js' : { packaged:false },
+        // 'wijmo-pro.css' : { packaged:false },
+        // 'wijmo-pro.js' : { packaged:false },
+        // 'jquery-wijmo.css' : { packaged:false },
 
         'font-awesome.css'  : { packaged:false },
         'js/jquery.sidr.min.js' : { packaged:false },
 
         'dropzone.js'  : { packaged:false },
         'dropzone.css' : { packaged:false },
+
+        'typeahead.js' : { packaged:false },
+        'moment.js' : { packaged: false },
 
         "bootstrap-table.js" : { packaged:false },
         "bootstrap-table.css" : { packaged:false },
@@ -68,13 +76,15 @@ module.exports={
 
         "bootbox.js" : { packaged:false },
 
-        "notify.js" : { packaged:false },
+        // "notify.js" : { packaged:false },
 
 
         // this is a special call that configures which opstools are loaded:
         'opsportal/requirements.js' : { ignore:true },
+        'opsportal/config' : { ignore:true },
 
-        'site/labels/OpsPortal.js' : { packaged:false, ignore:true }
+        'site/labels/OpsPortal.js' : { packaged:false, ignore:true },
+        'site/login-done' : { packaged:false, ignore:true }
     },
     // ext: {
     //     js: "js",

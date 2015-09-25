@@ -1,4 +1,9 @@
-(function($) {
+steal('appdev',
+    'jquery',
+    "bootstrapValidator.js",
+function() {
+
+// (function($) {
     $.fn.bootstrapValidator.i18n.server = $.extend($.fn.bootstrapValidator.i18n.server || {}, {
         'default': 'The server didn\'t like this.'
     });
@@ -47,4 +52,6 @@
         }
 
     };
-}(window.jQuery));
+// }(window.jQuery));
+
+});
