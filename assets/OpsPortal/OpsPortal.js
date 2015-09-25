@@ -6,7 +6,7 @@
 steal(
         'appdev',
         'jquery',
-        'jquery-ui.js',
+        // 'jquery-ui.js',
         'bootstrap.js',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
@@ -24,13 +24,15 @@ steal(
         "bootstrapValidator.css",
         'bootbox.js',
         // 'notify.js',
-        'GenericList.js',        
+        // 'GenericList.js',        
         'FilteredBootstrapTable.js',
         'OpsButtonBusy.js',
-        'font-awesome.css',
-        'OpsPortal/controllers/OpsPortal.js'
+        'font-awesome.css'
+        
 ).then(
+        'jquery-ui.js',
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
+        'OpsPortal/controllers/OpsPortal.js',
         'site/labels/OpsPortal.js'
         
 ).then(function(){
