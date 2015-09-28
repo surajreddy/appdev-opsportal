@@ -14,6 +14,9 @@ var CONST_SETUP_FILE = '.setup_install';
 var QUESTION_ADMIN = "enter the name of the admin userid:";
 var QUESTION_ADMIN_DEFAULT = "admin";
 
+var QUESTION_ADMIN_PW = "enter the password for the admin:";
+var QUESTION_ADMIN_PW_DEFAULT = "admin";
+
 var QUESTION_ROLE = "enter the name of the System Admin Role:";
 var QUESTION_ROLE_DEFAULT = "System Admin";
 
@@ -186,6 +189,13 @@ var questions = function(done) {
         then: [
             {
                 // cond: function(data) { return data.enableSSL; },
+                question: QUESTION_ADMIN_PW,
+                data: 'adminPassword',
+                def: QUESTION_ADMIN_PW_DEFAULT,
+
+            },
+            {
+                // cond: function(data) { return data.enableSSL; },
                 question: QUESTION_ROLE,
                 data: 'roleSystemAdmin',
                 def: QUESTION_ROLE_DEFAULT,
@@ -219,6 +229,7 @@ var questions = function(done) {
         } else {
 
         	Data.admin = data.adminUserID;
+        	Data.adminPassword = data.adminPassword;
         	Data.role  = data.roleSystemAdmin;
         	Data.scope = data.scopeName;
         	Data.isProduction = (data.environment == 'prod');
@@ -252,7 +263,7 @@ var verifyLanguages = function(done) {
 			AD.log();
 			AD.log('Type in a comma separated list of language definitions to create.');
 			AD.log('Each definition should be in the format: <yellow>i18n code</yellow>:<green>utf8 label</green>');
-			AD.log('')
+			AD.log('');
 			AD.log('    For example, if you wanted to create English, Korean, and Simplified Chinese, ');
 			AD.log('    type: <yellow>en</yellow>:<green>English</green>,<yellow>ko</yellow>:<green>Korean</green>,<yellow>zh-hans</yellow>:<green>中文</green>');
 			AD.log()
@@ -376,7 +387,7 @@ var createUser = function(done) {
 		if (user.length == 0) {
 
 			AD.log('<green>create :</green> user account: ', Data.admin);
-			SiteUser.create({ username: Data.admin })
+			SiteUser.create({ username: Data.admin, password:Data.adminPassword })
 			.then(function(newUser) {
 				AdminUser = newUser;
 				done();

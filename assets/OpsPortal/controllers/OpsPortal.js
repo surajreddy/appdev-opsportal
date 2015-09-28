@@ -13,11 +13,11 @@ steal(
         'OpsPortal/classes/OpsDialog.js',
         'OpsPortal/classes/OpsWidget.js',
         'jquery',
-        'can'
-).then(
+        'can',
+// ).then(
         'js/jquery.sidr.min.js',
-        'opsportal/requirements.js'     // this returns the steal() for loading each OpsTool
-).then(
+        'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
+// ).then(
        '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
        '//OpsPortal/views/OpsPortal/taskList.ejs',
 function(){

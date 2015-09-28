@@ -83,7 +83,7 @@ function(){
 
  //           this.element.html(can.view(this.options.templateDOM, {} ));
 
-        },
+        }
 
 
     });

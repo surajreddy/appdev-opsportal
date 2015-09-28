@@ -4,39 +4,37 @@
 //     has: 'js/jquery.min.js canjs/can.jquery.js appdev/ad.js js/OpenAjax.js appdev/comm/hub.js appdev/util/uuid.js js/async.js appdev/util/async.js appdev/config/config.js appdev/model/model.js appdev/labels/lang.js appdev/labels/label.js appdev/sal/web-jquery.js appdev/comm/service.js js/dependencies/sails.io.js appdev/comm/socket.js appdev/widgets/ad_ui_reauth/ad_ui_reauth.css appdev/widgets/ad_ui_reauth/ad_ui_reauth.js appdev/auth/reauth.js appdev/UIController.js appdev/control/control.js appdev/appdev.js'.split( ' ' )
 // } );
 steal(
-        'appdev'
-).then(
-        'jquery'
-).then(
-        'jquery-ui.js',
+        'appdev',
+        'jquery',
+        // 'jquery-ui.js',
         'bootstrap.js',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
         'styles/jquery.sidr.dark.css',
-        'js/moment.min.js'
-).then(
+        'moment.js',
         'js/jquery.sidr.min.js',
-        'bootstrap-datetimepicker.js',
         'bootstrap-datetimepicker.css',
-        'styles/bootstrap-wijmo.css',
-        'jquery-wijmo.css',
-        'wijmo-pro.css',
-        'wijmo-open.js',
+        // 'styles/bootstrap-wijmo.css',
+        // 'jquery-wijmo.css',
+        // 'wijmo-pro.css',
+        // 'wijmo-open.js',
         "bootstrap-table.js",
         "bootstrap-table.css",
         "bootstrapValidator.js",
         "bootstrapValidator.css",
         'bootbox.js',
-        'notify.js',
-        'GenericList.js'        // located:  js/GenericList.js
-).then(
-        'wijmo-pro.js',
+        // 'notify.js',
+        // 'GenericList.js',        
         'FilteredBootstrapTable.js',
-        'OpsButtonBusy.js'
-).then(
-        'OpsPortal/controllers/OpsPortal.js',
-        'site/labels/OpsPortal.js',
+        'OpsButtonBusy.js',
         'font-awesome.css'
+        
+).then(
+        'jquery-ui.js',
+        'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
+        'OpsPortal/controllers/OpsPortal.js',
+        'site/labels/OpsPortal.js'
+        
 ).then(function(){
 
 

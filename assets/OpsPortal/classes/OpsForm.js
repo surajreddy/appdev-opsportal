@@ -1,6 +1,6 @@
 
 steal(
-    'jquery',
+    'appdev',
     'can',
     'OpsPortal/classes/ValidationDateGreaterThanField.js',
     'OpsPortal/classes/ValidationServer.js',

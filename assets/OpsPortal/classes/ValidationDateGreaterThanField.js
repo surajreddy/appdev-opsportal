@@ -20,7 +20,12 @@
  * @codeend
  */
 
-(function($) {
+steal('appdev',
+    'jquery',
+    "bootstrapValidator.js",
+function() {
+
+// (function($) {
     /**
      * Enter the display text for this value:
      */
@@ -126,4 +131,6 @@
             return this._stringToDate(_date, _format, _delimiter).getTime();
         }
     };
-}(window.jQuery));
+// }(window.jQuery));
+
+});
