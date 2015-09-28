@@ -5,7 +5,15 @@
 // } );
 steal(
         'appdev',
-        'jquery',
+        'jquery'
+).then(
+        function() {
+
+            AD.ui.loading.attach('#portal');
+            AD.ui.loading.text('preparing OpsPortal ...');
+            AD.ui.loading.resources(19);  // increase the number of resources to load
+
+        },
         // 'jquery-ui.js',
         'bootstrap.js',
         'bootstrap.css',
@@ -30,6 +38,9 @@ steal(
         'font-awesome.css'
         
 ).then(
+        function(){
+            AD.ui.loading.completed(15); // this many have just been completed.
+        },
         'jquery-ui.js',
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',
@@ -37,6 +48,7 @@ steal(
         
 ).then(function(){
 
+    AD.ui.loading.completed(4);  // 
 
 //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
 

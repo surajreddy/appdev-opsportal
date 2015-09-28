@@ -3,6 +3,9 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
+        function() {
+            AD.ui.loading.resources(12);
+        },
         'OpsPortal/classes/OpsTool.js',
 
         'opstools/RBAC/models/SiteUser.js',
@@ -20,7 +23,8 @@ steal(
         '//opstools/RBAC/views/RBAC/RBAC.ejs',
 function(){
 
-
+    AD.ui.loading.completed(12);
+    
     //
     // RBAC 
     // 
