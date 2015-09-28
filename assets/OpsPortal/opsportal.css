@@ -203,6 +203,9 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 }
 .op-table input[type="text"], .opsportal-table select { margin-top: 0 !important; }
 
+/* =OpsPortal Lists */
+.op-list { position: relative; list-style: none; padding: 0; }
+
 
 /* =OpsPortal Margins, Padding, Dividers */
 .op-nopadding { padding: 0 !important; }
