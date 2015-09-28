@@ -73,8 +73,15 @@ function(){
             this.hiddenElements = [];           // used to track which elements we have hidden
 
 
-            this.initDOM();                     // embedded list view
+            // this.initDOM();                     // embedded list view
             this.initPortal();                  // popup portal view
+
+            // update loading progress for OpsPortal:
+            AD.ui.loading.reset();
+            AD.ui.loading.text('configuring Ops Portal Tools:');
+            AD.ui.loading.resources(2); // kicks off a new refresh of the bar
+
+
             this.requestConfiguration();
 
 
@@ -88,7 +95,9 @@ function(){
 
 
 			// display progress bar as tools load
-			//this.progress(80, $('#opsportal-loading'));
+			//this.progress(80, $('#opsportal-loading'))
+            
+
 
             // OK, one of the problems with resizing our tools comes when
             // they are currently not displayed.  Some widgets (GenLists.js)
@@ -209,11 +218,18 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
 //     console.log(data);
 // });
 
+            AD.ui.loading.completed(1);
+
             AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
 
+                AD.ui.loading.completed(1);  // just to show we have loaded the config.
                 if (err) {
                     // what to do here?
                 } else {
+
+                    // prepare our loading progress indicator:
+                    AD.ui.loading.resources(data.areas.length);
+                    AD.ui.loading.resources(data.tools.length);
 
                     var defaultArea  = {};
 
@@ -228,6 +244,7 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
                         if(data.areas[a].isDefault) {
                             defaultArea = data.areas[a];
                         }
+                        AD.ui.loading.completed(1);
                     }
 
 
@@ -240,6 +257,7 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
                     for (var t=0; t < data.tools.length; t++) {
                         AD.comm.hub.publish('opsportal.tool.new', data.tools[t]);
                         if (data.tools[t].isDefault) defaultTool[data.tools[t].area] = data.tools[t];
+                        AD.ui.loading.completed(1);
                     }
 
 
@@ -264,6 +282,9 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
                     // once everything is created, tell the menu slider to attach itself
                     self.portalPopup.find('#op-masthead-menu a:first-of-type').sidr({name:'op-menu-widget',side:'left'});
 
+
+                    // now show the Link to open the OpsPortal
+                    self.initDOM(); 
                 }
 
             });
