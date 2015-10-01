@@ -2,6 +2,8 @@
 steal(
     'appdev',
     'can',
+    'bootstrap.js',
+    "bootstrapValidator.js",
     'OpsPortal/classes/ValidationDateGreaterThanField.js',
     'OpsPortal/classes/ValidationServer.js',
     function() {

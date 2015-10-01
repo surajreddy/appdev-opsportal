@@ -40,7 +40,14 @@ function(){
             }, options);
 
 
-            this.controller = null;     // our Application controller
+            this.controller = {
+                needsUpdate: function() {
+                    this._needsUpdate = true;
+                },
+                resize:function(data){
+                    this._resize = data;
+                }
+            };     // our Application controller
             this.sizeData = null;       // the last reported resize() height
             this.isActive = false;      // is our tool the active one?
             this.isAreaActive = false;  // is our area the active area?
@@ -49,30 +56,67 @@ function(){
             // we were provided the Application's Controller name
             // if it exists, then create an instance of it on the DOM:
             var controllerName = this.options.data.controller;
-            if (AD.controllers.opstools[controllerName]) {
-                if( AD.controllers.opstools[controllerName].Tool) {
-                    this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
+            // if (AD.controllers.opstools[controllerName]) {
+            //     if( AD.controllers.opstools[controllerName].Tool) {
+            //         this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
+            //     } else {
+            //         console.error('controller ('+controllerName+').Tool()   not found!');
+            //     }
+            // } else {
+            //     console.error('controller ('+controllerName+') not found!');
+            // }
+            var delayedLoad = function(name, count) {
+                if (count < 100) {
+                    if (AD.controllers.opstools[name]) {
+                        if( AD.controllers.opstools[name].Tool) {
+                            var tempController = self.controller;
+                            self.controller = new AD.controllers.opstools[name].Tool( self.element);
+                            if (tempController._needsUpdate) {
+                                self.controller.needsUpdate();
+                            }
+                            if (tempController._resize) {
+                                self.controller.resize(tempController._resize);
+                            }
+                        } else {
+                            console.warn('controller ('+name+').Tool()   not found!');
+                            console.warn('... waiting to try again');
+                            setTimeout(function(){
+                                delayedLoad(name, count+1);
+                            },100);
+                        }
+                    } else {
+                        console.warn('controller ('+name+') not found!');
+                        console.warn('... waiting to try again');
+                            setTimeout(function(){
+                                delayedLoad(name, count+1);
+                            },100);
+                    }
                 } else {
-                    console.error('controller ('+controllerName+').Tool()   not found!');
+                    console.error('too many attempts to wait for ['+ name+'] to load!');
                 }
-            } else {
-                console.error('controller ('+controllerName+') not found!');
             }
+            delayedLoad(controllerName, 0);
 
+
+//// TODO: due to setTimeout() above, a controller might miss a .needsUpdate() below
 
             // listen to resize notifications
             AD.comm.hub.subscribe('opsportal.resize', function(message, data){
                 self.sizeData = data;
 
-                // tell controller it needs to update it's display at some point
-                self.controller.needsUpdate();
+                // if our controller is setup
+                if (self.controller) {
 
-                // and if I'm active
-                if ((self.isAreaActive)
-                    && (self.isActive)) {
+                    // tell controller it needs to update it's display at some point
+                    self.controller.needsUpdate();
 
-                    // make sure my controller knows to resize();
-                    self.controller.resize(data);
+                    // and if I'm active
+                    if ((self.isAreaActive)
+                        && (self.isActive)) {
+
+                        // make sure my controller knows to resize();
+                        self.controller.resize(data);
+                    }
                 }
             });
 

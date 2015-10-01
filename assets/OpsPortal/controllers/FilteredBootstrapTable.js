@@ -1,7 +1,8 @@
 
 steal(
         // List your Controller's dependencies here:
-        'appdev'
+        'appdev',
+        'jquery'
 ).then(
         'typeahead.js',
 //        'opstools/FCFActivities/models/Projects.js',

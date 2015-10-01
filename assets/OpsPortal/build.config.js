@@ -80,7 +80,7 @@ module.exports={
 
 
         // this is a special call that configures which opstools are loaded:
-        'opsportal/requirements.js' : { ignore:true },
+        'opsportal/requirements.js' : { packaged:false, ignore:true },
         'opsportal/config' : { ignore:true },
 
         'site/labels/OpsPortal.js' : { packaged:false, ignore:true },
