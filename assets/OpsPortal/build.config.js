@@ -11,7 +11,7 @@ module.exports={
         
         "jquery-ui.js" : "js/jquery-ui.min.js",         // 'http://code.jquery.com/ui/1.11.0/jquery-ui.min.js' 
         
-        "bootstrap.js" : "js/bootstrap/js/bootstrap.js",   // "bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
+        "bootstrap.js" : "bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
         "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
         "bootstrap-datetimepicker.js" : "js/bootstrap/js/bootstrap-datetimepicker.min.js",
         "bootstrap-datetimepicker.css" : "styles/bootstrap-datetimepicker.min.css",
@@ -50,7 +50,7 @@ module.exports={
         'jquery-ui.js' : { packaged:false },
         
         'bootstrap.js' : { packaged:false },
-        // 'bootstrap.css' : { packaged:false },
+        'bootstrap.css' : { packaged:false },
         'bootstrap-datetimepicker.js': {packaged:false },
         'bootstrap-datetimepicker.css': {packaged:false },
 

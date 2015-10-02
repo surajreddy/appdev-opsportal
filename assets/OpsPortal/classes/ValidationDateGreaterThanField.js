@@ -21,7 +21,8 @@
  */
 
 steal('appdev',
-    'jquery',
+    'jquery'
+).then(
     'bootstrap.js',
     "bootstrapValidator.js",
 function() {
