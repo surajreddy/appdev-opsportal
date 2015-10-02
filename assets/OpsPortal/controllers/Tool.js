@@ -49,15 +49,15 @@ function(){
             // we were provided the Application's Controller name
             // if it exists, then create an instance of it on the DOM:
             var controllerName = this.options.data.controller;
-            if (AD.controllers.opstools[controllerName]) {
-                if( AD.controllers.opstools[controllerName].Tool) {
-                    this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
-                } else {
-                    console.error('controller ('+controllerName+').Tool()   not found!');
-                }
-            } else {
-                console.error('controller ('+controllerName+') not found!');
-            }
+            // if (AD.controllers.opstools[controllerName]) {
+            //     if( AD.controllers.opstools[controllerName].Tool) {
+            //         this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
+            //     } else {
+            //         console.error('controller ('+controllerName+').Tool()   not found!');
+            //     }
+            // } else {
+            //     console.error('controller ('+controllerName+') not found!');
+            // }
 
             //// NOTE: In process of debugging some production build timing problems, I removed the above
             //// code for creating the controllers and created the following code to delay the instance 
@@ -66,46 +66,51 @@ function(){
             //// other changes to the OpsPortal code seems to have resolved the initial error I was 
             //// having, but I'm leaving this code here for reference if those come back.
             ////
-            // // temp mock controller  
-            // this.controller = {
-            //     needsUpdate: function() {
-            //         this._needsUpdate = true;
-            //     },
-            //     resize:function(data){
-            //         this._resize = data;
-            //     }
-            // };
-            // var delayedLoad = function(name, count) {
-            //     if (count < 200) {
-            //         if (AD.controllers.opstools[name]) {
-            //             if( AD.controllers.opstools[name].Tool) {
-            //                 var tempController = self.controller;
-            //                 self.controller = new AD.controllers.opstools[name].Tool( self.element);
-            //                 if (tempController._needsUpdate) {
-            //                     self.controller.needsUpdate();
-            //                 }
-            //                 if (tempController._resize) {
-            //                     self.controller.resize(tempController._resize);
-            //                 }
-            //             } else {
-            //                 console.warn('controller ('+name+').Tool()   not found!');
-            //                 console.warn('... waiting to try again');
-            //                 setTimeout(function(){
-            //                     delayedLoad(name, count+1);
-            //                 },100);
-            //             }
-            //         } else {
-            //             console.warn('controller ('+name+') not found!');
-            //             console.warn('... waiting to try again');
-            //                 setTimeout(function(){
-            //                     delayedLoad(name, count+1);
-            //                 },100);
-            //         }
-            //     } else {
-            //         console.error('too many attempts to wait for ['+ name+'] to load!');
-            //     }
-            // }
-            // delayedLoad(controllerName, 0);
+        
+            //// It seems that the server/browser can occassionally 'stall' the loading of these
+            //// javascript libraries.  these packages are requested in parallel, and we need to 
+            //// verify they are loaded before attempting to access them.
+            
+            // temp mock controller to catch .needsUpdate() and .resize() requests while delaying. 
+            this.controller = {
+                needsUpdate: function() {
+                    this._needsUpdate = true;
+                },
+                resize:function(data){
+                    this._resize = data;
+                }
+            };
+            var delayedLoad = function(name, count) {
+                if (count < 200) {
+                    if (AD.controllers.opstools[name]) {
+                        if( AD.controllers.opstools[name].Tool) {
+                            var tempController = self.controller;
+                            self.controller = new AD.controllers.opstools[name].Tool( self.element);
+                            if (tempController._needsUpdate) {
+                                self.controller.needsUpdate();
+                            }
+                            if (tempController._resize) {
+                                self.controller.resize(tempController._resize);
+                            }
+                        } else {
+                            console.warn('controller ('+name+').Tool()   not found!');
+                            console.warn('... waiting to try again');
+                            setTimeout(function(){
+                                delayedLoad(name, count+1);
+                            },100);
+                        }
+                    } else {
+                        console.warn('controller ('+name+') not found!');
+                        console.warn('... waiting to try again');
+                            setTimeout(function(){
+                                delayedLoad(name, count+1);
+                            },100);
+                    }
+                } else {
+                    console.error('too many attempts to wait for ['+ name+'] to load!');
+                }
+            }
+            delayedLoad(controllerName, 0);
 
             // listen to resize notifications
             AD.comm.hub.subscribe('opsportal.resize', function(message, data){
