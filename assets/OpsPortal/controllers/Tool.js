@@ -59,21 +59,72 @@ function(){
                 console.error('controller ('+controllerName+') not found!');
             }
 
+            //// NOTE: In process of debugging some production build timing problems, I removed the above
+            //// code for creating the controllers and created the following code to delay the instance 
+            //// loading of the controllers.
+            ////
+            //// other changes to the OpsPortal code seems to have resolved the initial error I was 
+            //// having, but I'm leaving this code here for reference if those come back.
+            ////
+            // // temp mock controller  
+            // this.controller = {
+            //     needsUpdate: function() {
+            //         this._needsUpdate = true;
+            //     },
+            //     resize:function(data){
+            //         this._resize = data;
+            //     }
+            // };
+            // var delayedLoad = function(name, count) {
+            //     if (count < 200) {
+            //         if (AD.controllers.opstools[name]) {
+            //             if( AD.controllers.opstools[name].Tool) {
+            //                 var tempController = self.controller;
+            //                 self.controller = new AD.controllers.opstools[name].Tool( self.element);
+            //                 if (tempController._needsUpdate) {
+            //                     self.controller.needsUpdate();
+            //                 }
+            //                 if (tempController._resize) {
+            //                     self.controller.resize(tempController._resize);
+            //                 }
+            //             } else {
+            //                 console.warn('controller ('+name+').Tool()   not found!');
+            //                 console.warn('... waiting to try again');
+            //                 setTimeout(function(){
+            //                     delayedLoad(name, count+1);
+            //                 },100);
+            //             }
+            //         } else {
+            //             console.warn('controller ('+name+') not found!');
+            //             console.warn('... waiting to try again');
+            //                 setTimeout(function(){
+            //                     delayedLoad(name, count+1);
+            //                 },100);
+            //         }
+            //     } else {
+            //         console.error('too many attempts to wait for ['+ name+'] to load!');
+            //     }
+            // }
+            // delayedLoad(controllerName, 0);
 
             // listen to resize notifications
             AD.comm.hub.subscribe('opsportal.resize', function(message, data){
                 self.sizeData = data;
 
-                // tell controller it needs to update it's display at some point
-                self.controller.needsUpdate();
+                // // if our controller is setup
+                // if (self.controller) {
 
-                // and if I'm active
-                if ((self.isAreaActive)
-                    && (self.isActive)) {
+                    // tell controller it needs to update it's display at some point
+                    self.controller.needsUpdate();
 
-                    // make sure my controller knows to resize();
-                    self.controller.resize(data);
-                }
+                    // and if I'm active
+                    if ((self.isAreaActive)
+                        && (self.isActive)) {
+
+                        // make sure my controller knows to resize();
+                        self.controller.resize(data);
+                    }
+                // }
             });
 
 

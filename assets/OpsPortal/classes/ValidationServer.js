@@ -1,5 +1,6 @@
 steal('appdev',
     'jquery',
+    'bootstrap.js',
     "bootstrapValidator.js",
 function() {
 

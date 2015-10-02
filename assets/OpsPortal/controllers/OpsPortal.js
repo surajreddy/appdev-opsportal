@@ -2,6 +2,9 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
+        'jquery'
+).then(
+
         'OpsPortal/portal-scratch.css',
 		'OpsPortal/opsportal.css',
 		'OpsPortal/opsportal-theme.css',
@@ -12,10 +15,10 @@ steal(
         'OpsPortal/classes/OpsForm.js',
         'OpsPortal/classes/OpsDialog.js',
         'OpsPortal/classes/OpsWidget.js',
-        'jquery',
-        'can',
+
+        
 // ).then(
-        'js/jquery.sidr.min.js',
+        // 'js/jquery.sidr.min.js',
         'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
 // ).then(
        '//OpsPortal/views/OpsPortal/OpsPortal.ejs',

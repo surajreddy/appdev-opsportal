@@ -26,10 +26,8 @@ steal(
         // 'jquery-wijmo.css',
         // 'wijmo-pro.css',
         // 'wijmo-open.js',
-        "bootstrap-table.js",
-        "bootstrap-table.css",
-        "bootstrapValidator.js",
-        "bootstrapValidator.css",
+        
+        // "bootstrapValidator.css",
         'bootbox.js',
         // 'notify.js',
         // 'GenericList.js',        
@@ -39,16 +37,19 @@ steal(
         
 ).then(
         function(){
-            AD.ui.loading.completed(15); // this many have just been completed.
+            AD.ui.loading.completed(12); // this many have just been completed.
         },
         'jquery-ui.js',
+        "bootstrap-table.js",
+        "bootstrap-table.css",
+        // "bootstrapValidator.js",
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',
         'site/labels/OpsPortal.js'
         
 ).then(function(){
 
-    AD.ui.loading.completed(4);  // 
+    AD.ui.loading.completed(7);  // 
 
 //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
 
