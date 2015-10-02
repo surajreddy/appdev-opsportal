@@ -27,7 +27,7 @@ steal(
         // 'wijmo-pro.css',
         // 'wijmo-open.js',
         
-        "bootstrapValidator.css",
+        // "bootstrapValidator.css",
         'bootbox.js',
         // 'notify.js',
         // 'GenericList.js',        
@@ -42,7 +42,7 @@ steal(
         'jquery-ui.js',
         "bootstrap-table.js",
         "bootstrap-table.css",
-        "bootstrapValidator.js",
+        // "bootstrapValidator.js",
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',
         'site/labels/OpsPortal.js'
