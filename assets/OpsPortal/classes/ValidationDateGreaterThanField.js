@@ -63,6 +63,7 @@ function() {
          * @param {Object} options Can consist of the following keys:
          * - field: {string} the other field name to compare this one to.
          * - value: {string} the other field name to compare this one to.
+         * - canEqual: {bool} can the values be == ?
          * - message: The invalid message
          * @returns {Boolean|Object}
          */
@@ -100,7 +101,7 @@ function() {
 // console.warn('dateGreaterThan: compareTo(timestamp):'+compareTo);
 
             return {
-                        valid: value > compareTo,
+                        valid: options.canEqual? value >= compareTo: value > compareTo,
                         message: $.fn.bootstrapValidator.helpers.format(options.message || $.fn.bootstrapValidator.i18n.greaterThan['default'], options.value)
                     };
         },

@@ -49,6 +49,8 @@ function(){
             // we were provided the Application's Controller name
             // if it exists, then create an instance of it on the DOM:
             var controllerName = this.options.data.controller;
+
+            
             // if (AD.controllers.opstools[controllerName]) {
             //     if( AD.controllers.opstools[controllerName].Tool) {
             //         this.controller = new AD.controllers.opstools[controllerName].Tool( this.element);
