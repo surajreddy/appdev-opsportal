@@ -68,6 +68,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
+                    'portal-autoenter': false,
                     templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
                     templateList: '//OpsPortal/views/OpsPortal/taskList.ejs'
             }, options);
@@ -75,6 +76,8 @@ function(){
 
             this.hiddenElements = [];           // used to track which elements we have hidden
 
+
+            this.elOptions();                   // search the attached element for config options.
 
             // this.initDOM();                     // embedded list view
             this.initPortal();                  // popup portal view
@@ -116,6 +119,32 @@ function(){
                 setTimeout(sizeContent,4);
 
             });
+
+        },
+
+
+
+        /**
+         * search the base element attributes for configuration options.
+         *     
+         * @return {nil} no return value
+         */
+        elOptions: function() {
+            var _this = this;
+
+            var params = ['portal-autoenter'];
+            params.forEach(function(key){
+
+                var val = _this.element.attr(key);
+                if (typeof val !== 'undefined'){
+                    val = val.toLowerCase();
+                    if (val == 'false') {
+                        val = false;
+                    }
+                    _this.options[key] = val;
+                }
+            })
+
 
         },
 
@@ -288,6 +317,13 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
 
                     // now show the Link to open the OpsPortal
                     self.initDOM(); 
+
+                    // if our auto open setting is set, then 
+                    if (self.options['portal-autoenter']) {
+
+                        // auto click the Enter link:
+                        self.element.find('.op-masthead a:first-of-type').click();
+                    }
                 }
 
             });
