@@ -4,7 +4,8 @@ steal(
         'appdev',
         'jquery'
 ).then(
-        'typeahead.js',
+        'typeahead.js'
+).then(
 //        'opstools/FCFActivities/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
         // '//opstools/FCFActivities/views/AddChooseMinistry/AddChooseMinistry.ejs',
@@ -225,6 +226,8 @@ function(){
             ////
 
             // Typeahead.js filter box
+            console.warn('... typeahead debug: tagFilter:'+ this.options.tagFilter);
+            console.warn('... typeahead debug:', this.element.find(this.options.tagFilter));
             this.textFilter = this.element.find(this.options.tagFilter)
                         .typeahead({
                             hint: true,
