@@ -233,7 +233,7 @@ function(){
             // stupid hack for .typeahead loading issue!
             var attachIt = function() {
 
-conasole.warn('... attaching typeahead:');
+console.warn('... attaching typeahead:');
 
                 self.textFilter
                     .typeahead({
