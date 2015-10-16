@@ -228,100 +228,128 @@ function(){
             // Typeahead.js filter box
             console.warn('... typeahead debug: tagFilter:'+ this.options.tagFilter);
             console.warn('... typeahead debug:', this.element.find(this.options.tagFilter));
-            this.textFilter = this.element.find(this.options.tagFilter)
-                        .typeahead({
-                            hint: true,
-                            highlight: true,
-                            minLength: 0
-                        },
-                        {
-                            name: 'teams',
-                            displayKey: 'value',
-                            source: function(q,cb) {
-                                self.filter(q,cb);
-                            }
-                        });
+            this.textFilter = this.element.find(this.options.tagFilter);
 
-            this.textFilter.on('typeahead:closed', function(){
-// console.log('typeahead:closed');
+            // stupid hack for .typeahead loading issue!
+            var attachIt = function() {
 
-                // if there is a selected row, then just continue on:
+conasole.warn('... attaching typeahead:');
 
-            });
+                self.textFilter
+                    .typeahead({
+                        hint: true,
+                        highlight: true,
+                        minLength: 0
+                    },
+                    {
+                        name: 'teams',
+                        displayKey: 'value',
+                        source: function(q,cb) {
+                            self.filter(q,cb);
+                        }
+                    });
 
-            this.textFilter.on('typeahead:cursorchanged', function(){
-// console.log('typeahead:cursorchanged');
+                self.textFilter.on('typeahead:closed', function(){
+    // console.log('typeahead:closed');
 
-                var val = self.textFilter.typeahead('val');
-                var data = self.dataHash[val];
-                if (data) {
-                    self.options.dataCursorOn(data);
-                }
+                    // if there is a selected row, then just continue on:
 
-            });
+                });
 
-            this.textFilter.on('typeahead:selected', function(){
-// console.log('typeahead:selected');
+                self.textFilter.on('typeahead:cursorchanged', function(){
+    // console.log('typeahead:cursorchanged');
 
-                var val = self.textFilter.typeahead('val');
-                
-                if (self.options.scrollToSelect) {
-                    self.table.bootstrapTable('scrollTo', self.posHash[val]);
-                }
+                    var val = self.textFilter.typeahead('val');
+                    var data = self.dataHash[val];
+                    if (data) {
+                        self.options.dataCursorOn(data);
+                    }
 
-                var data = self.dataHash[val];
-                if (data) {
-                    self.selectRow(data);          // set which data row should be selected
-                    self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
+                });
 
-                    // ## bootstraptable.js has a settimeout() when reloading data
-                    // if we continue on too quickly, the table header wont display 
-                    // correctly in certain situations: 
-                    //  - header is not visible, so bootstraptable repaints *another* header in table
-                    //  - which causes a new row and might then popup the scroll bar
-                    //  - when .resetView() is called after that, the scrollbar is originally there
-                    //    so the header is adjusted over for that
-                    //  - when all data is displayed, scroll bar is not shown
-                    //  ---> result: header is not in correct position.
-                    AD.sal.setImmediate(function() {
-                        self.options.termSelected(data);
-                    })
-                }
+                self.textFilter.on('typeahead:selected', function(){
+    // console.log('typeahead:selected');
 
-            });
-
-            this.textFilter.on('typeahead:autocompleted', function(){
-// console.log('typeahead:autocompleted');
-
-                var val = self.textFilter.typeahead('val');
-
-                if (self.options.scrollToSelect) {
-                    self.table.bootstrapTable('scrollTo', self.posHash[val]);
-                }
-
-                var data = self.dataHash[val];
-                if (data) {
-                    self.textFilter.typeahead('close');
-
-                    self.selectRow(data);          // set which data row should be selected
-                    self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
-
-                    // ## bootstraptable.js has a settimeout() when reloading data
-                    // if we continue on too quickly, the table header wont display 
-                    // correctly in certain situations: 
-                    //  - header is not visible, so bootstraptable repaints *another* header in table
-                    //  - which causes a new row and might then popup the scroll bar
-                    //  - when .resetView() is called after that, the scrollbar is originally there
-                    //    so the header is adjusted over for that
-                    //  - when all data is displayed, scroll bar is not shown
-                    //  ---> result: header is not in correct position.
-                    AD.sal.setImmediate(function() {
-                        self.options.termSelected(data);
-                    })
+                    var val = self.textFilter.typeahead('val');
                     
-                }
+                    if (self.options.scrollToSelect) {
+                        self.table.bootstrapTable('scrollTo', self.posHash[val]);
+                    }
 
-            });
+                    var data = self.dataHash[val];
+                    if (data) {
+                        self.selectRow(data);          // set which data row should be selected
+                        self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
+
+                        // ## bootstraptable.js has a settimeout() when reloading data
+                        // if we continue on too quickly, the table header wont display 
+                        // correctly in certain situations: 
+                        //  - header is not visible, so bootstraptable repaints *another* header in table
+                        //  - which causes a new row and might then popup the scroll bar
+                        //  - when .resetView() is called after that, the scrollbar is originally there
+                        //    so the header is adjusted over for that
+                        //  - when all data is displayed, scroll bar is not shown
+                        //  ---> result: header is not in correct position.
+                        AD.sal.setImmediate(function() {
+                            self.options.termSelected(data);
+                        })
+                    }
+
+                });
+
+                self.textFilter.on('typeahead:autocompleted', function(){
+    // console.log('typeahead:autocompleted');
+
+                    var val = self.textFilter.typeahead('val');
+
+                    if (self.options.scrollToSelect) {
+                        self.table.bootstrapTable('scrollTo', self.posHash[val]);
+                    }
+
+                    var data = self.dataHash[val];
+                    if (data) {
+                        self.textFilter.typeahead('close');
+
+                        self.selectRow(data);          // set which data row should be selected
+                        self.load(self.listData);   // ##Hack! to refresh selected item! (is there a better way?)
+
+                        // ## bootstraptable.js has a settimeout() when reloading data
+                        // if we continue on too quickly, the table header wont display 
+                        // correctly in certain situations: 
+                        //  - header is not visible, so bootstraptable repaints *another* header in table
+                        //  - which causes a new row and might then popup the scroll bar
+                        //  - when .resetView() is called after that, the scrollbar is originally there
+                        //    so the header is adjusted over for that
+                        //  - when all data is displayed, scroll bar is not shown
+                        //  ---> result: header is not in correct position.
+                        AD.sal.setImmediate(function() {
+                            self.options.termSelected(data);
+                        })
+                        
+                    }
+
+                });
+
+            }; // end attachIt
+
+
+
+            var isReady = function(count) {
+
+                if (count > 500) {
+
+                    console.error('!!! Waiting too long for typeahead()! ');
+                } else {
+
+                    if (self.textFilter.typeahead) {
+                        attachIt();
+                    } else {
+                        setTimeout( function(){ isReady(count+1); } , 100); // try again in 100ms
+                    }
+                }
+            }
+
+            isReady(0);
 
 
 
