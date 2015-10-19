@@ -230,7 +230,7 @@ function(){
             console.warn('... typeahead debug:', this.element.find(this.options.tagFilter));
             this.textFilter = this.element.find(this.options.tagFilter);
 
-            // stupid hack for .typeahead loading issue!
+            // ### stupid hack for .typeahead loading issue!
             var attachIt = function() {
 
 conasole.warn('... attaching typeahead:');
@@ -340,7 +340,7 @@ conasole.warn('... attaching typeahead:');
 
                     console.error('!!! Waiting too long for typeahead()! ');
                 } else {
-
+console.warn('... waiting for typeahead')
                     if (self.textFilter.typeahead) {
                         attachIt();
                     } else {
