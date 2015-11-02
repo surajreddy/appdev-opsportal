@@ -13,8 +13,16 @@ steal(
             AD.ui.loading.text('preparing OpsPortal ...');
             AD.ui.loading.resources(19);  // increase the number of resources to load
 
+        }
+).then(
+        'jquery-ui.js'
+).then(
+        function() {
+            // Change JQueryUI plugin names to fix name collision 
+            // with Bootstrap.
+            $.widget.bridge('uitooltip', $.ui.tooltip);
+            $.widget.bridge('uibutton', $.ui.button);        
         },
-        // 'jquery-ui.js',
         'bootstrap.js',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
@@ -39,7 +47,6 @@ steal(
         function(){
             AD.ui.loading.completed(12); // this many have just been completed.
         },
-        'jquery-ui.js',
         "bootstrap-table.js",
         "bootstrap-table.css",
         // "bootstrapValidator.js",
