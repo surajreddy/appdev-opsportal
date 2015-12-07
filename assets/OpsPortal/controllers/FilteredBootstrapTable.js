@@ -678,7 +678,7 @@ console.warn('... waiting for typeahead')
          * @return {array}
          */
         values: function() {
-            return this.table.bootstrapTable('getSelections');
+            return this.table.bootstrapTable('getAllSelections');
         }
 
 
