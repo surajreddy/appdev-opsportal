@@ -241,6 +241,19 @@ function(){
                 var role = this.data.role;
                 role.attr(obj);
                 role.attr('actions', actions);
+
+
+                // Bug Fix: remove .permissions if present
+                // this prevents us from loosing any Permission Assignments created
+                // since the loading of the page.
+                if (role.permissions) {
+                    delete role.permissions;
+                }
+                if (role._data.permissions) {
+                    delete role._data.permissions;
+                }
+
+
                 role.save()
                 .fail(function(err){
                     if (!_this.form.errorHandle(err)) {
