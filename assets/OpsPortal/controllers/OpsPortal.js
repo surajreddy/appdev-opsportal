@@ -70,7 +70,8 @@ function(){
             this.options = AD.defaults({
                     'portal-autoenter': false,
                     templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs'
+                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs',
+                    templateError: '//OpsPortal/views/OpsPortal/error.ejs'
             }, options);
 
 
@@ -168,6 +169,12 @@ function(){
 
 
 
+        initDOMError: function(errMsg) {
+            this.element.html(can.view(this.options.templateError, { errorMessage:errMsg } ));
+        },
+
+
+
         // this is the popup Ops Portal that takes over the page:
         initPortal:function() {
 
@@ -256,7 +263,10 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
 
                 AD.ui.loading.completed(1);  // just to show we have loaded the config.
                 if (err) {
+                    
                     // what to do here?
+                    self.initDOMError(' You don\'t have permission.  Ask your administrator to grant you access. ')
+                
                 } else {
 
                     // prepare our loading progress indicator:
