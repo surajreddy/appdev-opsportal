@@ -159,6 +159,8 @@ function(){
          * Determines if it is our area and then decide if our tool should be
          * told to resize itself.
          *
+         * NOTE: called when a new Area is chosen on the side menu.
+         *
          * @param {obj} data  the notification packet: { area: 'AreaString' }
          */
         areaShow:function(data){
@@ -172,11 +174,13 @@ function(){
 
                     // make sure my controller knows to resize();
                     this.controller.resize(this.sizeData);
+                    this.controller.trigger('opsportal.tool.show', {});
                 }
 
             } else {
 
                 this.isAreaActive = false;
+                this.controller.trigger('opsportal.tool.hide',{});
             }
         },
 
@@ -204,12 +208,15 @@ function(){
          * Determines if it is our Tool and then decide if our tool should be
          * told to resize itself.
          *
+         * NOTE: called in response to a switch of which tool on the Menu Bar is
+         * chosen.
+         *
          * @param {obj} data  the notification packet: 
          *                    { area: 'AreaString', tool:'ControllerName' }
          */
         toolShow:function(data) {
 
-            if (this.options.areaKey == data.area) {
+            if (data.area == this.options.areaKey) {
 
                 if (data.tool == this.options.key) {
 
@@ -222,6 +229,8 @@ function(){
                         // remember: show() first then resize()
                         this.element.show();
                         this.controller.resize(this.sizeData);
+                        // can.event.dispatch.call(this.controller, 'opsportal.tool.show', {});
+                        this.controller.trigger('opsportal.tool.show', {});
                     }
 
                 } else {
@@ -232,6 +241,8 @@ function(){
                         
                         this.isActive = false;
                         this.element.hide();
+                        // can.event.dispatch.call(this.controller, 'opsportal.tool.hide', {});
+                        this.controller.trigger('opsportal.tool.hide',{});
                     }
 
                 }

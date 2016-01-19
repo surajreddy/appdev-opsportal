@@ -103,6 +103,7 @@ function(){
                 // We subclass the UIController here so our UI controllers have
                 // built in translation capabilities.
                 curr.Tool = AD.classes.opsportal.OpsTool.extend(staticDef, instanceDef);
+                can.extend(curr.Tool.prototype, can.event);
 
             }
         }
