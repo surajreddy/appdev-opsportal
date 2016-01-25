@@ -17,6 +17,7 @@ function(){
 
             this.shouldUpdateUI = true;     // we have not updated our UI for the work area yet.
 
+            this.labels = [];       // the list of multilingual labels inside our Tool
         },
 
 
@@ -42,6 +43,14 @@ function(){
                 this.shouldUpdateUI = false;
             }
 
+        },
+
+
+
+        translate:function() {
+            // initiate the Multilingual Label translation for the interface labels
+            // created by this tool.
+            this.labels = AD.lang.label.translate(this.element);
         }
 
 
@@ -103,7 +112,7 @@ function(){
                 // We subclass the UIController here so our UI controllers have
                 // built in translation capabilities.
                 curr.Tool = AD.classes.opsportal.OpsTool.extend(staticDef, instanceDef);
-                can.extend(curr.Tool.prototype, can.event);
+                can.extend(curr.Tool.prototype, can.event); // they are event emitters
 
             }
         }

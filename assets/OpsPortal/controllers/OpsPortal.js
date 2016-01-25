@@ -85,7 +85,7 @@ function(){
 
             // update loading progress for OpsPortal:
             AD.ui.loading.reset();
-            AD.ui.loading.text('configuring Ops Portal Tools:');
+            AD.ui.loading.text(AD.lang.label.getLabel('opp.configuringTools'));
             AD.ui.loading.resources(2); // kicks off a new refresh of the bar
 
 
@@ -171,6 +171,7 @@ function(){
 
         initDOMError: function(errMsg) {
             this.element.html(can.view(this.options.templateError, { errorMessage:errMsg } ));
+            AD.lang.label.translate(this.element);
         },
 
 
@@ -195,6 +196,7 @@ function(){
 			this.dom.resize.masthead = this.portalPopup.find(".op-masthead");
             AD.ui.jQuery('body').append(this.portalPopup);
 
+            AD.lang.label.translate(this.portalPopup);  // translate the current OpsPortal Labels
         },
 
 
@@ -263,9 +265,10 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
 
                 AD.ui.loading.completed(1);  // just to show we have loaded the config.
                 if (err) {
-                    
+
                     // what to do here?
-                    self.initDOMError(' You don\'t have permission.  Ask your administrator to grant you access. ')
+                    var label = AD.lang.label.getLabel('opp.errorNoPermission') || ' You don\'t have permission.  Ask your administrator to grant you access. ';
+                    self.initDOMError(  label  )
                 
                 } else {
 
@@ -328,12 +331,20 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
                     // now show the Link to open the OpsPortal
                     self.initDOM(); 
 
+                    AD.lang.label.translate(self.element);  // translate the OpsPortal task list
+
+
+                    // notify everyone the opsportal is finished creating the Tools.
+                    AD.comm.hub.publish('opsportal.ready', {});
+
+
                     // if our auto open setting is set, then 
                     if (self.options['portal-autoenter']) {
 
                         // auto click the Enter link:
                         self.element.find('.op-masthead a:first-of-type').click();
                     }
+
                 }
 
             });

@@ -55,6 +55,8 @@ function(){
 			//this.element.find('#op-list-menu')
                 .append(can.view(this.options.templateItem, {area:area}));
 
+            // translate the new area
+            AD.lang.label.translate( this.element.find('.'+area.key) );  
         },
 
 

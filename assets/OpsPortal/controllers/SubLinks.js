@@ -74,6 +74,11 @@ function(){
                 self.updateToolLink(data);                
             });
 
+            AD.comm.hub.subscribe('opsportal.ready', function(key,data){
+
+                AD.lang.label.translate( self.element );
+            })
+
         },
 
 
@@ -94,6 +99,7 @@ function(){
             var area = this.areaLinks[tool.area];
             if (area) {
                 area.append(can.view('OpsPortal_SubLinks_Item', {tool:tool}));
+
             }
 
         },

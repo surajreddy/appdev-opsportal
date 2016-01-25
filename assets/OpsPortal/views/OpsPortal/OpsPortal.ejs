@@ -1,15 +1,20 @@
+<!-- 
+#  Appdev Label Info:
+#label_context:opsportal
+#language_code:en
+-->
 <div class="container">
 
     <!-- Masthead -->
 	<div class="op-container op-masthead">
         
 		<div class="op-container" id="op-masthead-menu">
-			<a href="#sidr-main"><span class="icon"><i class="fa fa-bars"></i></span> Menu <span class="badge">16</span></a>
+			<a href="#sidr-main"><span class="icon"><i class="fa fa-bars"></i></span><span app-label-key="opp.menu">Menu</span><span class="badge">16</span></a>
 		</div>
 		
 		<div class="op-container" id="op-masthead-nav">
 			<ul class="list-unstyled list-inline" area="[[= area.key ]]">
-				<li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[= tool.label ]]</a></li>
+				<li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- AD.lang.label.getLabelSpan({ key: tool.label, context:tool.context }) ]]</a></li>
 				<li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 2</a></li>
 				<li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 3</a></li>
 			</ul>

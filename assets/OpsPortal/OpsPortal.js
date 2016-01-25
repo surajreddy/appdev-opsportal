@@ -10,7 +10,7 @@ steal(
         function() {
 
             AD.ui.loading.attach('#portal');
-            AD.ui.loading.text('preparing OpsPortal ...');
+            AD.ui.loading.text(' OpsPortal ...');
             AD.ui.loading.resources(19);  // increase the number of resources to load
 
         }
