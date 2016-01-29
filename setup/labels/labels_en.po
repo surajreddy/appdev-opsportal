@@ -1,0 +1,97 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8"
+"Content-Transfer-Encoding: 8bit"
+
+#. #########################################
+#. Labels for context: opsportal
+#. Source language: en
+#. Target language: en
+#. #########################################
+
+
+
+#. path: opsportal
+#. code: en
+#. key: opp.configuringTools
+msgid "configuring Opsportal Tools:"
+msgstr "configuring Opsportal Tools:"
+
+#. path: opsportal
+#. code: en
+#. key: opp.menu
+msgid "Menu"
+msgstr "Menu"
+
+#. path: opsportal
+#. code: en
+#. key: opp.error
+msgid "Error:"
+msgstr "Error:"
+
+#. path: opsportal
+#. code: en
+#. key: opp.enterPortal
+msgid "Enter the Portal"
+msgstr "Enter the Portal"
+
+#. path: opsportal
+#. code: en
+#. key: opp.areaAdministration
+msgid "Administration"
+msgstr "Administration"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolPermissions
+msgid "Permissions"
+msgstr "Permissions"
+
+#. path: opsportal
+#. code: en
+#. key: opp.areaProfile
+msgid "Profile"
+msgstr "Profile"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolProfile
+msgid "Profile"
+msgstr "Profile"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolObjectBuilder
+msgid "Configure Objects"
+msgstr "Configure Objects"
+
+#. path: opsportal
+#. code: en
+#. key: opp.areaProcess
+msgid "Process Tools"
+msgstr "Process Tools"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolProcessApproval
+msgid "Approvals"
+msgstr "Approvals"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolProcessTranslation
+msgid "Translations"
+msgstr "Translations"
+
+#. path: opsportal
+#. code: en
+#. key: opp.areaFCFActivities
+msgid "Activities"
+msgstr "Activities"
+
+#. path: opsportal
+#. code: en
+#. key: opp.errorNoPermission
+msgid " You don't have permission.  Ask your administrator to grant you access. "
+msgstr " You don't have permission.  Ask your administrator to grant you access. "
+
