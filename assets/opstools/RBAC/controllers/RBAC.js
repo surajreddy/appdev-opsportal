@@ -7,19 +7,22 @@ steal(
             AD.ui.loading.resources(12);
         },
         'OpsPortal/classes/OpsTool.js',
-
         'opstools/RBAC/models/SiteUser.js',
+
         // 'opstools/RBAC/models/Permission.js',
         'opstools/RBAC/models/PermissionAction.js',
         'opstools/RBAC/models/PermissionRole.js',
         'opstools/RBAC/models/PermissionScope.js',
 
+
+
         'opstools/RBAC/controllers/Users.js',
-        'opstools/RBAC/controllers/UserAssignmentAdd.js',
-        'opstools/RBAC/controllers/UserPermissionList.js',
+        // 'opstools/RBAC/controllers/UserAssignmentAdd.js',
+        // 'opstools/RBAC/controllers/UserPermissionList.js',
         'opstools/RBAC/controllers/Roles.js',
-        'opstools/RBAC/controllers/RoleAdd.js',
-        'opstools/RBAC/controllers/RoleEdit.js',
+        // 'opstools/RBAC/controllers/RoleAdd.js',
+        // 'opstools/RBAC/controllers/RoleEdit.js',
+
         '//opstools/RBAC/views/RBAC/RBAC.ejs',
 function(){
 
@@ -93,11 +96,11 @@ function(){
 
 
             this.initDOM();
-            this.initEvents();
+            // this.initEvents();
 
             this.loadData();
 
-            // default to User portal:
+            // // default to User portal:
             this.portalShow('users');
         },
 
@@ -111,11 +114,12 @@ function(){
             
             var controllers = {
                 'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD, eventPermissionList:this.CONST.USERPERMISSIONLIST } },
-                'opstools.RBAC.UserAssignmentAdd'   : { el: '.rbac-addassignments',  opt:{ eventDone:this.CONST.DONE } },
-                'opstools.RBAC.UserPermissionList'  : { el: '.rbac-permissionlist',  opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD,  eventDone:this.CONST.DONE } },
+                // 'opstools.RBAC.UserAssignmentAdd'   : { el: '.rbac-addassignments',  opt:{ eventDone:this.CONST.DONE } },
+                // 'opstools.RBAC.UserPermissionList'  : { el: '.rbac-permissionlist',  opt:{ eventAssignmentAdd:this.CONST.ASSIGNMENTADD,  eventDone:this.CONST.DONE } },
                 'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{ eventRoleAdd:this.CONST.ROLEADD, eventRoleEdit:this.CONST.ROLEEDIT, eventRoleDeleted:this.CONST.ROLEDELETED }},
-                'opstools.RBAC.RoleAdd'             : { el: '.rbac-role-addroles',   opt:{ eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL }},
-                'opstools.RBAC.RoleEdit'            : { el: '.rbac-role-editrole',   opt:{ eventDone:this.CONST.DONE, eventCancel:this.CONST.CANCEL }}
+                // 'opstools.RBAC.RoleAdd'             : { el: '.rbac-role-addroles',   opt:{ eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL }},
+                // 'opstools.RBAC.RoleEdit'            : { el: '.rbac-role-editrole',   opt:{ eventDone:this.CONST.DONE, eventCancel:this.CONST.CANCEL }},
+                // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
             }
 
             var initPortal = function(key, ref, el, options) {
@@ -129,28 +133,6 @@ function(){
                 
                 initPortal(portal, cKey, controllers[cKey].el, controllers[cKey].opt);
             }
-            
-
-            
-            // // attach the Users Controller
-            // var Users = AD.Control.get('opstools.RBAC.Users');
-            // this.portals.Users = new Users(this.element.find('.rbac-users'), { eventAssignmentAdd:this.CONST.ASSIGNMENTADD });
-
-            // var UserAssignmentAdd = AD.Control.get('opstools.RBAC.UserAssignmentAdd');
-            // this.portals.UserAssignmentAdd = new UserAssignmentAdd(this.element.find('.rbac-addassignments'), { eventAssignmentAdded:this.CONST.ASSIGNMENTADDED });
-
-            // // attach the Roles Controller
-            // var Roles = AD.Control.get('opstools.RBAC.Roles');
-            // this.portals.Roles = new Roles(this.element.find('.rbac-roles'), { eventRoleAdd:this.CONST.ROLEADD, eventRoleEdit:this.CONST.ROLEEDIT });
-
-            // // attach the RoleAdd Controller
-            // var RoleAdd = AD.Control.get('opstools.RBAC.RoleAdd');
-            // this.portals.RoleAdd = new RoleAdd(this.element.find('.rbac-role-addroles'), { eventRoleAdded:this.CONST.ROLEADDED, eventCancel:this.CONST.CANCEL });
-
-            // // attach the RoleEdit Controller
-            // var RoleEdit = AD.Control.get('opstools.RBAC.RoleEdit');
-            // this.portals.RoleEdit = new RoleEdit(this.element.find('.rbac-role-editrole'), { eventDone:this.CONST.DONE, eventCancel:this.CONST.CANCEL });
-            
 
         },
 
@@ -360,19 +342,19 @@ function(){
 
             this.loadUsers();
 
-            var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
-            Actions.findAll()
-            .fail(function(err){
+//             var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
+//             Actions.findAll()
+//             .fail(function(err){
 
-            })
-            .then(function(list) {
-                list.forEach(function(l) {
-                    l.translate();
-                })
-                _this.portals.RoleAdd.loadActions(list);
-                _this.portals.RoleEdit.loadActions(list);
-                _this.data.actions = list; 
-            });
+//             })
+//             .then(function(list) {
+//                 list.forEach(function(l) {
+//                     l.translate();
+//                 })
+//                 _this.portals.RoleAdd.loadActions(list);
+//                 _this.portals.RoleEdit.loadActions(list);
+//                 _this.data.actions = list; 
+//             });
 
 
             var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
@@ -386,41 +368,41 @@ function(){
                     l.translate();
                 })
                 _this.portals.Users.loadRoles(list);
-                _this.portals.UserAssignmentAdd.loadRoles(list);
-                _this.portals.UserPermissionList.loadRoles(list);
-                _this.portals.Roles.loadRoles(list);
+                // _this.portals.UserAssignmentAdd.loadRoles(list);
+                // _this.portals.UserPermissionList.loadRoles(list);
+                // _this.portals.Roles.loadRoles(list);
                 _this.data.roles = list;    
             });
 
 
-            var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
-            Scopes.findAll()
-            .fail(function(err){
-//// TODO: handle Error properly!
-            })
-            .then(function(list){
-                // // make sure they are all translated.
-                // list.forEach(function(l){
-                //     l.translate();
-                // })
-                _this.portals.Users.loadScopes(list);
-                _this.portals.UserAssignmentAdd.loadScopes(list);
-                _this.portals.UserPermissionList.loadScopes(list);
+//             var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
+//             Scopes.findAll()
+//             .fail(function(err){
+// //// TODO: handle Error properly!
+//             })
+//             .then(function(list){
+//                 // // make sure they are all translated.
+//                 // list.forEach(function(l){
+//                 //     l.translate();
+//                 // })
+//                 _this.portals.Users.loadScopes(list);
+//                 _this.portals.UserAssignmentAdd.loadScopes(list);
+//                 _this.portals.UserPermissionList.loadScopes(list);
 
-                _this.data.scopes = list;    // all the 
-            });
+//                 _this.data.scopes = list;    // all the 
+//             });
 
 
-            var Permissions = AD.Model.get('opstools.RBAC.Permission');
-            Permissions.findAll()
-            .fail(function(err){
-//// TODO: handle Error properly!
-            })
-            .then(function(list){
-                _this.portals.Users.loadPermissions(list);
-                _this.portals.UserPermissionList.loadPermissions(list);
-                _this.data.permissions = list;
-            })
+//             var Permissions = AD.Model.get('opstools.RBAC.Permission');
+//             Permissions.findAll()
+//             .fail(function(err){
+// //// TODO: handle Error properly!
+//             })
+//             .then(function(list){
+//                 _this.portals.Users.loadPermissions(list);
+//                 _this.portals.UserPermissionList.loadPermissions(list);
+//                 _this.data.permissions = list;
+//             })
 
 
         },
@@ -429,15 +411,22 @@ function(){
 
         portalShow: function(portalKey) {
 
+            this.element.find('#topmenu li.selected').removeClass('selected');
+
             for (var p in this.portals) {
+// TODO: open this up when we implement scopes.
+if (portalKey!='Scopes'){
                 if (p.toLowerCase() == portalKey.toLowerCase()) {
 
                     this.portals[p].show();
                     this.data.lastPortalShown = p;
 
+                    this.element.find('[rbac-menu="'+p+'"]').addClass('selected');
+
                 } else {
                     this.portals[p].hide();
                 }
+}
             }
 
         },
@@ -471,7 +460,8 @@ function(){
 
         '.rbac-menu click': function ($el, ev) {
 
-            var portal = $el.attr('portal');
+            var portal = $el.attr('rbac-menu');
+console.log('... show portal:', portal);
             this.portalShow(portal);
 
             ev.preventDefault();

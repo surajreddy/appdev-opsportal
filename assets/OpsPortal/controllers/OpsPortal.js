@@ -217,6 +217,7 @@ function(){
 
             // Now show our Portal:
             this.portalPopup.show();
+            this.resize();
 
         },
 
