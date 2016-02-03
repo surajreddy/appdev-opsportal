@@ -118,7 +118,7 @@ module.exports.opsportal = {
 
           ]
       },
-      
+/*      
       {
           // MPD Report Tool
           icon:'fa-user',
@@ -152,5 +152,6 @@ module.exports.opsportal = {
               ]
           }]
       },
+*/
   ]
 };

@@ -92,6 +92,6 @@ msgstr "Activities"
 #. path: opsportal
 #. code: en
 #. key: opp.errorNoPermission
-msgid " You don't have permission.  Ask your administrator to grant you access. "
-msgstr " You don't have permission.  Ask your administrator to grant you access. "
+msgid "You don't have permission.  Ask your administrator to grant you access."
+msgstr "You don't have permission.  Ask your administrator to grant you access."
 
