@@ -2,8 +2,7 @@
 steal(
     'appdev',
     'can',
-    'jquery'
-).then(
+    'jquery',
     'bootstrap.js',
     "bootstrapValidator.js",
     'OpsPortal/classes/ValidationDateGreaterThanField.js',

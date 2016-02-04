@@ -1,10 +1,8 @@
 // Dependencies
 steal(
-    "opstools/RBAC/controllers/Roles.js"
-)
-
-// Initialization
-.then(function(){
+    "opstools/RBAC/controllers/Roles.js",
+    // Initialization
+    function(){
 
     // the div to attach the controller to
     var divID = 'test_Roles';

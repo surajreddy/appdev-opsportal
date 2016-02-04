@@ -1,7 +1,7 @@
 steal(
         'appdev',
-        'opstools/RBAC/models/Permission.js'
-).then( function(){
+        'opstools/RBAC/models/Permission.js',
+        function(){
 
     var Permission = AD.Model.get('opstools.RBAC.Permission');
 

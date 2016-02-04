@@ -1,11 +1,12 @@
 
 steal(
         // List your Controller's dependencies here:
+        'can',
         'appdev',
 //        'OpsPortal/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
         // '//OpsPortal/views/OpsButtonBusy/OpsButtonBusy.ejs',
-function(){
+function(can){
 
 
     // The OpsPortal will define a global namespace for our added utilities:

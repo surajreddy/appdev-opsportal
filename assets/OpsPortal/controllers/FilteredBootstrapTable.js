@@ -2,10 +2,9 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
-        'jquery'
-).then(
-        'typeahead.js'
-).then(
+        'appdev/control/control.js',
+        'jquery',
+        'typeahead.js',
 //        'opstools/FCFActivities/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
         // '//opstools/FCFActivities/views/AddChooseMinistry/AddChooseMinistry.ejs',

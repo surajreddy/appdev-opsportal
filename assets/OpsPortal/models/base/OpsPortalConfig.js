@@ -1,6 +1,6 @@
 steal(
-        'appdev'
-).then( function(){
+        'appdev',
+        function(){
 
 
     AD.Model.Base.extend('OpsPortalConfig', {
