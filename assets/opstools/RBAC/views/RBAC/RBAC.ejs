@@ -135,62 +135,10 @@
                 <div class="col-lg-4 col-md-6  rbac-user-display">
                   <div class="form-inline">
                     <div class="input-group" id="userdisplay"></div>
-                    <button type="submit" class="btn op-btn btn-primary pull-right off-top10" >add</button>
+                    <button type="submit" class="btn op-btn btn-primary pull-right off-top10 rbac-user-addPermission" app-label-key="rbac.user.add" >add</button>
                   </div>
                   <div id="rolesNscopes" class="clear" style="height:240px"></div>
-                  
-                  <script type="text/javascript" charset="utf-8">
-/*
-                    webix.ready(function(){
-                                            
-                      var gridassignments = webix.ui({
-                        container:"rolesNscopes",
-                        view:"datatable",
-                        id:"assignments",
-                        columns:[
-                          { id:"roles",   header:"Roles", css:"rank", width:80},
-                          { id:"scopes",  header:"Scopes", width:200,fillspace:true},
-                          { id:"enabled", header:"Enabled" , width:80, css:{"text-align":"center"}, template:"{common.checkbox()}"},
-                                                    { id:"trash", header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},
-                                                    
-                        ],
-                        select:"row",
-                        yCount:5, scrollY:true,scrollX:false,
-                        navigation:"true",
-                                                onClick:{
-                                                    trash:function(e, id){
-                                                        var recid = id;
-                                                        webix.confirm({text:"This will remove " + this.getItem(id).roles, 
-                                                                      
-                                                               callback:function(result){
-                                          //                         console.log("id", recid);
-                                                                   if (result) {
-                                                                       if(!recid){
-                                                                            webix.message("No item is selected!");
-                                                                            return;
-                                                                        }
-                                                                        $$("assignments").remove(recid);
-                                                                        return false;
-                                                                   }
-                                                               }
-                                                          });
-                                                       
-                                                    }
-                                                },
-                        data:[
-                                                     { id:1, userid:1, roles:"role 1", scopes:"scope 1, scope 2", enabled:1},
-                             { id:2, userid:1, roles:"role 2", scopes:"scope 3, scope 4", enabled:0},
-                                                     { id:3, userid:2, roles:"role 3", scopes:"scope 1, scope 6", enabled:1},
-                             { id:4, userid:3, roles:"role 4", scopes:"scope 1, scope 3", enabled:0},
-                                                     { id:5, userid:3, roles:"role 3", scopes:"scope 3, scope 5", enabled:0},
-                             { id:6, userid:5, roles:"role 2", scopes:"scope 2, scope 6", enabled:1}
-                                                    ]                   
-                      });   
-                      webix.event(window, "resize", function(){ gridassignments.adjust(); })
-                      
-                    });
-*/
-                  </script>                 
+                          
                 </div>
                 
                 <div class="col-lg-4 col-md-12 rbac-user-roleScope">

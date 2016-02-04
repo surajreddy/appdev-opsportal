@@ -213,20 +213,6 @@ function(){
                             // id:
                             _this.selectUser(id);
 
-// console.log('onItemClick->model:', _this.data.usersCollection.AD.currModel());
-
-                            // var userid = this.getItem(id).userid;
-                            // var useridnum = this.getItem(id).numroles;
-                            // console.log("userid ", userid);
-                            // function showuser(id) {
-                            //     $$("username").setValues({
-                            //         user:userid
-                            //     });
-                            //     $$("username").refresh;
-                            //     $$("assignments").filter("#userid#",useridnum);
-                            //     $$("assignments").refresh;
-                            // }
-                            // showuser(id);
                         }
                     }
                 });  
@@ -289,6 +275,7 @@ width:185
 
                     navigation:"true",
                     onClick:{
+
                         trash:function(e, id){
                             
                             var perm = this.getItem(id);
@@ -302,18 +289,24 @@ width:185
 
                                     if (result) {
 
-                                        if(!recid){
+                                        if(!id){
                                             webix.message("No item is selected!");
                                             return;
                                         }
 
-                                        _this.removePermission(perm)
+                                        _this.permissionRemove(perm)
                                         .fail(function(err){
-                                            AD.error.log('Problem removing permission.', { error:err, perm:perm } );
+                                            // .removePermission() already handles error messages ...
+                                            // AD.error.log('Problem removing permission.', { error:err, perm:perm } );
                                             webix.message("There was a problem trying to remove this permission.");
                                         })
                                         .then(function(){
+                                            // remove from list
                                             _this.dom.userPermissions.remove(id);
+
+                                            // update user's display
+                                            var currUserID = _this.data.usersCollection.getCursor();
+                                            _this.selectUser(currUserID);
                                         })
                                         
                                         return false;
@@ -321,20 +314,22 @@ width:185
                                 }
                             });
                            
-                        },
-//                         checkbox:function(e, id) {
-// console.warn('onclick.checkbox()!!!');
-//                         }
+                        }
+
                     }
-                    // data:[
-                    //     { id:1, userid:1, roles:"role 1", scopes:"scope 1, scope 2", enabled:1},
-                    //     { id:2, userid:1, roles:"role 2", scopes:"scope 3, scope 4", enabled:0},
-                    //     { id:3, userid:2, roles:"role 3", scopes:"scope 1, scope 6", enabled:1},
-                    //     { id:4, userid:3, roles:"role 4", scopes:"scope 1, scope 3", enabled:0},
-                    //     { id:5, userid:3, roles:"role 3", scopes:"scope 3, scope 5", enabled:0},
-                    //     { id:6, userid:5, roles:"role 2", scopes:"scope 2, scope 6", enabled:1}
-                    // ]                   
+                
                 }); 
+                _this.dom.userPermissions.attachEvent("onCheck", function(row, column, state){
+                    
+                    // get the permission object:
+                    var perm = _this.dom.userPermissions.getItem(row);
+                    if (state) {
+                        _this.permissionEnable(perm);
+                    } else {
+                        _this.permissionDisable(perm);
+                    }
+
+                });
                           
             });
 
@@ -467,6 +462,85 @@ width:185
             this.refresh();
         },
 
+        permissionInstance: function(perm) {
+
+            var Permission = AD.Model.get('opstools.RBAC.Permission');
+            return Permission.findOne({id:perm.id}).fail(function(err){
+                AD.error.log('Error finding permission:', {error:err, id:perm.id, perm:perm });
+            });
+            
+        },
+
+
+        /**
+         * @function permissionDisable
+         *
+         */
+        permissionDisable: function(perm) {
+            return this.permissionUpdate(perm, { 'enabled': false });
+        },
+
+
+        /**
+         * @function permissionEnable
+         *
+         */
+        permissionEnable: function(perm) {
+            return this.permissionUpdate(perm, { 'enabled': true });
+        },
+
+
+
+        /**
+         * @function permissionRemove
+         *
+         */
+        permissionRemove: function(perm) {
+            var dfd = AD.sal.Deferred();
+
+            this.permissionInstance(perm)
+            .fail(function(err){ dfd.reject(err); })
+            .then(function(permission){
+
+                permission.destroy()
+                .fail(function(err){
+                    AD.error.log('Error removing permission:', {error:err, perm:permission });
+                    dfd.reject(err);
+                })
+                .then(function(){
+
+                    dfd.resolve();
+                })
+            })
+
+            return dfd;
+        },
+
+
+        permissionUpdate:function(perm, values) {
+            var dfd = AD.sal.Deferred();
+
+            this.permissionInstance(perm)
+            .fail(function(err){ dfd.reject(err); })
+            .done(function(permission){
+
+                for(v in values) {
+                    permission.attr(v, values[v]);
+                }
+                
+                permission.save()
+                .fail(function(err){
+                    AD.error.log('Error updating permission:', {error:err, perm:permission, values:values });
+                    dfd.reject(err);
+                })
+                .done(function(){
+                    dfd.resolve();
+                })
+            })
+
+            return dfd;
+        },
+
 
 
         /** 
@@ -479,18 +553,6 @@ width:185
             this.dom.userGrid.adjust();
             // this.dom.listUsersTbody.html(' ');
             // this.dom.listUsersTbody.append(can.view('RBAC_User_UserList', {users: this.data.users }));
-        },
-
-
-
-        /**
-         * @function removePermission
-         *
-         */
-        removePermission: function(perm) {
-
-//// LEFT OFF HERE:
-
         },
 
 
