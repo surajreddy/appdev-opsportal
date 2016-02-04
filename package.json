@@ -23,7 +23,7 @@
   "homepage": "https://github.com/appdevdesigns/appdev-opsportal",
   "dependencies": {
     "ad-utils": "git://github.com/appdevdesigns/ad-utils",
-    "appdev-core": "wongpratan/appdev-core#new_build",
+    "appdev-core": "appdevdesigns/appdev-core#new_build",
     "async": "^1.5.2",
     "fs": "0.0.2",
     "path": "^0.12.7",
