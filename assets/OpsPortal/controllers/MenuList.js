@@ -31,8 +31,8 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    templateDOM: 'OpsPortal/views/MenuList/MenuList.ejs',
-                    templateItem: 'OpsPortal/views/MenuList/menuItem.ejs'
+                    templateDOM: '/OpsPortal/views/MenuList/MenuList.ejs',
+                    templateItem: '/OpsPortal/views/MenuList/menuItem.ejs'
             }, options);
 
 

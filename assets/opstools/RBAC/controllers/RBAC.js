@@ -72,7 +72,7 @@ function(){
         init: function (element, options) {
             var self = this;
             options = AD.defaults({
-                    templateDOM: 'opstools/RBAC/views/RBAC/RBAC.ejs'
+                    templateDOM: '/opstools/RBAC/views/RBAC/RBAC.ejs'
             }, options);
             this.options = options;
 

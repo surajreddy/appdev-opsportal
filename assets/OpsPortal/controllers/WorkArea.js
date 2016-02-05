@@ -29,7 +29,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    template_area: 'OpsPortal/views/WorkArea/area.ejs'
+                    template_area: '/OpsPortal/views/WorkArea/area.ejs'
             }, options);
 
             this.dataSource = this.options.dataSource; // AD.models.Projects;

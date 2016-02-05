@@ -17,8 +17,8 @@ function(){
             this.options = AD.defaults({
                     dom_listarea:'.genlist-list',
                     notification_selected:null,
-                    templateDOM: 'js/GenListDOM.ejs',
-                    templateItem: 'js/GenListItem.ejs',
+                    templateDOM: '/js/GenListDOM.ejs',
+                    templateItem: '/js/GenListItem.ejs',
                     title: 'List',
                     onAdd:null,
                     onEdit:null,
