@@ -20,7 +20,7 @@ steal(
         'opstools/RBAC/controllers/Roles.js',
         'opstools/RBAC/controllers/RoleAdd.js',
         'opstools/RBAC/controllers/RoleEdit.js',
-        '//opstools/RBAC/views/RBAC/RBAC.ejs',
+        'opstools/RBAC/views/RBAC/RBAC.ejs',
 function(){
 
     AD.ui.loading.completed(12);
@@ -72,7 +72,7 @@ function(){
         init: function (element, options) {
             var self = this;
             options = AD.defaults({
-                    templateDOM: '//opstools/RBAC/views/RBAC/RBAC.ejs'
+                    templateDOM: 'opstools/RBAC/views/RBAC/RBAC.ejs'
             }, options);
             this.options = options;
 

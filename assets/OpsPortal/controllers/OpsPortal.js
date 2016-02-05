@@ -67,9 +67,9 @@ function(){
             var self = this;
             this.options = AD.defaults({
                     'portal-autoenter': false,
-                    templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs',
-                    templateError: '//OpsPortal/views/OpsPortal/error.ejs'
+                    templateDOM: 'OpsPortal/views/OpsPortal/OpsPortal.ejs',
+                    templateList: 'OpsPortal/views/OpsPortal/taskList.ejs',
+                    templateError: 'OpsPortal/views/OpsPortal/error.ejs'
             }, options);
 
 
