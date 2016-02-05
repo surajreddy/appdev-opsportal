@@ -36,7 +36,7 @@ function(){
         init: function( element, options ) {
             var self = this;
             this.options = AD.defaults({
-                    templateDOM: '//OpsPortal/views/Tool/Tool.ejs'
+                    templateDOM: '/OpsPortal/views/Tool/Tool.ejs'
             }, options);
 
 

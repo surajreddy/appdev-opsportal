@@ -1,10 +1,8 @@
 // Dependencies
 steal(
-    "opstools/RBAC/controllers/RBAC.js"
-)
-
-// Initialization
-.then(function(){
+    "opstools/RBAC/controllers/RBAC.js",
+    // Initialization
+    function(){
 
     // the div to attach the controller to
     var divID = 'test_RBAC';

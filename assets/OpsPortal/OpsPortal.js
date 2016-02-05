@@ -5,25 +5,31 @@
 // } );
 steal(
         'appdev',
-        'jquery'
-).then(
+        'jquery',
         function() {
 
             AD.ui.loading.attach('#portal');
             AD.ui.loading.text(' OpsPortal ...');
             AD.ui.loading.resources(19);  // increase the number of resources to load
 
+            loadJqueryUi();
         }
-).then(
-        'jquery-ui.js'
-).then(
-        function() {
-            // Change JQueryUI plugin names to fix name collision 
-            // with Bootstrap.
-            $.widget.bridge('uitooltip', $.ui.tooltip);
-            $.widget.bridge('uibutton', $.ui.button);        
-        },
-        'bootstrap.js',
+);
+
+function loadJqueryUi() {
+    steal('jquery-ui.js', 
+            function() {
+                // Change JQueryUI plugin names to fix name collision 
+                // with Bootstrap.
+                $.widget.bridge('uitooltip', $.ui.tooltip);
+                $.widget.bridge('uibutton', $.ui.button);
+                
+                loadBootstrapStyle();
+            });
+}
+
+function loadBootstrapStyle() {
+    steal('bootstrap.js',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
         'styles/jquery.sidr.dark.css',
@@ -38,24 +44,32 @@ steal(
         // "bootstrapValidator.css",
         'bootbox.js',
         // 'notify.js',
-        // 'GenericList.js',        
+        // 'GenericList.js',
         'FilteredBootstrapTable.js',
         'OpsButtonBusy.js',
-        'font-awesome.css'
-        
-).then(
-        function(){
-            AD.ui.loading.completed(12); // this many have just been completed.
-        },
+        'font-awesome.css',
+        function() {
+            loadBootstrapPlugins();
+        });
+}
+
+function loadBootstrapPlugins() {
+    AD.ui.loading.completed(12); // this many have just been completed.
+    
+    steal(
         "bootstrap-table.js",
         "bootstrap-table.css",
         // "bootstrapValidator.js",
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',
-        'site/labels/OpsPortal.js'
-        
-).then(function(){
+        'site/labels/OpsPortal.js',
+        function() {
+            setupSocket();
+        }
+    )
+}
 
+function setupSocket() {
     AD.ui.loading.completed(7);  // 
 
 //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
@@ -72,11 +86,8 @@ steal(
     })
     .then(function(){
         console.log('... OPSPORTAL:  socket registered.')
-    })
-
-});
-
-
+    });
+}
 
 
 // steal(

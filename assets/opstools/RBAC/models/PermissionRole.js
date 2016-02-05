@@ -1,7 +1,7 @@
 steal(
         'appdev',
-        'opstools/RBAC/models/base/PermissionRole.js'
-).then( function(){
+        'opstools/RBAC/models/base/PermissionRole.js',
+        function(){
 
     // Namespacing conventions:
     // AD.Model.extend('[application].[Model]', {static}, {instance} );  --> Object

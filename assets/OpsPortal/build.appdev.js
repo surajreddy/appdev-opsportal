@@ -16,7 +16,7 @@ var AD = require('ad-utils');
 var path = require('path');
 var fs = require('fs');
 var async = require('async');
-
+var transform = require("steal-tools").transform;
 
 module.exports = {
 
@@ -31,10 +31,14 @@ module.exports = {
      * @param {fn} cb   The callback fn to run when command is complete.
      *                  The callback follows the usual node: cb(err) format.
      */
-    command:function(builder, cb) {
+    command: function (builder, cb) {
 
         var self = this;
-
+        var mainBuildModules = [path.join('OpsPortal', 'OpsPortal'),
+                                'FilteredBootstrapTable',
+                                'OpsButtonBusy',
+                                'OpsPortal/controllers/OpsPortal'
+                                ];
 
         //// NOTE:  this is expected to be running the /assets directory
 
@@ -42,9 +46,9 @@ module.exports = {
         async.series([
 
             // step 1:  check to make sure appdev exists:
-            function(next) {
+            function (next) {
 
-                 fs.exists(path.join(process.cwd(), 'appdev'), function(exists) {
+                fs.exists(path.join(process.cwd(), 'appdev'), function (exists) {
 
                     if (exists) {
                         next();
@@ -60,51 +64,101 @@ module.exports = {
 
 
 
-            // step 2: run the build command
-            function(next) {
+            // step 2: build JS files
+            function (next) {
 
 
                 // 1) We are going to run the steal/buildjs against appdev and OpsPortal
                 //    so that the OpsPortal doesn't package together the appdev library.
 
-
-                // command:  './cjs steal/buildjs  appdev  OpsPortal'
-
-
                 AD.log();
-                AD.log('<green>building</green> OpsPortal');
+                AD.log('<green>building</green> OpsPortal JS files');
 
-                AD.spawn.command({
-                    command:'./cjs',
-                    options:[path.join('steal', 'buildjs'), 'appdev', 'OpsPortal'],
-shouldEcho:true,
-                    // exitTrigger:'OpsPortal/production.css'
-                })
-                .fail(function(err){
-                    AD.log.error('<red>could not complete OpsPortal build!</red>');
-                    next(err);
-                })
-                .then(function(){
-                    next();
-                });
+
+                transform(
+                    {
+                        main: mainBuildModules,
+                        config: 'stealconfig.js'
+                    },
+                    {
+                        minify: true,
+                        noGlobalShim: true,
+                        ignore: [
+                            /^.*(.css)+/, // Ignore css files
+                            /^(?!(OpsPortal|opsportal).*)/, // Get only OpsPortal module files
+                        ]
+                    }).then(function (transform) {
+                        // Get the main module and it's dependencies as a string
+                        var main = transform();
+
+                        fs.writeFile(path.join('OpsPortal', 'production.js'), main.code, "utf8", function (err) {
+                            if (err) {
+                                AD.log.error('<red>could not write minified OpsPortal JS file !</red>', err);
+                                next(err);
+                            }
+
+                            next();
+                        });
+                    })
+                    .catch(function (err) {
+                        AD.log.error('<red>could not complete OpsPortal JS build!</red>', err);
+                        next(err);
+                    });
+
             },
 
 
+            // step 3: build CSS files
+            function (next) {
+                AD.log('<green>building</green> OpsPortal CSS files');
+                AD.log('<green>+++++++++++++++</green>');
 
-            // step 3: cleanup the production.js file to point to 
+                // Minify css files
+                transform(
+                    {
+                        main: mainBuildModules,
+                        config: 'stealconfig.js'
+                    },
+                    {
+                        minify: true,
+                        noGlobalShim: true,
+                        ignore: [
+                            /^(?!.*(.css)+)/, // Get only css files
+                            /^(?!(OpsPortal|opsportal).*)/, // Get only OpsPortal module files
+                        ]
+                    }).then(function (transform) {
+                        var main = transform();
+
+                        fs.writeFile(path.join('OpsPortal', 'production.css'), main.code, "utf8", function (err) {
+                            if (err) {
+                                AD.log.error('<red>could not write minified OpsPortal CSS file !</red>', err);
+                                next(err);
+                            }
+
+                            next();
+                        });
+                    })
+                    .catch(function (err) {
+                        AD.log.error('<red>could not complete OpsPortal CSS build!</red>', err);
+                        next(err);
+                    });
+            },
+            
+            
+            // step 4: cleanup the production.js file to point to 
             //         appdev/production.js
-            function(next) {
+            function (next) {
 
                 AD.log('<green>cleaning</green> the OpsPortal/production.js file');
 
                 var patches = [
-                    { file:path.join('OpsPortal', 'production.js'), tag:'id:"packages/OpsPortal-appdev.js",', replace:'id:"appdev/production.js",'}
+                    { file: path.join('OpsPortal', 'production.js'), tag: 'id:"packages/OpsPortal-appdev.js",', replace: 'id:"appdev/production.js",' }
                 ];
                 builder.patchFile(patches, next);
 
             }
 
-        ], function(err, results) {
+        ], function (err, results) {
             if (cb) cb(err);
         });
 

@@ -1,14 +1,20 @@
-module.exports={
-
-    amd:false,
-
-    // map: {
-    //     "*": {
-    //       "jquery/jquery.js" : "js/jquery.min.js"
-    //     }
-    // },
-    paths: {
-        
+module.exports={    
+  "map": {
+        "jquery/jquery": "jquery",
+        "jquery-ui": "jquery-ui.js",
+        "bootstrap": "bootstrap.js",
+        "bootstrap-table" : "bootstrap-table.js",
+        "bootstrap-datetimepicker" : "bootstrap-datetimepicker.js",
+        "bootstrapValidator": "bootstrapValidator.js", 
+        "GenericList": "js/GenericList.js",
+        "bootbox": "bootbox.js",
+        "typeahead": "typeahead.js",
+        "moment": "moment.js",
+        "FilteredBootstrapTable": "FilteredBootstrapTable.js",
+        "OpsButtonBusy": "OpsButtonBusy.js"
+    },
+    "paths": {
+        "jquery" : "js/jquery.min.js",                  // 'http://code.jquery.com/jquery-1.11.1.min.js'
         "jquery-ui.js" : "js/jquery-ui.min.js",         // 'http://code.jquery.com/ui/1.11.0/jquery-ui.min.js' 
         
         "bootstrap.js" : "js/bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
@@ -46,7 +52,7 @@ module.exports={
 
         "OpsButtonBusy.js" : "OpsPortal/classes/OpsButtonBusy.js"
     },
-    shim : {
+    "shim" : {
         'jquery-ui.js' : { packaged:false },
         
         'bootstrap.js' : { packaged:false },
@@ -86,11 +92,13 @@ module.exports={
         'site/labels/OpsPortal.js' : { packaged:false, ignore:true },
         'site/login-done' : { packaged:false, ignore:true }
     },
-    // ext: {
-    //     js: "js",
-    //     css: "css",
-    //     less: "steal/less/less.js",
-    //     coffee: "steal/coffee/coffee.js",
-    //     ejs: "can/view/ejs/ejs.js"
-    // }
+    "ext": {
+        "ejs": "can/view/ejs/system"
+    },
+    "buildConfig": {
+        "map": {
+            "can/util/util": "can/util/domless/domless"
+        }
+    },
+    'amd': false
 };

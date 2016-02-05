@@ -1,7 +1,7 @@
 steal(
         'appdev',
-        'OpsPortal/models/base/OpsPortalConfig.js'
-).then( function(){
+        'OpsPortal/models/base/OpsPortalConfig.js',
+        function(){
 
 
     AD.Model.extend('OpsPortalConfig', { 

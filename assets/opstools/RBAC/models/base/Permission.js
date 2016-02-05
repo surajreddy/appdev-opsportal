@@ -1,8 +1,8 @@
 steal(
         'appdev',
         'opstools/RBAC/models/PermissionRole.js',
-        'opstools/RBAC/models/PermissionScope.js'
-).then( function(){
+        'opstools/RBAC/models/PermissionScope.js',
+        function(){
 
     var Role = AD.Model.get('opstools.RBAC.PermissionRole');
     var Scope = AD.Model.get('opstools.RBAC.PermissionScope');

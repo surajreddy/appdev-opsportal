@@ -2,9 +2,7 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
-        'jquery'
-).then(
-
+        'jquery',
         'OpsPortal/portal-scratch.css',
 		'OpsPortal/opsportal.css',
 		'OpsPortal/opsportal-theme.css',
@@ -19,10 +17,10 @@ steal(
         
 // ).then(
         // 'js/jquery.sidr.min.js',
-        'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
+        // 'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
 // ).then(
-       '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-       '//OpsPortal/views/OpsPortal/taskList.ejs',
+       'OpsPortal/views/OpsPortal/OpsPortal.ejs',
+       'OpsPortal/views/OpsPortal/taskList.ejs',
 function(){
 
 
@@ -69,9 +67,9 @@ function(){
             var self = this;
             this.options = AD.defaults({
                     'portal-autoenter': false,
-                    templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs',
-                    templateError: '//OpsPortal/views/OpsPortal/error.ejs'
+                    templateDOM: '/OpsPortal/views/OpsPortal/OpsPortal.ejs',
+                    templateList: '/OpsPortal/views/OpsPortal/taskList.ejs',
+                    templateError: '/OpsPortal/views/OpsPortal/error.ejs'
             }, options);
 
 
