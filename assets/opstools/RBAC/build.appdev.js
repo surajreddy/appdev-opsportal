@@ -16,6 +16,7 @@ var AD = require('ad-utils');
 var path = require('path');
 var fs = require('fs');
 var async = require('async');
+var transform = require("steal-tools").transform;
 
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
      * @param {fn} cb   The callback fn to run when command is complete.
      *                  The callback follows the usual node: cb(err) format.
      */
-    command:function(builder, cb) {
+    command: function (builder, cb) {
 
         var self = this;
 
@@ -42,9 +43,9 @@ module.exports = {
         async.series([
 
             // step 1:  check to make sure appdev exists:
-            function(next) {
+            function (next) {
 
-                 fs.exists(path.join(process.cwd(), 'appdev'), function(exists) {
+                fs.exists(path.join(process.cwd(), 'appdev'), function (exists) {
 
                     if (exists) {
                         next();
@@ -60,51 +61,65 @@ module.exports = {
 
 
 
-            // step 2: run the build command
-            function(next) {
+            // step 2: build JS files
+            function (next) {
 
 
                 // 1) We are going to run the steal/buildjs against appdev and opstools/RBAC
                 //    so that the opstools/RBAC doesn't package together the appdev library.
 
 
-                // command:  './cjs steal/buildjs  appdev  opstools/RBAC'
-
-
                 AD.log();
-                AD.log('<green>building</green> opstools/RBAC');
+                AD.log('<green>building</green> opstools/RBAC JS files');
 
-                AD.spawn.command({
-                    command:'./cjs',
-                    options:[path.join('steal', 'buildjs'), 'appdev', 'opstools/RBAC'],
-shouldEcho:true,
-                    // exitTrigger:'opstools/RBAC/production.css'
-                })
-                .fail(function(err){
-                    AD.log.error('<red>could not complete opstools/RBAC build!</red>');
-                    next(err);
-                })
-                .then(function(){
-                    next();
-                });
+
+                transform(
+                    {
+                        main: path.join('opstools', 'RBAC', 'RBAC'),
+                        config: 'stealconfig.js'
+                    },
+                    {
+                        minify: true,
+                        noGlobalShim: true,
+                        ignore: [
+                            /^.*(.css)+/, // Ignore css files
+                            /^(?!(opstools\/RBAC).*)/, // Get only RBAC module files
+                        ]
+                    }).then(function (transform) {
+                        // Get the main module and it's dependencies as a string
+                        var main = transform();
+
+                        fs.writeFile(path.join('opstools', 'RBAC', 'production.js'), main.code, "utf8", function (err) {
+                            if (err) {
+                                AD.log.error('<red>could not write minified RBAC JS file !</red>', err);
+                                next(err);
+                            }
+
+                            next();
+                        });
+                    })
+                    .catch(function (err) {
+                        AD.log.error('<red>could not complete RBAC JS build!</red>', err);
+                        next(err);
+                    });
             },
 
 
 
             // step 3: cleanup the production.js file to point to 
             //         appdev/production.js
-            function(next) {
+            function (next) {
 
                 AD.log('<green>cleaning</green> the opstools/RBAC/production.js file');
 
                 var patches = [
-                    { file:path.join('opstools/RBAC', 'production.js'), tag:'id:"packages/appdev-RBAC.js",', replace:'id:"appdev/production.js",'}
+                    { file: path.join('opstools/RBAC', 'production.js'), tag: 'id:"packages/appdev-RBAC.js",', replace: 'id:"appdev/production.js",' }
                 ];
                 builder.patchFile(patches, next);
 
             }
 
-        ], function(err, results) {
+        ], function (err, results) {
             if (cb) cb(err);
         });
 
