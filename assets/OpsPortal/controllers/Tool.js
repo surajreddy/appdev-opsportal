@@ -73,13 +73,15 @@ function(){
             //// javascript libraries.  these packages are requested in parallel, and we need to 
             //// verify they are loaded before attempting to access them.
             
-            // temp mock controller to catch .needsUpdate() and .resize() requests while delaying. 
+            // temp mock controller to catch .needsUpdate(), .resize() and trigger() requests while delaying. 
             this.controller = {
                 needsUpdate: function() {
                     this._needsUpdate = true;
                 },
                 resize:function(data){
                     this._resize = data;
+                },
+                trigger:function() {
                 }
             };
             var delayedLoad = function(name, count) {
