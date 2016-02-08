@@ -375,22 +375,22 @@ function(){
             });
 
 
-//             var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
-//             Scopes.findAll()
-//             .fail(function(err){
-// //// TODO: handle Error properly!
-//             })
-//             .then(function(list){
-//                 // // make sure they are all translated.
-//                 // list.forEach(function(l){
-//                 //     l.translate();
-//                 // })
-//                 _this.portals.Users.loadScopes(list);
-//                 _this.portals.UserAssignmentAdd.loadScopes(list);
-//                 _this.portals.UserPermissionList.loadScopes(list);
+            var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
+            Scopes.findAll()
+            .fail(function(err){
+//// TODO: handle Error properly!
+            })
+            .then(function(list){
+                // // make sure they are all translated.
+                // list.forEach(function(l){
+                //     l.translate();
+                // })
+                _this.portals.Users.loadScopes(list);
+                // _this.portals.UserAssignmentAdd.loadScopes(list);
+                // _this.portals.UserPermissionList.loadScopes(list);
 
-//                 _this.data.scopes = list;    // all the 
-//             });
+                _this.data.scopes = list;    // all the 
+            });
 
 
 //             var Permissions = AD.Model.get('opstools.RBAC.Permission');

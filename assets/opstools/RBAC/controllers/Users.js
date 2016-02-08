@@ -2,15 +2,14 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
-        'opstools/RBAC/models/SiteUser.js',
+        // 'opstools/RBAC/models/SiteUser.js',
         'opstools/RBAC/models/Permission.js',
-        'opstools/RBAC/models/PermissionRole.js',
-        'opstools/RBAC/models/PermissionScope.js',
+        // 'opstools/RBAC/models/PermissionRole.js',
+        // 'opstools/RBAC/models/PermissionScope.js',
 
         'OpsWebixDataCollection.js',
         'OpsWebixSearch.js',
 
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
         // '//opstools/RBAC/views/Users/Users.ejs',
 function(){
 
@@ -49,7 +48,6 @@ function(){
 
 
             this.initDOM();
-            this.loadData();
         },
 
 
@@ -57,92 +55,46 @@ function(){
         initDOM: function () {
             var _this = this;
 
-            // // this.element.html(can.view(this.options.templateDOM, {} ));
-
-
-            // //// 
-            // //// Create a template for our User List:
-            // //// 
-
-            // // register template as :  'FCFActivities_ActivityReport_ActivityTaggedPeople'
-            // //  NOTE:  DON'T USE '.' as seperators here!!!  -> can.ejs thinks they are file names then... doh!
-            // var templateUserList =  this.domToTemplate(this.element.find('#userList>tbody'));
-            // can.view.ejs('RBAC_User_UserList', templateUserList);
-
-            // // remove the template from the DOM
-            // this.dom.listUsers = this.element.find('#userList');
-            // this.dom.listUsersTbody = this.dom.listUsers.find('tbody');
-            // // this.dom.listUsersTbody.html(' ');
-
-
-
-            // this.dom.listAssignments = this.element.find('.rbac-user-table-assignments');
-            // this.dom.listAssignmentsTbody = this.dom.listAssignments.find('tbody');
-            // var templateAssignmentList = this.domToTemplate(this.dom.listAssignmentsTbody);
-            // can.view.ejs('RBAC_User_AssignmentList', templateAssignmentList);
-            // this.quickviewClear();
-
-
-
-            // // attach the FilteredBootstrapTable Controller
-            // var Filter = AD.Control.get('OpsPortal.FilteredBootstrapTable');
-            // this.Filter = new Filter(this.element, {
-            //     tagFilter: '.autocomplete-filter',
-            //     tagBootstrapTable: '#userList',
-            //     scrollToSelect:true,
-
-            //     cssSelected:'orange',
-
-            //     tableOptions:{
-
-            //         pagination: true,
-
-            //         columns: [
-            //             { title:'# Assignments', formatter: '.numAssignments' },  // function(value, row, index){ return row.numAssignments(); }
-            //             { title:'Username',      field:'username'             },
-            //             { title:'Options',       formatter:'.options'         },
-            //             { title:'Status',        formatter:'.status'          }
-            //         ]
-            //     },
-
-            //     // filterTable:true,
-
-            //     rowClicked:function(data) {
-
-            //         if (data) {
-            //             console.log('... clicked user:', data);
-            //             // self.selectedActivity = data;
-            //             // self.nextEnable();
-            //         }
-
-            //     },
-            //     rowDblClicked: function(data) {
-            //         // if they dbl-click a row,
-            //         // just continue on as if they clicked [next]
-            //         _this.element.trigger(_this.options.eventPermissionList, data);
-            //     },
-            //     termSelected:function(data) {
-            //         _this.element.trigger(_this.options.eventPermissionList, data);
-            //     },
-            //     dataToTerm: function(data) {  
-            //         if (data) {
-            //             return data.username;
-            //         } else {
-            //             return '';
-            //         }
-            //     }
-            // });
-
-
-// this.dom.listUsersTbody.html(' ');
-
             this.dom.userPanel = this.element.find('.rbac-user-display');
             this.dom.userPanel.hide();
+
 
             this.dom.userRoleScope = this.element.find('.rbac-user-roleScope');
             this.dom.userRoleScope.hide();
 
+            this.dom.userRoleScopeForm = this.element.find('.rbac-user-roleScope-form');
+            var templateAddUserPermission = this.domToTemplate(this.dom.userRoleScopeForm);
+            can.view.ejs('RBAC_User_AddUserPermission', templateAddUserPermission);
 
+
+            //// Create a Form for our Add Permission
+            this.form = new AD.op.Form(this.dom.userRoleScopeForm);
+            this.form.addField('role', 'integer', { notEmpty: {} });
+            this.form.addField('scope', 'array', { notEmpty: {} });
+
+
+            this.dom.userRoleScopeEdit = this.element.find('.rbac-user-roleScopeEdit');
+            this.dom.userRoleScopeEdit.hide();
+
+
+            this.dom.userRoleScopeEditForm = this.element.find('.rbac-user-roleScopeEdit-form');
+            var templateEditUserPermission = this.domToTemplate(this.dom.userRoleScopeEditForm);
+            can.view.ejs('RBAC_User_EditUserPermission', templateEditUserPermission);
+
+
+            //// Create a Form for our Add Permission
+            this.formEdit = new AD.op.Form(this.dom.userRoleScopeEditForm);
+            // this.formEdit.addField('role', 'integer', { notEmpty: {} });
+            this.formEdit.addField('scope', 'array', { notEmpty: {} });
+
+
+            //// Create our Busy buttons:
+            this.button = {};
+            this.button.add = new AD.op.ButtonBusy(this.element.find('.rbac-user-addPerm-add'));
+            this.button.update = new AD.op.ButtonBusy(this.element.find('.rbac-user-editPerm-update'));
+
+
+            //// Now initialize the Webix components:
             webix.ready(function(){
 
 
@@ -203,7 +155,6 @@ function(){
                       group:5
                     },  
 
-
                     on:{
                         onItemClick:function(id){
 
@@ -211,7 +162,7 @@ function(){
                             // and so is our selected form, so we need to make sure
                             // the userCollection's cursor is set to the selected
                             // id:
-                            _this.selectUser(id);
+                            _this.userSelect(id);
 
                         }
                     }
@@ -222,8 +173,8 @@ function(){
                 ////
                 //// setup the Selected User Name Form
                 ////
-                var lblNoUserSelected = AD.lang.label.getLabel('rbac.user.noUserSelected')
-                if (!lblNoUserSelected) { lblNoUserSelected = 'no user selected' };
+                var lblNoUserSelected = AD.lang.label.getLabel('rbac.user.noUserSelected') || 'no user selected';
+                // if (!lblNoUserSelected) { lblNoUserSelected = 'no user selected' };
                 _this.dom.userName = webix.ui({
                     id:"username",
                     container:"userdisplay",
@@ -254,7 +205,7 @@ width:185
                     id:"assignments",
                     columns:[
                         { id:"role",   header:"Roles", css:"rank", width:80, template:function(obj){
-                            var role = _this.roleForID(obj.role.id);
+                            // var role = _this.roleForID(obj.role.id);
                             return obj.role.role_label; // role.role_label || role.translations[0].role_label;
                         }},
                         { id:"scope",  header:"Scopes", width:200, fillspace:true, template:function(obj){
@@ -274,6 +225,27 @@ width:185
                     scrollX:false,
 
                     navigation:"true",
+
+                    on: {
+
+                        onItemClick: function(id, e, node){
+                            _this.formEditShow(id);
+                            _this.data.userPermissionCollection.setCursor(id);
+                        },
+
+                        onCheck: function(row, column, state){
+                    
+                            // get the permission object:
+                            var perm = _this.dom.userPermissions.getItem(row);
+                            if (state) {
+                                _this.permissionEnable(perm);
+                            } else {
+                                _this.permissionDisable(perm);
+                            }
+
+                        }
+                    },
+
                     onClick:{
 
                         trash:function(e, id){
@@ -306,117 +278,24 @@ width:185
 
                                             // update user's display
                                             var currUserID = _this.data.usersCollection.getCursor();
-                                            _this.selectUser(currUserID);
+                                            _this.userSelect(currUserID);
                                         })
                                         
                                         return false;
                                     }
                                 }
                             });
+
+                            return false;
                            
                         }
 
                     }
                 
                 }); 
-                _this.dom.userPermissions.attachEvent("onCheck", function(row, column, state){
-                    
-                    // get the permission object:
-                    var perm = _this.dom.userPermissions.getItem(row);
-                    if (state) {
-                        _this.permissionEnable(perm);
-                    } else {
-                        _this.permissionDisable(perm);
-                    }
-
-                });
                           
             });
 
-
-
-
-
-        },
-
-
-
-        loadData: function( id ) {
-            var _this = this;
-
-//             var User = AD.Model.get('opstools.RBAC.SiteUser');
-//             User.findAll()
-//             .fail(function(err){
-// //// TODO: handle Error properly!
-//             })
-//             .then(function(list){
-//                 _this.dom.listUsersTbody.html(' ');
-//                 _this.dom.listUsersTbody.append(can.view('RBAC_User_UserList', {users: list }));
-//             })
-
-
-//             var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
-//             Roles.findAll()
-//             .fail(function(err){
-// //// TODO: handle Error properly!
-//             })
-//             .then(function(list){
-//                 // make sure they are all translated.
-//                 list.forEach(function(l){
-//                     l.translate();
-//                 })
-//                 _this.data.roles = list;    // all the 
-//             })
-
-
-//             var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
-//             Scopes.findAll()
-//             .fail(function(err){
-// //// TODO: handle Error properly!
-//             })
-//             .then(function(list){
-//                 // // make sure they are all translated.
-//                 // list.forEach(function(l){
-//                 //     l.translate();
-//                 // })
-//                 _this.data.scopes = list;    // all the 
-//             })
-
-//             var Permissions = AD.Model.get('opstools.RBAC.Permission');
-
-//             // if an id is provided, then we are loading a new entry and 
-//             // adding it to our current list.
-//             if (id) {
-
-//                 Permissions.findOne({ id: id })
-//                 .fail(function(err){
-// //// TODO: handle Error properly!
-//                 })
-//                 .then(function(entry){
-//                     _this.data.permissions.push( entry );
-//                 })
-
-//             } else {
-
-//                 // else we are loading the initial list!
-//                 Permissions.findAll()
-//                 .fail(function(err){
-// //// TODO: handle Error properly!
-//                 })
-//                 .then(function(list){
-//                     _this.data.permissions = list;
-//                 })
-
-//             }
-            
-            
-
-        },
-
-
-
-        loadPermissions: function(list) {
-            this.data.permissions = list;
         },
 
 
@@ -459,8 +338,10 @@ width:185
                 this.dom.userName.bind(this.data.usersCollection);
                 // this.dom.userGrid.parse(this.data.usersCollection);
             }
-            this.refresh();
+// this.refresh();
         },
+
+
 
         permissionInstance: function(perm) {
 
@@ -472,6 +353,7 @@ width:185
         },
 
 
+
         /**
          * @function permissionDisable
          *
@@ -479,6 +361,7 @@ width:185
         permissionDisable: function(perm) {
             return this.permissionUpdate(perm, { 'enabled': false });
         },
+
 
 
         /**
@@ -517,6 +400,7 @@ width:185
         },
 
 
+
         permissionUpdate:function(perm, values) {
             var dfd = AD.sal.Deferred();
 
@@ -543,16 +427,60 @@ width:185
 
 
 
-        /** 
-         * @function refresh
+        /**
+         * @function formUpade
+         * 
+         * make sure the Add Form properly reflects the currently selected
+         * user's permissions.
          *
-         * Redraw the list of users
+         * eg the form shouldn't not give Roles that have already been assigned.
          */
-        refresh: function() {
- 
-            this.dom.userGrid.adjust();
-            // this.dom.listUsersTbody.html(' ');
-            // this.dom.listUsersTbody.append(can.view('RBAC_User_UserList', {users: this.data.users }));
+        formUpdate:function(){
+
+            var ids = [];
+            this.dom.userPermissions.data.each(function(perm, indx){
+                ids.push(perm.role.id);
+            })
+
+            this.dom.userRoleScopeForm.html(can.view("RBAC_User_AddUserPermission", { roles:this.data.roles, excludeIDs:ids, scopes:this.data.scopes }));
+            this.form.attach();
+            this.form.elAdd(this.dom.userRoleScopeForm.find('[name="role"]')); // these fields have been recreated, so re add!
+            this.form.elAdd(this.dom.userRoleScopeForm.find('[name="scope"]'));
+            
+        },
+
+
+
+        formEditShow:function(id) {
+            var _this = this;
+
+            // get the current permission entry for id
+            var perm = this.dom.userPermissions.getItem(id);
+// console.log('... perm:', perm);
+
+            // get ids of scopes 
+            var selectedScopes = [];
+            perm.scope.forEach(function(scope){
+                selectedScopes.push(scope.id);
+            })
+
+            var roles = [ perm.role ];
+
+            // update view
+            this.dom.userRoleScopeEditForm.html(can.view("RBAC_User_EditUserPermission", { roles:roles, scopes:this.data.scopes, selectedScopes:selectedScopes  }));
+            
+            
+            // attach form & reAdd fields
+            this.formEdit.attach();
+            // this.formEdit.elAdd(this.dom.userRoleScopeEditForm.find('[name="role"]')); // these fields have been recreated, so re add!
+            this.formEdit.elAdd(this.dom.userRoleScopeEditForm.find('[name="scope"]'));
+            
+            // show form
+            this.dom.userRoleScope.hide() // but hide this one
+            this.dom.userRoleScopeEdit.show();
+
+            // form.reset()
+            this.formEdit.reset();
         },
 
 
@@ -582,14 +510,15 @@ width:185
         },
 
 
+
         /**
-         * @function selectUser
+         * @function userSelect
          * 
          * called when a user is selected in our User Datatable.
          *
          * @param {} id  The id of the data element selected
          */
-        selectUser:function(id) {
+        userSelect:function(id) {
 
             var _this = this;
 
@@ -611,27 +540,6 @@ width:185
             })
             .then(function(list){
 
-//// LEFT OFF HERE: 
-//// + clicking on checkbox -> updates permission to not active
-//// + clicking on trashbox -> removed permission 
-//// + clicking on [add] -> shows new permission form
-
-
-/*
-                list.forEach(function(perm){
-                    var newPerm = perm.attr();
-
-                    _this.data.roles.forEach(function(r){
-                        if (r.id == perm.role.id) {
-                            r.translate();
-                            newPerm.role = r;
-                        }
-                    })
-
-                    newList.push(newPerm);
-                })
-*/
-
                 // convert each basic perm.role into the more detailed role info:
                 list.forEach(function(perm){
                     _this.data.roles.forEach(function(r){
@@ -643,10 +551,20 @@ width:185
 
                 // convert to DataCollection
                 var permissionDC = AD.op.WebixDataCollection(list);
-console.log('... list:', list);
-console.log('... permissionDC:', permissionDC);
+// console.log('... list:', list);
+// console.log('... permissionDC:', permissionDC);
                 // load into PermissionGrid
                 _this.dom.userPermissions.parse(permissionDC);
+                _this.data.userPermissionCollection = permissionDC;
+
+                // update AddForm's Role list to not include the roles already assigned:
+                _this.formUpdate();
+
+                // remove any permission editing:
+                _this.dom.userRoleScopeEdit.hide();
+
+                // since I just loaded my permissions:
+                _this.userAssignmentUpdate();
 
                 // remove loading overlay
 
@@ -662,76 +580,185 @@ console.log('... permissionDC:', permissionDC);
         },
 
 
-        roleForID: function(id){
-            var role = null;
-            this.data.roles.forEach(function(r){
-                if (r.id == id) {
-                    role = r;
-                }
-            })
 
-            return role;
+        /**
+         * @function userAssignmentUpdate
+         *
+         * Make sure the user's entry in the DataCollection has the proper permissions.
+         *
+         * [Add] and [Delete] operations update this.
+         */
+        userAssignmentUpdate: function() {
+
+            var user = this.dom.userGrid.getItem(this.data.usersCollection.getCursor() );
+            var perms = [];
+            this.dom.userPermissions.data.each(function(p){
+                perms.push(p);
+            })
+            user['permission'] = perms;
+             
+            this.dom.userGrid.refresh();
         },
 
 
-        // quickviewClear: function() {
-        //     this.dom.listAssignmentsTbody.html('');
-        // },
 
+        /*
+         * Make sure that only 1 Role is selected in our Multi Select field.
+         */
+        '.rbac-only-one click': function($el, ev) {
 
-        // quickviewShow: function(permissions) {
-        //     this.quickviewClear();
-        //     this.dom.listAssignmentsTbody.append(can.view('RBAC_User_AssignmentList', { list:permissions, listPermissions:this.data.permissions, listRoles:this.data.roles, listScopes:this.data.scopes }));
-        //     // this.assignmentsLoad(permissions);
+            // for the Roles options, only one can be selected, so clear all others:
+            $el.parent().find('option').each(function(indx, curr){
 
-        // },
-
-
-
-        // userForID: function(id) {
-        //     var found = null;
-        //     for (var i=0; i<this.data.users.length; i++) {
-
-        //         if (this.data.users[i].id == id) {
-        //             return this.data.users[i];
-        //         }
-        //     }
-        //     return null;
-        // },
+                var $curr = $(curr);
+                if ($curr.val() != $el.val()) {
+                    $curr.attr('selected',false);
+                }
+            });
+        },
 
 
 
-        // // when the user clicks on the [quickview] icon:
-        // '.rbac-user-perm-quickview click': function($el, ev) {
+        /*
+         * [Add] button click handler.
+         *
+         * This Show's the Add Form, and prepares it for initial use.
+         */
+        '.rbac-user-addPermission click': function ($el, ev) {
 
-        //     // var user = $el.data('user');
-        //     var id = parseInt($el.attr('user-id'));
-        //     var user = this.userForID(id);
-        //     this.quickviewShow(user.permission);
+            // set form template (only 1 time)
+            if (!this.isFormCreated) {
+                this.formUpdate();
+                this.isFormCreated = true;
+                this.form.attach();
+            }
 
-        // },
-
-
-
-        // // when the user clicks on the [add] icon:
-        // '.rbac-user-perm-add click': function($el, ev) {
-
-        //     var id = parseInt($el.attr('user-id'));
-        //     var user = this.userForID(id);
+            // clear fields
+            this.dom.userRoleScopeForm.find('option').attr('selected',false);
             
-        //     // emit the AssignmentAdd event:
-        //     this.element.trigger(this.options.eventAssignmentAdd, user );
 
-        //     ev.preventDefault();
+            // show form
+            this.dom.userRoleScopeEdit.hide();  // but hide this one.
+            this.dom.userRoleScope.show();
 
-        // },
+            // NOTE: reset() the form when it is visible! 
+            this.form.reset();
+
+            ev.preventDefault();
+        },
 
 
 
-        // '.ad-item-add click': function ($el, ev) {
+        /*
+         * [Add] button click handler.
+         *
+         * Adds a new Permission definition to the currently selected User.
+         */
+        '.rbac-user-addPerm-add click': function ($el, ev) {
+            var _this = this;
 
-        //     ev.preventDefault();
-        // }
+            if (this.form.isValid()) {
+
+                this.button.add.busy();
+
+                var values = this.form.values();
+                
+                values.user = this.data.usersCollection.AD.currModel().getID();
+                values.enabled = true;
+
+                var Permission = AD.Model.get('opstools.RBAC.Permission');
+                var entry = new Permission(values);
+                entry.save()
+                .fail(function(err){
+                    if (!_this.form.errorHandle(err)) {
+                        AD.error.log('RBAC: addPermission : unknown error', {error:err, values:values });
+                    }
+                })
+                .then(function(savedEntry){
+
+                    // update the Selected User's permission list:
+                    _this.userSelect(_this.data.usersCollection.getCursor());
+
+                    // clear form, but leave it displayed
+                    _this.form.reset();
+
+                    _this.button.add.ready();
+
+                });
+
+
+            }
+
+            ev.preventDefault();
+        },
+
+
+
+        /*
+         * [Cancel] button click handler.
+         *
+         * Closes the Add Permission form.
+         */
+        '.rbac-user-addPerm-cancel click': function ($el, ev) {
+
+            this.dom.userRoleScope.hide();
+            ev.preventDefault();
+        },
+
+
+
+        /*
+         * [Update] button click handler.
+         *
+         * Updates a Permission definition for the currently selected Permission.
+         */
+        '.rbac-user-editPerm-update click': function ($el, ev) {
+
+            var _this = this;
+
+            if (this.formEdit.isValid()) {
+
+                this.button.update.busy();
+
+                var values = this.formEdit.values();
+
+                // values.user = this.data.usersCollection.AD.currModel().getID();
+                var permission = this.data.userPermissionCollection.AD.currModel();
+
+                permission.attr('scope', values.scope);
+                permission.save()
+                .fail(function(er){
+                    if (!_this.formEdit.errorHandle(err)) {
+                        AD.error.log('RBAC: updatePermission : unknown error', {error:err, values:values });
+                    }
+                })
+                .then(function(savedEntry){
+
+                    _this.dom.userRoleScopeEdit.hide();
+
+                    // update the Selected User's permission list:
+                    _this.userSelect(_this.data.usersCollection.getCursor());
+
+                    _this.button.update.ready();
+
+                });
+            }
+
+            ev.preventDefault();
+        },
+
+
+
+        /*
+         * [Cancel] button click handler.
+         *
+         * Closes the Edit Permission form.
+         */
+        '.rbac-user-editPerm-cancel click': function ($el, ev) {
+
+            this.dom.userRoleScopeEdit.hide();
+            ev.preventDefault();
+        }
 
 
     });

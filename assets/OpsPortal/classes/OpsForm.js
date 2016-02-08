@@ -21,7 +21,34 @@ steal(
          * This is a Form controller that lets us simply bind Models to Forms
          * and handle validations automatically.
          *
+         * To manually setup a form:
+         * @codestart
+         *   this.form = new AD.op.Form(this.dom.userRoleScopeForm);
+         *   this.form.addField('role', 'integer', { notEmpty: {} });
+         *   this.form.addField('scope', 'array', { notEmpty: {} });
+         *   this.form.attach();  // do this once the data in form is ready
+         * @codeend
          *
+         * To process a form:
+         * @codestart
+         *   var _this = this;
+         *   if(this.form.isValid()) {
+         *       var values = this.form.values();
+         *       Model.create(values)
+         *       .fail(function(err){
+         *          if (!_this.form.errorHandle(err)) {
+         *              AD.error.log('Unknown Error for Model.create()', {values:values, error:err})
+         *          }
+         *       })
+         *       .then(function(model){
+         *          _this.form.reset();
+         *       })
+         *   }
+         * @codeend
+         *
+         *
+         *  NOTE:
+         *      form.reset() : should be done while the form is visible
          */
         AD.op.Form = can.Control.extend({
             // Static properties
@@ -308,6 +335,8 @@ steal(
              * // add the dynamically created [checkboxes]
              * self.form.elAdd(self.modalAdd.find('.objectives-section [name="objective"]'));
              * @codeend
+             *
+             * NOTE: perform this action after .attach()
              *
              * @param {el|array[el]} el  a DOM element (or an Array of DOM elements) to be added
              */

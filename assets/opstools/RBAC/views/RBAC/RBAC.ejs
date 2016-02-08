@@ -49,85 +49,7 @@
                   <div id="userlist-tbl" style="clear:both"></div>
                   <div id="paging_here" class="padleft20"></div>
                   <script type="text/javascript" charset="utf-8">
-/*                                       
-                    webix.ready(function(){
-                                            
-                                            webix.ui({
-                                                id:"searchuser",
-                                                container:"search1",
-                                                view:"search",
-                                                placeholder:"Search..",
-                                                width:220
-                                            
-                                            });
-                                            $$("searchuser").attachEvent("onSearchIconClick",function(e){ 
-                                                //get user input value
-                                                var value = this.getValue().toLowerCase(); 
 
-                                                $$("usertable").filter(function(obj){ //here it filters data!
-                                                    return obj.userid.toLowerCase().indexOf(value)==0;
-                                                })
-                                            });
-                                            
-                                            webix.ui({
-                                                id:"username",
-                                                container:"userdisplay",
-                                                view:"form",
-                         //                       hidden: true,
-                                                elements:[
-
-                                                    { view: "text", name:"user", value:"no user selected"}
-                                                    ],
-                                                borderless: true,
-                                                paddingY: 8,
-                                                paddingX: 0,
-                                                margin: 0,
-                        width:185
-                                                
-                                            });
-                                            
-                                            
-                      var griduser = webix.ui({
-                                                id:"usertable",
-                        container:"userlist-tbl",
-                        view:"datatable",
-                        columns:[
-                          { id:"numroles",header:"#", css:"rank", width:50, sort:"int"},
-                          { id:"userid",  header:"User ID", width:200,  sort:"string",fillspace:true},
-                          { id:"status",  header:"Status" , width:80,css:{"text-align":"center"}},
-                        ],
-                        select:"row",
-                        yCount:5, scrollY:false,scrollX:false,
-                        navigation:"true",      
-
-                        pager:{
-                          container:"paging_here",
-                          size:5,
-                          group:5
-                        },  
-                        
-                        data:small_film_set,
-                                                on:{
-                                                    onItemClick:function(id){
-                                                        var userid = this.getItem(id).userid;
-                                                        var useridnum = this.getItem(id).numroles;
-                                                        console.log("userid ", userid);
-                                                        function showuser(id) {
-                                                            $$("username").setValues({
-                                                                user:userid
-                                                            });
-                                                            $$("username").refresh;
-                                                            $$("assignments").filter("#userid#",useridnum);
-                                                            $$("assignments").refresh;
-                                                        }
-                                                        showuser(id);
-                                                    }
-                                                }
-                      });   
-                      webix.event(window, "resize", function(){ griduser.adjust(); }) 
-                          
-                    });
-*/
                   </script>
                 
                 </div>
@@ -142,32 +64,39 @@
                 </div>
                 
                 <div class="col-lg-4 col-md-12 rbac-user-roleScope">
-                  <p>Select a role and one or more scopes for this assignment:</p>
-                  <div class="row">
+                  <p app-label-key="rbac.user.selectSomeStuff">Select a role and one or more scopes for this assignment:</p>
+                  <div class="row rbac-user-roleScope-form">
                     <div class="col-lg-6 col-xs-6">
                       <div class="panel panel-default">
-                        <div class="panel-heading">Roles</div>
+                        <div class="panel-heading"><span app-label-key="rbac.Roles">Roles</span></div>
                           <div class="panel-body">
-                            <select multiple class="no-boxbord">
-                              <option>role 1</option>
-                              <option>role 2</option>
-                              <option>role 3</option>
-                              <option>role 4</option>
-                              <option>role 5</option>
+                            <select multiple class="no-boxbord" name="role">
+                              <!-- roles.forEach(function(role){ 
+                                      if (excludeIDs.indexOf(role.id) == -1) {
+                              --> 
+                              <option class='rbac-only-one' value="[[= role.id ]]">[[= role.role_label ]]</option>
+                              <!--    }
+                                    }) -->
+                              <option class="mockup">role 2</option>
+                              <option class="mockup">role 3</option>
+                              <option class="mockup">role 4</option>
+                              <option class="mockup">role 5</option>
                             </select>
                           </div>
                       </div>
                     </div>
                     <div class="col-lg-6 col-xs-6">
                       <div class="panel panel-default">
-                        <div class="panel-heading">Scopes</div>
+                        <div class="panel-heading"><span app-label-key="rbac.Scopes">Scopes</span></div>
                           <div class="panel-body">
-                            <select multiple class="form-control no-boxbord">
-                              <option>role 1</option>
-                              <option>role 2</option>
-                              <option>role 3</option>
-                              <option>role 4</option>
-                              <option>role 5</option>
+                            <select multiple class="form-control no-boxbord" name="scope">
+                              <!-- scopes.forEach(function(scope){ -->
+                              <option value="[[= scope.id ]]">[[= scope.attr('label') ]]</option>
+                              <!-- }) -->
+                              <option class="mockup">role 2</option>
+                              <option class="mockup">role 3</option>
+                              <option class="mockup">role 4</option>
+                              <option class="mockup">role 5</option>
                             </select>
                           </div>
                       </div>
@@ -175,8 +104,64 @@
                   </div>
                   <div class="row off-botm10">
                     <div class="col-lg-12">
-                      <button class="btn op-btn btn-primary pull-right" type="submit">Add</button>
-                      <button class="btn op-btn op-btn-dk offset-15 pull-right" type="submit">Cancel</button>
+                      <button class="btn op-btn btn-primary pull-right rbac-user-addPerm-add" ><i class="fa"></i><span app-label-key="rbac.Add">Add</span></button>
+                      <button class="btn op-btn op-btn-dk offset-15 pull-right rbac-user-addPerm-cancel" ><span app-label-key="rbac.Cancel">Cancel</span></button>
+                    </div>                  
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-12 rbac-user-roleScopeEdit">
+                  <p app-label-key="rbac.user.selectSomeStuffEdit">Select one or more scopes for this Role assignment:</p>
+                  <div class="row rbac-user-roleScopeEdit-form">
+                    <div class="col-lg-6 col-xs-6">
+                      <div class="panel panel-default">
+                        <div class="panel-heading"><span app-label-key="rbac.Roles">Roles</span></div>
+                          <div class="panel-body">
+                            <select multiple class="no-boxbord" name="role" disabled >
+                              <!-- roles.forEach(function(role){ --> 
+                              <option class='rbac-only-one' value="[[= role.id ]]" selected >[[= role.role_label ]]</option>
+                              <!-- }) -->
+                              <option class="mockup">role 2</option>
+                              <option class="mockup">role 3</option>
+                              <option class="mockup">role 4</option>
+                              <option class="mockup">role 5</option>
+                            </select>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-xs-6">
+                      <div class="panel panel-default">
+                        <div class="panel-heading"><span app-label-key="rbac.Scopes">Scopes</span></div>
+                          <div class="panel-body">
+                            <select multiple class="form-control no-boxbord" name="scope">
+                              <!-- 
+                              scopes.forEach(function(scope){ 
+                                  
+                                  if (selectedScopes.indexOf(scope.id) != -1) {
+                                    -->
+                                    <option selected="selected" value="[[= scope.id ]]"  >[[= scope.attr('label') ]]</option>
+                                    <!--
+                                  } else {
+                                    -->
+                                    <option value="[[= scope.id ]]"  >[[= scope.attr('label') ]]</option>
+                                    <!--
+
+                                  }
+
+                               }) -->
+                              <option class="mockup">role 2</option>
+                              <option class="mockup">role 3</option>
+                              <option class="mockup">role 4</option>
+                              <option class="mockup">role 5</option>
+                            </select>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row off-botm10">
+                    <div class="col-lg-12">
+                      <button class="btn op-btn btn-primary pull-right rbac-user-editPerm-update" ><i class="fa"></i><span app-label-key="rbac.Update">Update</span></button>
+                      <button class="btn op-btn op-btn-dk offset-15 pull-right rbac-user-editPerm-cancel" ><span app-label-key="rbac.Cancel">Cancel</span></button>
                     </div>                  
                   </div>
                 </div>
