@@ -17,7 +17,7 @@ steal(
         
 // ).then(
         // 'js/jquery.sidr.min.js',
-        // 'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
+        'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
 // ).then(
        'OpsPortal/views/OpsPortal/OpsPortal.ejs',
        'OpsPortal/views/OpsPortal/taskList.ejs',
