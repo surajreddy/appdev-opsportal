@@ -92,6 +92,8 @@ function(){
             this.button = {};
             this.button.add = new AD.op.ButtonBusy(this.element.find('.rbac-user-addPerm-add'));
             this.button.update = new AD.op.ButtonBusy(this.element.find('.rbac-user-editPerm-update'));
+            this.button.cancel = new AD.op.ButtonBusy(this.element.find('.rbac-user-addPerm-cancel'));
+            this.button.cancelEdit = new AD.op.ButtonBusy(this.element.find('.rbac-user-editPerm-cancel'));
 
 
             //// Now initialize the Webix components:
@@ -660,6 +662,7 @@ width:185
             if (this.form.isValid()) {
 
                 this.button.add.busy();
+                this.button.cancel.disable();
 
                 var values = this.form.values();
                 
@@ -673,6 +676,8 @@ width:185
                     if (!_this.form.errorHandle(err)) {
                         AD.error.log('RBAC: addPermission : unknown error', {error:err, values:values });
                     }
+                    _this.button.add.ready();
+                    _this.button.cancel.enable();
                 })
                 .then(function(savedEntry){
 
@@ -683,6 +688,7 @@ width:185
                     _this.form.reset();
 
                     _this.button.add.ready();
+                    _this.button.cancel.enable();
 
                 });
 
@@ -719,6 +725,7 @@ width:185
             if (this.formEdit.isValid()) {
 
                 this.button.update.busy();
+                this.button.cancelEdit.disable();
 
                 var values = this.formEdit.values();
 
@@ -731,6 +738,8 @@ width:185
                     if (!_this.formEdit.errorHandle(err)) {
                         AD.error.log('RBAC: updatePermission : unknown error', {error:err, values:values });
                     }
+                    _this.button.update.ready();
+                    _this.button.cancelEdit.enable();
                 })
                 .then(function(savedEntry){
 
@@ -740,6 +749,7 @@ width:185
                     _this.userSelect(_this.data.usersCollection.getCursor());
 
                     _this.button.update.ready();
+                    _this.button.cancelEdit.enable();
 
                 });
             }
