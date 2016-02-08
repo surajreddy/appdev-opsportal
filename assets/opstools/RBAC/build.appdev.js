@@ -11,11 +11,10 @@
  */
 
 
-
 var AD = require('ad-utils');
 var path = require('path');
-var fs = require('fs');
 var async = require('async');
+var fs = require('fs');
 var transform = require("steal-tools").transform;
 
 
@@ -28,7 +27,6 @@ module.exports = {
      * 
      * This method is required.
      *
-     * @param {obj} builder The appdev.build object that is running this command.
      * @param {fn} cb   The callback fn to run when command is complete.
      *                  The callback follows the usual node: cb(err) format.
      */
@@ -36,62 +34,59 @@ module.exports = {
 
         var self = this;
 
+        // this is expected to be running the /assets directory
 
-        //// NOTE:  this is expected to be running the /assets directory
+        // build command:  ./cjs steal/buildjs OpsPortal opstools/RBAC
 
+
+        //// NOTE: the build command will attempt to rebuild OpsPortal/production.[js,css].  We don't
+        //// want to do that here, so we'll have to backup the original files and return them when we are done.
+
+        var backUpName = '';
+        var backUpCSS = '';
 
         async.series([
 
-            // step 1:  check to make sure appdev exists:
+
+            // step 1:  backup the original OpsPortal/production.* files.
             function (next) {
 
-                fs.exists(path.join(process.cwd(), 'appdev'), function (exists) {
+                AD.log('<green>backing up</green> OpsPortal production files');
 
-                    if (exists) {
-                        next();
-                    } else {
-                        AD.log('<red>error:</red> building opstools/RBAC requires appdev module to be installed as well.');
-                        var err = new Error('building opstools/RBAC requires appdev module to be installed as well. ');
-                        next(err);
-                    }
+                backUpName = builder.backupProduction({ base: 'OpsPortal', file: 'production.js' });
+                backUpCSS = builder.backupProduction({ base: 'OpsPortal', file: 'production.css' });
 
-                });
-
-            }, 
+                next();
+            },
 
 
 
-            // step 2: build JS files
+            // step 2:  build js files
             function (next) {
 
+                // build command:  ./cjs steal/buildjs OpsPortal opstools/RBAC
 
-                // 1) We are going to run the steal/buildjs against appdev and opstools/RBAC
-                //    so that the opstools/RBAC doesn't package together the appdev library.
-
-
-                AD.log();
                 AD.log('<green>building</green> opstools/RBAC JS files');
 
-
-                transform(
-                    {
-                        main: path.join('opstools', 'RBAC', 'RBAC'),
-                        config: 'stealconfig.js'
-                    },
-                    {
+                // Minify js/ejs files
+                transform({
+                    main: path.join('opstools', 'RBAC', 'RBAC'),
+                    config: "stealconfig.js"
+                }, {
                         minify: true,
                         noGlobalShim: true,
                         ignore: [
                             /^.*(.css)+/, // Ignore css files
-                            /^(?!(opstools\/RBAC).*)/, // Get only RBAC module files
+                            /^(?!opstools\/RBAC.*)/, // Ignore all are not plugin scripts
                         ]
                     }).then(function (transform) {
+
                         // Get the main module and it's dependencies as a string
                         var main = transform();
 
                         fs.writeFile(path.join('opstools', 'RBAC', 'production.js'), main.code, "utf8", function (err) {
                             if (err) {
-                                AD.log.error('<red>could not write minified RBAC JS file !</red>', err);
+                                AD.log.error('<red>could not write minified JS file !</red>', err);
                                 next(err);
                             }
 
@@ -99,30 +94,39 @@ module.exports = {
                         });
                     })
                     .catch(function (err) {
-                        AD.log.error('<red>could not complete RBAC JS build!</red>', err);
+                        AD.log.error('<red>could not complete opstools/RBAC JS build!</red>', err);
                         next(err);
                     });
             },
 
+            // step :  replace our original OpsPortal/production.* files
+            function(next) {
+                AD.log('<green>replacing</green> OpsPortal production files');
+
+                builder.replaceProduction({ base: 'OpsPortal', file: 'production.js', backup: backUpName });
+                builder.replaceProduction({ base: 'OpsPortal', file: 'production.css', backup: backUpCSS });
+                next();
+            },
 
 
-            // step 3: cleanup the production.js file to point to 
-            //         appdev/production.js
+
+            // step 5:  patch our production.js to reference OpsPortal/production.js 
             function (next) {
-
-                AD.log('<green>cleaning</green> the opstools/RBAC/production.js file');
+                AD.log('<green>patching</green> OpsPortal production files');
 
                 var patches = [
-                    { file: path.join('opstools/RBAC', 'production.js'), tag: 'id:"packages/appdev-RBAC.js",', replace: 'id:"appdev/production.js",' }
+                    { file: path.join('opstools', 'RBAC', 'production.js'), tag: 'packages/OpsPortal-RBAC.js', replace: 'OpsPortal/production.js' }
                 ];
-                builder.patchFile(patches, next);
 
-            }
+                builder.patchFile(patches, next);
+            },
+
+
 
         ], function (err, results) {
-            if (cb) cb(err);
+
+            cb(err);
         });
 
     }
-
 }
