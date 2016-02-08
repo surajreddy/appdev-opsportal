@@ -18,6 +18,21 @@ function(){
      * This is a button controller that lets us show busy spinners on a button
      * while it's operation is in process.
      *
+     * The button element needs to contain an element to attach the spinner 
+     * icon to.  
+     *
+     * For example, for a button defined this way:
+     * @codestart
+     *  <button class="btn op-btn btn-primary my-button" ><i class="fa"></i>Add</button>
+     * @codeend
+     *
+     * You can control it like this:
+     * @codestart
+     * this.button = new AD.op.ButtonBusy(this.element.find('.my-button'));
+     * this.button.busy();  // starts the spinner and disables the button
+     * this.button.ready(); // hides the spinner and enables the button.
+     * @codeend
+     *
      */
     AD.op.ButtonBusy = can.Control.extend({
         // Static Properties
