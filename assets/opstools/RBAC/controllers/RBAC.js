@@ -95,6 +95,10 @@ function(){
             this.data.lastPortalShown = 'Users'; // what was the last portal displayed?
 
 
+            this.data.resize = {};
+            this.data.resize.menuBar = null;
+
+
             this.initDOM();
             // this.initEvents();
 
@@ -102,6 +106,9 @@ function(){
 
             // // default to User portal:
             this.portalShow('users');
+
+
+            this.translate(); // translate the labels on the tool
         },
 
 
@@ -368,9 +375,7 @@ function(){
                     l.translate();
                 })
                 _this.portals.Users.loadRoles(list);
-                // _this.portals.UserAssignmentAdd.loadRoles(list);
-                // _this.portals.UserPermissionList.loadRoles(list);
-                // _this.portals.Roles.loadRoles(list);
+                _this.portals.Roles.loadRoles(list);
                 _this.data.roles = list;    
             });
 
@@ -433,8 +438,35 @@ if (portalKey!='Scopes'){
 
 
 
-        resize:function() {
+        resize:function(data) {
             this._super();
+
+            var totalHeight = data.height;
+
+
+            // update the containing Div to height
+            // this div is total Height, since it contains the menuBar:
+            this.element.css('height', totalHeight + 'px');
+
+
+
+            // find the height of the menu bar (selected item has a dropdown arrow)
+            // this shouldn't change, so only do it 1x
+            if (!this.data.resize.menuBar) {
+
+                var selectedMenuItem = this.element.find('li.selected.rbac-menu');
+                this.data.resize.menuBar = selectedMenuItem.outerHeight(true);
+            }
+
+
+            // Total area for the available space of the tool, will be the
+            // givenheight - (heightOfMenuBar)
+            this.data.resize.available = totalHeight - this.data.resize.menuBar;
+
+
+
+
+            // send  displayed portal a resize(availableHeight);
 
             if (this.element.is(':visible')) {
                 if (!this.data.hasBeenShown) {
@@ -449,7 +481,7 @@ if (portalKey!='Scopes'){
             // pass a resize() call to the currently shown portal:
             var portal = this.portals[this.data.lastPortalShown];
             if (portal.resize) {
-                portal.resize();
+                portal.resize( { height: this.data.resize.available } );
             }
 
 

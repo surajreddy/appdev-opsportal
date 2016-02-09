@@ -33,6 +33,8 @@ function(){
             // Call parent init
             this._super(element, options);
 
+            this.dom = {};
+
             this.data = {}; 
             this.data.roles = [];
 
@@ -105,33 +107,159 @@ function(){
             //     }
             // });
 
+            this.dom.roleForm = this.element.find('.rbac-roles-form');
+            this.dom.roleForm.hide();
+
+
+
+            webix.ready(function(){
+
+
+                ////
+                //// Setup the User Search Bar:    
+                ////  
+                var lblPlaceholderSearch = AD.lang.label.getLabel('rbac.roles.search') || 'Search *';           
+                _this.dom.roleSearch = AD.op.WebixSearch({
+                    id:"searchroles",
+                    container:"search2",
+                    view:"search",
+                    placeholder:lblPlaceholderSearch,
+                    width:300
+                });
+                _this.dom.roleSearch.AD.filter(function(value){
+
+                    _this.dom.roleGrid.filter(function(obj){ //here it filters data!
+                        return obj.role_label.indexOf(value)>=0;
+                    })
+                });
+
+
+                ////
+                //// Setup the Role List
+                ////             
+                var lblHeaderName = AD.lang.label.getLabel('rbac.roles.name') || 'Name*';
+                var lblHeaderDescription = AD.lang.label.getLabel('rbac.roles.description') || 'Description*';
+                _this.dom.roleGrid = webix.ui({
+                    id:"rolestable",
+                    container:"userlist-tbl-role",
+                    view:"datatable",
+                    width:483,
+
+                    columns:[
+                        { id:"role_label",  header:lblHeaderName, width:180, sort:"string"},
+                        { id:"role_description",  header:lblHeaderDescription , fillspace:true},
+                        { id:"copy",  header:"" , width:40, css:{"text-align":"center"}, template:function(obj) { return "<div class='clone fa fa-copy fa-2 offset-9 rbac-role-list-clone' role-id='"+obj.id+"'  ></div>"; } } ,
+                        { id:"trash", header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},
+                    ],
+
+
+                    select:"row",
+                    yCount:8, 
+                    scrollY:false,
+                    scrollX:false,
+                    navigation:"true",      
+
+                    pager:{
+                        container:"pgb",
+                        size:8,
+                        group:5,
+                        width:300
+                    },  
+                    on:{
+                        onItemClick:function(id){
+                        //     var name = this.getItem(id).name;
+                        //     var description = this.getItem(id).desc;
+                        //     console.log("name ", name);
+                        //     function showroles(id) {
+                        // /*
+                        //             stuff to update the form goes here
+                        // */
+                                    
+                        //     }
+                        //     showroles(id);
+                        }
+                    },
+                    onClick:{
+
+                        clone:function(e,id){
+                            var role = this.getItem(id);
+                            var lblConfirmClone = AD.lang.label.getLabel('rbac.roles.confirmClone', [this.getItem(id).role_label]) || 'Clone :'+this.getItem(id).role_label;
+                            webix.confirm({text:lblConfirmClone, 
+                                          
+                                callback:function(result){
+
+                                    if (result) {
+
+                                        _this.roleClone(id);
+
+                                        // var clonedRole = {};
+                                        // clonedRole.actions = [];
+                                        // role.actions.forEach(function(action){
+                                        //     clonedRole.actions.push(action.id);
+                                        // });
+
+
+                                        return false;
+                                    }
+                                }
+                            });
+                        },
+                        trash:function(e, id){
+
+                            var role = this.getItem(id);
+                            var lblConfirm =  AD.lang.label.getLabel('rbac.roles.confirmDelete', [this.getItem(id).role_label]) || 'Remove :'+this.getItem(id).role_label;
+                            webix.confirm({text:lblConfirm, 
+                                          
+                                   callback:function(result){
+
+                                       if (result) {
+
+                                            _this.data.rolesCollection.AD.destroyModel(id)
+                                            .fail(function(err){
+                                                AD.error.log('Error destroying role.', { error:err, role:role, id:id });
+                                            })
+                                            .then(function(oldData){
+
+                                            });
+
+                                            return false;
+                                       }
+                                   }
+                              });
+                           
+                        }
+                    }
+                }); 
+// webix.event(window, "resize", function(){ gridroles.adjust(); })                      
+            });
+
         },
 
 
 
-        iconBusy: function($el) {
-            $el.addClass(' fa-spinner fa-pulse');
-        },
-
-        iconReady:function($el) {
-            $el.removeClass(' fa-spinner fa-pulse');
-        },
-
-
-
-        // /**
-        //  * @listRoleNames
-        //  *
-        //  * return an array of current role names.
-        //  * @return {array}
-        //  */
-        // listRoleNames:function() {
-        //     var list = [];
-        //     for (var i = this.data.roles.length - 1; i >= 0; i--) {
-        //         list.push(this.data.roles[i].role_label);
-        //     };
-        //     return list;
+        // iconBusy: function($el) {
+        //     $el.addClass(' fa-spinner fa-pulse');
         // },
+
+        // iconReady:function($el) {
+        //     $el.removeClass(' fa-spinner fa-pulse');
+        // },
+
+
+
+        /**
+         * @listRoleNames
+         *
+         * return an array of current role names.
+         * @return {array}
+         */
+        listRoleNames:function() {
+            var list = [];
+            for (var i = this.data.roles.length - 1; i >= 0; i--) {
+                list.push(this.data.roles[i].role_label);
+            };
+            return list;
+        },
 
 
 
@@ -143,6 +271,11 @@ function(){
          */
         loadRoles: function(list) {
             this.data.roles = list;
+            this.data.rolesCollection = AD.op.WebixDataCollection(list);
+            if (this.dom.roleGrid) {
+                this.dom.roleGrid.data.sync(this.data.rolesCollection);
+
+            }
             this.refresh();
         },
 
@@ -166,22 +299,84 @@ function(){
          * resized.  
          */
         resize: function() {
-            // this.Filter.resetView();
+            var pager = this.dom.roleGrid.getPager();
+            this.dom.roleGrid.adjust(); 
+            
+            // now update the related pager/searchbox with the proper $width
+            pager.define('width', this.dom.roleGrid.$width);
+            this.dom.roleSearch.define('width', this.dom.roleGrid.$width);
+
+            // resize everything now:
+            pager.resize();
+            this.dom.roleSearch.resize();
+
         },
 
 
+        roleClone:function(id){
+            var _this = this;
 
-        roleForID:function(id) {
+            var origModel = this.data.rolesCollection.AD.getModel(id);
+            var attrs = AD.Model.clone(origModel);
+            delete attrs.permissions;
 
-            var foundRole = null;
-            this.data.roles.forEach(function(role){
-                if (role.id == id) {
-                    foundRole = role;
-                }
+            var actions = [];
+            attrs.actions.forEach(function(action){
+                actions.push(action.id);
+            })
+            attrs.actions = actions;
+
+            var listNames = this.listRoleNames();
+
+            // role names need to be unique
+            attrs.role_label += ' (cloned) ';
+            while (listNames.indexOf(attrs.role_label) != -1) {
+                attrs.role_label += '.';
+            }
+// console.log('... clone attrs:', attrs);
+
+            var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
+            Roles.create(attrs)
+            .fail(function(err){
+                AD.error.log('Error creating new cloned role.', {error:err, attrs:attrs});
+            })
+            .then(function(data){
+
+                // now do a full find for this entry, so we have all the filled out info:
+                Roles.findOne({ id:data.id })
+                .fail(function(err){
+                    AD.error.log('Error looking up new cloned role.', {error:err, role:data});
+                })
+                .then(function(newRole){
+
+                    // console.log('... new cloned Role:', newRole);
+                    newRole.translate();
+
+                    // insert right under our original role
+                    var roleIndex = _this.data.roles.indexOf(origModel);
+                    _this.data.roles.splice(roleIndex+1, 0, newRole);
+
+                });
+
             });
 
-            return foundRole;
+
+
         },
+
+
+
+        // roleForID:function(id) {
+
+        //     var foundRole = null;
+        //     this.data.roles.forEach(function(role){
+        //         if (role.id == id) {
+        //             foundRole = role;
+        //         }
+        //     });
+
+        //     return foundRole;
+        // },
 
 
         /** 

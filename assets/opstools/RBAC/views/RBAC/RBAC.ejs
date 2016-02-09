@@ -1,19 +1,39 @@
+<!-- 
+#  Appdev Label Info:
+#label_context:opstool-RBAC
+#language_code:en
+-->
+
+<div style="display:none;">
+  Labels not in HTML but needed in tool:
+  <span app-label-key="rbac.users.userID">User ID</span>
+  <span app-label-key="rbac.users.status">Status</span>
+  <span app-label-key="rbac.users.enabled">Enabled</span>
+  <span app-label-key="rbac.user.noUserSelected">no user selected</span>
+  <span app-label-key="rbac.roles.search">search for roles</span>
+  <span app-label-key="rbac.roles.name">Name</span>
+  <span app-label-key="rbac.roles.description">Description</span>
+  <span app-label-key="rbac.roles.confirmClone">Clone role %s</span>
+  <span app-label-key="rbac.roles.confirmDelete">This will remove %s</span>
+</div>
+
+
           <!--Top Menu-->
           <div  class="op-widget-horizontal-nav">
             <ul id="topmenu" class="op-list">
               <li class="op-container selected rbac-menu" rbac-menu="Users">
-                <a  mockup-show="users" href="#user"><i class="fa fa-users"></i><br>
-                <span app-label-key="rbac.users"><strong>Users</strong></span><span class="badge"></span></a>
+                <a  mockup-show="users" href="#user"><i class="fa fa-users"></i><br><strong>
+                <span app-label-key="rbac.Users">Users</span></strong><span class="badge"></span></a>
               </li>
               <li class="sep"></li>
               <li class="op-container rbac-menu" rbac-menu="Roles">
-                <a  mockup-show="roles" href="#roles"><i class="fa fa-user-md"></i><br>
-                <span app-label-key="rbac.roles"><strong>Roles</strong></span><span class="badge"></span></a>
+                <a  mockup-show="roles" href="#roles"><i class="fa fa-user-md"></i><br><strong>
+                <span app-label-key="rbac.Roles">Roles</span></strong><span class="badge"></span></a>
               </li>
               <li class="sep"></li>
               <li class="op-container rbac-menu" rbac-menu="Scopes">
-                <a  mockup-show="scopes" href="#scopes"><i class="fa fa-street-view" style="margin-left:12px"></i><br>
-                <span app-label-key="rbac.scopes"><strong>Scopes</strong></span><span class="badge"></span></a>
+                <a  mockup-show="scopes" href="#scopes"><i class="fa fa-street-view" style="margin-left:12px"></i><br><strong>
+                <span app-label-key="rbac.Scopes">Scopes</span></strong><span class="badge"></span></a>
               </li>
             </ul>
             <!--- menu button for low screen only -->
@@ -22,16 +42,16 @@
               </a>
               <ul class="dropdown-menu lowscreen-drop" aria-labelledby="lowscreen-menu" style="position:absolute">
                 <li class="op-container ">
-                  <a class="rbac-menu" rbac-menu="users" mockup-show="users" href="#user"><i class="fa fa-calendar fa-2x"></i><br>
-                  <span app-label-key="rbac.users"><strong>Users</strong></span><span class="badge">16</span></a>
+                  <a class="rbac-menu" rbac-menu="users" mockup-show="users" href="#user"><i class="fa fa-calendar fa-2x"></i><br><strong>
+                  <span app-label-key="rbac.Users">Users</span></strong><span class="badge">16</span></a>
                 </li>
                   <li class="op-container">
-                  <a class="rbac-menu" rbac-menu="roles" mockup-show="roles" href="#roles"><i class="fa fa-calendar fa-2x"></i><br>
-                  <span app-label-key="rbac.roles"><strong>Roles</strong></span><span class="badge"></span></a>
+                  <a class="rbac-menu" rbac-menu="roles" mockup-show="roles" href="#roles"><i class="fa fa-calendar fa-2x"></i><br><strong>
+                  <span app-label-key="rbac.Roles">Roles</span></strong><span class="badge"></span></a>
                 </li>
                 <li class="op-container">
-                  <a class="rbac-menu" rbac-menu="scopes" mockup-show="scopes" href="#scopes"><i class="fa fa-photo fa-2x"></i><br>
-                  <span app-label-key="rbac.scopes"><strong>Scopes</strong></span><span class="badge"></span></a>
+                  <a class="rbac-menu" rbac-menu="scopes" mockup-show="scopes" href="#scopes"><i class="fa fa-photo fa-2x"></i><br><strong>
+                  <span app-label-key="rbac.Scopes">Scopes</span></strong><span class="badge"></span></a>
                 </li>
               </ul>           
             <!---/-->
@@ -42,7 +62,7 @@
           <!--Users Area-->
           <div id="users-area" class="op-container mockup-display users rbac-users">
             <div class="row nomargin">
-                <div class="col-lg-4 col-md-6 padbot55">              
+                <div class="col-lg-4 col-md-6 padbot55 rbac-user-div">              
                   <div class="nopadL form-inline" role="search">
                     <div class="input-group" id="search1"></div>
                   </div>
@@ -57,7 +77,7 @@
                 <div class="col-lg-4 col-md-6  rbac-user-display">
                   <div class="form-inline">
                     <div class="input-group" id="userdisplay"></div>
-                    <button type="submit" class="btn op-btn btn-primary pull-right off-top10 rbac-user-addPermission" app-label-key="rbac.user.add" >add</button>
+                    <button  class="btn op-btn btn-primary pull-right off-top10 rbac-user-addPermission" app-label-key="rbac.user.add" >add</button>
                   </div>
                   <div id="rolesNscopes" class="clear" style="height:240px"></div>
                           
@@ -178,100 +198,13 @@
                   <div id="userlist-tbl-role" style="padding-bottom:10px;clear:both"></div>
                   <div id="pgb" class="padleft20"></div>
                   <script type="text/javascript" charset="utf-8">               
-                    webix.ready(function(){
-                                             webix.ui({
-                                                id:"searchroles",
-                                                container:"search2",
-                                                view:"search",
-                                                placeholder:"Search..",
-                                                width:300
-                                            
-                                            });
-                                            $$("searchroles").attachEvent("onSearchIconClick",function(e){ 
-                                                //get user input value
-                                                var value = this.getValue().toLowerCase(); 
 
-                                                $$("rolestable").filter(function(obj){ //here it filters data!
-                                                    return obj.name.toLowerCase().indexOf(value)==0;
-                                                })
-                                            });
-                                            
-                    var gridroles = webix.ui({
-                                                id:"rolestable",
-                        container:"userlist-tbl-role",
-                        view:"datatable",
-                                                width:483,
-                        columns:[
-                          { id:"id", header:"#", css:"rank", width:50, sort:"int"},
-                          { id:"name",  header:"Name", width:100, sort:"string"},
-                          { id:"desc",  header:"Description" , fillspace:true},
-                                                    { id:"copy",  header:"" , width:40, css:{"text-align":"center"}, template:"<a class='clone fa fa-copy fa-2 offset-9 rbac-role-list-clone' role-id='1' data-target='.clone-confirm' data-toggle='modal' href=''></a>"},
-                                                    { id:"trash", header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},
-                        ],
-                        select:"row",
-                        yCount:5, scrollY:false,scrollX:false,
-                        navigation:"true",      
-
-                        pager:{
-                          container:"pgb",
-                          size:5,
-                          group:5,
-                                                    width:300
-                        },  
-                         on:{
-                                                    onItemClick:function(id){
-                                                        var name = this.getItem(id).name;
-                                                        var description = this.getItem(id).desc;
-                                                        console.log("name ", name);
-                                                        function showroles(id) {
-                                                /*
-                                                            stuff to update the form goes here
-                                                */
-                                                            
-                                                        }
-                                                        showroles(id);
-                                                    }
-                                                },
-                                                onClick:{
-                                                    trash:function(e, id){
-                                                        var recid = id;
-                                                        webix.confirm({text:"This will remove " + this.getItem(id).name, 
-                                                                      
-                                                               callback:function(result){
-                                          //                         console.log("id", recid);
-                                                                   if (result) {
-                                                                       if(!recid){
-                                                                            webix.message("No item is selected!");
-                                                                            return;
-                                                                        }
-                                                                        $$("rolestable").remove(recid);
-                                                                        return false;
-                                                                   }
-                                                               }
-                                                          });
-                                                       
-                                                    }
-                                                },
-                        data:[
-                                                    { id:1, name:"Everyone", desc:"basic site access", enabled:1},
-                            { id:2, name:"Admin", desc:"Access everything", enabled:1},
-                                                    { id:3, name:"ExPat", desc:"Visa Mgmt tools", enabled:1},
-                                                    { id:4, name:"role 4", desc:"my fourth role", enabled:1},
-                                                    { id:5, name:"role 5", desc:"my fifth role", enabled:1},
-                                                     { id:6, name:"role 6", desc:"my fifth role", enabled:1},
-                                                     { id:7, name:"role 7", desc:"my fifth role", enabled:1},
-                                                     { id:8, name:"role 8", desc:"my fifth role", enabled:1},
-                                                     { id:9, name:"role 9", desc:"my fifth role", enabled:1}
-                                                    ] 
-                      }); 
-                      webix.event(window, "resize", function(){ gridroles.adjust(); })                      
-                    });
                   </script>
                 
                 </div>
                 
                 
-                <div class="col-lg-8">
+                <div class="col-lg-8 rbac-roles-form">
                   <div class="form-group">
                     <p class="lbl-title">Role Name</p>
                     <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Activity Name" value="Ex Pat">

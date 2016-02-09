@@ -48,6 +48,8 @@ function(){
 
 
             this.initDOM();
+
+
         },
 
 
@@ -123,6 +125,8 @@ function(){
                 ////
                 //// Setup the User List
                 ////
+                var lblHeaderUserID = AD.lang.label.getLabel('rbac.users.userID') || 'User ID*';
+                var lblHeaderStatus = AD.lang.label.getLabel('rbac.users.status') || 'Status*';
                 _this.dom.userGrid = webix.ui({
                     id:"usertable",
                     container:"userlist-tbl",
@@ -133,8 +137,8 @@ function(){
                         { id:"numPermissions",  header:"#",    template:function(obj){ 
                             return obj.permission.length; 
                         },   width:50,   css:"rank",    sort:"int" },
-                        { id:"username",  header:"User ID", width:200,  sort:"string", fillspace:true },
-                        { id:"status",  header:"Status" , width:80,  template:function(obj){ 
+                        { id:"username",  header:lblHeaderUserID,   sort:"string", fillspace:true },
+                        { id:"status",  header:lblHeaderStatus, width:80,  template:function(obj){ 
                             if ( obj.permission.length == 0) {
                                 return "<div class='img-thumbnail stats-red'></div>";
                             } else {
@@ -145,15 +149,17 @@ function(){
 
 
                     select:"row",
-                    yCount:8, 
+                    // yCount:8, 
                     scrollY:false,
                     scrollX:false,
-                    navigation:"true",      
+                    navigation:"true", 
+
+                    autoheight: true,     
 
 
                     pager:{
                       container:"paging_here",
-                      size:8,
+                      // size:8,
                       group:5
                     },  
 
@@ -176,7 +182,6 @@ function(){
                 //// setup the Selected User Name Form
                 ////
                 var lblNoUserSelected = AD.lang.label.getLabel('rbac.user.noUserSelected') || 'no user selected';
-                // if (!lblNoUserSelected) { lblNoUserSelected = 'no user selected' };
                 _this.dom.userName = webix.ui({
                     id:"username",
                     container:"userdisplay",
@@ -184,14 +189,17 @@ function(){
 //                       hidden: true,
                     elements:[
 
-                        { view: "text", name:"username", value:lblNoUserSelected}
+                        { view: "text", name:"username", value:lblNoUserSelected, disabled:true }
 
                     ],
                     borderless: true,
                     paddingY: 8,
                     paddingX: 0,
                     margin: 0,
-width:185
+
+
+
+                    width:185
                     
                 }); 
 
@@ -200,30 +208,34 @@ width:185
                 //// 
                 //// Setup the Permission List
                 ////
-
+                var lblHeaderRoles = AD.lang.label.getLabel('rbac.Roles') || 'Roles*';
+                var lblHeaderScopes = AD.lang.label.getLabel('rbac.Scopes') || 'Scopes*';
+                var lblHeaderEnabled = AD.lang.label.getLabel('rbac.users.enabled') || 'Enabled*';
                 _this.dom.userPermissions = webix.ui({
                     container:"rolesNscopes",
                     view:"datatable",
                     id:"assignments",
                     columns:[
-                        { id:"role",   header:"Roles", css:"rank", width:80, template:function(obj){
+                        { id:"role",   header:lblHeaderRoles,  width:180, template:function(obj){
                             // var role = _this.roleForID(obj.role.id);
                             return obj.role.role_label; // role.role_label || role.translations[0].role_label;
                         }},
-                        { id:"scope",  header:"Scopes", width:200, fillspace:true, template:function(obj){
+                        { id:"scope",  header:lblHeaderScopes, fillspace:true, template:function(obj){
                             var scopes = [];
-                            obj.scope.forEach(function(s){
-                                scopes.push(s.label);
-                            });
+                            if (obj && (obj.scope)) {
+                                obj.scope.forEach(function(s){
+                                    scopes.push(s.label);
+                                });
+                            }
                             return scopes.join(', ');
                         }},
-                        { id:"enabled", header:"Enabled" , width:80, css:{"text-align":"center"}, template:"{common.checkbox()}"},
+                        { id:"enabled", header:lblHeaderEnabled , width:80, css:{"text-align":"center"}, template:"{common.checkbox()}"},
                         { id:"trash", header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},                        
                     ],
                     select:"row",
 
                     yCount:8, 
-                    scrollY:true, 
+                    scrollY:false, 
                     scrollX:false,
 
                     navigation:"true",
@@ -309,7 +321,14 @@ width:185
          * @param {array/can.List} list  the current list of roles.
          */
         loadRoles: function(list) {
+            var _this = this;
+
             this.data.roles = list;
+            this.data.roles.bind('change', function(){
+                
+                // make sure we refresh the user's permissions when roles change
+                _this.userSelect(_this.data.usersCollection.getCursor());
+            })
         },
 
 
@@ -435,7 +454,7 @@ width:185
          * make sure the Add Form properly reflects the currently selected
          * user's permissions.
          *
-         * eg the form shouldn't not give Roles that have already been assigned.
+         * eg the form should not give Roles that have already been assigned.
          */
         formUpdate:function(){
 
@@ -493,10 +512,33 @@ width:185
          * this is called when the Role controller is displayed and the window is
          * resized.  
          */
-        resize: function() {
+        resize: function( data ) {
+
+            var pager = this.dom.userGrid.getPager();
+
+            if (data) {
+
+                // the outer container for the userGrid will be increased
+                this.element.find('div.rbac-user-div').css('height', data.height+'px');
+
+                // adjust the height of the userGrid:
+                var gridHeight = data.height;
+                gridHeight -= pager.$height;
+                gridHeight -= this.dom.userSearch.$height;
+
+//// TODO: try to figure out how many rows would fit into available space
+////    then adjust ycount to fit that.
+////        gridHeight -= heightOf1Row (to accomodate the header)
+////        numrows = gridHeight / heightOf1Row
+////        
+
+                // this.dom.userGrid.define('height', gridHeight);
+                // this.dom.userGrid.resize();
+            }
 
             this.dom.userGrid.adjust(); 
-            var pager = this.dom.userGrid.getPager();
+            
+            // now update the related pager/searchbox with the proper $width
             pager.define('width', this.dom.userGrid.$width);
 
             this.dom.userSearch.define('width', this.dom.userGrid.$width);
