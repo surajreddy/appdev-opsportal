@@ -20,119 +20,118 @@
  * @codeend
  */
 
-steal('appdev',
-    'jquery',
-    'bootstrap.js',
-    "bootstrapValidator.js",
-function() {
+steal.import('jquery',
+    'appdev',
+    'bootstrap',
+    "bootstrapValidator")
+    .then(function () {
 
-// (function($) {
-    /**
-     * Enter the display text for this value:
-     */
-    $.fn.bootstrapValidator.i18n.dateGreaterThan = $.extend($.fn.bootstrapValidator.i18n.dateGreaterThan || {}, {
-        'default': 'This value must be greater than field (%s)',
-        notInclusive: 'Please enter a value greater than %s'
-    });
-
-    $.fn.bootstrapValidator.validators.dateGreaterThan = {
-        // html5Attributes: {
-        //     message: 'message',
-        //     value: 'value',
-        //     inclusive: 'inclusive'
-        // },
-
-        // enableByHtml5: function($field) {
-        //     var type = $field.attr('type'),
-        //         min  = $field.attr('min');
-        //     if (min && type !== 'date') {
-        //         return {
-        //             value: min
-        //         };
-        //     }
-
-        //     return false;
-        // },
-
+        // (function($) {
         /**
-         * Return true if the input value is greater than the specified field
-         *
-         * @param {BootstrapValidator} validator Validate plugin instance
-         * @param {jQuery} $field Field element
-         * @param {Object} options Can consist of the following keys:
-         * - field: {string} the other field name to compare this one to.
-         * - value: {string} the other field name to compare this one to.
-         * - canEqual: {bool} can the values be == ?
-         * - message: The invalid message
-         * @returns {Boolean|Object}
+         * Enter the display text for this value:
          */
-        validate: function(validator, $field, options) {
-            var value = $field.val();
+        $.fn.bootstrapValidator.i18n.dateGreaterThan = $.extend($.fn.bootstrapValidator.i18n.dateGreaterThan || {}, {
+            'default': 'This value must be greater than field (%s)',
+            notInclusive: 'Please enter a value greater than %s'
+        });
 
-// console.warn('dateGreaterThan: value:'+value);
+        $.fn.bootstrapValidator.validators.dateGreaterThan = {
+            // html5Attributes: {
+            //     message: 'message',
+            //     value: 'value',
+            //     inclusive: 'inclusive'
+            // },
 
-            // if there is nothing in the field yet, return true
-            if (value === '') {
-                return true;
-            }
-            
-            // value = this._format(value);
-            // if (!$.isNumeric(value)) {
+            // enableByHtml5: function($field) {
+            //     var type = $field.attr('type'),
+            //         min  = $field.attr('min');
+            //     if (min && type !== 'date') {
+            //         return {
+            //             value: min
+            //         };
+            //     }
+
             //     return false;
-            // }
+            // },
 
-            var otherField =  options.field || options.value;
+            /**
+             * Return true if the input value is greater than the specified field
+             *
+             * @param {BootstrapValidator} validator Validate plugin instance
+             * @param {jQuery} $field Field element
+             * @param {Object} options Can consist of the following keys:
+             * - field: {string} the other field name to compare this one to.
+             * - value: {string} the other field name to compare this one to.
+             * - canEqual: {bool} can the values be == ?
+             * - message: The invalid message
+             * @returns {Boolean|Object}
+             */
+            validate: function (validator, $field, options) {
+                var value = $field.val();
 
-            if ( typeof otherField == 'undefined' ) {
-                console.error( 'dateGreaterThan() validation rule: no other field specified:', options);
-                return true;
-            }
+                // console.warn('dateGreaterThan: value:'+value);
 
-
-            var compareTo      =  validator.getDynamicOption($field, otherField);
-
-// console.warn('dateGreaterThan: compareTo:'+compareTo);
-
-            value     = this._stringToTimestamp(value, options.format);
-            compareTo = this._stringToTimestamp(compareTo, options.format);
-
-// console.warn('dateGreaterThan: value(timestamp):'+value);
-// console.warn('dateGreaterThan: compareTo(timestamp):'+compareTo);
-
-            return {
-                        valid: options.canEqual? value >= compareTo: value > compareTo,
-                        message: $.fn.bootstrapValidator.helpers.format(options.message || $.fn.bootstrapValidator.i18n.greaterThan['default'], options.value)
-                    };
-        },
-
-        _stringToDate: function(_date,_format,_delimiter)
-        {
-            if (typeof _delimiter == "undefined") {
-                // assume '/' 
-                _delimiter = '/';
-                
-                // unless we find out otherwise:
-                if (_format.indexOf('-') != -1) {
-                    _delimiter = '-';
+                // if there is nothing in the field yet, return true
+                if (value === '') {
+                    return true;
                 }
+            
+                // value = this._format(value);
+                // if (!$.isNumeric(value)) {
+                //     return false;
+                // }
+
+                var otherField = options.field || options.value;
+
+                if (typeof otherField == 'undefined') {
+                    console.error('dateGreaterThan() validation rule: no other field specified:', options);
+                    return true;
+                }
+
+
+                var compareTo = validator.getDynamicOption($field, otherField);
+
+                // console.warn('dateGreaterThan: compareTo:'+compareTo);
+
+                value = this._stringToTimestamp(value, options.format);
+                compareTo = this._stringToTimestamp(compareTo, options.format);
+
+                // console.warn('dateGreaterThan: value(timestamp):'+value);
+                // console.warn('dateGreaterThan: compareTo(timestamp):'+compareTo);
+
+                return {
+                    valid: options.canEqual ? value >= compareTo : value > compareTo,
+                    message: $.fn.bootstrapValidator.helpers.format(options.message || $.fn.bootstrapValidator.i18n.greaterThan['default'], options.value)
+                };
+            },
+
+            _stringToDate: function (_date, _format, _delimiter) {
+                if (typeof _delimiter == "undefined") {
+                    // assume '/' 
+                    _delimiter = '/';
+                
+                    // unless we find out otherwise:
+                    if (_format.indexOf('-') != -1) {
+                        _delimiter = '-';
+                    }
+                }
+                var formatLowerCase = _format.toLowerCase();
+                var formatItems = formatLowerCase.split(_delimiter);
+                var dateItems = _date.split(_delimiter);
+                var monthIndex = formatItems.indexOf("mm");
+                var dayIndex = formatItems.indexOf("dd");
+                var yearIndex = formatItems.indexOf("yyyy");
+                var month = parseInt(dateItems[monthIndex]);
+                month -= 1;
+                var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+                return formatedDate;
+            },
+
+            _stringToTimestamp: function (_date, _format, _delimiter) {
+
+                return this._stringToDate(_date, _format, _delimiter).getTime();
             }
-            var formatLowerCase=_format.toLowerCase();
-            var formatItems=formatLowerCase.split(_delimiter);
-            var dateItems=_date.split(_delimiter);
-            var monthIndex=formatItems.indexOf("mm");
-            var dayIndex=formatItems.indexOf("dd");
-            var yearIndex=formatItems.indexOf("yyyy");
-            var month=parseInt(dateItems[monthIndex]);
-            month-=1;
-            var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
-            return formatedDate;
-        },
+        };
+        // }(window.jQuery));
 
-        _stringToTimestamp: function(_date, _format, _delimiter) {
-
-            return this._stringToDate(_date, _format, _delimiter).getTime();
-        }
-    };
-// }(window.jQuery));
-
-});
+    });

@@ -1,8 +1,9 @@
 
-steal(
+steal.import(
         // List your Controller's dependencies here:
-        'appdev',
-function(){
+        'can',
+        'appdev'
+).then(function(){
 
 
     // The OpsPortal will define a global namespace for our added utilities:

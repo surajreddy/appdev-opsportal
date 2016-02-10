@@ -1,8 +1,9 @@
-steal('appdev',
+steal.import(
     'jquery',
-    'bootstrap.js',
-    "bootstrapValidator.js",
-function() {
+    'appdev',
+    'bootstrap',
+    "bootstrapValidator")
+.then(function() {
 
 // (function($) {
     $.fn.bootstrapValidator.i18n.server = $.extend($.fn.bootstrapValidator.i18n.server || {}, {

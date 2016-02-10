@@ -1,8 +1,7 @@
 
-steal(
-    'appdev',
-    function() {
-
+steal.import(
+    'appdev'
+    ).then(function () {
 
         // The OpsPortal will define a global namespace for our added utilities:
         if (typeof AD.op == 'undefined') AD.op = {};
@@ -18,35 +17,35 @@ steal(
         AD.op.Dialog = {
             // Instance properties
             
-            Confirm: function(opts) {
+            Confirm: function (opts) {
 
                 var title = opts.title || 'Confirm';
                 var message = opts.message || 'Are you sure you want to do this?';
 
                 var labelYes = opts.labelYes || 'yes';
-                var labelNo  = opts.labelNo  || 'no';
+                var labelNo = opts.labelNo || 'no';
 
-                var fnYes =  opts.fnYes || function() {};
-                var fnNo  =  opts.fnNo  || function() {};
+                var fnYes = opts.fnYes || function () { };
+                var fnNo = opts.fnNo || function () { };
 
 
                 bootbox.dialog({
-                    title:title,
-                    message:message,
+                    title: title,
+                    message: message,
                     buttons: {
-                        yes:{
-                            label:labelYes,
+                        yes: {
+                            label: labelYes,
                             className: 'btn-primary',
-                            callback:fnYes
+                            callback: fnYes
                         },
-                        no:{
-                            label:labelNo,
+                        no: {
+                            label: labelNo,
                             className: 'btn-default',
-                            callback:fnNo
+                            callback: fnNo
                         }
                     }
                 });
-               
+
 
             }
 
