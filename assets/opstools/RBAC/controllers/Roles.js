@@ -2,6 +2,7 @@
 steal(
         // List your Controller's dependencies here:
         'appdev',
+        'opstools/RBAC/models/PermissionAction.js',
         'opstools/RBAC/models/PermissionRole.js',
 //        'opstools/RBAC/models/Projects.js',
 //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
@@ -40,6 +41,9 @@ function(){
 
             
             this.initDOM();
+
+            this.loadActions();
+
 
         },
 
@@ -143,7 +147,7 @@ function(){
                     id:"rolestable",
                     container:"userlist-tbl-role",
                     view:"datatable",
-                    width:483,
+                    // width:483,
 
                     columns:[
                         { id:"role_label",  header:lblHeaderName, width:180, sort:"string"},
@@ -167,16 +171,8 @@ function(){
                     },  
                     on:{
                         onItemClick:function(id){
-                        //     var name = this.getItem(id).name;
-                        //     var description = this.getItem(id).desc;
-                        //     console.log("name ", name);
-                        //     function showroles(id) {
-                        // /*
-                        //             stuff to update the form goes here
-                        // */
-                                    
-                        //     }
-                        //     showroles(id);
+
+                            _this.roleSelect(id);
                         }
                     },
                     onClick:{
@@ -230,7 +226,156 @@ function(){
                         }
                     }
                 }); 
-// webix.event(window, "resize", function(){ gridroles.adjust(); })                      
+
+
+
+                ////
+                //// Setup the Role Form
+                ////
+                var labelLabel = AD.lang.label.getLabel('rbac.roles.name') || 'Role Name*';
+                var placeHolderLabel = AD.lang.label.getLabel('rbac.roles.label') || 'Role Name*';
+                var labelDesc = AD.lang.label.getLabel('rbac.roles.description') || 'Role Description*';
+                var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
+// _this.dom.roleForm.find('[placeholder="rbac.roles.label"]').attr('placeholder',placeHolderLabel);
+// _this.dom.roleForm.find('[placeholder="rbac.roles.descriptionPlaceholder"]').attr('placeholder',placeHolderDesc);
+// this.dom.formRole.elements.item(1).placeholder = 'yadda yadda';
+// _this.dom.formRole = webix.ui({
+//     container:'rbac-roles-form',
+//     view:"htmlform",
+//     id:'formRole',
+//     content: "rbac-roles-form",
+//     autoheight: true,
+
+//     on: {
+
+//         onChange: function(newv, oldv){
+//             webix.message("Value changed from: ",oldv," to: ",newv);
+//         }
+//     }
+// });
+                _this.dom.formRole = webix.ui({
+                    container:'rbac-roles-form',
+                    view:"form",
+                    id:'formRole',
+                    elements:[
+
+                        { id:"role_label", view: "text", name:"role_label", label:labelLabel, value:'', placeholder: placeHolderLabel, labelPosition:"top" },
+                        { id:"role_description", view: "textarea", name:"role_description", label:labelDesc, labelPosition:"top", value:'', placeholder: placeHolderDesc, height:150 }
+                        
+                    ],
+                    autoheight: true,
+
+                    on: {
+
+                        onChange: function(newv, oldv){
+                            console.log("Value changed from: ",oldv," to: ",newv);
+                        }
+                    }
+                });
+
+                //// onChange handlers for each field
+                var fields = ['role_label', 'role_description'];
+                fields.forEach(function(field){
+                    _this.dom.formRole.elements[field].attachEvent("onChange", function(newv, oldv){
+                        var model = _this.data.rolesCollection.AD.currModel();
+                        var modelValue = model.attr(field);
+                        if (modelValue != newv){
+
+                            model.attr(field, newv);
+                            model.save()
+                            .fail(function(err){
+                                AD.error.log('Error saving current model.', {error:err, field:field, value:newv });
+                            })
+                            .then(function(){
+                                console.log(field+": Value changed from: "+oldv+" to: "+newv);
+                            })
+                        }
+                        
+                    });
+                })
+
+
+
+                //// 
+                //// Setup the Action Search
+                ////
+                
+                // webix.ui({
+                //     id:"searchactions",
+                //     container:"search3",
+                //     view:"search",
+                //     placeholder:"Search..",
+                //     width:300
+
+                // });
+                // $$("searchactions").attachEvent("onSearchIconClick",function(e){ 
+                //     //get user input value
+                //     var value = this.getValue().toLowerCase(); 
+
+                //     $$("actiontable").filter(function(obj){ //here it filters data!
+                //         return obj.name.toLowerCase().indexOf(value)==0;
+                //     })
+                // });  
+                var lblPlaceholderSearchActions = AD.lang.label.getLabel('rbac.roles.searchActions') || 'Search Actions*';           
+                _this.dom.roleSearchActions = AD.op.WebixSearch({
+                    id:"rbac-search-actions",
+                    container:"rbac-search-actions",
+                    view:"search",
+                    placeholder:lblPlaceholderSearchActions,
+                    width:300
+                });
+                _this.dom.roleSearchActions.AD.filter(function(value){
+                    _this.dom.actionGrid.filter(function(obj){ 
+                        return obj.action_key.indexOf(value)>=0;
+                    })
+                });
+
+
+
+                //// 
+                //// Setup the Action Grid
+                ////
+
+                _this.dom.actionGrid = webix.ui({
+                    id:"rbacGridActions",
+                    container:"rbac-grid-actions",
+                    view:"datatable",
+                    // width:993,
+                    editable:true,
+
+                    columns:[
+
+                        { id:"enabled", header:{text:"", template:"{common.checkbox()}"}, width:40, css:{"text-align":"center"}, template:"{common.checkbox()}"},
+                        { id:"action_key",  header:"Name", width:100, sort:"string"},
+                        { id:"action_description",  header:"Description" , editor:"text", fillspace:true}
+                                    
+                    ],
+
+                           
+                    select:"row",
+                    yCount:5, 
+                    scrollY:false, 
+                    scrollX:false,
+                    navigation:"true", 
+
+
+                    pager:{
+                        container:"rbac-pager-actions",
+                        size:5,
+                        group:5,
+                        width:300
+                    },
+
+
+                    onClick:{
+                        
+
+                    } 
+
+                });
+
+
+
             });
 
         },
@@ -263,6 +408,29 @@ function(){
 
 
 
+        loadActions: function() {
+            var _this = this;
+
+            var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
+            Actions.findAll()
+            .fail(function(err){
+                AD.error.log('RBAC:Roles.js: error loading actions.', {error:err});
+            })
+            .then(function(list) {
+                list.forEach(function(l) {
+                    l.translate();
+                })
+                _this.data.actions = list;
+                _this.data.actionsCollection = AD.op.WebixDataCollection(list);
+                if (_this.dom.actionGrid) {
+                    _this.dom.actionGrid.data.sync(_this.data.actionsCollection);
+                }
+            });
+
+        },
+
+
+
         /** 
          * @function loadRoles
          *
@@ -274,7 +442,7 @@ function(){
             this.data.rolesCollection = AD.op.WebixDataCollection(list);
             if (this.dom.roleGrid) {
                 this.dom.roleGrid.data.sync(this.data.rolesCollection);
-
+                this.dom.formRole.bind(this.data.rolesCollection);
             }
             this.refresh();
         },
@@ -304,11 +472,20 @@ function(){
             
             // now update the related pager/searchbox with the proper $width
             pager.define('width', this.dom.roleGrid.$width);
-            this.dom.roleSearch.define('width', this.dom.roleGrid.$width);
+            this.dom.roleSearch.define('width', this.dom.roleGrid.$width/2);
 
             // resize everything now:
             pager.resize();
             this.dom.roleSearch.resize();
+
+
+            this.dom.formRole.adjust();
+
+
+            this.dom.actionGrid.adjust();
+            this.dom.roleSearchActions.define('width', this.dom.actionGrid.$width );
+            this.dom.roleSearchActions.resize();
+            
 
         },
 
@@ -366,6 +543,16 @@ function(){
 
 
 
+        roleSelect: function(id) {
+
+            // set the cursor to this form:
+            this.data.rolesCollection.setCursor(id);
+            this.dom.roleForm.show();
+            this.resize();  
+        },
+
+
+
         // roleForID:function(id) {
 
         //     var foundRole = null;
@@ -387,8 +574,7 @@ function(){
          */
         show:function() {
             this._super();
-            this.refresh();
-            // this.Filter.resetView();
+            this.resize();
         },
 
 

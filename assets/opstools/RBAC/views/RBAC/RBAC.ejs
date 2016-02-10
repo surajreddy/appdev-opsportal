@@ -10,11 +10,13 @@
   <span app-label-key="rbac.users.status">Status</span>
   <span app-label-key="rbac.users.enabled">Enabled</span>
   <span app-label-key="rbac.user.noUserSelected">no user selected</span>
+  <span app-label-key="rbac.user.search">search for users</span>
   <span app-label-key="rbac.roles.search">search for roles</span>
   <span app-label-key="rbac.roles.name">Name</span>
   <span app-label-key="rbac.roles.description">Description</span>
   <span app-label-key="rbac.roles.confirmClone">Clone role %s</span>
   <span app-label-key="rbac.roles.confirmDelete">This will remove %s</span>
+  <span app-label-key="rbac.roles.searchActions">search for actions</span>
 </div>
 
 
@@ -139,7 +141,7 @@
                           <div class="panel-body">
                             <select multiple class="no-boxbord" name="role" disabled >
                               <!-- roles.forEach(function(role){ --> 
-                              <option class='rbac-only-one' value="[[= role.id ]]" selected >[[= role.role_label ]]</option>
+                              <option class='rbac-only-one' value="[[= role.id ]]" selected >[[= role.attr('role_label') ]]</option>
                               <!-- }) -->
                               <option class="mockup">role 2</option>
                               <option class="mockup">role 3</option>
@@ -191,135 +193,51 @@
           <!--Roles Area-->
           <div id="roles-area" class="op-container mockup-display roles rbac-roles" style="display:none">
             <div class="row op-container nomargin">
-                <div class="col-lg-4 padbot55">
-                  <div class="nopadL form-inline" role="search">
-                    <div class="input-group" id="search2"></div>
+
+
+                <div class="col-lg-4 ">
+                  <div class=" form-inline" >
+                    <div class="input-group pull-left" id="search2"></div>
+                    <button  class="btn op-btn btn-primary pull-right off-top10 rbac-role-addRole" app-label-key="rbac.user.add" >add</button>
                   </div>
                   <div id="userlist-tbl-role" style="padding-bottom:10px;clear:both"></div>
                   <div id="pgb" class="padleft20"></div>
-                  <script type="text/javascript" charset="utf-8">               
-
-                  </script>
-                
                 </div>
-                
+              
+
                 
                 <div class="col-lg-8 rbac-roles-form">
-                  <div class="form-group">
-                    <p class="lbl-title">Role Name</p>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Activity Name" value="Ex Pat">
+                  <div  id="rbac-roles-form">
+                  
+<!--                   <div class="form-group">
+                    <p class="lbl-title" app-label-key="rbac.roles.name">Role Name</p>
+                    <input id="role_label" type="text" class="form-control" name="role_label" placeholder="rbac.roles.label" value="Ex Pat">
                   </div>                
                   <div class="form-group">
-                    <p class="lbl-title">Description</p>
-                    <textarea class="form-control" rows="3">This role is useful for foreigners who need to have their Visas managed.</textarea>                   
+                    <p class="lbl-title" app-label-key="rbac.roles.description">Description</p>
+                    <textarea id="role_description" class="form-control" rows="3" name="role_description" placeholder="rbac.roles.descriptionPlaceholder">This role is useful for foreigners who need to have their Visas managed.</textarea>                   
+                  </div> -->
                   </div>
                   <div id="roletab">
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                      <li role="presentation" class="active"><a href="#actionstab" aria-controls="actionstab" role="tab" data-toggle="tab">Actions</a></li>
-                      <li role="presentation"><a href="#datafieldtab" aria-controls="datafieldtab" role="tab" data-toggle="tab">Data Fields</a></li>
+                      <li role="presentation" class="active"><a href="#actionstab" aria-controls="actionstab" role="tab" data-toggle="tab"><span app=label-key="rbac.roles.tabActions">Actions</span></a></li>
+                      <li role="presentation"><a href="#datafieldtab" aria-controls="datafieldtab" role="tab" data-toggle="tab"><span app=label-key="rbac.roles.tabDataFields">Data Fields</span></a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content padbot10 off-botm10">
-                      <div role="tabpanel" class="tab-pane active" id="actionstab">
-                        <div class="col-md-9 pull-left">
-                          <form class="padleft5 navbar-form" role="search">
-                            <div class="input-group" id="search3">
-                            </div>
-                          </form>
-                        </div>
-                        <div id="testC" style="padding-bottom:10px;clear:both;"></div>
-                        <div id="pgc" class="padleft20"></div>
-                        <script type="text/javascript" charset="utf-8">
-                                          
-                          webix.ready(function(){
-                                                        
-
-                                                         webix.ui({
-                                                            id:"searchactions",
-                                                            container:"search3",
-                                                            view:"search",
-                                                            placeholder:"Search..",
-                                                            width:300
-
-                                                        });
-                                                        $$("searchactions").attachEvent("onSearchIconClick",function(e){ 
-                                                            //get user input value
-                                                            var value = this.getValue().toLowerCase(); 
-
-                                                            $$("actiontable").filter(function(obj){ //here it filters data!
-                                                                return obj.name.toLowerCase().indexOf(value)==0;
-                                                            })
-                                                        });
-                                                        
-                                                        
-                            var gridactions = webix.ui({
-                                                            id:"actiontable",
-                              container:"testC",
-                              view:"datatable",
-                                                            width:993,
-                                                            editable:true,
-                              columns:[
-                                                                { id:"enabled", header:{text:"", template:"{common.checkbox()}"}, width:40, css:{"text-align":"center"}, template:"{common.checkbox()}"},
-                                
-                                                                { id:"name",  header:"Name", width:100, sort:"string"},
-                                                                { id:"desc",  header:"Description" , editor:"text", fillspace:true},
-                                                                { id:"edit",  header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},
-                                                
-                              ],
-                              select:"row",
-                              yCount:5, scrollY:false,scrollX:false,
-                              navigation:"true",      
-                                                            onClick:{
-                                                                trash:function(e, id){
-                                                                   
-                                                                    var recid = id;
-                                                                    webix.confirm({text:"This will remove " + this.getItem(id).name, 
-
-                                                                           callback:function(result){
-                                                      //                         console.log("id", recid);
-                                                                               if (result) {
-                                                                                   if(!recid){
-                                                                                        webix.message("No item is selected!");
-                                                                                        return;
-                                                                                    }
-                                                                                    $$("actiontable").remove(recid);
-                                                                                    return false;
-                                                                               }
-                                                                           }
-                                                                      });
-                                                                }
-                                                            },
-                              pager:{
-                                container:"pgc",
-                                size:5,
-                                group:5,
-                                                                width:300
-                              },  
-                              
-                              data:[
-                                                                { id:1, name:"act.key.1", desc:"allow access to ops portal", enabled:1},
-                                                                { id:2, name:"act.key.2", desc:"can edit permissions", enabled:0},
-                                                                { id:3, name:"act.key.3", desc:"can edit roles", enabled:1},
-                                                                { id:4, name:"action 4", desc:"my fourth action", enabled:0},
-                                                                { id:5, name:"action 5", desc:"my fifth action", enabled:1},
-                                                                 { id:6, name:"action 6", desc:"my fifth action", enabled:1},
-                                                                 { id:7, name:"action 7", desc:"my fifth action", enabled:0},
-                                                                 { id:8, name:"action 8", desc:"my fifth action", enabled:0},
-                                                                 { id:9, name:"action 9", desc:"my fifth action", enabled:0}
-                                                                ] 
-                            });   
-                                                        
-                            webix.event(window, "resize", function(){ gridactions.adjust(); })                      
-                          });
-                        </script>                   
+                      <div role="tabpanel" class="tab-pane active" id="actionstab"  style="padding:17px;">
+                          <div class="input-group" id="rbac-search-actions"></div>
+                          <div id="rbac-grid-actions" style="padding-bottom:10px;clear:both;"></div>
+                          <div id="rbac-pager-actions" class="padleft20"></div>
                       </div>
                       
                       <div role="tabpanel" class="tab-pane" id="datafieldtab"></div>
                     </div>
 
+        
                   </div>                  
                 </div>
             </div>

@@ -104,12 +104,13 @@ function(){
 
                 ////
                 //// Setup the User Search Bar:    
-                ////              
+                ////   
+                var lblPlaceholderSearchUser = AD.lang.label.getLabel('rbac.user.search') || 'Search *';              
                 _this.dom.userSearch = AD.op.WebixSearch({
                     id:"searchuser",
                     container:"search1",
                     view:"search",
-                    placeholder:"Search ...",
+                    placeholder:lblPlaceholderSearchUser,
                     width:220
                 });
                 _this.dom.userSearch.AD.filter(function(value){
@@ -325,7 +326,7 @@ function(){
 
             this.data.roles = list;
             this.data.roles.bind('change', function(){
-                
+
                 // make sure we refresh the user's permissions when roles change
                 _this.userSelect(_this.data.usersCollection.getCursor());
             })
@@ -566,53 +567,59 @@ function(){
 
             var _this = this;
 
-            // this datatable is synced with our usersCollection
-            // and so is our selected form, so we need to make sure
-            // the userCollection's cursor is set to the selected
-            // id:
-            this.data.usersCollection.setCursor(id);
+            // if a valid id was given:
+            if (id != null) {
 
-            this.dom.userPanel.show();
+                
+                // this datatable is synced with our usersCollection
+                // and so is our selected form, so we need to make sure
+                // the userCollection's cursor is set to the selected
+                // id:
+                this.data.usersCollection.setCursor(id);
 
-            var user = this.data.usersCollection.getItem(id);
+                this.dom.userPanel.show();
 
-            // show loading message on PermissionGrid
-            var Permission = AD.Model.get('opstools.RBAC.Permission');
-            Permission.findAll({user:user.id})
-            .fail(function(err){
+                var user = this.data.usersCollection.getItem(id);
 
-            })
-            .then(function(list){
+                // show loading message on PermissionGrid
+                var Permission = AD.Model.get('opstools.RBAC.Permission');
+                Permission.findAll({user:user.id})
+                .fail(function(err){
 
-                // convert each basic perm.role into the more detailed role info:
-                list.forEach(function(perm){
-                    _this.data.roles.forEach(function(r){
-                        if (r.id == perm.role.id) {
-                            perm.attr('role', r);
-                        }
+                })
+                .then(function(list){
+
+                    // convert each basic perm.role into the more detailed role info:
+                    list.forEach(function(perm){
+                        _this.data.roles.forEach(function(r){
+                            if (r.id == perm.role.id) {
+                                perm.attr('role', r);
+                            }
+                        })
                     })
+
+                    // convert to DataCollection
+                    var permissionDC = AD.op.WebixDataCollection(list);
+    // console.log('... list:', list);
+    // console.log('... permissionDC:', permissionDC);
+                    // load into PermissionGrid
+                    _this.dom.userPermissions.parse(permissionDC);
+                    _this.data.userPermissionCollection = permissionDC;
+
+                    // update AddForm's Role list to not include the roles already assigned:
+                    _this.formUpdate();
+
+                    // remove any permission editing:
+                    _this.dom.userRoleScopeEdit.hide();
+
+                    // since I just loaded my permissions:
+                    _this.userAssignmentUpdate();
+
+                    // remove loading overlay
+
                 })
 
-                // convert to DataCollection
-                var permissionDC = AD.op.WebixDataCollection(list);
-// console.log('... list:', list);
-// console.log('... permissionDC:', permissionDC);
-                // load into PermissionGrid
-                _this.dom.userPermissions.parse(permissionDC);
-                _this.data.userPermissionCollection = permissionDC;
-
-                // update AddForm's Role list to not include the roles already assigned:
-                _this.formUpdate();
-
-                // remove any permission editing:
-                _this.dom.userRoleScopeEdit.hide();
-
-                // since I just loaded my permissions:
-                _this.userAssignmentUpdate();
-
-                // remove loading overlay
-
-            })
+            }
 
         },
 

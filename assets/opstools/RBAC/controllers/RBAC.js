@@ -10,7 +10,7 @@ steal(
         'opstools/RBAC/models/SiteUser.js',
 
         // 'opstools/RBAC/models/Permission.js',
-        'opstools/RBAC/models/PermissionAction.js',
+        // 'opstools/RBAC/models/PermissionAction.js',
         'opstools/RBAC/models/PermissionRole.js',
         'opstools/RBAC/models/PermissionScope.js',
 
@@ -348,20 +348,6 @@ function(){
 
 
             this.loadUsers();
-
-//             var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
-//             Actions.findAll()
-//             .fail(function(err){
-
-//             })
-//             .then(function(list) {
-//                 list.forEach(function(l) {
-//                     l.translate();
-//                 })
-//                 _this.portals.RoleAdd.loadActions(list);
-//                 _this.portals.RoleEdit.loadActions(list);
-//                 _this.data.actions = list; 
-//             });
 
 
             var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
