@@ -1,4 +1,4 @@
-System.import('appdev').then(function () {
+System.import('can').then(function () {
     steal.import(
         'appdev/ad',
         'appdev/control/control',

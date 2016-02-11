@@ -4,7 +4,7 @@ steal(
     function () {
         System.import('appdev').then(function () {
             steal.import(
-                'can',
+                'can/control/control',
                 'appdev/ad',
                 'appdev/control/control',
                 'appdev/comm/socket')

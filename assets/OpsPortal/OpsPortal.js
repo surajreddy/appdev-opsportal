@@ -3,14 +3,12 @@
 //     waits: !1,
 //     has: 'js/jquery.min.js canjs/can.jquery.js appdev/ad.js js/OpenAjax.js appdev/comm/hub.js appdev/util/uuid.js js/async.js appdev/util/async.js appdev/config/config.js appdev/model/model.js appdev/labels/lang.js appdev/labels/label.js appdev/sal/web-jquery.js appdev/comm/service.js js/dependencies/sails.io.js appdev/comm/socket.js appdev/widgets/ad_ui_reauth/ad_ui_reauth.css appdev/widgets/ad_ui_reauth/ad_ui_reauth.js appdev/auth/reauth.js appdev/UIController.js appdev/control/control.js appdev/appdev.js'.split( ' ' )
 // } );
-steal('jquery', function () {
+System.import('appdev').then(function () {
     AD.ui.loading.attach('#portal');
     AD.ui.loading.text(' OpsPortal ...');
     AD.ui.loading.resources(19);  // increase the number of resources to load
 
-    System.import('appdev').then(function () {
-        loadJqueryUi();
-    });
+    loadJqueryUi();
 });
 
 function loadJqueryUi() {

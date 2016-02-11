@@ -24,10 +24,10 @@ steal(
             // 'js/jquery.sidr.min.js',
             // ).then(
                 ).then(function () {
-                    steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
-
+                    // steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
+                    
                     // make sure $ is defined:
-                    if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
+                    var $ = typeof window.jQuery == 'undefined' ? AD.ui.jQuery : window.jQuery;
     
                     // create our opstools namespace for our tools.
                     if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
