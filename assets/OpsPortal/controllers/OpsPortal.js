@@ -16,6 +16,7 @@ steal(
         System.import('appdev').then(function () {
             steal.import(
                 'jquery',
+                'appdev',
                 'appdev/ad',
                 'appdev/control/control',
                 'appdev/comm/socket',
@@ -26,6 +27,9 @@ steal(
                 ).then(function () {
                     // steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
                     
+                    System.import('opstools/RBAC').then(function () {
+                    });
+
                     // make sure $ is defined:
                     var $ = typeof window.jQuery == 'undefined' ? AD.ui.jQuery : window.jQuery;
     

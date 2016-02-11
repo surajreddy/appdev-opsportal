@@ -1,6 +1,7 @@
 System.import('can').then(function () {
     steal.import(
     // List your Controller's dependencies here:
+        'can/construct/construct',
         'can/control/control',
         'appdev/ad'
         ).then(function () {

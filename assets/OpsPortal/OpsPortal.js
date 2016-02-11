@@ -3,6 +3,7 @@
 //     waits: !1,
 //     has: 'js/jquery.min.js canjs/can.jquery.js appdev/ad.js js/OpenAjax.js appdev/comm/hub.js appdev/util/uuid.js js/async.js appdev/util/async.js appdev/config/config.js appdev/model/model.js appdev/labels/lang.js appdev/labels/label.js appdev/sal/web-jquery.js appdev/comm/service.js js/dependencies/sails.io.js appdev/comm/socket.js appdev/widgets/ad_ui_reauth/ad_ui_reauth.css appdev/widgets/ad_ui_reauth/ad_ui_reauth.js appdev/auth/reauth.js appdev/UIController.js appdev/control/control.js appdev/appdev.js'.split( ' ' )
 // } );
+
 System.import('appdev').then(function () {
     AD.ui.loading.attach('#portal');
     AD.ui.loading.text(' OpsPortal ...');
@@ -55,9 +56,10 @@ function loadBootstrapPlugins() {
         "bootstrap-table",
         "bootstrap-table.css",
     // "bootstrapValidator.js",
-        'bootstrap-datetimepicker',  // <<--- needs moment.js loaded first.
+        'bootstrap-datetimepicker', // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal',
-        'site/labels/OpsPortal')
+        'site/labels/OpsPortal'
+        )
         .then(function () {
             setupSocket();
         });
