@@ -5,11 +5,13 @@
 // } );
 
 System.import('appdev').then(function () {
-    AD.ui.loading.attach('#portal');
-    AD.ui.loading.text(' OpsPortal ...');
-    AD.ui.loading.resources(19);  // increase the number of resources to load
+    steal.import('appdev/ad').then(function () {
+        AD.ui.loading.attach('#portal');
+        AD.ui.loading.text(' OpsPortal ...');
+        AD.ui.loading.resources(19);  // increase the number of resources to load
 
-    loadJqueryUi();
+        loadJqueryUi();
+    })
 });
 
 function loadJqueryUi() {
