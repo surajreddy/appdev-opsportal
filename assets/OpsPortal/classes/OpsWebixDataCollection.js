@@ -52,35 +52,43 @@ function(){
                             // Deleting an element from the DataCollection
                             // auto removes it from the can.List:
                             var index = List.indexOf(model);
-console.log('... list index to remove:'+index);
+// console.log('... list index to remove:'+index);
                             if (index >= 0) {
                                 List.splice(index,1);
                             }
 
                         }
 
-                        // model.destroy()
-                        // .fail(function(err){
-                        //     AD.error.log('Error with auto delete from WebixDataCollection to Can.Model:', {error:err, model:model });
-                        // })
-                        // .then(function(data){
-                        //     console.log('... can model destroyed:', model);
-                        // })
-
 
                     }
                 }
             });
 
+
             List.___webixDataCollection = dc;
             List.bind('change', function(ev, attr, how, newVals, oldVals) {
-// console.log('... change: ' + attr + ', ' + how + ', ' + newVals + ', ' + oldVals);
+console.log('... List.change: ' + attr + ', ' + how + ', ' + newVals + ', ' + oldVals);
 
                 if (how == 'add') {
                     newVals.forEach(function(item){
                         dc.add(item.attr(), attr );
                         attr++;
                     })
+                } else if (how == 'set') {
+
+                    // a change happened in a value within our list.
+                    // we need to update the corresponding value in our DC:
+
+                    // the attr value can be a complex descriptor:
+                    //  0.translations.0.role_label
+                    var partsAttr = attr.split('.'); // break into pieces
+
+                    // pull the data item that was changed
+                    var indx = partsAttr.shift();       // the first element is the List[indx];
+                    var model = List[indx];             // get that model
+
+                    // tell the DC to update the item related to this model
+                    dc.updateItem(model.getID(), model.attr() );
                 }
                 
             });
@@ -119,15 +127,9 @@ console.log('... list index to remove:'+index);
             dc.AD.destroyModel = function(id) {
                 var model = this.getModel(id);
                 if (model) {
-// // temp to test out without actually deleting from server.
-// var index = List.indexOf(model);
-// console.log('... list index to remove:'+index);
-// List.splice(index,1);
-// return AD.sal.Deferred().resolve(model);
-
                     return model.destroy();
                 } else {
-                    return AD.sal.Deferred().reject( new Error('no model for id:'+id));
+                    return AD.sal.Deferred().reject( new Error('dc.AD.destroyModel(): no model for id:'+id));
                 }
             }
 

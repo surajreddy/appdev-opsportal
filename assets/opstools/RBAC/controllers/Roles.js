@@ -216,13 +216,16 @@ function(){
                                             })
                                             .then(function(oldData){
 
+                                                _this.dom.roleForm.hide();
+
                                             });
 
                                             return false;
                                        }
                                    }
-                              });
-                           
+                            });
+
+                            return false;
                         }
                     }
                 }); 
@@ -236,40 +239,22 @@ function(){
                 var placeHolderLabel = AD.lang.label.getLabel('rbac.roles.label') || 'Role Name*';
                 var labelDesc = AD.lang.label.getLabel('rbac.roles.description') || 'Role Description*';
                 var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
-// _this.dom.roleForm.find('[placeholder="rbac.roles.label"]').attr('placeholder',placeHolderLabel);
-// _this.dom.roleForm.find('[placeholder="rbac.roles.descriptionPlaceholder"]').attr('placeholder',placeHolderDesc);
-// this.dom.formRole.elements.item(1).placeholder = 'yadda yadda';
-// _this.dom.formRole = webix.ui({
-//     container:'rbac-roles-form',
-//     view:"htmlform",
-//     id:'formRole',
-//     content: "rbac-roles-form",
-//     autoheight: true,
-
-//     on: {
-
-//         onChange: function(newv, oldv){
-//             webix.message("Value changed from: ",oldv," to: ",newv);
-//         }
-//     }
-// });
                 _this.dom.formRole = webix.ui({
                     container:'rbac-roles-form',
                     view:"form",
                     id:'formRole',
+
                     elements:[
 
                         { id:"role_label", view: "text", name:"role_label", label:labelLabel, value:'', placeholder: placeHolderLabel, labelPosition:"top" },
                         { id:"role_description", view: "textarea", name:"role_description", label:labelDesc, labelPosition:"top", value:'', placeholder: placeHolderDesc, height:150 }
                         
                     ],
+
                     autoheight: true,
 
                     on: {
 
-                        onChange: function(newv, oldv){
-                            console.log("Value changed from: ",oldv," to: ",newv);
-                        }
                     }
                 });
 
@@ -278,17 +263,19 @@ function(){
                 fields.forEach(function(field){
                     _this.dom.formRole.elements[field].attachEvent("onChange", function(newv, oldv){
                         var model = _this.data.rolesCollection.AD.currModel();
-                        var modelValue = model.attr(field);
-                        if (modelValue != newv){
+                        if (model) {
+                            var modelValue = model.attr(field);
+                            if (modelValue != newv){
 
-                            model.attr(field, newv);
-                            model.save()
-                            .fail(function(err){
-                                AD.error.log('Error saving current model.', {error:err, field:field, value:newv });
-                            })
-                            .then(function(){
-                                console.log(field+": Value changed from: "+oldv+" to: "+newv);
-                            })
+                                model.attr(field, newv);
+                                model.save()
+                                .fail(function(err){
+                                    AD.error.log('Error saving current model.', {error:err, field:field, value:newv });
+                                })
+                                .then(function(){
+                                    console.log(field+": Value changed from: "+oldv+" to: "+newv);
+                                })
+                            }
                         }
                         
                     });
@@ -299,23 +286,6 @@ function(){
                 //// 
                 //// Setup the Action Search
                 ////
-                
-                // webix.ui({
-                //     id:"searchactions",
-                //     container:"search3",
-                //     view:"search",
-                //     placeholder:"Search..",
-                //     width:300
-
-                // });
-                // $$("searchactions").attachEvent("onSearchIconClick",function(e){ 
-                //     //get user input value
-                //     var value = this.getValue().toLowerCase(); 
-
-                //     $$("actiontable").filter(function(obj){ //here it filters data!
-                //         return obj.name.toLowerCase().indexOf(value)==0;
-                //     })
-                // });  
                 var lblPlaceholderSearchActions = AD.lang.label.getLabel('rbac.roles.searchActions') || 'Search Actions*';           
                 _this.dom.roleSearchActions = AD.op.WebixSearch({
                     id:"rbac-search-actions",
@@ -345,7 +315,24 @@ function(){
 
                     columns:[
 
-                        { id:"enabled", header:{text:"", template:"{common.checkbox()}"}, width:40, css:{"text-align":"center"}, template:"{common.checkbox()}"},
+                        { id:"enabled", header:{text:"", template:"{common.checkbox()}"}, width:40, css:{"text-align":"center"}, 
+                            template:function(obj, common, value){
+                                var inThere = false;
+                                var rc = _this.data.rolesCollection;
+                                var currentRole = rc.getItem(rc.getCursor());
+                                if (currentRole.actions) {
+                                    currentRole.actions.forEach(function(a){
+                                        if (a.id == obj.id) {
+                                            inThere = true;
+                                        }
+                                    })
+                                }
+                                if (inThere)
+                                    return "<input class=\"webix_table_checkbox\" type=\"checkbox\" checked=\"true\">";
+                                else
+                                    return "<input class=\"webix_table_checkbox\" type=\"checkbox\" >";
+                            } 
+                        },
                         { id:"action_key",  header:"Name", width:100, sort:"string"},
                         { id:"action_description",  header:"Description" , editor:"text", fillspace:true}
                                     
@@ -367,7 +354,17 @@ function(){
                     },
 
 
-                    onClick:{
+                    on:{
+
+                        onCheck:function(id, column, state) {
+
+                            if (state) {
+                                _this.actionChecked(id);
+                            } else {
+                                _this.actionUnChecked(id);
+                            }
+
+                        }
                         
 
                     } 
@@ -382,13 +379,51 @@ function(){
 
 
 
-        // iconBusy: function($el) {
-        //     $el.addClass(' fa-spinner fa-pulse');
-        // },
+        actionChecked: function(id) {
+// console.log('... actionChecked:', id);
+            // get current action
+            var action = this.data.actionsCollection.AD.getModel(id);
+            var role = this.data.rolesCollection.AD.currModel();
 
-        // iconReady:function($el) {
-        //     $el.removeClass(' fa-spinner fa-pulse');
-        // },
+            if (role.actions) {
+                role.actions.push(action);
+            } else {
+                role.actions = new can.List([ action ]);
+            }
+
+            return role.save()
+            .fail(function(err){
+                AD.error.log('Roles:actionChecked(): error saving action to role:', {error:err, action:action.attr(), role:role.attr() });
+            });
+
+        },
+
+
+
+        actionUnChecked: function(id) {
+// console.log('... actionUnChecked:', id);
+
+            var action = this.data.actionsCollection.AD.getModel(id);
+            var role = this.data.rolesCollection.AD.currModel();
+
+            if (role.actions) {
+                var pos = -1;
+                role.actions.each(function(a, i){
+                    if (a.id == action.id) {
+                        pos = i;
+                    }
+                });
+                if (pos != -1) {
+                    role.actions.splice(pos,1);
+                }
+            } 
+
+            return role.save()
+            .fail(function(err){
+                AD.error.log('Roles:actionChecked(): error saving action to role:', {error:err, action:action.attr(), role:role.attr() });
+            });
+
+        },
 
 
 
@@ -490,6 +525,60 @@ function(){
         },
 
 
+
+        roleAdd:function(){
+            var _this = this;
+
+            var listNames = this.listRoleNames();
+
+            var attrs = {};
+
+            // role names need to be unique
+            attrs.role_label = AD.lang.label.getLabel('rbac.roles.newRole') || 'New Role';
+            attrs.role_description = AD.lang.label.getLabel('rbac.roles.newRoleDescription') || 'Describe this role ...';
+            while (listNames.indexOf(attrs.role_label) != -1) {
+                attrs.role_label += '.';
+            }
+// console.log('... clone attrs:', attrs);
+
+            // var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
+            // Roles.create(attrs)
+            // .fail(function(err){
+            //     AD.error.log('Error creating new role.', {error:err, attrs:attrs});
+            //     dfd.reject();
+            // })
+            // .then(function(data){
+
+            //     // now do a full find for this entry, so we have all the filled out info:
+            //     Roles.findOne({ id:data.id })
+            //     .fail(function(err){
+            //         AD.error.log('Error looking up new role.', {error:err, role:data});
+            //         dfd.reject();
+            //     })
+            //     .then(function(newRole){
+
+            //         // console.log('... new cloned Role:', newRole);
+            //         newRole.translate();
+
+            //         // insert at the beginning of our list
+            //         _this.data.roles.unshift(newRole);
+
+            //         dfd.resolve();
+            //     });
+
+            // });
+
+
+            return this.roleCreate(attrs)
+            .done(function(newRole){
+
+                // insert at the beginning of our list
+                _this.data.roles.unshift(newRole);
+            });
+        },
+
+
+
         roleClone:function(id){
             var _this = this;
 
@@ -512,33 +601,73 @@ function(){
             }
 // console.log('... clone attrs:', attrs);
 
+            // var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
+            // Roles.create(attrs)
+            // .fail(function(err){
+            //     AD.error.log('Error creating new cloned role.', {error:err, attrs:attrs});
+            // })
+            // .then(function(data){
+
+            //     // now do a full find for this entry, so we have all the filled out info:
+            //     Roles.findOne({ id:data.id })
+            //     .fail(function(err){
+            //         AD.error.log('Error looking up new cloned role.', {error:err, role:data});
+            //     })
+            //     .then(function(newRole){
+
+            //         // console.log('... new cloned Role:', newRole);
+            //         newRole.translate();
+
+            //         // insert right under our original role
+            //         var roleIndex = _this.data.roles.indexOf(origModel);
+            //         _this.data.roles.splice(roleIndex+1, 0, newRole);
+
+            //     });
+
+            // });
+
+            return this.roleCreate(attrs)
+            .done(function(newRole){
+
+                // insert right under our original role
+                var roleIndex = _this.data.roles.indexOf(origModel);
+                _this.data.roles.splice(roleIndex+1, 0, newRole);
+            });
+
+
+
+        },
+
+
+        roleCreate:function(attrs) {
+            var _this = this;
+            var dfd = AD.sal.Deferred();
+
             var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
             Roles.create(attrs)
             .fail(function(err){
-                AD.error.log('Error creating new cloned role.', {error:err, attrs:attrs});
+                AD.error.log('Error creating new role.', {error:err, attrs:attrs});
+                dfd.reject();
             })
             .then(function(data){
 
                 // now do a full find for this entry, so we have all the filled out info:
                 Roles.findOne({ id:data.id })
                 .fail(function(err){
-                    AD.error.log('Error looking up new cloned role.', {error:err, role:data});
+                    AD.error.log('Error looking up new role.', {error:err, role:data});
+                    dfd.reject();
                 })
                 .then(function(newRole){
 
                     // console.log('... new cloned Role:', newRole);
                     newRole.translate();
 
-                    // insert right under our original role
-                    var roleIndex = _this.data.roles.indexOf(origModel);
-                    _this.data.roles.splice(roleIndex+1, 0, newRole);
-
+                    dfd.resolve(newRole);
                 });
 
             });
 
-
-
+            return dfd;
         },
 
 
@@ -548,22 +677,10 @@ function(){
             // set the cursor to this form:
             this.data.rolesCollection.setCursor(id);
             this.dom.roleForm.show();
+            this.dom.actionGrid.refresh();
             this.resize();  
         },
 
-
-
-        // roleForID:function(id) {
-
-        //     var foundRole = null;
-        //     this.data.roles.forEach(function(role){
-        //         if (role.id == id) {
-        //             foundRole = role;
-        //         }
-        //     });
-
-        //     return foundRole;
-        // },
 
 
         /** 
@@ -576,6 +693,21 @@ function(){
             this._super();
             this.resize();
         },
+
+
+
+        '.rbac-role-addRole click': function($el, ev) {
+            var _this = this;
+
+            this.roleAdd()
+            .done(function(){
+                var rc = _this.data.rolesCollection;
+                var id = rc.getIdByIndex(0);
+                _this.dom.roleGrid.select(id);
+                _this.roleSelect(id);
+            });
+
+        }
 
 
 

@@ -17,6 +17,8 @@
   <span app-label-key="rbac.roles.confirmClone">Clone role %s</span>
   <span app-label-key="rbac.roles.confirmDelete">This will remove %s</span>
   <span app-label-key="rbac.roles.searchActions">search for actions</span>
+  <span app-label-key="rbac.roles.newRole">Spiffy New Role</span>
+  <span app-label-key="rbac.roles.newRoleDescription">Describe this role</span>
 </div>
 
 
@@ -96,7 +98,7 @@
                               <!-- roles.forEach(function(role){ 
                                       if (excludeIDs.indexOf(role.id) == -1) {
                               --> 
-                              <option class='rbac-only-one' value="[[= role.id ]]">[[= role.role_label ]]</option>
+                              <option class='rbac-only-one' value="[[= role.id ]]">[[= role.attr('role_label') ]]</option>
                               <!--    }
                                     }) -->
                               <option class="mockup">role 2</option>
@@ -140,7 +142,8 @@
                         <div class="panel-heading"><span app-label-key="rbac.Roles">Roles</span></div>
                           <div class="panel-body">
                             <select multiple class="no-boxbord" name="role" disabled >
-                              <!-- roles.forEach(function(role){ --> 
+                              <!-- roles.forEach(function(role){ 
+console.log('... role:', role); --> 
                               <option class='rbac-only-one' value="[[= role.id ]]" selected >[[= role.attr('role_label') ]]</option>
                               <!-- }) -->
                               <option class="mockup">role 2</option>

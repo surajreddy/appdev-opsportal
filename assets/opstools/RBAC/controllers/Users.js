@@ -486,7 +486,7 @@ function(){
                 selectedScopes.push(scope.id);
             })
 
-            var roles = [ perm.role ];
+            var roles = [ this.data.userPermissionCollection.AD.getModel(id).role ]; // [ perm.role ];
 
             // update view
             this.dom.userRoleScopeEditForm.html(can.view("RBAC_User_EditUserPermission", { roles:roles, scopes:this.data.scopes, selectedScopes:selectedScopes  }));
