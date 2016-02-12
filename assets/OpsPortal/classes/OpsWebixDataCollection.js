@@ -69,19 +69,12 @@ function(){
             List.bind('change', function(ev, attr, how, newVals, oldVals) {
 console.log('... List.change: ' + attr + ', ' + how + ', ' + newVals + ', ' + oldVals);
 
-                if (how == 'add') {
-                    newVals.forEach(function(item){
-                        dc.add(item.attr(), attr );
-                        attr++;
-                    })
-                } else if (how == 'set') {
+                
+                // the attr value can be a complex descriptor:
+                //  0.translations.0.role_label
+                var partsAttr = attr.split('.'); // break into pieces
 
-                    // a change happened in a value within our list.
-                    // we need to update the corresponding value in our DC:
-
-                    // the attr value can be a complex descriptor:
-                    //  0.translations.0.role_label
-                    var partsAttr = attr.split('.'); // break into pieces
+                function set() {
 
                     // pull the data item that was changed
                     var indx = partsAttr.shift();       // the first element is the List[indx];
@@ -89,6 +82,30 @@ console.log('... List.change: ' + attr + ', ' + how + ', ' + newVals + ', ' + ol
 
                     // tell the DC to update the item related to this model
                     dc.updateItem(model.getID(), model.attr() );
+                }
+
+                if (how == 'add') {
+
+                    // if this was an embedded value, then treat as a set()
+                    if (partsAttr.length > 1) {
+                        set();
+                    } else {
+
+                        // else, add the newVals to the DC
+                        newVals.forEach(function(item){
+                            dc.add(item.attr(), attr );
+                            attr++;
+                        })
+
+                    }
+                    
+                } else if (how == 'set') {
+
+                    // a change happened in a value within our list.
+                    // we need to update the corresponding value in our DC:
+
+                    set();
+
                 }
                 
             });
