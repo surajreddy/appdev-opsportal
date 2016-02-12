@@ -10,7 +10,7 @@ steal(
         function() {
 
             AD.ui.loading.attach('#portal');
-            AD.ui.loading.text(' OpsPortal ...');
+            AD.ui.loading.text(' ... ');
             AD.ui.loading.resources(19);  // increase the number of resources to load
 
         }
@@ -34,6 +34,9 @@ steal(
         // 'jquery-wijmo.css',
         // 'wijmo-pro.css',
         // 'wijmo-open.js',
+        'webix.js',
+        'webix.css',
+        
         
         // "bootstrapValidator.css",
         'bootbox.js',
@@ -41,6 +44,7 @@ steal(
         // 'GenericList.js',        
         'FilteredBootstrapTable.js',
         'OpsButtonBusy.js',
+        'OpsWebixDataCollection.js',
         'font-awesome.css'
         
 ).then(
@@ -49,6 +53,7 @@ steal(
         },
         "bootstrap-table.js",
         "bootstrap-table.css",
+        'webix-opsportal.js',           // theme for webix
         // "bootstrapValidator.js",
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',

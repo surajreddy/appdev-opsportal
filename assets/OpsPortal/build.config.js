@@ -44,7 +44,13 @@ module.exports={
 
         "FilteredBootstrapTable.js" : "OpsPortal/controllers/FilteredBootstrapTable.js",
 
-        "OpsButtonBusy.js" : "OpsPortal/classes/OpsButtonBusy.js"
+        "OpsButtonBusy.js" : "OpsPortal/classes/OpsButtonBusy.js",
+        "OpsWebixDataCollection.js" : "OpsPortal/classes/OpsWebixDataCollection.js",
+        "OpsWebixSearch.js" : "OpsPortal/classes/OpsWebixSearch.js",
+
+        "webix.js" : "js/webix/webix.js",
+        "webix.css" : "js/webix/webix.css",
+        "webix-opsportal.js" : "js/webix/opsportal-skin.js"
     },
     shim : {
         'jquery-ui.js' : { packaged:false },
@@ -78,6 +84,9 @@ module.exports={
 
         // "notify.js" : { packaged:false },
 
+"webix.js" : { packaged:false },
+"webix.css" : { packaged:false },
+"webix-opsportal.js" : { packaged:false },
 
         // this is a special call that configures which opstools are loaded:
         'opsportal/requirements.js' : { packaged:false, ignore:true },

@@ -203,9 +203,6 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 }
 .op-table input[type="text"], .opsportal-table select { margin-top: 0 !important; }
 
-/* =OpsPortal Lists */
-.op-list { position: relative; list-style: none; padding: 0; }
-
 
 /* =OpsPortal Margins, Padding, Dividers */
 .op-nopadding { padding: 0 !important; }
@@ -240,6 +237,14 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	overflow: auto; 
 	-webkit-overflow-scrolling: touch; 
 }
+
+.op-widget-horizontal-nav {
+	width: 100%;
+    position: absolute;
+    height: 69px;
+	background:#f0f0f0;	
+ }
+ 
 .op-widget-masthead { 
 	margin: 0 15px 15px 15px; 
 	padding-top: 15px; 
@@ -259,11 +264,6 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	bottom: 0; 
 	left: 0; 
 	width: 100%; 
-}
-
-/* FIX : lists have too much padding */
-ul.op-list { 
-	padding-left: 0px;
 }
 
 .op-widget .op-list li.active { 
