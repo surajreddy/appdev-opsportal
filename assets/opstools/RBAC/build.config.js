@@ -12,6 +12,8 @@ module.exports = {
             "deps": [
                 'jquery',
 
+                'js/GenericList',
+
                 "OpsPortal/classes/OpsButtonBusy",
                 "OpsPortal/classes/OpsDialog",
                 "OpsPortal/classes/OpsForm",
