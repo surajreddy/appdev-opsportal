@@ -25,10 +25,7 @@ steal(
             // 'js/jquery.sidr.min.js',
             // ).then(
                 ).then(function () {
-                    // steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
-                    
-                    System.import('opstools/RBAC').then(function () {
-                    });
+                    steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
 
                     // make sure $ is defined:
                     var $ = typeof window.jQuery == 'undefined' ? AD.ui.jQuery : window.jQuery;
