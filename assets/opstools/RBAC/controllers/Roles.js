@@ -466,7 +466,7 @@ function(){
                 this.dom.roleGrid.data.sync(this.data.rolesCollection);
                 this.dom.formRole.bind(this.data.rolesCollection);
             }
-            this.refresh();
+            this.resize();
         },
 
 
