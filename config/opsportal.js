@@ -28,9 +28,14 @@ module.exports.opsportal = {
     // e.g. 'http://example.com/screenshots/'
     imageBaseURL: '',
     
-    // The GitHub user account that the feedback will be posted under.
+    // The GitHub user account that the feedback will be posted from.
     githubUsername: '',
-    githubPassword: ''
+    githubPassword: '',
+    
+    // The GitHub repository that the feeback will be posted to.
+    githubRepo: 'appdev-opsportal',
+    // The GitHub repository owner.
+    githubOwner: 'appdevdesigns'
   },
   
   

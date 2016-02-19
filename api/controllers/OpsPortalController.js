@@ -105,6 +105,8 @@ module.exports = {
     var imageBaseURL = sails.config.opsportal.feedback.imageBaseURL;
     var githubUsername = sails.config.opsportal.feedback.githubUsername;
     var githubPassword = sails.config.opsportal.feedback.githubPassword;
+    var githubRepo = sails.config.opsportal.feedback.githubRepo;
+    var githubOwner = sails.config.opsportal.feedback.githubOwner;
     
     // Data submitted by the Feedback widget
     var feedback = req.param('feedback');
@@ -115,6 +117,7 @@ module.exports = {
             data = JSON.parse(feedback);
         } catch(err) {
             console.log('Invalid feedback format', err, feedback);
+            res.status(400);
             res.send(err);
             return;
         }
@@ -129,6 +132,7 @@ module.exports = {
     }
     else {
         console.log('Invalid feedback format', feedback);
+        res.status(400);
         res.send(new Error('Invalid feedback format'));
         return;
     }
@@ -190,15 +194,15 @@ module.exports = {
         // Post feedback issue to GitHub
         function(next) {
             var title = 'Feedback';
-            // Use the first 15 chars of the first sentence.
-            var beginning = data.note.trim().match(/^[\w\s]{1,15}/i);
+            // Use the first 40 chars of the first sentence.
+            var beginning = data.note.trim().match(/^[\w\s]{1,40}/i);
             if (beginning) {
                 title = beginning[0];
             }
             
             github.issues.create({
-                repo: 'appdev-opsportal',
-                user: 'appdevdesigns',
+                repo: githubRepo,
+                user: githubOwner,
                 title: title,
                 body: html
             }, function(err) {
@@ -210,6 +214,7 @@ module.exports = {
     ], function(err) {
         if (err) {
             console.log(err);
+            res.status(500);
             res.send(err);
         } else {
             res.send('1');
