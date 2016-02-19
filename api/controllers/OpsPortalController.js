@@ -15,7 +15,12 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+var fs = require('fs');
+var path = require('path');
+var crypto = require('crypto');
+
 var AD = require('ad-utils');
+var GitHubApi = require('github');
 
 module.exports = {
 
@@ -27,19 +32,19 @@ module.exports = {
    * (specific to OpsPortalConfigController)
    */
 
-  _config: {}
+  _config: {},
 
   // Fixture Data:
   // Use this for initial design and testing
-  , config:function(req, res) {
-
+  config:function(req, res) {
+      
       ADCore.comm.success(res, res.appdev.opsportalconfig);
-  }
+  },
 
 
 
 
-  , requirements:function(req, res) {
+  requirements: function(req, res) {
 
 
       res.setHeader('content-type', 'application/javascript');
@@ -47,18 +52,19 @@ module.exports = {
 
       //// tools will be gathered from config/opsportal.js
       //// and matched against a user's permissions.
-/*
-      var tools = [
-                   'HrisAdminObjects'
-                   ];
-*/
+      
+      /*
+            var tools = [
+                         'HrisAdminObjects'
+                         ];
+      */
       var tools = [];
       var data = res.appdev.opsportalconfig;
-      for (var d=0; d< data.tools.length; d++){
-          tools.push( data.tools[d].controller)
+      for (var d=0; d< data.tools.length; d++) {
+          tools.push(data.tools[d].controller);
       }
-
-
+      
+      
       res.view({
           environment:sails.config.environment,
           listTools:tools,
@@ -84,6 +90,132 @@ module.exports = {
         AD.log('<yellow>warn:</yellow> socket.id not registered. ');
       }
       ADCore.comm.success(res, { session:'registered'});
+  },
+  
+  
+  /**
+   * POST /opsportal/feedback
+   *
+   * This is the back end for the Feedback widget, which will submit the
+   * feedback as a GitHub issue.
+   */
+  feedback: function(req, res) {
+    // Settings
+    var imageBasePath = sails.config.opsportal.feedback.imageBasePath;
+    var imageBaseURL = sails.config.opsportal.feedback.imageBaseURL;
+    var githubUsername = sails.config.opsportal.feedback.githubUsername;
+    var githubPassword = sails.config.opsportal.feedback.githubPassword;
+    
+    // Data submitted by the Feedback widget
+    var feedback = req.param('feedback');
+    var data;
+    if (typeof feedback == 'string') {
+        // JSON string not yet parsed
+        try {
+            data = JSON.parse(feedback);
+        } catch(err) {
+            console.log('Invalid feedback format', err, feedback);
+            res.send(err);
+            return;
+        }
+    } 
+    else if (
+        // JSON string was parsed by sails
+        typeof feedback == 'object'
+        && feedback.browser
+        && feedback.img
+    ) {
+        data = feedback;
+    }
+    else {
+        console.log('Invalid feedback format', feedback);
+        res.send(new Error('Invalid feedback format'));
+        return;
+    }
+    
+    var github = new GitHubApi({
+        version: '3.0.0',
+    });
+    github.authenticate({
+        type: 'basic',
+        username: githubUsername,
+        password: githubPassword
+    });
+    
+    var html = '';
+    
+    async.series([
+        // Save image to file system
+        function(next) {
+            var png = data.img.replace(/^data:image\/png;base64,/, '');
+            var filename, filepath;
+            
+            var generateName = function() {
+                filename = 'feedback-'
+                    + crypto.randomBytes(32).toString('hex')
+                    + '.png';
+                filepath = path.join(imageBasePath, filename);
+                // Keep generating random names until we get a unique one
+                fs.exists(filepath, function(exists) {
+                    if (exists) generateName();
+                    else {
+                        generated();
+                    }
+                });
+            };
+            
+            var generated = function() {
+                data.imageURL = path.join(imageBaseURL, filename);
+                fs.writeFile(filepath, png, 'base64', next);
+            }
+            
+            generateName();
+        },
+        
+        // Render feedback HTML
+        function(next) {
+            data.guid = req.user.GUID();
+            data.locals = {};
+            data.layout = false;
+            
+            sails.renderView('appdev-opsportal/opsportal/feedback', data,
+                function(err, rendered) {
+                    if (err) return next(err);
+                    html = rendered;
+                    next();
+                }
+            )
+        },
+        
+        // Post feedback issue to GitHub
+        function(next) {
+            var title = 'Feedback';
+            // Use the first 15 chars of the first sentence.
+            var beginning = data.note.trim().match(/^[\w\s]{1,15}/i);
+            if (beginning) {
+                title = beginning[0];
+            }
+            
+            github.issues.create({
+                repo: 'appdev-opsportal',
+                user: 'appdevdesigns',
+                title: title,
+                body: html
+            }, function(err) {
+                if (err) return next(err);
+                next();
+            });
+        }
+        
+    ], function(err) {
+        if (err) {
+            console.log(err);
+            res.send(err);
+        } else {
+            res.send('1');
+        }
+    });
+    
   }
 
 

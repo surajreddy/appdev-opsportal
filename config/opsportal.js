@@ -15,6 +15,25 @@ module.exports.opsportal = {
   },
 
 
+  // Settings for the Feedback widget
+  feedback: {
+    enabled: false,
+    
+    // The filesystem location where screenshot images will be saved.
+    // This should be somewhere that a webserver serves files from.
+    // e.g. '/data/www/screenshots/'
+    imageBasePath: '',
+    
+    // The public URL for accessing the saved screenshot image.
+    // e.g. 'http://example.com/screenshots/'
+    imageBaseURL: '',
+    
+    // The GitHub user account that the feedback will be posted under.
+    githubUsername: '',
+    githubPassword: ''
+  },
+  
+  
   // The ops portal is broken down into specific "areas".  Each area shows up
   // as a menu option on the Ops Portal [Menu] list.
   areas: [

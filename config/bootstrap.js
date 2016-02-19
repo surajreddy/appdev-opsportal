@@ -14,3 +14,19 @@ module.exports = function (cb) {
 	AD.module.permissions(path.join(__dirname, '..', 'setup', 'permissions'), cb);
 
 };
+
+// Add CSRF route exclusion
+if (sails.config.csrf) {
+    
+    var csrf = sails.config.csrf;
+    csrf.routesDisabled = csrf.routesDisabled || '';
+    
+    if (csrf.routesDisabled == '-') {
+        csrf.routesDisabled = '';
+    }
+    else if (csrf.routesDisabled) {
+        csrf.routesDisabled += ',';
+    }
+    csrf.routesDisabled += '/opsportal/feedback';
+    
+}
