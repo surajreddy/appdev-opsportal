@@ -35,7 +35,7 @@ module.exports = function(req, res, next) {
     var data = {
             areas:areas,
             tools:tools,
-            feedback: config.feedback.enabled || false
+            feedback: (config.feedback && config.feedback.enabled) || false
     };
 
 
