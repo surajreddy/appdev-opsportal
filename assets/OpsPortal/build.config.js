@@ -10,6 +10,8 @@ module.exports = {
     "bundle": ['opstools/RBAC'],
     "meta": {
 		"js/bootbox.min": {
+			"exports": "bootbox",
+			"format": "global",
 			"sideBundle": true
 		},
         "OpsPortal/OpsPortal": {
