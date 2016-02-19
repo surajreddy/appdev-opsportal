@@ -37,7 +37,6 @@ steal(
         'webix.js',
         'webix.css',
         
-        
         // "bootstrapValidator.css",
         'bootbox.js',
         // 'notify.js',
@@ -57,7 +56,10 @@ steal(
         // "bootstrapValidator.js",
         'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
         'OpsPortal/controllers/OpsPortal.js',
-        'site/labels/OpsPortal.js'
+        'site/labels/OpsPortal.js',
+        
+        'feedback/feedback.min.css',
+        'feedback/feedback.min.js'
         
 ).then(function(){
 

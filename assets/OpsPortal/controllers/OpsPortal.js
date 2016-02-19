@@ -21,8 +21,15 @@ steal(
         // 'js/jquery.sidr.min.js',
         'opsportal/requirements.js',     // this returns the steal() for loading each OpsTool
 // ).then(
-       '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-       '//OpsPortal/views/OpsPortal/taskList.ejs',
+        
+        '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
+        '//OpsPortal/views/OpsPortal/taskList.ejs',
+        
+        '//feedback/tpl.highlighter.ejs',
+        '//feedback/tpl.overview.ejs',
+        '//feedback/tpl.submitSuccess.ejs',
+        '//feedback/tpl.submitError.ejs',
+        
 function(){
 
 
@@ -98,9 +105,7 @@ function(){
             };
             AD.ui.jQuery(document).ready(sizeContent);
             AD.ui.jQuery(window).resize(sizeContent);
-
-
-
+            
 			// display progress bar as tools load
 			//this.progress(80, $('#opsportal-loading'))
             
@@ -198,6 +203,36 @@ function(){
 
             AD.lang.label.translate(this.portalPopup);  // translate the current OpsPortal Labels
         },
+        
+        
+        initFeedback: function() {
+            
+            var labels = {
+                t: function(key) {
+                    return AD.lang.label.getLabel(key) || key;
+                }
+            };
+            var templates = {
+                highlighter: can.view('//feedback/tpl.highlighter.ejs', labels),
+                overview: can.view('//feedback/tpl.overview.ejs', labels),
+                submitSuccess: can.view('//feedback/tpl.submitSuccess.ejs', labels),
+                submitError: can.view('//feedback/tpl.submitError.ejs', labels),
+            };
+            for (var key in templates) {
+                // can.view produces a document fragment. We need it to be a
+                // plaintext string.
+                templates[key] = templates[key].firstChild.innerHTML;
+            }
+            
+            $.feedback({
+                ajaxURL: '/opsportal/feedback',
+                html2canvasURL: '/feedback/html2canvas.min.js',
+                postHTML: false,
+                tpl: templates,
+                initButtonText: labels.t('Feedback')
+            });
+            
+        },
 
 
 
@@ -217,6 +252,12 @@ function(){
 
             // Now show our Portal:
             this.portalPopup.show();
+            
+            // Add the Feedback widget
+            if (this.isFeedbackEnabled) {
+                this.initFeedback();
+            }
+            
             this.resize();
 
         },
@@ -263,7 +304,9 @@ console.log('//// resize: window.height:'+hWindow+' masthead.outer:'+hMasthead);
             AD.ui.loading.completed(1);
 
             AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
-
+                
+                self.isFeedbackEnabled = data.feedback || false;
+                
                 AD.ui.loading.completed(1);  // just to show we have loaded the config.
                 if (err) {
 
