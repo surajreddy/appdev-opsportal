@@ -1,17 +1,22 @@
 module.exports = {
     "map": {
         "FilteredBootstrapTable": "OpsPortal/controllers/FilteredBootstrapTable",
-        "OpsButtonBusy": "OpsPortal/classes/OpsButtonBusy"
+        "OpsButtonBusy": "OpsPortal/classes/OpsButtonBusy",
+		"bootbox": "js/bootbox.min"
     },
     "paths": {
         "opstools/RBAC": "opstools/RBAC/RBAC.js",
     },
     "bundle": ['opstools/RBAC'],
     "meta": {
+		"js/bootbox.min": {
+			"sideBundle": true
+		},
         "OpsPortal/OpsPortal": {
             "deps": [
                 'jquery',
-		'can',
+				'can',
+				"bootbox",
 
                 'js/GenericList',
 
