@@ -44,6 +44,7 @@ steal(
         'FilteredBootstrapTable.js',
         'OpsButtonBusy.js',
         'OpsWebixDataCollection.js',
+        'OpsWebixForm.js',
         'font-awesome.css'
         
 ).then(

@@ -47,6 +47,7 @@ module.exports={
         "OpsButtonBusy.js" : "OpsPortal/classes/OpsButtonBusy.js",
         "OpsWebixDataCollection.js" : "OpsPortal/classes/OpsWebixDataCollection.js",
         "OpsWebixSearch.js" : "OpsPortal/classes/OpsWebixSearch.js",
+        "OpsWebixForm.js" : "OpsPortal/classes/OpsWebixForm.js",
 
         "webix.js" : "js/webix/webix.js",
         "webix.css" : "js/webix/webix.css",
