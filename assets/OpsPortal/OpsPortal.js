@@ -3,88 +3,99 @@
 //     waits: !1,
 //     has: 'js/jquery.min.js canjs/can.jquery.js appdev/ad.js js/OpenAjax.js appdev/comm/hub.js appdev/util/uuid.js js/async.js appdev/util/async.js appdev/config/config.js appdev/model/model.js appdev/labels/lang.js appdev/labels/label.js appdev/sal/web-jquery.js appdev/comm/service.js js/dependencies/sails.io.js appdev/comm/socket.js appdev/widgets/ad_ui_reauth/ad_ui_reauth.css appdev/widgets/ad_ui_reauth/ad_ui_reauth.js appdev/auth/reauth.js appdev/UIController.js appdev/control/control.js appdev/appdev.js'.split( ' ' )
 // } );
-steal(
-        'appdev',
-        'jquery'
-).then(
-        function() {
 
-            AD.ui.loading.attach('#portal');
-            AD.ui.loading.text(' ... ');
-            AD.ui.loading.resources(19);  // increase the number of resources to load
+System.import('appdev').then(function () {
+    steal.import('appdev/ad').then(function () {
+        AD.ui.loading.attach('#portal');
+        AD.ui.loading.text(' OpsPortal ...');
+        AD.ui.loading.resources(19);  // increase the number of resources to load
 
-        }
-).then(
-        'jquery-ui.js'
-).then(
-        function() {
+        loadJqueryUi();
+    })
+});
+
+function loadJqueryUi() {
+    steal.import('jquery-ui')
+        .then(function () {
+
             // Change JQueryUI plugin names to fix name collision 
             // with Bootstrap.
             $.widget.bridge('uitooltip', $.ui.tooltip);
-            $.widget.bridge('uibutton', $.ui.button);        
-        },
-        'bootstrap.js',
+            $.widget.bridge('uibutton', $.ui.button);
+
+            loadBootstrapStyle();
+        });
+}
+
+function loadBootstrapStyle() {
+    steal.import('bootstrap',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
         'styles/jquery.sidr.dark.css',
-        'moment.js',
-        'js/jquery.sidr.min.js',
+        'moment',
+        'js/jquery.sidr.min',
         'bootstrap-datetimepicker.css',
-        // 'styles/bootstrap-wijmo.css',
-        // 'jquery-wijmo.css',
-        // 'wijmo-pro.css',
-        // 'wijmo-open.js',
-        'webix.js',
-        'webix.css',
+'webix.js',
+'webix.css',
+
         
-        // "bootstrapValidator.css",
-        'bootbox.js',
-        // 'notify.js',
-        // 'GenericList.js',        
-        'FilteredBootstrapTable.js',
-        'OpsButtonBusy.js',
-        'OpsWebixDataCollection.js',
-        'OpsWebixForm.js',
-        'font-awesome.css'
-        
-).then(
-        function(){
-            AD.ui.loading.completed(12); // this many have just been completed.
-        },
-        "bootstrap-table.js",
+    // "bootstrapValidator.css",
+        'bootbox',
+    // 'notify.js',
+    // 'GenericList.js',
+        'FilteredBootstrapTable',
+        'OpsButtonBusy',
+'OpsWebixDataCollection.js',
+'OpsWebixForm.js',
+        'font-awesome.css').then(
+            function () {
+                loadBootstrapPlugins();
+            });
+}
+
+function loadBootstrapPlugins() {
+    AD.ui.loading.completed(12); // this many have just been completed.
+    
+    steal.import(
+        "bootstrap-table",
         "bootstrap-table.css",
+
         'webix-opsportal.js',           // theme for webix
-        // "bootstrapValidator.js",
-        'bootstrap-datetimepicker.js',  // <<--- needs moment.js loaded first.
-        'OpsPortal/controllers/OpsPortal.js',
-        'site/labels/OpsPortal.js',
+
+    // "bootstrapValidator.js",
+        'bootstrap-datetimepicker', // <<--- needs moment.js loaded first.
+        'OpsPortal/controllers/OpsPortal',
         
         'feedback/feedback.min.css',
-        'feedback/feedback.min.js'
+        'feedback/feedback.min.js',
         
-).then(function(){
+        'site/labels/OpsPortal'
+        )
+        .then(function () {
+            setupSocket();
+        });
+}
+
+function setupSocket() {
 
     AD.ui.loading.completed(7);  // 
 
-//// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
-//// TODO: or scan for any elements with appdev-opsportal="true" attribute
-//// TODO: or scan the <scripts  opsportal-element="#divID" ... >
+    //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
+    //// TODO: or scan for any elements with appdev-opsportal="true" attribute
+    //// TODO: or scan the <scripts  opsportal-element="#divID" ... >
 
     // attach our OpsPortal to this ID :
     new AD.controllers.OpsPortal.OpsPortal('#portal');
 
     // register our socket connection
-    AD.comm.socket.get({ url:'/opsportal/socket/register'})
-    .fail(function(err){
-        console.error(err);
-    })
-    .then(function(){
-        console.log('... OPSPORTAL:  socket registered.')
-    })
-
-});
-
-
+    AD.comm.socket.get({ url: '/opsportal/socket/register' })
+        .fail(function (err) {
+            console.error(err);
+        })
+        .then(function () {
+            console.log('... OPSPORTAL:  socket registered.')
+        });
+}
 
 
 // steal(

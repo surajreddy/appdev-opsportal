@@ -1,10 +1,8 @@
 // Dependencies
 steal(
-    "opstools/RBAC/models/PermissionAction.js"
-)
-
-// Initialization
-.then(function(){
+    "opstools/RBAC/models/PermissionAction.js",
+    // Initialization
+    function(){
 
 
     //Define the unit tests

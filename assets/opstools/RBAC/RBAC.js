@@ -1,8 +1,11 @@
 steal(
-        // List your Page's dependencies here:
-        'opstools/RBAC/controllers/RBAC.js',
-        'opstools/RBAC/RBAC.css',
-        '/site/labels/opstool-RBAC.js'
-).then(function(){
+// List your Page's dependencies here:
+    'site/labels/opstools-RBAC.js',
+    //'opstools/RBAC/RBAC.css',
+    function () {
+        steal.import('opstools/RBAC/controllers/RBAC')
+            .then(function () {
 
-});
+
+            });
+    });

@@ -1,12 +1,12 @@
 
 steal(
         // List your Controller's dependencies here:
-        'appdev',
-        '//styles/genericList.css',
-        '//js/GenListDOM.ejs',
-        '//js/GenListItem.ejs',
+        'styles/genericList.css',
+        'js/GenListDOM.ejs',
+        'js/GenListItem.ejs',
 function(){
-
+System.import('appdev').then(function() {
+    steal.import('can/control/control', 'appdev/ad').then(function() {
 
 
     AD.controllers.GenericList = can.Control.extend({
@@ -17,8 +17,8 @@ function(){
             this.options = AD.defaults({
                     dom_listarea:'.genlist-list',
                     notification_selected:null,
-                    templateDOM: '//js/GenListDOM.ejs',
-                    templateItem: '//js/GenListItem.ejs',
+                    templateDOM: '/js/GenListDOM.ejs',
+                    templateItem: '/js/GenListItem.ejs',
                     title: 'List',
                     onAdd:null,
                     onEdit:null,
@@ -183,4 +183,6 @@ function(){
 ////  the model on '.genlist-item click'
 ////  - add in notifications: notify_on_select
 ////
+});    
+});
 });

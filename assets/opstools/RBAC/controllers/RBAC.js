@@ -1,36 +1,41 @@
 /* global AD */
 
 steal(
-        // List your Controller's dependencies here:
-        'appdev',
-        function() {
-            AD.ui.loading.resources(8);
-        },
-        'OpsPortal/classes/OpsTool.js',
-        'opstools/RBAC/models/SiteUser.js',
+    // List your Controller's dependencies here:
+    'opstools/RBAC/models/SiteUser.js',
 
-        // 'opstools/RBAC/models/Permission.js',
-        // 'opstools/RBAC/models/PermissionAction.js',
-        'opstools/RBAC/models/PermissionRole.js',
-        'opstools/RBAC/models/PermissionScope.js',
+    // 'opstools/RBAC/models/Permission.js',
+    // 'opstools/RBAC/models/PermissionAction.js',
+    'opstools/RBAC/models/PermissionRole.js',
+    'opstools/RBAC/models/PermissionScope.js',
 
+    'opstools/RBAC/controllers/Users.js',
+    'opstools/RBAC/controllers/Roles.js',
 
-        'opstools/RBAC/controllers/Users.js',
-        'opstools/RBAC/controllers/Roles.js',
+    'opstools/RBAC/views/RBAC/RBAC.ejs',
+    function () {
+        AD.ui.loading.resources(12);
 
-        '//opstools/RBAC/views/RBAC/RBAC.ejs',
-function(){
-
-    AD.ui.loading.completed(8);
+        System.import('can').then(function () {
+            steal.import(
+                'can/construct/construct',
+                'can/control/control',
+                'appdev/ad',
+                'appdev/control/control',
+                'OpsPortal/classes/OpsTool'
+                ).then(function () {
+                    console.log('RBAC STart');
+                    
+                    AD.ui.loading.completed(12);
     
-    //
-    // RBAC 
-    // 
-    // This is the OpsPortal Roles Based Access Control interface.
-    //
-    // This RBAC Controller is responsible for setting up the Application's
-    // subcontrollers and managing the interactions between them.
-    //
+                    //
+                    // RBAC 
+                    // 
+                    // This is the OpsPortal Roles Based Access Control interface.
+                    //
+                    // This RBAC Controller is responsible for setting up the Application's
+                    // subcontrollers and managing the interactions between them.
+                    //
 
 
 
@@ -40,231 +45,230 @@ function(){
 //// + Grid Heights: scale grids to match available height
 
 
-    // Namespacing conventions:
-    // AD.Control.extend('[application].[controller]', [{ static },] {instance} );
-    AD.Control.OpsTool.extend('RBAC', { 
+                    // Namespacing conventions:
+                    // AD.Control.extend('[application].[controller]', [{ static },] {instance} );
+                    AD.Control.OpsTool.extend('RBAC', { 
 
 
-        CONST: {
+                        CONST: {
 
-        }, 
-
-
-        init: function (element, options) {
-            var self = this;
-            options = AD.defaults({
-                    templateDOM: '//opstools/RBAC/views/RBAC/RBAC.ejs'
-            }, options);
-            this.options = options;
-
-            // Call parent init
-            // AD.classes.UIController.prototype.init.apply(this, arguments);
-            this._super(element, options);
-
-            this.portals = {};  // a hash of portals managed by RBAC:
-
-            this.data = {};     // hold any data we are working with.
-            this.data.users = [];
-            this.data.permissions = [];  // all permission fields
-            this.data.roles = [];   // all the roles in the system
-            this.data.scopes = [];  // all the scopes in the db
-
-            this.data.hasBeenShown  = false;     // has this controller been shown yet?
-            this.data.lastPortalShown = 'Users'; // what was the last portal displayed?
+                        }, 
 
 
-            this.data.resize = {};
-            this.data.resize.menuBar = null;
+                        init: function (element, options) {
+                            var self = this;
+                            options = AD.defaults({
+                                    templateDOM: '//opstools/RBAC/views/RBAC/RBAC.ejs'
+                            }, options);
+                            this.options = options;
+
+                            // Call parent init
+                            // AD.classes.UIController.prototype.init.apply(this, arguments);
+                            this._super(element, options);
+
+                            this.portals = {};  // a hash of portals managed by RBAC:
+
+                            this.data = {};     // hold any data we are working with.
+                            this.data.users = [];
+                            this.data.permissions = [];  // all permission fields
+                            this.data.roles = [];   // all the roles in the system
+                            this.data.scopes = [];  // all the scopes in the db
+
+                            this.data.hasBeenShown  = false;     // has this controller been shown yet?
+                            this.data.lastPortalShown = 'Users'; // what was the last portal displayed?
 
 
-            this.initDOM();
+                            this.data.resize = {};
+                            this.data.resize.menuBar = null;
 
 
-            this.loadData();
-
-            // // default to User portal:
-            this.portalShow('users');
+                            this.initDOM();
 
 
-            this.translate(); // translate the labels on the tool
-        },
+                            this.loadData();
+
+                            // // default to User portal:
+                            this.portalShow('users');
 
 
-
-        initDOM: function () {
-            var _this = this;
-
-            this.element.html(can.view(this.options.templateDOM, {} ));
-
-            
-            var controllers = {
-                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{} },
-                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{} },
-                // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
-            }
-
-            var initPortal = function(key, ref, el, options) {
-                var Controller = AD.Control.get(ref);
-                _this.portals[key] = new Controller( el, options );
-            }
-
-            for(var cKey in controllers) {
-                var parts = cKey.split('.');
-                var portal = parts.pop();
-                
-                initPortal(portal, cKey, controllers[cKey].el, controllers[cKey].opt);
-            }
-
-        },
+                            this.translate(); // translate the labels on the tool
+                        },
 
 
 
-        loadUsers:function() {
-            var _this = this;
+                        initDOM: function () {
+                            var _this = this;
 
-            console.log('... loading Users');
-            var User = AD.Model.get('opstools.RBAC.SiteUser');
-            User.findAll()
-            .fail(function(err){
-                AD.error.log('RBAC:RBAC: Error loading Users', {error:err});
-            })
-            .then(function(list){
-                _this.data.users = list;
-                _this.portals.Users.loadUsers(list);
-            });
+                            this.element.html(can.view(this.options.templateDOM, {} ));
 
-        },
+                            
+                            var controllers = {
+                                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{} },
+                                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{} },
+                                // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
+                            }
 
+                            var initPortal = function(key, ref, el, options) {
+                                var Controller = AD.Control.get(ref);
+                                _this.portals[key] = new Controller( el, options );
+                            }
 
+                            for(var cKey in controllers) {
+                                var parts = cKey.split('.');
+                                var portal = parts.pop();
+                                
+                                initPortal(portal, cKey, controllers[cKey].el, controllers[cKey].opt);
+                            }
 
-        loadData: function() {
-            var _this = this;
-
-
-            this.loadUsers();
-
-
-            var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
-            Roles.findAll()
-            .fail(function(err){
-                AD.error.log('RBAC:RBAC: Error loading Roles', {error:err});
-            })
-            .then(function(list){
-                // make sure they are all translated.
-                list.forEach(function(l){
-                    l.translate();
-                })
-                _this.portals.Users.loadRoles(list);
-                _this.portals.Roles.loadRoles(list);
-                _this.data.roles = list;    
-            });
-
-
-            var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
-            Scopes.findAll()
-            .fail(function(err){
-                AD.error.log('RBAC:RBAC: Error loading scopes', {error:err});
-            })
-            .then(function(list){
-                // // make sure they are all translated.
-                // list.forEach(function(l){
-                //     l.translate();
-                // })
-                _this.portals.Users.loadScopes(list);
-
-                _this.data.scopes = list;    // all the 
-            });
-
-
-        },
+                        },
 
 
 
-        portalShow: function(portalKey) {
+                        loadUsers:function() {
+                            var _this = this;
 
-            this.element.find('#topmenu li.selected').removeClass('selected');
+                            console.log('... loading Users');
+                            var User = AD.Model.get('opstools.RBAC.SiteUser');
+                            User.findAll()
+                            .fail(function(err){
+                                AD.error.log('RBAC:RBAC: Error loading Users', {error:err});
+                            })
+                            .then(function(list){
+                                _this.data.users = list;
+                                _this.portals.Users.loadUsers(list);
+                            });
 
-            for (var p in this.portals) {
+                        },
+
+
+
+                        loadData: function() {
+                            var _this = this;
+
+
+                            this.loadUsers();
+
+
+                            var Roles = AD.Model.get('opstools.RBAC.PermissionRole');
+                            Roles.findAll()
+                            .fail(function(err){
+                                AD.error.log('RBAC:RBAC: Error loading Roles', {error:err});
+                            })
+                            .then(function(list){
+                                // make sure they are all translated.
+                                list.forEach(function(l){
+                                    l.translate();
+                                })
+                                _this.portals.Users.loadRoles(list);
+                                _this.portals.Roles.loadRoles(list);
+                                _this.data.roles = list;    
+                            });
+
+
+                            var Scopes = AD.Model.get('opstools.RBAC.PermissionScope');
+                            Scopes.findAll()
+                            .fail(function(err){
+                                AD.error.log('RBAC:RBAC: Error loading scopes', {error:err});
+                            })
+                            .then(function(list){
+                                // // make sure they are all translated.
+                                // list.forEach(function(l){
+                                //     l.translate();
+                                // })
+                                _this.portals.Users.loadScopes(list);
+
+                                _this.data.scopes = list;    // all the 
+                            });
+
+
+                        },
+
+
+
+                        portalShow: function(portalKey) {
+
+                            this.element.find('#topmenu li.selected').removeClass('selected');
+
+                            for (var p in this.portals) {
 // TODO: open this up when we implement scopes.
 if (portalKey!='Scopes'){
-                if (p.toLowerCase() == portalKey.toLowerCase()) {
+                                if (p.toLowerCase() == portalKey.toLowerCase()) {
 
-                    this.portals[p].show();
-                    this.data.lastPortalShown = p;
+                                    this.portals[p].show();
+                                    this.data.lastPortalShown = p;
 
-                    this.element.find('[rbac-menu="'+p+'"]').addClass('selected');
+                                    this.element.find('[rbac-menu="'+p+'"]').addClass('selected');
 
-                } else {
-                    this.portals[p].hide();
-                }
+                                } else {
+                                    this.portals[p].hide();
+                                }
 }
-            }
+                            }
 
-        },
-
-
-
-        resize:function(data) {
-            this._super();
-
-            var totalHeight = data.height;
-
-
-            // update the containing Div to height
-            // this div is total Height, since it contains the menuBar:
-            this.element.css('height', totalHeight + 'px');
+                        },
 
 
 
-            // find the height of the menu bar (selected item has a dropdown arrow)
-            // this shouldn't change, so only do it 1x
-            if (!this.data.resize.menuBar) {
+                        resize:function(data) {
+                            this._super();
 
-                var selectedMenuItem = this.element.find('li.selected.rbac-menu');
-                this.data.resize.menuBar = selectedMenuItem.outerHeight(true);
-            }
+                            var totalHeight = data.height;
 
 
-            // Total area for the available space of the tool, will be the
-            // givenheight - (heightOfMenuBar)
-            this.data.resize.available = totalHeight - this.data.resize.menuBar;
+                            // update the containing Div to height
+                            // this div is total Height, since it contains the menuBar:
+                            this.element.css('height', totalHeight + 'px');
 
 
 
+                            // find the height of the menu bar (selected item has a dropdown arrow)
+                            // this shouldn't change, so only do it 1x
+                            if (!this.data.resize.menuBar) {
 
-            // send  displayed portal a resize(availableHeight);
-
-            if (this.element.is(':visible')) {
-                if (!this.data.hasBeenShown) {
-
-                    // tell our portal to show() itself:
-                    this.portalShow(this.data.lastPortalShown);
-                    this.data.hasBeenShown = true;
-                }
-            }
+                                var selectedMenuItem = this.element.find('li.selected.rbac-menu');
+                                this.data.resize.menuBar = selectedMenuItem.outerHeight(true);
+                            }
 
 
-            // pass a resize() call to the currently shown portal:
-            var portal = this.portals[this.data.lastPortalShown];
-            if (portal.resize) {
-                portal.resize( { height: this.data.resize.available } );
-            }
-            
-        },
+                            // Total area for the available space of the tool, will be the
+                            // givenheight - (heightOfMenuBar)
+                            this.data.resize.available = totalHeight - this.data.resize.menuBar;
+
+
+                            // send  displayed portal a resize(availableHeight);
+
+                            if (this.element.is(':visible')) {
+                                if (!this.data.hasBeenShown) {
+
+                                    // tell our portal to show() itself:
+                                    this.portalShow(this.data.lastPortalShown);
+                                    this.data.hasBeenShown = true;
+                                }
+                            }
+
+
+                            // pass a resize() call to the currently shown portal:
+                            var portal = this.portals[this.data.lastPortalShown];
+                            if (portal.resize) {
+                                portal.resize( { height: this.data.resize.available } );
+                            }
+                            
+                        },
 
 
 
-        '.rbac-menu click': function ($el, ev) {
+                        '.rbac-menu click': function ($el, ev) {
 
-            var portal = $el.attr('rbac-menu');
+                            var portal = $el.attr('rbac-menu');
 console.log('... show portal:', portal);
-            this.portalShow(portal);
+                            this.portalShow(portal);
 
-            ev.preventDefault();
-        }
+                            ev.preventDefault();
+                        }
 
 
+                    });
+
+                });
+        });
     });
-
-
-});
