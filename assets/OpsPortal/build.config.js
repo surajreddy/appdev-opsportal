@@ -7,7 +7,7 @@ module.exports = {
 		"bootstrap-table": "js/bootstraptable/bootstrap-table",
 		"bootstrapValidator": "js/bootstrapValidator.min",
 		"bootbox": "js/bootbox.min",
-		"webix": "js/webix/webix.js"
+		"webix": "js/webix/webix"
     },
     "paths": {
         "opstools/RBAC": "opstools/RBAC/RBAC.js",
@@ -43,6 +43,7 @@ module.exports = {
 
         "moment": "js/moment.min.js",
 
+        "feedback": "feedback/feedback.min.js",
 
         // "notify" : "js/notify.min.js",
 
@@ -59,6 +60,13 @@ module.exports = {
     },
     "bundle": ['opstools/RBAC'],
     "meta": {
+		'feedback/feedback.min': {
+			"deps": ['js/jquery.min',
+				'feedback/feedback.min.css'
+			],
+			"format": "global",
+			"sideBundle": true
+		},
 		"js/jquery-ui.min": {
 			"deps": ['js/jquery.min'],
 			"format": "global",

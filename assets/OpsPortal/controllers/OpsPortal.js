@@ -214,10 +214,10 @@ steal(
                                 }
                             };
                             var templates = {
-                                highlighter: can.view('//feedback/tpl.highlighter.ejs', labels),
-                                overview: can.view('//feedback/tpl.overview.ejs', labels),
-                                submitSuccess: can.view('//feedback/tpl.submitSuccess.ejs', labels),
-                                submitError: can.view('//feedback/tpl.submitError.ejs', labels),
+                                highlighter: can.view('/feedback/tpl.highlighter.ejs', labels),
+                                overview: can.view('/feedback/tpl.overview.ejs', labels),
+                                submitSuccess: can.view('/feedback/tpl.submitSuccess.ejs', labels),
+                                submitError: can.view('/feedback/tpl.submitError.ejs', labels),
                             };
                             for (var key in templates) {
                                 // can.view produces a document fragment. We need it to be a

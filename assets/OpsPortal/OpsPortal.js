@@ -67,7 +67,7 @@ function loadBootstrapPlugins() {
         'OpsPortal/controllers/OpsPortal',
         
         'feedback/feedback.min.css',
-        'feedback/feedback.min.js',
+        'feedback/feedback.min',
         
         'site/labels/OpsPortal'
         )
