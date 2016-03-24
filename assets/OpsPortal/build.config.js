@@ -1,15 +1,37 @@
 module.exports = {
     "map": {
-        "FilteredBootstrapTable": "OpsPortal/controllers/FilteredBootstrapTable",
+		"FilteredBootstrapTable": "OpsPortal/controllers/FilteredBootstrapTable",
         "OpsButtonBusy": "OpsPortal/classes/OpsButtonBusy",
-		"typeahead": "js/typeahead.jquery.min",
-		"moment": "js/moment.min",
-		"bootstrap-table": "js/bootstraptable/bootstrap-table",
-		"bootstrapValidator": "js/bootstrapValidator.min",
-		"bootbox": "js/bootbox.min",
-		"webix": "js/webix/webix"
+        "bootbox": "js/bootbox.min",
+        "jquery": "js/jquery.min",
+        "jquery/jquery": "js/jquery.min",
+        "jquery-ui": "js/jquery-ui.min",
+        "selectivity": "js/selectivity/selectivity-full.min",
+        "selectivity.css": "js/selectivity/selectivity-full.min.css",
+        "bootstrap": "js/bootstrap/js/bootstrap.min",
+        "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
+        "bootstrap-datetimepicker": "js/bootstrap/js/bootstrap-datetimepicker.min",
+        "bootstrap-datetimepicker.css": "styles/bootstrap-datetimepicker.min.css",
+        "font-awesome.css": "styles/font-awesome.css",
+        "GenericList": "js/GenericList",
+        "bootstrap-table": "js/bootstraptable/bootstrap-table",
+        "bootstrap-table.css": "js/bootstraptable/bootstrap-table.css",
+        "bootstrapValidator": "js/bootstrapValidator.min",
+        "bootstrapValidator.css": "styles/bootstrapValidator.min.css",
+        "typeahead": "js/typeahead.jquery.min",
+        "moment": "js/moment.min",
+        "jsreports-all": "js/jsreports-all.min",
+        "dropzone": "js/dropzone/dropzone.min",
+        "dropzone.css": "js/dropzone/dropzone.min.css",
+        "async": "js/async",
+        "webix": "js/webix/webix",
+		"webix-opsportal": "js/webix/opsportal-skin"
     },
     "paths": {
+		"async": "js/async",
+        "jquery": "js/jquery.min.js",
+        "can": "can/can.js",
+
         "opstools/RBAC": "opstools/RBAC/RBAC.js",
         "jquery-ui": "js/jquery-ui.min.js",         // 'http://code.jquery.com/ui/1.11.0/jquery-ui.min.js' 
 
@@ -54,12 +76,72 @@ module.exports = {
         "OpsWebixSearch": "OpsPortal/classes/OpsWebixSearch.js",
         "OpsWebixForm": "OpsPortal/classes/OpsWebixForm.js",
 
-        "webix": "js/webix/webix.js",
+		"jquery-ui.js": "js/jquery-ui.min.js",
+        "opstools/HrisUserProfile": "opstools/HrisUserProfile/HrisUserProfile.js",
+		"bootstrap.js": "js/bootstrap/js/bootstrap.min.js",
+        "bootstrap-datetimepicker.js": "js/bootstrap/js/bootstrap-datetimepicker.min.js",
+        "GenericList.js": "js/GenericList.js",
+        "dropzone.js": "js/dropzone/dropzone.min.js",
+        "bootstrap-table.js": "js/bootstraptable/bootstrap-table.js",
+        "bootstrapValidator.js": "js/bootstrapValidator.min.js",
+        "bootbox.js": "js/bootbox.min.js",
+        "typeahead.js": "js/typeahead.jquery.min.js",
+        "moment.js": "js/moment.min.js",
+        "FilteredBootstrapTable.js": "OpsPortal/controllers/FilteredBootstrapTable.js",
+        "OpsButtonBusy.js": "OpsPortal/classes/OpsButtonBusy.js",
+        "OpsWebixDataCollection.js": "OpsPortal/classes/OpsWebixDataCollection.js",
+        "OpsWebixSearch.js": "OpsPortal/classes/OpsWebixSearch.js",
+        "OpsWebixForm.js": "OpsPortal/classes/OpsWebixForm.js",
+		
+		"webix.js": "js/webix/webix.js",
         "webix.css": "js/webix/webix.css",
-        "webix-opsportal": "js/webix/opsportal-skin.js"
+        "webix-opsportal.js": "js/webix/opsportal-skin.js"
     },
     "bundle": ['opstools/RBAC'],
     "meta": {
+		"can": {
+            "deps": [
+                "can/util/can",
+                "can/util/attr/attr",
+                "can/event/event",
+                "can/util/array/each",
+                "can/util/string/string",
+                "can/util/inserted/inserted",
+                "can/util/jquery/jquery",
+                "can/util/util",
+                "can/util/array/makeArray",
+                "can/util/domless/domless",
+                "can/util/bind/bind",
+                "can/map/bubble",
+                "can/util/object/isplain/isplain",
+                "can/map/map_helpers",
+                "can/util/string/string",
+                "can/construct/super/super",
+                "can/construct/construct",
+                "can/util/batch/batch",
+                "can/map/map",
+                "can/list/list",
+                "can/util/string/deparam/deparam",
+                "can/route/route",
+                "can/control/control",
+                "can/control/route/route",
+                "can/model/model",
+                "can/compute/read",
+                "can/compute/get_value_and_bind",
+                "can/compute/proto_compute",
+                "can/compute/compute",
+                "can/map/define/define"
+            ]
+        },
+		"js/jquery.min": {
+            "exports": "jQuery",
+            "format": "global",
+            "sideBundle": true
+        },
+		"js/dependencies/sails.io": {
+            "format": "global",
+            "sideBundle": true
+        },
 		'feedback/feedback.min': {
 			"deps": ['js/jquery.min',
 				'feedback/feedback.min.css'
@@ -80,9 +162,6 @@ module.exports = {
 		"js/bootstrap/js/bootstrap-datetimepicker.min": {
 			"deps": ['styles/bootstrap-datetimepicker.min.css'],
 			"format": "global",
-			"sideBundle": true
-		},
-		"styles/font-awesome.css": {
 			"sideBundle": true
 		},
 		"js/jquery.sidr.min": {
@@ -129,6 +208,9 @@ module.exports = {
 		"js/bootbox.min": {
 			"exports": "bootbox",
 			"format": "global",
+			"sideBundle": true
+		},
+		"styles/font-awesome.css": {
 			"sideBundle": true
 		},
 		"OpsPortal/OpsPortal": {
