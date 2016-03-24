@@ -24,7 +24,6 @@
   "dependencies": {
     "ad-utils": "git://github.com/appdevdesigns/ad-utils",
     "github": "0.2.4",
-    "appdev-core": "appdevdesigns/appdev-core",
     "async": "^1.5.2",
     "steal-tools": "^0.13.3"
   },
