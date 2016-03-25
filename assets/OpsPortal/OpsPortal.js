@@ -35,9 +35,8 @@ function loadBootstrapStyle() {
         'moment',
         'js/jquery.sidr.min',
         'bootstrap-datetimepicker.css',
-'webix.js',
-'webix.css',
 
+        'webix-opsportal',           // theme for webix
         
     // "bootstrapValidator.css",
         'bootbox',
@@ -45,8 +44,6 @@ function loadBootstrapStyle() {
     // 'GenericList.js',
         'FilteredBootstrapTable',
         'OpsButtonBusy',
-'OpsWebixDataCollection.js',
-'OpsWebixForm.js',
         'font-awesome.css').then(
             function () {
                 loadBootstrapPlugins();
@@ -60,7 +57,8 @@ function loadBootstrapPlugins() {
         "bootstrap-table",
         "bootstrap-table.css",
 
-        'webix-opsportal.js',           // theme for webix
+		'OpsWebixDataCollection.js',
+		'OpsWebixForm.js',
 
     // "bootstrapValidator.js",
         'bootstrap-datetimepicker', // <<--- needs moment.js loaded first.
