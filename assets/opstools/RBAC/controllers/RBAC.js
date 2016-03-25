@@ -22,7 +22,8 @@ steal(
                 'can/control/control',
                 'appdev/ad',
                 'appdev/control/control',
-                'OpsPortal/classes/OpsTool'
+                'OpsPortal/classes/OpsTool',
+				'site/labels/opstools-RBAC'
                 ).then(function () {
                     console.log('RBAC STart');
                     
