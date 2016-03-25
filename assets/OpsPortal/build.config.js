@@ -170,6 +170,7 @@ module.exports = {
 			"sideBundle": true
 		},
 		"js/dropzone/dropzone.min": {
+            "exports": "Dropzone",
 			"deps": ['js/dropzone/dropzone.min.css'],
 			"format": "global",
 			"sideBundle": true
