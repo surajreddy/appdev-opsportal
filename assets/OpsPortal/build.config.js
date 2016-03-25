@@ -223,7 +223,6 @@ module.exports = {
 				"bootstrap-table",
 				"bootstrapValidator",
 				"bootbox",
-				"webix",
 
 				'js/GenericList',
 

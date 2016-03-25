@@ -1,63 +1,54 @@
 
 steal(
-        // List your Controller's dependencies here:
-        'appdev',
+	// List your Controller's dependencies here:
+	function() {
+		System.import('webix-opsportal').then(function() {
 
-        'webix.js',
-        'webix.css',
-        'webix-opsportal.js',
+			// The OpsPortal will define a global namespace for our added utilities:
+			if (typeof AD.op == 'undefined') AD.op = {};
 
-//        'OpsPortal/models/Projects.js',
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-        // '//OpsPortal/views/OpsButtonBusy/OpsButtonBusy.ejs',
-function(){
+			/**
+			 * @class AD.op.WebixDatatable
+			 * @parent can.Control
+			 *
+			 * Middleware to merge a can.List with a Webix Datatable/Datagrid component.
+			 *
+			 * The webix datatable should respond to changes posted in the List.
+			 *
+			 */
+			AD.op.WebixDatatable = can.Control.extend({
+				// Static Properties
+			}, {
 
+					// Instance Properties:
 
-    // The OpsPortal will define a global namespace for our added utilities:
-    if (typeof AD.op == 'undefined') AD.op = {};
-    
-    /**
-     * @class AD.op.WebixDatatable
-     * @parent can.Control
-     *
-     * Middleware to merge a can.List with a Webix Datatable/Datagrid component.
-     *
-     * The webix datatable should respond to changes posted in the List.
-     *
-     */
-    AD.op.WebixDatatable = can.Control.extend({
-        // Static Properties
-    },{
+					init: function(element, options) {
+						var _this = this;
+						options = AD.defaults({
 
-        // Instance Properties:
+							webixConfig: {},     // passed directly to webix.datatable
 
-        init: function (element, options) {
-            var _this = this;
-            options = AD.defaults({
+						}, options);
+						this.options = options;
 
-                    webixConfig:{},     // passed directly to webix.datatable
+						// Call parent init
+						this._super(element, options);
 
-            }, options);
-            this.options = options;
-
-            // Call parent init
-            this._super(element, options);
-
-            this.initDOM();
-        },
+						this.initDOM();
+					},
 
 
-        initDOM: function () {
-            var _this = this;
+					initDOM: function() {
+						var _this = this;
 
 
 
 
-        }
+					}
 
 
 
-    });
+				});
 
-
-});
+		});
+	});
