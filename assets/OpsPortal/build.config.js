@@ -10,7 +10,7 @@ module.exports = {
         "selectivity.css": "js/selectivity/selectivity-full.min.css",
         "bootstrap": "js/bootstrap/js/bootstrap.min",
         "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
-        "bootstrap-datetimepicker": "js/bootstrap/js/bootstrap-datetimepicker.min",
+        "bootstrap-datetimepicker": "js/bootstrap/ext/bootstrap-datetimepicker.min",
         "bootstrap-datetimepicker.css": "styles/bootstrap-datetimepicker.min.css",
         "font-awesome.css": "styles/font-awesome.css",
         "GenericList": "js/GenericList",
@@ -37,7 +37,7 @@ module.exports = {
 
         "bootstrap": "js/bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
         "bootstrap.css": "js/bootstrap/css/bootstrap.min.css",
-        "bootstrap-datetimepicker": "js/bootstrap/js/bootstrap-datetimepicker.min.js",
+        "bootstrap-datetimepicker": "js/bootstrap/ext/bootstrap-datetimepicker.min.js",
         "bootstrap-datetimepicker.css": "styles/bootstrap-datetimepicker.min.css",
 
         // "wijmo-open"   : "js/jquery.wijmo-open.all.3.20142.45.min.js",   // 'http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js'
@@ -79,7 +79,7 @@ module.exports = {
 		"jquery-ui.js": "js/jquery-ui.min.js",
         "opstools/HrisUserProfile": "opstools/HrisUserProfile/HrisUserProfile.js",
 		"bootstrap.js": "js/bootstrap/js/bootstrap.min.js",
-        "bootstrap-datetimepicker.js": "js/bootstrap/js/bootstrap-datetimepicker.min.js",
+        "bootstrap-datetimepicker.js": "js/bootstrap/ext/bootstrap-datetimepicker.min.js",
         "GenericList.js": "js/GenericList.js",
         "dropzone.js": "js/dropzone/dropzone.min.js",
         "bootstrap-table.js": "js/bootstraptable/bootstrap-table.js",
@@ -159,7 +159,7 @@ module.exports = {
 			"format": "global",
 			"sideBundle": true
 		},
-		"js/bootstrap/js/bootstrap-datetimepicker.min": {
+		"js/bootstrap/ext/bootstrap-datetimepicker.min": {
 			"deps": ['styles/bootstrap-datetimepicker.min.css'],
 			"format": "global",
 			"sideBundle": true
