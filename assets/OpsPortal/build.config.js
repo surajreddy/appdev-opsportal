@@ -32,7 +32,6 @@ module.exports = {
         "jquery": "js/jquery.min.js",
         "can": "can/can.js",
 
-        "opstools/RBAC": "opstools/RBAC/RBAC.js",
         "jquery-ui": "js/jquery-ui.min.js",         // 'http://code.jquery.com/ui/1.11.0/jquery-ui.min.js' 
 
         "bootstrap": "js/bootstrap/js/bootstrap.min.js",  // for debugging: 'bootstrap/js/bootstrap.js'
@@ -97,7 +96,7 @@ module.exports = {
         "webix.css": "js/webix/webix.css",
         "webix-opsportal.js": "js/webix/opsportal-skin.js"
     },
-    "bundle": ['opstools/RBAC'],
+    "bundle": [],
     "meta": {
 		"can": {
             "deps": [
