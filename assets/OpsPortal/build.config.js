@@ -23,14 +23,13 @@ module.exports = {
         "jsreports-all": "js/jsreports-all.min",
         "dropzone": "js/dropzone/dropzone.min",
         "dropzone.css": "js/dropzone/dropzone.min.css",
-        "async": "js/async",
+        // "async": "js/async",
         "webix": "js/webix/webix",
 		"webix-opsportal": "js/webix/opsportal-skin"
     },
     "paths": {
-		"async": "js/async",
+		// "async": "js/async",
         "jquery": "js/jquery.min.js",
-        "can": "can/can.js",
 
         "jquery-ui": "js/jquery-ui.min.js",         // 'http://code.jquery.com/ui/1.11.0/jquery-ui.min.js' 
 
@@ -98,49 +97,49 @@ module.exports = {
     },
     "bundle": [],
     "meta": {
-		"can": {
-            "deps": [
-                "can/util/can",
-                "can/util/attr/attr",
-                "can/event/event",
-                "can/util/array/each",
-                "can/util/string/string",
-                "can/util/inserted/inserted",
-                "can/util/jquery/jquery",
-                "can/util/util",
-                "can/util/array/makeArray",
-                "can/util/domless/domless",
-                "can/util/bind/bind",
-                "can/map/bubble",
-                "can/util/object/isplain/isplain",
-                "can/map/map_helpers",
-                "can/util/string/string",
-                "can/construct/super/super",
-                "can/construct/construct",
-                "can/util/batch/batch",
-                "can/map/map",
-                "can/list/list",
-                "can/util/string/deparam/deparam",
-                "can/route/route",
-                "can/control/control",
-                "can/control/route/route",
-                "can/model/model",
-                "can/compute/read",
-                "can/compute/get_value_and_bind",
-                "can/compute/proto_compute",
-                "can/compute/compute",
-                "can/map/define/define"
-            ]
-        },
+		// "can": {
+  //           "deps": [
+  //               "can/util/can",
+  //               "can/util/attr/attr",
+  //               "can/event/event",
+  //               "can/util/array/each",
+  //               "can/util/string/string",
+  //               "can/util/inserted/inserted",
+  //               "can/util/jquery/jquery",
+  //               "can/util/util",
+  //               "can/util/array/makeArray",
+  //               "can/util/domless/domless",
+  //               "can/util/bind/bind",
+  //               "can/map/bubble",
+  //               "can/util/object/isplain/isplain",
+  //               "can/map/map_helpers",
+  //               "can/util/string/string",
+  //               "can/construct/super/super",
+  //               "can/construct/construct",
+  //               "can/util/batch/batch",
+  //               "can/map/map",
+  //               "can/list/list",
+  //               "can/util/string/deparam/deparam",
+  //               "can/route/route",
+  //               "can/control/control",
+  //               "can/control/route/route",
+  //               "can/model/model",
+  //               "can/compute/read",
+  //               "can/compute/get_value_and_bind",
+  //               "can/compute/proto_compute",
+  //               "can/compute/compute",
+  //               "can/map/define/define"
+  //           ]
+  //       },
 		"js/jquery.min": {
             "exports": "jQuery",
             "format": "global",
             "sideBundle": true
         },
-		"js/dependencies/sails.io": {
-            "format": "global",
-            "sideBundle": true
-        },
+		// "js/dependencies/sails.io": {
+  //           "format": "global",
+  //           "sideBundle": true
+  //       },
 		'feedback/feedback.min': {
 			"deps": ['js/jquery.min',
 				'feedback/feedback.min.css'
