@@ -266,14 +266,16 @@ steal('OpsPortal/classes/ValidationDateGreaterThanField.js',
                                     var fieldValidations = {};
                                     if (Model.validations) {
                                         validations = Model.validations[field]; // [ 'notEmpty' ]
-                                        validations.forEach(function (valKey) {
+                                        if (validations) {
+                                            validations.forEach(function (valKey) {
 
-                                            var key = _this.entryToKey(valKey);
-                                            var obj = _this.entryToConfig(valKey);
+                                                var key = _this.entryToKey(valKey);
+                                                var obj = _this.entryToConfig(valKey);
 
-                                            fieldValidations[key] = obj;
+                                                fieldValidations[key] = obj;
 
-                                        })
+                                            })
+                                        }
                                     }
 
                                     // add in the server side validation rule
