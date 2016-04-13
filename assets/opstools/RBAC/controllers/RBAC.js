@@ -11,6 +11,7 @@ steal(
 
     'opstools/RBAC/controllers/Users.js',
     'opstools/RBAC/controllers/Roles.js',
+    'opstools/RBAC/controllers/Scopes.js',
 
     'opstools/RBAC/views/RBAC/RBAC.ejs',
     function () {
@@ -106,7 +107,7 @@ steal(
                             var controllers = {
                                 'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{} },
                                 'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{} },
-                                // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
+                                'opstools.RBAC.Scopes'              : { el: '.rbac-scopes',          opt:{} }
                             }
 
                             var initPortal = function(key, ref, el, options) {
@@ -191,8 +192,7 @@ steal(
                             this.element.find('#topmenu li.selected').removeClass('selected');
 
                             for (var p in this.portals) {
-// TODO: open this up when we implement scopes.
-if (portalKey!='Scopes'){
+
                                 if (p.toLowerCase() == portalKey.toLowerCase()) {
 
                                     this.portals[p].show();
@@ -203,7 +203,7 @@ if (portalKey!='Scopes'){
                                 } else {
                                     this.portals[p].hide();
                                 }
-}
+
                             }
 
                         },
