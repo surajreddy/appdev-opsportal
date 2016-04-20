@@ -99,13 +99,13 @@ msgstr "คุณไม่ได้รับการอนุญาต กร�
 #. code: th
 #. key: rbac.user.confirmRemoveRole
 msgid "This will remove role: %s"
-msgstr ""
+msgstr "[th]This will remove role: %s"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.enabled
 msgid "Enabled"
-msgstr ""
+msgstr "[th]Enabled"
 
 #. path: opsportal
 #. code: th
