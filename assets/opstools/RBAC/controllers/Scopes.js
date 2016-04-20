@@ -4,6 +4,7 @@ steal(
 // List your Controller's dependencies here:
     'opstools/RBAC/models/PermissionAction.js',
     'opstools/RBAC/models/PermissionRole.js',
+    'opstools/RBAC/models/PermissionScopeObject.js',
     'OpsWebixDataCollection.js',
     'OpsWebixSearch.js',
     //        'opstools/RBAC/models/Projects.js',
@@ -46,7 +47,7 @@ steal(
                             
                             this.initDOM();
 
-                            // this.loadActions();
+                            this.loadObjects();
 
 
                         },
@@ -66,284 +67,133 @@ steal(
                             // this.dom.roleForm.hide();
 
 
-                    //         webix.ready(function(){
+                            webix.ready(function(){
 
 
-                    //             ////
-                    //             //// Setup the User Search Bar:    
-                    //             ////  
-                    //             var lblPlaceholderSearch = AD.lang.label.getLabel('rbac.roles.search') || 'Search *';           
-                    //             _this.dom.roleSearch = AD.op.WebixSearch({
-                    //                 id:"searchroles",
-                    //                 container:"search2",
-                    //                 view:"search",
-                    //                 placeholder:lblPlaceholderSearch,
-                    //                 width:300
-                    //             });
-                    //             _this.dom.roleSearch.AD.filter(function(value){
+                                ////
+                                //// Setup the Scope Search Bar:    
+                                ////  
+                                var lblPlaceholderSearch = AD.lang.label.getLabel('rbac.scopes.search') || 'Search *';           
+                                _this.dom.scopeSearch = AD.op.WebixSearch({
+                                    id:"searchscopes",
+                                    container:"searchScopes",
+                                    view:"search",
+                                    placeholder:lblPlaceholderSearch,
+                                    width:300
+                                });
+                                _this.dom.scopeSearch.AD.filter(function(value){
 
-                    //                 _this.dom.roleGrid.filter(function(obj){ //here it filters data!
-                    //                     return obj.role_label.indexOf(value)>=0;
-                    //                 })
-                    //             });
-
-
-                    //             ////
-                    //             //// Setup the Role List
-                    //             ////             
-                    //             var lblHeaderName = AD.lang.label.getLabel('rbac.roles.name') || 'Name*';
-                    //             var lblHeaderDescription = AD.lang.label.getLabel('rbac.roles.description') || 'Description*';
-                    //             _this.dom.roleGrid = webix.ui({
-                    //                 id:"rolestable",
-                    //                 container:"userlist-tbl-role",
-                    //                 view:"datatable",
-                    //                 // width:483,
-
-                    //                 columns:[
-                    //                     { id:"role_label",  header:lblHeaderName, width:180, sort:"string"},
-                    //                     { id:"role_description",  header:lblHeaderDescription , fillspace:true},
-                    //                     { id:"copy",  header:"" , width:40, css:{"text-align":"center"}, template:function(obj) { return "<div class='clone fa fa-copy fa-2 offset-9 rbac-role-list-clone' role-id='"+obj.id+"'  ></div>"; } } ,
-                    //                     { id:"trash", header:"" , width:40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>"},
-                    //                 ],
+                                    _this.dom.scopeGrid.filter(function(obj){ 
+                                        return obj.label.indexOf(value)>=0;
+                                    });
+                                });
 
 
-                    //                 select:"row",
-                    //                 yCount:8, 
-                    //                 scrollY:false,
-                    //                 scrollX:false,
-                    //                 navigation:"true",      
+                                ////
+                                //// Setup the Scope List
+                                ////             
+                                var lblHeaderName = AD.lang.label.getLabel('rbac.scopes.name') || 'Name*';
+                                var lblHeaderObject = AD.lang.label.getLabel('rbac.scopes.object') || 'Object*';
+                                _this.dom.scopeGrid = webix.ui({
+  
+                                      id : "scopeList",
+                                      container : "rbac-scope-list",
+                                      autoConfig : true,
+                                      view : "datatable",
+                                      height:600,
+                                      width:400,
+                                      columns : [
+                                        { id : "label", header : lblHeaderName, fillspace : true },
+                                        { id : "object", header : lblHeaderObject, template:function(obj){
 
-                    //                 pager:{
-                    //                     container:"pgb",
-                    //                     size:8,
-                    //                     group:5,
-                    //                     width:300
-                    //                 },  
-                    //                 on:{
-                    //                     onItemClick:function(id){
+                                                var objName = "?";
+                                                var O = _this.data.objectsCollection.AD.getModel(obj.object.id);
+                                                if (O) {
+                                                    objName = O.name;
+                                                }
+                                                return objName;
+                                            } 
+                                        },
+                                        { id : "copy", header : "", width : 40, css:{"text-align":"center"}, template:function(obj) { return "<div class='clone fa fa-copy fa-2 offset-9 rbac-scope-list-clone' scope-id='"+obj.id+"'  ></div>"; }  },
+                                        { id : "trash", header : "", width : 40, css:{"text-align":"center"}, template:"<span class='trash'>{common.trashIcon()}</span>" }
+                                      ],
 
-                    //                         _this.roleSelect(id);
-                    //                     }
-                    //                 },
-                    //                 onClick:{
+                                      select:"row", 
+                                      navigation:"true",      
 
-                    //                     clone:function(e,id){
-                    //                         var role = this.getItem(id);
-                    //                         var lblConfirmClone = AD.lang.label.getLabel('rbac.roles.confirmClone', [this.getItem(id).role_label]) || 'Clone :'+this.getItem(id).role_label;
-                    //                         webix.confirm({text:lblConfirmClone, 
-                                                          
-                    //                             callback:function(result){
+                                      pager:{
+                                          container:"rbac-scope-list-pager",
+                                          size:8,
+                                          group:5,
+                                          width:300
+                                      }
 
-                    //                                 if (result) {
-
-                    //                                     _this.roleClone(id);
-
-                    //                                     // var clonedRole = {};
-                    //                                     // clonedRole.actions = [];
-                    //                                     // role.actions.forEach(function(action){
-                    //                                     //     clonedRole.actions.push(action.id);
-                    //                                     // });
-
-
-                    //                                     return false;
-                    //                                 }
-                    //                             }
-                    //                         });
-                    //                     },
-                    //                     trash:function(e, id){
-
-                    //                         var role = this.getItem(id);
-                    //                         var lblConfirm =  AD.lang.label.getLabel('rbac.roles.confirmDelete', [this.getItem(id).role_label]) || 'Remove :'+this.getItem(id).role_label;
-                    //                         webix.confirm({text:lblConfirm, 
-                                                          
-                    //                                callback:function(result){
-
-                    //                                    if (result) {
-
-                    //                                         _this.data.rolesCollection.AD.destroyModel(id)
-                    //                                         .fail(function(err){
-                    //                                             AD.error.log('Error destroying role.', { error:err, role:role, id:id });
-                    //                                         })
-                    //                                         .then(function(oldData){
-
-                    //                                             _this.dom.roleForm.hide();
-
-                    //                                         });
-
-                    //                                         return false;
-                    //                                    }
-                    //                                }
-                    //                         });
-
-                    //                         return false;
-                    //                     }
-                    //                 }
-                    //             }); 
+                                });
 
 
+                                _this.dom.formCombo = webix.ui({
+                                        id: "rbac-scope-object",
+                                        container:'rbac-scope-object',
+                                        view : "richselect",
+                                        label : labelObject,
+                                        // value : "1",
+                                        // options : [
+                                        //   { id : 1, value : "My Calendar" },
+                                        //   { id : 2, value : "Webix project" },
+                                        //   { id : 3, value : "Other" }
+                                        // ],
+                                        labelWidth : 100
+                                      });
+                                
+                                ////
+                                //// Setup the Role Form
+                                ////
+                                var labelLabel = AD.lang.label.getLabel('rbac.scopes.name') || 'Scope Name*';
+                                // var placeHolderLabel = AD.lang.label.getLabel('rbac.scopes.label') || 'enter a new name*';
+                                // var labelObject = AD.lang.label.getLabel('rbac.scopes.object') || 'Object*';
+                                // var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
+                                // _this.dom.formScope = webix.ui({
+                                //     container:'rbac-scopes-form',
+                                //     view:"form",
+                                //     id:'formScope',
 
-                    //             ////
-                    //             //// Setup the Role Form
-                    //             ////
-                    //             var labelLabel = AD.lang.label.getLabel('rbac.roles.name') || 'Role Name*';
-                    //             var placeHolderLabel = AD.lang.label.getLabel('rbac.roles.label') || 'Role Name*';
-                    //             var labelDesc = AD.lang.label.getLabel('rbac.roles.description') || 'Role Description*';
-                    //             var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
-                    //             _this.dom.formRole = webix.ui({
-                    //                 container:'rbac-roles-form',
-                    //                 view:"form",
-                    //                 id:'formRole',
+                                //     rows : [
+                                //       { id:"label", view : "text", placeholder : placeHolderLabel, label : labelLabel, labelWidth : 100 },
+                                //       _this.dom.formCombo,
+                                //       { view : "spacer", height : 15 },
+                                //       {
+                                //         type : "line",
+                                //         cols : [
+                                //           { view : "template" },
+                                //           { view : "template" }
+                                //         ]
+                                //       },
+                                //       {
+                                //         margin : 10,
+                                //         paddingY : 7,
+                                //         paddingX : 2,
+                                //         borderless : true,
+                                //         cols : [
+                                //           { view : "spacer" },
+                                //           { view : "button", label : "Info", align : "right", width : 120 },
+                                //           {
+                                //             view : "button",
+                                //             type : "form",
+                                //             label : "Done",
+                                //             align : "right",
+                                //             width : 120
+                                //           }
+                                //         ]
+                                //       }
+                                //     ]
 
-                    //                 elements:[
 
-                    //                     { id:"role_label", view: "text", name:"role_label", label:labelLabel, value:'', placeholder: placeHolderLabel, labelPosition:"top" },
-                    //                     { id:"role_description", view: "textarea", name:"role_description", label:labelDesc, labelPosition:"top", value:'', placeholder: placeHolderDesc, height:150 }
-                                        
-                    //                 ],
-
-                    //                 autoheight: true,
-
-                    //                 on: {
-
-                    //                 }
-                    //             });
-
-                    //             //// onChange handlers for each field
-                    //             var fields = ['role_label', 'role_description'];
-                    //             fields.forEach(function(field){
-                    //                 _this.dom.formRole.elements[field].attachEvent("onChange", function(newv, oldv){
-                    //                     var model = _this.data.rolesCollection.AD.currModel();
-                    //                     if (model) {
-                    //                         var modelValue = model.attr(field);
-                    //                         if (modelValue != newv){
-
-                    //                             model.attr(field, newv);
-                    //                             model.save()
-                    //                             .fail(function(err){
-                    //                                 AD.error.log('Error saving current model.', {error:err, field:field, value:newv });
-                    //                             })
-                    //                             .then(function(){
-                    //                                 console.log(field+": Value changed from: "+oldv+" to: "+newv);
-                    //                             })
-                    //                         }
-                    //                     }
-                                        
-                    //                 });
-                    //             })
+                                // });
 
 
 
-                    //             //// 
-                    //             //// Setup the Action Search
-                    //             ////
-                    //             var lblPlaceholderSearchActions = AD.lang.label.getLabel('rbac.roles.searchActions') || 'Search Actions*';           
-                    //             _this.dom.roleSearchActions = AD.op.WebixSearch({
-                    //                 id:"rbac-search-actions",
-                    //                 container:"rbac-search-actions",
-                    //                 view:"search",
-                    //                 placeholder:lblPlaceholderSearchActions,
-                    //                 width:300
-                    //             });
-                    //             _this.dom.roleSearchActions.AD.filter(function(value){
-                    //                 _this.dom.actionGrid.filter(function(obj){ 
-                    //                     return obj.action_key.indexOf(value)>=0;
-                    //                 })
-                    //             });
 
-
-
-                    //             //// 
-                    //             //// Setup the Action Grid
-                    //             ////
-
-                    //             _this.dom.actionGrid = webix.ui({
-                    //                 id:"rbacGridActions",
-                    //                 container:"rbac-grid-actions",
-                    //                 view:"datatable",
-                    //                 // width:993,
-                    //                 editable:true,
-
-                    //                 columns:[
-
-                    //                     { id:"enabled", header:{text:"", template:"{common.checkbox()}"}, width:40, css:{"text-align":"center"}, 
-                    //                         template:function(obj, common, value){
-                    //                             var inThere = false;
-                    //                             var rc = _this.data.rolesCollection;
-                    //                             var currentRole = rc.getItem(rc.getCursor());
-                    //                             if (currentRole.actions) {
-                    //                                 currentRole.actions.forEach(function(a){
-                    //                                     if (a.id == obj.id) {
-                    //                                         inThere = true;
-                    //                                     }
-                    //                                 })
-                    //                             }
-                    //                             if (inThere)
-                    //                                 return "<input class=\"webix_table_checkbox\" type=\"checkbox\" checked=\"true\">";
-                    //                             else
-                    //                                 return "<input class=\"webix_table_checkbox\" type=\"checkbox\" >";
-                    //                         } 
-                    //                     },
-                    //                     { id:"action_key",  header:"Name", width:100, sort:"string"},
-                    //                     { id:"action_description",  header:"Description" , editor:"text", fillspace:true}
-                                                    
-                    //                 ],
-
-                                           
-                    //                 select:"row",
-                    //                 yCount:5, 
-                    //                 scrollY:false, 
-                    //                 scrollX:false,
-                    //                 navigation:"true", 
-
-
-                    //                 pager:{
-                    //                     container:"rbac-pager-actions",
-                    //                     size:5,
-                    //                     group:5,
-                    //                     width:300
-                    //                 },
-
-
-                    //                 on:{
-
-                    //                     onCheck:function(id, column, state) {
-
-                    //                         if (state) {
-                    //                             _this.actionChecked(id);
-                    //                         } else {
-                    //                             _this.actionUnChecked(id);
-                    //                         }
-
-                    //                     },
-
-                    //                     onAfterEditStop: function(state, editor, ignoreUpdate){
-                    // // console.log('... onAfterEditStop(): state:', state);
-                    // // console.log('... onAfterEditStop(): editor:', editor);
-                    // // console.log('... onAfterEditStop(): ignoreUpdate:', ignoreUpdate);
-
-                    //                         if(state.value != state.old){
-                    //                             webix.message("Cell value was changed");
-                    //                             var action = _this.data.actionsCollection.AD.getModel(editor.row);
-                    //                             action.attr(editor.column, state.value);
-                    //                             action.save()
-                    //                             .fail(function(err){
-                    //                                 AD.error.log('RBAC:Roles:onAfterEditStop(): error updating action', { error:err, action:action.attr(), editor:editor });
-                    //                             })
-                    //                             .then(function(){
-                    //                                 webix.message("Model value was changed");
-                    //                             })
-
-                    //                         }  
-                    //                     }
-                                        
-
-                    //                 } 
-
-                    //             });
-
-
-
-                    //         });
+                            });
 
                         },
 
@@ -427,81 +277,76 @@ steal(
 
 
 
-                    //     /**
-                    //      * @loadActions
-                    //      *
-                    //      * reques the list of Action definitions from the server, and
-                    //      * load them into our actionGrid.
-                    //      */
-                    //     loadActions: function() {
-                    //         var _this = this;
+                        /**
+                         * @loadObjects
+                         *
+                         * reques the list of Scope Object definitions from the server, and
+                         * load them into our actionGrid.
+                         */
+                        loadObjects: function() {
+                            var _this = this;
 
-                    //         var Actions = AD.Model.get('opstools.RBAC.PermissionAction'); 
-                    //         Actions.findAll()
-                    //         .fail(function(err){
-                    //             AD.error.log('RBAC:Roles.js: error loading actions.', {error:err});
-                    //         })
-                    //         .then(function(list) {
-                    //             list.forEach(function(l) {
-                    //                 l.translate();
-                    //             })
-                    //             _this.data.actions = list;
-                    //             _this.data.actionsCollection = AD.op.WebixDataCollection(list);
-                    //             if (_this.dom.actionGrid) {
-                    //                 _this.dom.actionGrid.data.sync(_this.data.actionsCollection);
-                    //             }
-                    //         });
+                            var Model = AD.Model.get('opstools.RBAC.PermissionScopeObject'); 
+                            Model.findAll()
+                            .fail(function(err){
+                                AD.error.log('RBAC:Roles.js: error loading actions.', {error:err});
+                            })
+                            .then(function(list) {
+                                list.forEach(function(l) {
+                                    if (l.translate) l.translate();
+                                })
+                                _this.data.objects = list;
+                                _this.data.objectsCollection = AD.op.WebixDataCollection(list);
+                                // if (_this.dom.actionGrid) {
+                                //     _this.dom.actionGrid.data.sync(_this.data.actionsCollection);
+                                // }
+                            });
 
-                    //     },
-
-
-
-                    //     /** 
-                    //      * @function loadRoles
-                    //      *
-                    //      * load the given list of roles.
-                    //      * @param {array/can.List} list  the current list of roles.
-                    //      */
-                    //     loadRoles: function(list) {
-                    //         this.data.roles = list;
-                    //         this.data.rolesCollection = AD.op.WebixDataCollection(list);
-                    //         if (this.dom.roleGrid) {
-                    //             this.dom.roleGrid.data.sync(this.data.rolesCollection);
-                    //             this.dom.formRole.bind(this.data.rolesCollection);
-                    //         }
-                    //         this.resize();
-                    //     },
+                        },
 
 
 
-                    //     /**
-                    //      * @function resize
-                    //      *
-                    //      * this is called when the Role controller is displayed and the window is
-                    //      * resized.  
-                    //      */
-                    //     resize: function() {
-                    //         var pager = this.dom.roleGrid.getPager();
-                    //         this.dom.roleGrid.adjust(); 
+                        /** 
+                         * @function loadScopes
+                         *
+                         * load the given list of scopes.
+                         * @param {array/can.List} list  the current list of scopes.
+                         */
+                        loadScopes: function(list) {
+                            this.data.scopes = list;
+                            this.data.scopesCollection = AD.op.WebixDataCollection(list);
+                            if (this.dom.scopeGrid) {
+                                this.dom.scopeGrid.data.sync(this.data.scopesCollection);
+                                // this.dom.formScope.bind(this.data.scopesCollection);
+                            }
+                            // this.resize();
+                        },
+
+
+
+                        /**
+                         * @function resize
+                         *
+                         * this is called when the Role controller is displayed and the window is
+                         * resized.  
+                         */
+                        resize: function() {
+                            var pager = this.dom.scopeGrid.getPager();
+                            this.dom.scopeGrid.adjust(); 
                             
-                    //         // now update the related pager/searchbox with the proper $width
-                    //         pager.define('width', this.dom.roleGrid.$width);
-                    //         this.dom.roleSearch.define('width', this.dom.roleGrid.$width/2);
+                            // now update the related pager/searchbox with the proper $width
+                            pager.define('width', this.dom.scopeGrid.$width);
+                            this.dom.roleSearch.define('width', this.dom.scopeGrid.$width/2);
 
-                    //         // resize everything now:
-                    //         pager.resize();
-                    //         this.dom.roleSearch.resize();
-
-
-                    //         this.dom.formRole.adjust();
+                            // resize everything now:
+                            pager.resize();
+                            this.dom.scopeSearch.resize();
 
 
-                    //         this.dom.actionGrid.adjust();
-                    //         this.dom.roleSearchActions.define('width', this.dom.actionGrid.$width );
-                    //         this.dom.roleSearchActions.resize();
+                            this.dom.formScope.adjust();
                             
 
-                    //     },
+                        },
 
 
 

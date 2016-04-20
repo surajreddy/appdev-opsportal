@@ -173,11 +173,12 @@ steal(
                                 AD.error.log('RBAC:RBAC: Error loading scopes', {error:err});
                             })
                             .then(function(list){
-                                // // make sure they are all translated.
-                                // list.forEach(function(l){
-                                //     l.translate();
-                                // })
+                                // make sure they are all translated.
+                                list.forEach(function(l){
+                                    if (l.translate) { l.translate(); }
+                                })
                                 _this.portals.Users.loadScopes(list);
+                                _this.portals.Scopes.loadScopes(list);
 
                                 _this.data.scopes = list;    // all the 
                             });

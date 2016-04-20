@@ -300,7 +300,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 	margin-bottom:10px;
 }
 
-#search1, #search2 {padding:9px 0}
+.rbacSearch {padding:9px 0}
 
 #userdisplay {float:left;}
 

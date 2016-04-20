@@ -227,9 +227,20 @@ steal(
                                         }},
                                         { id:"scope",  header:lblHeaderScopes, fillspace:true, template:function(obj){
                                             var scopes = [];
+                                            //// NOTE: currently Sails v0.12 doesn't support deep populate, so we will
+                                            ////  do a second lookup for scopes that fill out their data here so we can
+                                            ////  use that here.
+
                                             if (obj && (obj.scope)) {
                                                 obj.scope.forEach(function(s){
-                                                    scopes.push(s.label);
+
+                                                    var S = _this.data.scopesCollection.AD.getModel(s.id);
+                                                    if (S) {
+                                                        if (S.translate) { S.translate(); }
+                                                        scopes.push(S.label);
+                                                    } else { 
+                                                        // scopes.push(' ? ');
+                                                    }
                                                 });
                                             }
                                             return scopes.join(', ');
@@ -346,6 +357,8 @@ steal(
                          */
                         loadScopes: function(list) {
                             this.data.scopes = list;
+                            this.data.scopesCollection = AD.op.WebixDataCollection(list);
+
                         },
 
 

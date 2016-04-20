@@ -19,6 +19,7 @@
   <span app-label-key="rbac.roles.searchActions">search for actions</span>
   <span app-label-key="rbac.roles.newRole">Spiffy New Role</span>
   <span app-label-key="rbac.roles.newRoleDescription">Describe this role</span>
+  <span app-label-key="rbac.scopes.search">search for scopes</span>
 </div>
 
 
@@ -68,14 +69,10 @@
             <div class="row nomargin">
                 <div class="col-lg-4 col-md-6 padbot55 rbac-user-div">              
                   <div class="nopadL form-inline" role="search">
-                    <div class="input-group" id="search1"></div>
+                    <div class="input-group rbacSearch" id="search1"></div>
                   </div>
                   <div id="userlist-tbl" style="clear:both"></div>
                   <div id="paging_here" class="padleft20"></div>
-                  <script type="text/javascript" charset="utf-8">
-
-                  </script>
-                
                 </div>
                 
                 <div class="col-lg-4 col-md-6  rbac-user-display">
@@ -200,7 +197,7 @@ console.log('... role:', role); -->
 
                 <div class="col-lg-4 ">
                   <div class=" form-inline" >
-                    <div class="input-group pull-left" id="search2"></div>
+                    <div class="input-group pull-left rbacSearch" id="search2"></div>
                     <button  class="btn op-btn btn-primary pull-right off-top10 rbac-role-addRole" app-label-key="rbac.user.add" >add</button>
                   </div>
                   <div id="userlist-tbl-role" style="padding-bottom:10px;clear:both"></div>
@@ -240,7 +237,6 @@ console.log('... role:', role); -->
                       <div role="tabpanel" class="tab-pane" id="datafieldtab"></div>
                     </div>
 
-        
                   </div>                  
                 </div>
             </div>
@@ -250,9 +246,57 @@ console.log('... role:', role); -->
           <!--/Roles Area-->
           <!--Scopes Area-->
           <div  class="op-container mockup-display scopes rbac-scopes" style="display:none">
-             <div class="row op-container">
+             <div class="row op-container nomargin">
 
-             There is actually something here.
+                <div class="col-lg-4 ">
+                  <div class=" form-inline" >
+                    <div class="input-group pull-left rbacSearch" id="searchScopes"></div>
+                    <button  class="btn op-btn btn-primary pull-right off-top10 rbac-role-addRole" app-label-key="rbac.scopes.add" >add</button>
+                  </div>
+                  <div id="rbac-scope-list" style="padding-bottom:10px;clear:both"></div>
+                  <div id="rbac-scope-list-pager" class="padleft20"></div>
+                </div>
+
+                <div class="col-lg-8 rbac-scope-form-add">
+<div class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend>New Scope</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="name">Name</label>  
+  <div class="col-md-4">
+  <input id="name" name="name" type="text" placeholder="enter scope name here" class="form-control input-md" required="">
+  <span class="help-block">this should be unique value</span>  
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="object">Object</label>
+  <div class="col-md-4" id="rbac-scope-object">
+
+  </div>
+</div>
+
+<div class="form-group">
+  <span> query string here </span>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="button1id"></label>
+  <div class="col-md-8">
+    <button id="button1id" name="button1id" class="btn btn-info">cancel</button>
+    <button id="button2id" name="button2id" class="btn btn-success">Save</button>
+  </div>
+</div>
+
+</fieldset>
+</div>
+                </div>
              
              </div>
           </div>
