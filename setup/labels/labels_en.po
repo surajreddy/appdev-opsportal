@@ -85,6 +85,18 @@ msgstr "Translations"
 
 #. path: opsportal
 #. code: en
+#. key: opp.toolProcessReport
+msgid "ProcessReport"
+msgstr "Create/Edit Reports"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolRunReport
+msgid "RunReport"
+msgstr "Run Reports"
+
+#. path: opsportal
+#. code: en
 #. key: opp.areaFCFActivities
 msgid "Activities"
 msgstr "Activities"

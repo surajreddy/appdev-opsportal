@@ -85,6 +85,18 @@ msgstr "สิ่งที่แปล"
 
 #. path: opsportal
 #. code: th
+#. key: opp.toolProcessReport
+msgid "ProcessReport"
+msgstr "เพิ่ม/แก้ไข รายงาน"
+
+#. path: opsportal
+#. code: th
+#. key: opp.toolRunReport
+msgid "RunReport"
+msgstr "รายงาน"
+
+#. path: opsportal
+#. code: th
 #. key: opp.areaFCFActivities
 msgid "Activities"
 msgstr "กิจกรรม"
