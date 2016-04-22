@@ -15,97 +15,109 @@ msgstr ""
 #. code: th
 #. key: opp.configuringTools
 msgid "configuring Opsportal Tools:"
-msgstr "[th] configuring Opsportal Tools:"
+msgstr "สร้างเครื่องมือระบบบริการสารสนเทศ"
 
 #. path: opsportal
 #. code: th
 #. key: opp.menu
 msgid "Menu"
-msgstr "[th]Menu"
+msgstr "เมนู"
 
 #. path: opsportal
 #. code: th
 #. key: opp.error
 msgid "Error:"
-msgstr "[th]Error:"
+msgstr "ข้อผิดพลาด"
 
 #. path: opsportal
 #. code: th
 #. key: opp.enterPortal
 msgid "Enter the Portal"
-msgstr "[th]Enter the Portal"
+msgstr "การเข้าสู่ระบบบริการ"
 
 #. path: opsportal
 #. code: th
 #. key: opp.areaAdministration
 msgid "Administration"
-msgstr "[th] Administration"
+msgstr "ฝ่ายบริหาร"
 
 #. path: opsportal
 #. code: th
 #. key: opp.toolPermissions
 msgid "Permissions"
-msgstr "[th] Permissions"
+msgstr "อนุญาต"
 
 #. path: opsportal
 #. code: th
 #. key: opp.areaProfile
 msgid "Profile"
-msgstr "[th] Profile"
+msgstr "ข้อมูลโดยรวม"
 
 #. path: opsportal
 #. code: th
 #. key: opp.toolProfile
 msgid "Profile"
-msgstr "[th] Profile"
+msgstr "ข้อมูลโดยรวม"
 
 #. path: opsportal
 #. code: th
 #. key: opp.toolObjectBuilder
 msgid "Configure Objects"
-msgstr "[th] Configure Objects"
+msgstr "สร้างวัตถุ"
 
 #. path: opsportal
 #. code: th
 #. key: opp.areaProcess
 msgid "Process Tools"
-msgstr "[th] Process Tools"
+msgstr "เครื่องมือสำหรับขั้นตอน"
 
 #. path: opsportal
 #. code: th
 #. key: opp.toolProcessApproval
 msgid "Approvals"
-msgstr "[th] Approvals"
+msgstr "การอนุมัติ"
 
 #. path: opsportal
 #. code: th
 #. key: opp.toolProcessTranslation
 msgid "Translations"
-msgstr "[th] Translations"
+msgstr "สิ่งที่แปล"
+
+#. path: opsportal
+#. code: th
+#. key: opp.toolProcessReport
+msgid "ProcessReport"
+msgstr "เพิ่ม/แก้ไข รายงาน"
+
+#. path: opsportal
+#. code: th
+#. key: opp.toolRunReport
+msgid "RunReport"
+msgstr "รายงาน"
 
 #. path: opsportal
 #. code: th
 #. key: opp.areaFCFActivities
 msgid "Activities"
-msgstr "[th] Activities"
+msgstr "กิจกรรม"
 
 #. path: opsportal
 #. code: th
 #. key: opp.errorNoPermission
 msgid "You don't have permission.  Ask your administrator to grant you access."
-msgstr "[th]  You don't have permission.  Ask your administrator to grant you access."
+msgstr "คุณไม่ได้รับการอนุญาต กรุณาสอบถามผู้บริหารของคุณเพื่อทำรายการ"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.confirmRemoveRole
 msgid "This will remove role: %s"
-msgstr ""
+msgstr "[th]This will remove role: %s"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.enabled
 msgid "Enabled"
-msgstr ""
+msgstr "[th]Enabled"
 
 #. path: opsportal
 #. code: th

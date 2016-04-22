@@ -126,6 +126,7 @@ steal(
                                         onItemClick:function(id){
 
                                             _this.roleSelect(id);
+                                            return false;
                                         }
                                     },
                                     onClick:{
@@ -152,6 +153,8 @@ steal(
                                                     }
                                                 }
                                             });
+
+                                            return false;
                                         },
                                         trash:function(e, id){
 
