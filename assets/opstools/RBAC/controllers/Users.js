@@ -132,24 +132,53 @@ steal(
                                 ////
                                 var lblHeaderUserID = AD.lang.label.getLabel('rbac.users.userID') || 'User ID*';
                                 var lblHeaderStatus = AD.lang.label.getLabel('rbac.users.status') || 'Status*';
+                                var lblHeaderIsActive = AD.lang.label.getLabel('rbac.users.isActive') || 'Is Active*';
+                                // Note that there is a SiteUser.id field. But the "User ID" column actually
+                                // refers to the SiteUser.username field instead.
                                 _this.dom.userGrid = webix.ui({
                                     id:"usertable",
                                     container:"userlist-tbl",
                                     view:"datatable",
-
-
+                                    
+                                    // Idea: how about combining the '#' column with the 'Status' column?
+                                    //       They both refer to the same field. Maybe use a colored background?
+                                    
                                     columns:[
                                         { id:"numPermissions",  header:"#",    template:function(obj){ 
                                             return obj.permission.length; 
                                         },   width:50,   css:"rank",    sort:"int" },
                                         { id:"username",  header:lblHeaderUserID,   sort:"string", fillspace:true },
-                                        { id:"status",  header:lblHeaderStatus, width:80,  template:function(obj){ 
-                                            if ( obj.permission.length == 0) {
-                                                return "<div class='img-thumbnail stats-red'></div>";
-                                            } else {
-                                                return "<div class='img-thumbnail stats-green'></div>";
-                                            }
-                                        }, css:{ "text-align":"center" } },
+                                        { id:"status",  header:lblHeaderStatus, width:80, 
+                                            template:function(obj){ 
+                                                if ( obj.permission.length == 0) {
+                                                    return "<div class='img-thumbnail stats-red'></div>";
+                                                } else {
+                                                    return "<div class='img-thumbnail stats-green'></div>";
+                                                }
+                                            }, 
+                                            css:{ "text-align":"center" } 
+                                        },
+                                        { 
+                                            id: "isActive", 
+                                            header: lblHeaderIsActive,
+                                            template: function(obj) {
+                                                if (obj.isActive) {
+                                                    return '<span class="glyphicon glyphicon-ok"></span>';
+                                                } else {
+                                                    return '<span class="glyphicon glyphicon-ban-circle"></span>';
+                                                }
+                                            },
+                                            css: { 'text-align': 'center' }
+                                        },
+                                        {
+                                            id: "editUser", 
+                                            header: '', 
+                                            width: 40,
+                                            template: '<a href="#" class="rbac-user-editUser" user_id="#id#">'
+                                                    + '<span class="glyphicon glyphicon-cog"></span>'
+                                                    + '</a>',
+                                            css: { 'text-align': 'center' }
+                                        },
                                     ],
 
 
@@ -312,7 +341,140 @@ steal(
                                     }
                                 
                                 }); 
-                                          
+                                
+                                
+                                // Add User window
+                                var lblAddUser = AD.lang.label.getLabel('rbac.AddUser') || 'Add User';
+                                var lblUsername = AD.lang.label.getLabel('rbac.username') || 'Username';
+                                var lblPassword = AD.lang.label.getLabel('rbac.password') || 'Password';
+                                var lblEmail = AD.lang.label.getLabel('rbac.email') || 'Email';
+                                _this.dom.addUserWindow = webix.ui({
+                                    view: 'window',
+                                    head: lblAddUser,
+                                    position: 'center',
+                                    body: {
+                                        view: 'form',
+                                        elements: [
+                                            { view: 'text', label: lblUsername, name: 'username' },
+                                            { view: 'text', type: lblPassword, label: 'Password', name: 'password' },
+                                            { view: 'text', label: lblEmail, name: 'email' },
+                                            { view: 'checkbox', label: lblHeaderIsActive, name: 'isActive' },
+                                            { 
+                                                view: 'layout',
+                                                cols: [
+                                                    {
+                                                        view: 'button', 
+                                                        type: 'iconButtonTop',
+                                                        icon: 'save',
+                                                        on: {
+                                                            onItemClick: function(id, ev) {
+                                                                var form = _this.dom.addUserWindow.getBody();
+                                                                var values = form.getValues();
+                                                                
+                                                                var SiteUser = AD.Model.get('opstools.RBAC.SiteUser');
+                                                                SiteUser.create(values)
+                                                                .fail(function(err) {
+                                                                    webix.message(err.message);
+                                                                    console.log(err);
+                                                                })
+                                                                .then(function(user) {
+                                                                    form.clear();
+                                                                    _this.dom.addUserWindow.hide();
+                                                                    // Refresh the user list
+                                                                    SiteUser.findAll()
+                                                                    .then(function(list) {
+                                                                        _this.loadUsers(list);
+                                                                    });
+                                                                    
+                                                                });
+                                                            }
+                                                        }
+                                                    },
+                                                    { 
+                                                        view: 'button', 
+                                                        type: 'iconButtonTop',
+                                                        icon: 'close',
+                                                        on: {
+                                                            onItemClick: function(id, ev) {
+                                                                _this.dom.addUserWindow.getBody().clear();
+                                                                _this.dom.addUserWindow.hide();
+                                                            }
+                                                        }
+                                                    }
+                                                
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                });
+                                
+                                
+                                // Edit User window
+                                var lblEditUser = AD.lang.label.getLabel('rbac.EditUser') || 'Edit User';
+                                var lblFailedLogins = AD.lang.label.getLabel('rbac.failedLogins') || 'Failed logins';
+                                _this.dom.editUserWindow = webix.ui({
+                                    view: 'window',
+                                    head: lblEditUser,
+                                    position: 'center',
+                                    body: {
+                                        view: 'form',
+                                        elements: [
+                                            { view: 'text', label: 'ID', name: 'id', readonly: true },
+                                            { view: 'text', label: 'GUID', name: 'guid', readonly: true },
+                                            { view: 'text', label: lblUsername, name: 'username' },
+                                            { view: 'text', label: lblPassword, name: 'password', type: 'password' },
+                                            { view: 'text', label: lblEmail, name: 'email' },
+                                            { view: 'checkbox', label: lblHeaderIsActive, name: 'isActive' },
+                                            { view: 'counter', label: lblFailedLogins, name: 'failedLogins', min: 0, labelWidth: '100' },
+                                            { 
+                                                view: 'layout',
+                                                cols: [
+                                                    {
+                                                        view: 'button', 
+                                                        type: 'iconButtonTop',
+                                                        icon: 'save',
+                                                        on: {
+                                                            onItemClick: function(id, ev) {
+                                                                var form = _this.dom.editUserWindow.getBody();
+                                                                var user_id = form.getValues().id;
+                                                                var values = form.getDirtyValues();
+                                                                var SiteUser = AD.Model.get('opstools.RBAC.SiteUser');
+                                                                
+                                                                SiteUser.update(user_id, values)
+                                                                .fail(function(err) {
+                                                                    webix.message(err.message);
+                                                                    console.log(err);
+                                                                })
+                                                                .then(function(user) {
+                                                                    form.clear();
+                                                                    _this.dom.editUserWindow.hide();
+                                                                    // Refresh the user list
+                                                                    SiteUser.findAll()
+                                                                    .then(function(list) {
+                                                                        _this.loadUsers(list);
+                                                                    });
+                                                                    
+                                                                });
+                                                            }
+                                                        }
+                                                    },
+                                                    { 
+                                                        view: 'button', 
+                                                        type: 'iconButtonTop',
+                                                        icon: 'close',
+                                                        on: {
+                                                            onItemClick: function(id, ev) {
+                                                                _this.dom.editUserWindow.getBody().clear();
+                                                                _this.dom.editUserWindow.hide();
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                });
+                                
                             });
 
                         },
@@ -545,8 +707,9 @@ steal(
                             
                             // now update the related pager/searchbox with the proper $width
                             pager.define('width', this.dom.userGrid.$width);
-
-                            this.dom.userSearch.define('width', this.dom.userGrid.$width);
+                            
+                            // Leave space on the right for the "Add User" button
+                            this.dom.userSearch.define('width', this.dom.userGrid.$width - 80);
 
 
                             // the userPermissions table:
@@ -657,6 +820,36 @@ steal(
 
 
 
+                        /*
+                         * The User list [+] button
+                         */
+                        '.rbac-user-addUser click': function($el, ev) {
+                            this.dom.addUserWindow.show();
+                        },
+                        
+                        
+                        /*
+                         * The User list edit button
+                         */
+                        '.rbac-user-editUser click': function($el, ev) {
+                            ev.preventDefault();
+                            
+                            var self = this;
+                            var user_id = $el.attr('user_id');
+                            var form = this.dom.editUserWindow.getBody();
+                            var SiteUser = AD.Model.get('opstools.RBAC.SiteUser');
+                            
+                            SiteUser.findAll({ id: user_id })
+                            .then(function(list) {
+                                if (list && list[0]) {
+                                    form.setValues(list[0]);
+                                    self.dom.editUserWindow.show();
+                                }
+                            });
+                        },
+                        
+                        
+                        
                         /*
                          * Make sure that only 1 Role is selected in our Multi Select field.
                          */
