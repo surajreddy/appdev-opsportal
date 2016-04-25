@@ -7,6 +7,9 @@ steal(
     'opstools/RBAC/models/PermissionScopeObject.js',
     'OpsWebixDataCollection.js',
     'OpsWebixSearch.js',
+
+    'query-builder',
+
     //        'opstools/RBAC/models/Projects.js',
     //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
     // '//opstools/RBAC/views/Roles/Roles.ejs',
@@ -131,26 +134,26 @@ steal(
                                 });
 
 
+                                // var labelObject = AD.lang.label.getLabel('rbac.scopes.object') || 'Object*';
+                                _this.dom.formNew = _this.element.find('.rbac-scope-form-add');
+                                _this.dom.formNew.hide();
+
                                 _this.dom.formCombo = webix.ui({
-                                        id: "rbac-scope-object",
+                                        id: "rbacScopeObject",
                                         container:'rbac-scope-object',
-                                        view : "richselect",
-                                        label : labelObject,
-                                        // value : "1",
-                                        // options : [
-                                        //   { id : 1, value : "My Calendar" },
-                                        //   { id : 2, value : "Webix project" },
-                                        //   { id : 3, value : "Other" }
-                                        // ],
-                                        labelWidth : 100
-                                      });
+                                        view : "combo",
+                                        options : [
+                                        ],
+                                        width:200
+                                });
+                                _this.dom.formCombo.getPopup().getList().define("template", " #name# ");
                                 
                                 ////
                                 //// Setup the Role Form
                                 ////
                                 var labelLabel = AD.lang.label.getLabel('rbac.scopes.name') || 'Scope Name*';
                                 // var placeHolderLabel = AD.lang.label.getLabel('rbac.scopes.label') || 'enter a new name*';
-                                // var labelObject = AD.lang.label.getLabel('rbac.scopes.object') || 'Object*';
+                                
                                 // var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
                                 // _this.dom.formScope = webix.ui({
                                 //     container:'rbac-scopes-form',
@@ -297,9 +300,12 @@ steal(
                                 })
                                 _this.data.objects = list;
                                 _this.data.objectsCollection = AD.op.WebixDataCollection(list);
-                                // if (_this.dom.actionGrid) {
-                                //     _this.dom.actionGrid.data.sync(_this.data.actionsCollection);
-                                // }
+                                if (_this.dom.formCombo) {
+                                    var comboList = _this.dom.formCombo.getPopup().getList();
+                                    comboList.clearAll();
+                                    comboList.sync(_this.data.objectsCollection);
+                                    // _this.dom.formCombo.getPopup().getList().sync(_this.data.objectsCollection);
+                                }
                             });
 
                         },
@@ -347,6 +353,20 @@ steal(
                             
 
                         },
+
+
+                        '.rbac-scope-addScope click': function($el, ev) {
+                            this.dom.formNew.show();
+                        },
+
+
+
+                        '.rbac-scope-object-cancel click': function($el, ev) {
+                            var _this = this;
+
+                            _this.dom.formNew.hide();
+
+                        }
 
 
 

@@ -251,7 +251,7 @@ console.log('... role:', role); -->
                 <div class="col-lg-4 ">
                   <div class=" form-inline" >
                     <div class="input-group pull-left rbacSearch" id="searchScopes"></div>
-                    <button  class="btn op-btn btn-primary pull-right off-top10 rbac-role-addRole" app-label-key="rbac.scopes.add" >add</button>
+                    <button  class="btn op-btn btn-primary pull-right off-top10 rbac-scope-addScope" app-label-key="rbac.scopes.add" >add</button>
                   </div>
                   <div id="rbac-scope-list" style="padding-bottom:10px;clear:both"></div>
                   <div id="rbac-scope-list-pager" class="padleft20"></div>
@@ -289,8 +289,8 @@ console.log('... role:', role); -->
 <div class="form-group">
   <label class="col-md-4 control-label" for="button1id"></label>
   <div class="col-md-8">
-    <button id="button1id" name="button1id" class="btn btn-info">cancel</button>
-    <button id="button2id" name="button2id" class="btn btn-success">Save</button>
+    <button  name="button1id" class="btn btn-info rbac-scope-object-cancel" app-label-key="rbac.scopes.cancel">Cancel*</button>
+    <button  name="button2id" class="btn btn-success rbac-scope-new-add"><span app-label-key="rbac.scopes.add">Add*</span></button>
   </div>
 </div>
 
