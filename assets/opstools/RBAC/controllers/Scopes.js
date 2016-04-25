@@ -8,7 +8,6 @@ steal(
     'OpsWebixDataCollection.js',
     'OpsWebixSearch.js',
 
-    'query-builder',
 
     //        'opstools/RBAC/models/Projects.js',
     //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
@@ -16,6 +15,7 @@ steal(
     function () {
         System.import('appdev').then(function () {
             steal.import(
+		'query-builder',
                 'can/construct/construct',
                 'appdev/ad',
                 'appdev/control/control').then(function () {
