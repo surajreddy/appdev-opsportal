@@ -69,6 +69,9 @@ steal(
                             // this.dom.roleForm = this.element.find('.rbac-roles-form');
                             // this.dom.roleForm.hide();
 
+                            this.dom.queryBuilder = this.element.find('#rbac-scope-querybuilder').queryBuilder({
+
+                            });
 
                             webix.ready(function(){
 
@@ -147,6 +150,9 @@ steal(
                                         width:200
                                 });
                                 _this.dom.formCombo.getPopup().getList().define("template", " #name# ");
+                                _this.dom.formCombo.attachEvent('onChange', function(){
+                                    _this.updateFiltersFromObject();
+                                })
                                 
                                 ////
                                 //// Setup the Role Form
@@ -352,6 +358,11 @@ steal(
                             this.dom.formScope.adjust();
                             
 
+                        },
+
+
+                        updateFiltersFromObject:function() {
+console.log('---> updateFiltersFromObject()');
                         },
 
 
