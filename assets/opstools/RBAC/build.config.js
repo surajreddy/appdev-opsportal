@@ -1,7 +1,7 @@
 module.exports = {
     "map": {
 
-    	"query-builder": "js/query-builder/query-builder.min"
+        "query-builder": "js/query-builder/query-builder.min"
     },
     "paths": {
         "opstools/RBAC": "opstools/RBAC/RBAC.js",
@@ -11,12 +11,17 @@ module.exports = {
     "bundle": ['opstools/RBAC'],
     "meta": {
 
-    	"js/query-builder/query-builder.min": {
+        "js/query-builder/query-builder.min": {
             "exports": "Querybuilder",
-			"deps": ['js/query-builder/query-builder.default.min.css'],
-			"format": "global",
-			"sideBundle": true
-		}
-        
+            "deps": ['jquery', 'js/query-builder/query-builder.default.min.css'],
+            "format": "global",
+            "sideBundle": true
+        },
+        "opstools/RBAC": {
+            "deps": [
+                "query-builder"
+            ]
+        }
+
     }
 };

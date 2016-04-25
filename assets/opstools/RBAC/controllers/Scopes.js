@@ -15,7 +15,6 @@ steal(
     function () {
         System.import('appdev').then(function () {
             steal.import(
-		'query-builder',
                 'can/construct/construct',
                 'appdev/ad',
                 'appdev/control/control').then(function () {
