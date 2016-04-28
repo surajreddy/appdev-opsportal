@@ -375,6 +375,7 @@ steal(
                                             label: 'User Profile',
                                             isDefault: true,
                                         });
+                                        self.workArea.listAreas.UserProfile.element.hide();
                                         AD.comm.hub.publish('opsportal.tool.show', {
                                             area: 'UserProfile',
                                             tool: 'UserProfile',
