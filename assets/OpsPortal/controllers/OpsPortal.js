@@ -30,7 +30,8 @@ steal(
             // ).then(
                 ).then(function () {
                     steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
-
+                    System.import('opstools/UserProfile');
+                    
                     // make sure $ is defined:
                     var $ = typeof window.jQuery == 'undefined' ? AD.ui.jQuery : window.jQuery;
     
@@ -194,7 +195,7 @@ steal(
 
                             var SubLinks = AD.Control.get('OpsPortal.SubLinks');
                             //this.subLinks = new SubLinks(this.portalPopup.find('.opsportal-nav-sub-list'));
-                            this.subLinks = new SubLinks(this.portalPopup.find('#op-masthead-nav'));
+                            this.subLinks = new SubLinks(this.portalPopup.find('#op-masthead-sublinks'));
                             this.dom = {};
                             this.dom.resize = {};
                             //this.dom.resize.masthead = this.portalPopup.find(".opsportal-container-masthead");
@@ -203,6 +204,11 @@ steal(
 
 
                             AD.lang.label.translate(this.portalPopup);  // translate the current OpsPortal Labels
+                            
+                            $('#userprofile-menuitem').on('click', function(ev) {
+                                ev.preventDefault();
+                                AD.comm.hub.publish('opsportal.area.show', { area: 'UserProfile' });
+                            });
                         },
                         
                         
@@ -352,6 +358,29 @@ steal(
                                         if (data.tools[t].isDefault) defaultTool[data.tools[t].area] = data.tools[t];
                                         AD.ui.loading.completed(1);
                                     }
+                                    
+                                    // Create the User Profile tool
+                                    // (special case which is accessible for all
+                                    //  users and has no top-left menu item)
+                                    setTimeout(function() {
+                                        self.workArea.createArea({
+                                            icon: 'fa-cogs',
+                                            key: 'UserProfile',
+                                            label: 'User Profile',
+                                            isDefault: false,
+                                        });
+                                        self.workArea.listAreas.UserProfile.createTool({
+                                            area: 'UserProfile',
+                                            controller: 'UserProfile',
+                                            label: 'User Profile',
+                                            isDefault: true,
+                                        });
+                                        self.workArea.listAreas.UserProfile.element.hide();
+                                        AD.comm.hub.publish('opsportal.tool.show', {
+                                            area: 'UserProfile',
+                                            tool: 'UserProfile',
+                                        });
+                                    }, 50);
 
 
                                     //// all tools should be created now
@@ -410,9 +439,8 @@ steal(
 
                             ev.preventDefault();
                         },
-
-
-
+                        
+                        
                         '.ad-item-add click': function ($el, ev) {
 
                             ev.preventDefault();
