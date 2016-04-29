@@ -12,11 +12,21 @@ module.exports = {
     "meta": {
 
     	"js/query-builder/query-builder.min": {
-            "exports": "Querybuilder",
-			"deps": ['js/query-builder/query-builder.default.min.css'],
+            // "exports": "Querybuilder",
+			"deps": [
+				"jquery",
+				'js/query-builder/query-builder.default.min.css'
+			],
 			"format": "global",
 			"sideBundle": true
-		}
+		},
+
+		"opstools/RBAC": {
+            "deps": [
+                "query-builder"
+            ]
+        }
+
         
     }
 };
