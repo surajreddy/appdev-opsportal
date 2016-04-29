@@ -294,6 +294,7 @@ var verifyLanguages = function(done) {
 				AD.log('<yellow>  7:</yellow> run this command again');
 			}
 		}
+		return null;
 	})
 }
 
@@ -349,6 +350,7 @@ var recursiveLanguageInstall = function(done) {
         			})
         			.catch(function(err){
         				done(err);
+        				return null;
         			})
 
         		} else {
@@ -398,6 +400,7 @@ var createUser = function(done) {
 			})
 			.catch(function(err){
 				done(err);
+				return null;
 			})
 
 		} else {
@@ -512,7 +515,8 @@ var createRole = function(done) {
 			    			return null;
 			    		})
 			    		.catch(function(err){
-			    			done(err)
+			    			done(err);
+			    			return null;
 			    		})
 			    		
 			    	} else {
@@ -556,6 +560,7 @@ var createScope = function(done) {
 			})
 			.catch(function(err){
 				done(err);
+				return null;
 			});
 
 //// TODO: once we convert Scope to Multilingual:
@@ -692,6 +697,7 @@ var associateRoleToActions = function(done) {
 
 			AD.log('<yellow>linked :</yellow> action keys already linked to role');
 			done();	// <--- not actually a reason to stop the process.
+			return null;
 		})
 
 	}
@@ -725,12 +731,14 @@ var createPermission = function(done) {
 		})
 		.catch(function(err){
 			done(err);
+			return null;
 		})
 		return null;
 
 	})
 	.catch(function(err){
 		done(err);
+		return null;
 	})
 	
 }
