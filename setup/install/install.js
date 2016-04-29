@@ -274,6 +274,7 @@ var verifyLanguages = function(done) {
 			AD.log('<green>confirm:</green> there are languages installed in the site.');
 			done();
 		}
+		return null;
 	})
 	.catch(function(err){
 
@@ -343,6 +344,8 @@ var recursiveLanguageInstall = function(done) {
         					
         				}
 
+        				return null;
+
         			})
         			.catch(function(err){
         				done(err);
@@ -391,6 +394,7 @@ var createUser = function(done) {
 			.then(function(newUser) {
 				AdminUser = newUser;
 				done();
+				return null;
 			})
 			.catch(function(err){
 				done(err);
@@ -434,6 +438,7 @@ var createUser = function(done) {
 		    })
 
 		}
+		return null;
 	})
 }
 
@@ -504,6 +509,7 @@ var createRole = function(done) {
 			    		.then(function( pRole ){
 			    			AdminRole = pRole[0];
 			    			done();
+			    			return null;
 			    		})
 			    		.catch(function(err){
 			    			done(err)
@@ -519,6 +525,7 @@ var createRole = function(done) {
 		    })
 
 		}
+		return null;
 	})
 }
 
@@ -545,6 +552,7 @@ var createScope = function(done) {
 			.then(function(newScope){
 				AdminScope = newScope;
 				done();
+				return null;
 			})
 			.catch(function(err){
 				done(err);
@@ -604,6 +612,7 @@ var createScope = function(done) {
 		    })
 
 		}
+		return null;
 	})
 }
 
@@ -651,6 +660,7 @@ var verifyActions = function(done) {
 			ActionKeys = actions;
 			done();
 		}
+		return null;
 	})
 }
 
@@ -676,6 +686,7 @@ var associateRoleToActions = function(done) {
 		.then(function(newRole){
 			AD.log('<green>linked :</green> action keys to role');
 			done();
+			return null;
 		})
 		.catch(function(err){
 
@@ -710,10 +721,12 @@ var createPermission = function(done) {
 		.then(function(newPerm){
 			AD.log('<green>created:</green> permission assignment for admin user + role + scope');
 			done();
+			return null;
 		})
 		.catch(function(err){
 			done(err);
 		})
+		return null;
 
 	})
 	.catch(function(err){
