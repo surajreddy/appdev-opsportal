@@ -85,18 +85,6 @@ msgstr "สิ่งที่แปล"
 
 #. path: opsportal
 #. code: th
-#. key: opp.toolProcessReport
-msgid "ProcessReport"
-msgstr "เพิ่ม/แก้ไข รายงาน"
-
-#. path: opsportal
-#. code: th
-#. key: opp.toolRunReport
-msgid "RunReport"
-msgstr "รายงาน"
-
-#. path: opsportal
-#. code: th
 #. key: opp.areaFCFActivities
 msgid "Activities"
 msgstr "กิจกรรม"
@@ -111,13 +99,13 @@ msgstr "คุณไม่ได้รับการอนุญาต กร�
 #. code: th
 #. key: rbac.user.confirmRemoveRole
 msgid "This will remove role: %s"
-msgstr "[th]This will remove role: %s"
+msgstr "สิ่งนี้จะนำตำแหน่ง  %s ออก"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.enabled
 msgid "Enabled"
-msgstr "[th]Enabled"
+msgstr "เปิดใช้งาน"
 
 #. path: opsportal
 #. code: th
@@ -250,4 +238,16 @@ msgstr "[th]Spiffy New Role"
 #. key: rbac.roles.newRoleDescription
 msgid "Describe this role"
 msgstr "[th]Describe this role"
+
+#. path: opsportal
+#. code: th
+#. key: opp.toolProcessReport
+msgid "Create/Edit Reports"
+msgstr "เพิ่ม/แก้ไข รายงาน"
+
+#. path: opsportal
+#. code: th
+#. key: opp.toolRunReport
+msgid "Run Reports"
+msgstr "รายงาน"
 
