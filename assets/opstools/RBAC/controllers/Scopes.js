@@ -15,7 +15,7 @@ steal(
     function () {
         System.import('appdev').then(function () {
             steal.import(
-		'query-builder',
+		        // 'query-builder',
                 'can/construct/construct',
                 'appdev/ad',
                 'appdev/control/control').then(function () {
@@ -70,7 +70,15 @@ steal(
                             // this.dom.roleForm.hide();
 
                             this.dom.queryBuilder = this.element.find('#rbac-scope-querybuilder').queryBuilder({
-
+                                // requires at least one filter to be instantiated
+                                filters:[{
+                                    id: 'date',
+                                    label: 'Datepicker',
+                                    type: 'date',
+                                    validation: {
+                                      format: 'YYYY/MM/DD'
+                                    }
+                                  }]
                             });
 
                             webix.ready(function(){
@@ -150,8 +158,10 @@ steal(
                                         width:200
                                 });
                                 _this.dom.formCombo.getPopup().getList().define("template", " #name# ");
-                                _this.dom.formCombo.attachEvent('onChange', function(){
-                                    _this.updateFiltersFromObject();
+                                _this.dom.formCombo.attachEvent('onItemClick', function(newV, oldVal){
+                                    var obj = this.getPopup().getBody().getItem(newV);
+console.log('... obj:', obj);
+                                    _this.updateFiltersFromObject(id);
                                 })
                                 
                                 ////
@@ -361,8 +371,12 @@ steal(
                         },
 
 
-                        updateFiltersFromObject:function() {
+                        updateFiltersFromObject:function(id) {
 console.log('---> updateFiltersFromObject()');
+                            // get chosen model
+                            var Object = this.data.scopesCollection.AD.getModel(id);
+console.log('object for id('+id+') :', Object);
+
                         },
 
 

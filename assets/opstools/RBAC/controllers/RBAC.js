@@ -112,6 +112,9 @@ steal(
 
                             var initPortal = function(key, ref, el, options) {
                                 var Controller = AD.Control.get(ref);
+if (Controller == null){
+    console.warn('!!!!! '+ref+': isnt there!');
+}
                                 _this.portals[key] = new Controller( el, options );
                             }
 
