@@ -1,0 +1,100 @@
+<!-- 
+#  Appdev Label Info:
+#label_context:opstool-RBAC
+#language_code:en
+-->
+
+<div style="display:none;">
+  Labels not in HTML but needed in tool:
+  <span app-label-key="site.user.newPassword">New Password</span>
+  <span app-label-key="site.user.confirmPassword">Confirm Password</span>
+</div>
+
+
+
+<!--Top Menu-->
+<div  class="op-widget-horizontal-nav">
+    <div class="fa fa-picture-o dragNdrop"><p>&nbsp;</p></div>
+    <label class="mlabel" app-label-key="site.user.profile">User Profile</label>
+</div>
+<!--/Top Menu-->
+
+
+<!--Content-->
+<div class="op-container wrapper">
+    <div class="op-container padtop40 mid-screen-mrgn-lr-15">
+        
+        <!-- Misc Info -->
+        <div class="panel panel-default col-lg-6 boxcenter off-botm10">
+            <div class="panel-heading">
+                <h3 class="panel-title" app-label-key="site.user.info">Information</h3>
+            </div>
+            <div class="panel-body user-info">
+                <dl>
+                    <dt app-label-key="site.user.username">Username</dt>
+                    <dd name="username"></dd>
+                </dl>
+            </div>
+        </div>
+        
+        <!--Change Password-->
+        <div class="panel panel-default col-lg-6 boxcenter off-botm10 password-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title" app-label-key="site.user.password">Password</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-inline user-password-form">
+                    <form class="user-password">
+                    <div class="form-group offset-5">
+                        <input type="password" class="form-control" name="password" placeholder="New Password" app-label-key="site.user.newPassword">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password2" placeholder="Confirm Password" app-label-key="site.user.confirmPassword">
+                    </div>
+                    <button type="button" class="btn btn-primary off-botm10" app-label-key="site.user.update">Update</button>
+
+                    <div class="alert alert-warning password-error-message" role="alert">
+                      <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    </div>
+                    </form>
+                    
+                </div>
+            </div>							
+        </div>
+        <!--/Change Password-->
+        
+        <!-- Email -->
+        <div class="panel panel-default col-lg-6 boxcenter off-botm10">
+            <div class="panel-heading">
+                <h3 class="panel-title" app-label-key="site.user.email">Email</h3>
+            </div>
+            <div class="panel-body user-email">
+                <input type="text" placeholder="Email address" app-label-key="site.user.emailAddress" name="email" class="form-control">
+                
+            </div>
+        </div>
+
+
+
+        <!--Select Language-->
+        <div id="slang" class="panel panel-default col-lg-6 boxcenter ">
+            <div class="panel-heading">
+                <h3 class="panel-title" app-label-key="site.user.language">Language</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-inline">
+                    <label app-label-key="site.user.chooseLanguage">Choose your default language for the web site:</label>
+                    <div class="col-lg-6">
+                        <select class="form-control" name="language">
+                            <option>English</option>
+                            <option>Chinese</option>
+                        </select>											
+                    </div>
+                        
+                </div>
+            </div>							
+        </div>							
+        <!--/Select Language-->
+        
+    </div>
+</div>
