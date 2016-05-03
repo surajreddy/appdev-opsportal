@@ -116,9 +116,16 @@ steal(
 
                         resize: function(data) {
                             this._super();
-                            // update the containing Div to height
-                            // this div is total Height, since it contains the menuBar:
-                            this.element.css('height', data.height + 'px');
+
+                            if ((data) && (data.height)) {
+
+                                // update the containing Div to height
+                                // this div is total Height, since it contains the menuBar:
+                                this.element.css('height', data.height + 'px');
+                            } else {
+                                console.warn('UserProfile.resize(): called without a valid data.height provided.');
+                            }
+                            
                         },
 
 
