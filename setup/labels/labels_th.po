@@ -85,6 +85,12 @@ msgstr "สิ่งที่แปล"
 
 #. path: opsportal
 #. code: th
+#. key: opp.toolActivityReporting
+msgid "Dashboard"
+msgstr "หน้าควบคุมระบบ"
+
+#. path: opsportal
+#. code: th
 #. key: opp.areaFCFActivities
 msgid "Activities"
 msgstr "กิจกรรม"
@@ -250,4 +256,22 @@ msgstr "เพิ่ม/แก้ไข รายงาน"
 #. key: opp.toolRunReport
 msgid "Run Reports"
 msgstr "รายงาน"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.profile
+msgid "User Profile"
+msgstr "[th]User Profile"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.switcheroo
+msgid "Switcheroo"
+msgstr "[th]Switcheroo"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.logout
+msgid "Logout"
+msgstr "[th]Logout"
 
