@@ -85,6 +85,12 @@ msgstr "สิ่งที่แปล"
 
 #. path: opsportal
 #. code: th
+#. key: opp.toolActivityReporting
+msgid "Dashboard"
+msgstr "หน้าควบคุมระบบ"
+
+#. path: opsportal
+#. code: th
 #. key: opp.areaFCFActivities
 msgid "Activities"
 msgstr "กิจกรรม"
@@ -111,133 +117,133 @@ msgstr "เปิดใช้งาน"
 #. code: th
 #. key: rbac.Users
 msgid "Users"
-msgstr "[th]Users"
+msgstr "ผู้ใช้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.add
 msgid "add"
-msgstr "[th]add"
+msgstr "เพิ่ม"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.selectSomeStuff
 msgid "Select a role and one or more scopes for this assignment:"
-msgstr "[th]Select a role and one or more scopes for this assignment:"
+msgstr "เลือกหนึ่งตำแหน่งหนึ่งและหนึ่งขอบเขตหรือมากกว่าเพื่อการทำงานนี้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.Roles
 msgid "Roles"
-msgstr "[th]Roles"
+msgstr "ตำแหน่ง"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.Scopes
 msgid "Scopes"
-msgstr "[th]Scopes"
+msgstr "ขอบเขต"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.Add
 msgid "Add"
-msgstr "[th]Add"
+msgstr "เพิ่ม"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.Cancel
 msgid "Cancel"
-msgstr "[th]Cancel"
+msgstr "ยกเลิก"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.selectSomeStuffEdit
 msgid "Select one or more scopes for this Role assignment:"
-msgstr "[th]Select one or more scopes for this Role assignment:"
+msgstr "หนึ่งขอบเขตหรือมากกว่าเพื่อการทำงานนี้เพื่อตำแหน่งงานนี้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.Update
 msgid "Update"
-msgstr "[th]Update"
+msgstr "ทำให้เป็นปัจจุบัน"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.users.userID
 msgid "User ID"
-msgstr "[th]User ID"
+msgstr "ชื่อผู้ใช้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.users.status
 msgid "Status"
-msgstr "[th]Status"
+msgstr "สถานะ"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.users.enabled
 msgid "Enabled"
-msgstr "[th]Enabled"
+msgstr "ใช้การได้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.noUserSelected
 msgid "no user selected"
-msgstr "[th]no user selected"
+msgstr "ไม่ได้เลือกผู้ใช้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.search
 msgid "search for roles"
-msgstr "[th]search for roles"
+msgstr "ค้นหาตำแหน่ง"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.name
 msgid "Name"
-msgstr "[th]Name"
+msgstr "ชื่อ"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.description
 msgid "Description"
-msgstr "[th]Description"
+msgstr "คำบรรยาย"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.confirmDelete
 msgid "This will remove %s"
-msgstr "[th]This will remove %s"
+msgstr "สิ่งนี้จะทำให้ %s ถูกกำจัดออกไป"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.user.search
 msgid "search for users"
-msgstr "[th]search for users"
+msgstr "ค้นหาผู้ใช้"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.confirmClone
 msgid "Clone role %s"
-msgstr "[th]Clone role %s"
+msgstr "หาตำแหน่งงานที่เหมือนกัน %s"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.searchActions
 msgid "search for actions"
-msgstr "[th]search for actions"
+msgstr "ค้นหาการเคลื่อนไหว"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.newRole
 msgid "Spiffy New Role"
-msgstr "[th]Spiffy New Role"
+msgstr "ตำแห่นงใหม่ที่เก๋ไก๋"
 
 #. path: opsportal
 #. code: th
 #. key: rbac.roles.newRoleDescription
 msgid "Describe this role"
-msgstr "[th]Describe this role"
+msgstr "อธิบายถึงตำแหน่งนี้"
 
 #. path: opsportal
 #. code: th
@@ -250,4 +256,22 @@ msgstr "เพิ่ม/แก้ไข รายงาน"
 #. key: opp.toolRunReport
 msgid "Run Reports"
 msgstr "รายงาน"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.profile
+msgid "User Profile"
+msgstr "ประวัติผู้ใช้"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.switcheroo
+msgid "Switcheroo"
+msgstr "แลก"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.logout
+msgid "Logout"
+msgstr "ลงชื่อออก"
 

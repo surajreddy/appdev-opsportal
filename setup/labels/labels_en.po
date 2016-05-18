@@ -85,15 +85,9 @@ msgstr "Translations"
 
 #. path: opsportal
 #. code: en
-#. key: opp.toolProcessReport
-msgid "ProcessReport"
-msgstr "Create/Edit Reports"
-
-#. path: opsportal
-#. code: en
-#. key: opp.toolRunReport
-msgid "RunReport"
-msgstr "Run Reports"
+#. key: opp.toolActivityReporting
+msgid "Dashboard"
+msgstr "Dashboard"
 
 #. path: opsportal
 #. code: en
@@ -250,4 +244,34 @@ msgstr "Spiffy New Role"
 #. key: rbac.roles.newRoleDescription
 msgid "Describe this role"
 msgstr "Describe this role"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolProcessReport
+msgid "Create/Edit Reports"
+msgstr "Create/Edit Reports"
+
+#. path: opsportal
+#. code: en
+#. key: opp.toolRunReport
+msgid "Run Reports"
+msgstr "Run Reports"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.profile
+msgid "User Profile"
+msgstr "User Profile"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.switcheroo
+msgid "Switcheroo"
+msgstr "Switcheroo"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.logout
+msgid "Logout"
+msgstr "Logout"
 
