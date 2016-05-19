@@ -14,7 +14,7 @@
 
 * {outline:none !important;}
 
-p {font-size:12px;}
+p {font-size:14px;}
 
 
 th, label {
@@ -106,7 +106,7 @@ th, label {
 	}
 
 
-.workspace .op-block-border {padding:15px 15px 0;}
+.workspace .op-block-border {padding:15px 15px 15px;}
 #submittedby .op-block-border {padding:0 15px;}
 #objective .checkbox label {margin-bottom:5px;}
 
@@ -142,7 +142,6 @@ th, label {
 	margin-right:15px;
 }
 
-
 .offset-9 {
 	margin-right:9px;
 }
@@ -166,6 +165,10 @@ th, label {
 
 .off-top10 {
 	margin-top:10px;
+}
+
+.off-top35 {
+	margin-top:35px;
 }
 
 
@@ -283,7 +286,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 .panel-default>.panel-heading {
-	background-color:#333 !important;
+	background-color:#333;
 	background-image:none;
 	color:#eaeaea !important
 
@@ -303,6 +306,8 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 .rbacSearch {padding:9px 0}
 
 #userdisplay {float:left;}
+
+#userlist-tbl {margin-bottom:10px;}
 
 .form-inline button {margin-right:0}
 
@@ -325,7 +330,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }	
 
 .webix_view.webix_form {
-	background-color: transparent !important;
+	background-color: transparent;
 }
 
 
