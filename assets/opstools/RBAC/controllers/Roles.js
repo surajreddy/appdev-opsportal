@@ -597,19 +597,9 @@ steal(
                             })
                             .then(function(data){
 
-                                // now do a full find for this entry, so we have all the filled out info:
-                                Roles.findOne({ id:data.id })
-                                .fail(function(err){
-                                    AD.error.log('Error looking up new role.', {error:err, role:data});
-                                    dfd.reject();
-                                })
-                                .then(function(newRole){
-
-                                    // console.log('... new cloned Role:', newRole);
-                                    newRole.translate();
-
-                                    dfd.resolve(newRole);
-                                });
+                                // AD.Model's should now auto findOne() created data
+                                data.translate();
+                                dfd.resolve(data);
 
                             });
 

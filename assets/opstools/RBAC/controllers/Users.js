@@ -693,11 +693,11 @@ steal(
                                 gridHeight -= pager.$height;
                                 gridHeight -= this.dom.userSearch.$height;
 
-                //// TODO: try to figure out how many rows would fit into available space
-                ////    then adjust ycount to fit that.
-                ////        gridHeight -= heightOf1Row (to accomodate the header)
-                ////        numrows = gridHeight / heightOf1Row
-                ////        
+//// TODO: try to figure out how many rows would fit into available space
+////    then adjust ycount to fit that.
+////        gridHeight -= heightOf1Row (to accomodate the header)
+////        numrows = gridHeight / heightOf1Row
+////        
 
                                 // this.dom.userGrid.define('height', gridHeight);
                                 // this.dom.userGrid.resize();
