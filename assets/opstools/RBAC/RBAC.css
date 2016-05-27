@@ -5,6 +5,13 @@
 	background-color: #F1F4F6 !important;
 }
 */
+
+/* Reset user-agent styles */
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .box-shadow {
 	-webkit-box-shadow: 0px 0px 5px 0px rgba(235, 235, 235, 1);
 	-moz-box-shadow: 0px 0px 5px 0px rgba(235, 235, 235, 1);
