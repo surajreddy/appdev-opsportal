@@ -47,48 +47,21 @@
 	border-radius: 10px;
 }
 
-.opsportal-user-avatar {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    display: block;
-    height: auto;
-    margin: 10px 0;
-    width: 125px;
-}
-.opsportal-user-avatar-th {
-    display: inline-block;
-    margin: 0 10px 0 0;
-    width: 65px;
-}
-
-.opsportal-edit-avatar {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0 !important;
-    position: relative;
-    width: 127px;
-}
-.opsportal-edit-avatar img {
-    border: 0 none !important;
-    display: block;
-    margin: 0 !important;
-}
-.opsportal-edit-avatar a {
-    background-color: #333333;
-    border: 0 none;
-    color: #FFFFFF !important;
-    display: block;
-    margin: 0;
-    padding: 5px 0;
-    text-align: center;
-    width: 100%;
-}
-.opsportal-edit-avatar a:hover {
-    color: #FFFFFF;
-    text-decoration: none;
-}
-
 .opsportal-widget-container-divider { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px; margin-top: 30px; }
 
 .opsportal-showhide { display: block; position: relative; }
+
+
+/* Edits after 2015-04-30 */
+
+
+
+/*.gen-btn-list { position: relative; margin: 15px 30px 15px 15px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 15px; height: 50px; }
+.gen-btn-list ul { float: right; border-left: 0 !important; }
+.gen-btn-list ul li { margin: 0; padding: 0; }
+.gen-btn-list ul li:hover { background: transparent; border: 0; }
+.gen-btn-list .active-btn, .gen-btn-list .active-btn a { opacity: 1; }*/
+
+
+
+

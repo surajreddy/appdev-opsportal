@@ -1,0 +1,19 @@
+<dl>
+    <dt>URL</dt>
+    <dd><code><%= url %></code></dd>
+    
+    <dt>Browser</dt>
+    <dd><code><%= browser.userAgent %></code></dd>
+    
+    <dt>User</dt>
+    <dd><code><%= guid %></code></dd>
+</dl>
+<hr>
+
+<h3>Note</h3>
+<p><%= note %></p>
+
+<h3>Screenshot</h3>
+<!-- inline image may get filtered out by GitHub -->
+<img src="<%= img %>">
+<a href="<%= imageURL %>" target="_blank">[^]</a>

@@ -1,19 +1,51 @@
-<div class="panel panel-default opsportal-container">
-    <div class="opsportal-container-masthead">
-        <a class="opsportal-masthead-link opsportal-menu-trigger" href="#"><span class="icon"><i class="fa fa-bars"></i></span> <span class="opsportal-menu-trigger-text">Menu</span> &nbsp;<span class="badge">16</span></a>
+<!-- 
+#  Appdev Label Info:
+#label_context:opsportal
+#language_code:en
+-->
+<div class="container">
 
-		<div class="opsportal-nav-sub-list">
-			<ul class="list-unstyled list-inline">
-			<li><a href="#" class="opsportal-masthead-link" role="button">Sublink 1</a></li>
-			<li><a href="#" class="opsportal-masthead-link" role="button">Sublink 2</a></li>
-			<li><a href="#" class="opsportal-masthead-link" role="button">Sublink 3</a></li>
-			</ul>
+    <!-- Masthead -->
+	<div class="op-container op-masthead">
+        
+		<div class="op-container" id="op-masthead-menu">
+			<a href="#sidr-main"><span class="icon"><i class="fa fa-bars"></i></span><span app-label-key="opp.menu">Menu</span><span class="badge"></span></a>
 		</div>
+		
+		<div class="op-container" id="op-masthead-nav">
+		    
+		    <!-- sublinks -->
+		    <div class="col-lg-11 col-md-11 col-xs-9" id="op-masthead-sublinks">
+                <ul class="list-unstyled list-inline" area="[[= area.key ]]">
+                    <li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- AD.lang.label.getLabelSpan({ key: tool.label, context:tool.context }) ]]</a></li>
+                    <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 2</a></li>
+                    <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 3</a></li>
+                </ul>
+            </div>
+            
+            <!-- user options icon -->
+            <div class="dropdown col-lg-1 col-md-1 col-xs-3">
+                <a id="user-options-icon" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user fa-2x" id=""></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="user-options-icon" style="position:absolute; left: auto; right: 0;">
+                    <li><a id="userprofile-menuitem" href="#user-profile" app-label-key="site.user.profile">User Profile</a></li>
+                    <li><a href="#switcheroo" app-label-key="site.user.switcheroo">Switcheroo</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/site/logout" app-label-key="site.user.logout">Logout</a></li>
+                </ul>
+            </div>
+			
+		</div>
+		
     </div>
-    <!-- <div class="panel-body"> -->
-    <div class="opsportal-fill">
-        <div class="opsportal-menu-widget"></div>
-		<!-- <div id="opsportal-loading" class="opsportal-content opsportal-loading-global"><div></div></div> -->
-        <div class="opsportal-content"></div>
-    </div>
+	
+	<!-- Global menu (Widget hidden by default) -->
+	<div class="op-menu-widget"></div>
+	
+	<!-- Stage -->
+	<div class="op-container op-stage"></div>
+		
+	<!-- <div id="opsportal-loading" class="opsportal-content opsportal-loading-global"><div></div></div> -->
+    
 </div>

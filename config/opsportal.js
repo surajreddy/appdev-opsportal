@@ -15,6 +15,30 @@ module.exports.opsportal = {
   },
 
 
+  // Settings for the Feedback widget
+  feedback: {
+    enabled: false,
+    
+    // The filesystem location where screenshot images will be saved.
+    // This should be somewhere that a webserver serves files from.
+    // e.g. '/data/www/screenshots/'
+    imageBasePath: '',
+    
+    // The public URL for accessing the saved screenshot image.
+    // e.g. 'http://example.com/screenshots/'
+    imageBaseURL: '',
+    
+    // The GitHub user account that the feedback will be posted from.
+    githubUsername: '',
+    githubPassword: '',
+    
+    // The GitHub repository that the feeback will be posted to.
+    githubRepo: 'appdev-opsportal',
+    // The GitHub repository owner.
+    githubOwner: 'appdevdesigns'
+  },
+  
+  
   // The ops portal is broken down into specific "areas".  Each area shows up
   // as a menu option on the Ops Portal [Menu] list.
   areas: [
@@ -65,6 +89,32 @@ module.exports.opsportal = {
       },
 
  */
+      ////
+      //// Administration Tools packaged with OpsPortal:
+      //// 
+      {
+          // Define the Administration Area
+          icon:'fa-cogs',
+          key:'PortalAdmin',
+          label:'opp.areaAdministration',
+          context:'opsportal',
+          tools:[{
+                  // Roles and Permissions
+                  controller:'RBAC',
+                  label:'opp.areaAdministration',
+                  context:'opsportal',
+                  isDefault: true,
+                  permissions:[
+                      'adcore.admin'
+                      , 'adcore.developer'
+                  ]
+              }
+
+              // User management Interface here...
+          ]
+      },
+
+
       {
           // User Profile Tool
           icon:'fa-user',
@@ -72,36 +122,29 @@ module.exports.opsportal = {
           label:'Profile',
           isDefault:false,
           tools:[{
-              // Hris User Profile Tool
-              controller:'HrisUserProfile',
-              label:'Profile',
-              isDefault: true,
-              permissions:[
-                  'hris.profile'
-                  , 'developer'
-              ]
-          }]
-      },
-
-      {
-          // HR Admin Tools
-          icon:'fa-wrench',
-          key:'hradmin',
-          label:'HR Admin',
-          isDefault: false,
-          tools:[
+                  // Hris User Profile Tool
+                  controller:'HrisUserProfile',
+                  label:'Profile',
+                  isDefault: true,
+                  permissions:[
+                      'hris.profile'
+                      , 'adcore.developer'
+                  ]
+              },
               {
                   // Hris Admin Objects
                   controller:'HrisAdminObjects',
                   label:'Configure Objects',
-                  isDefault: true,
+                  isDefault: false,
                   permissions:[
                       'hrisadmin.objects'
-                      , 'developer'
+                      , 'adcore.developer'
                   ]
               }
+
           ]
       },
+/*      
       {
           // MPD Report Tool
           icon:'fa-user',
@@ -115,7 +158,7 @@ module.exports.opsportal = {
               isDefault: true,
               permissions:[
                 'mpdreports.balancereports',
-				'developer'
+                'adcore.developer'
               ]
           }]
       },
@@ -131,9 +174,10 @@ module.exports.opsportal = {
               isDefault: true,
               permissions:[
                   'gma.matrix'
-                  , 'developer'
+                  , 'adcore.developer'
               ]
           }]
-      }
+      },
+*/
   ]
 };

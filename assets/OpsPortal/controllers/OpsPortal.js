@@ -1,263 +1,465 @@
-
 steal(
-        // List your Controller's dependencies here:
-        'appdev',
-        'OpsPortal/portal-scratch.css',
-		'OpsPortal/opsportal.css',
-        'OpsPortal/controllers/MenuList.js',
-        'OpsPortal/controllers/WorkArea.js',
-        'OpsPortal/classes/OpsTool.js'
-).then(
-        'opsportal/requirements.js'
-).then(
-//        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
-//        'OpsPortal/views/Portal/Portal.ejs',
-function(){
-
-
-    // make sure $ is defined:
-    if (typeof $ == 'undefined') var $ = AD.ui.jQuery;
+// List your Controller's dependencies here:
+    'OpsPortal/classes/OpsTool.js',
+    'OpsPortal/classes/OpsForm.js',
+    'OpsPortal/classes/OpsDialog.js',
+    'OpsPortal/classes/OpsWidget.js',
+    'OpsPortal/controllers/MenuList.js',
+    'OpsPortal/controllers/WorkArea.js',
+    'OpsPortal/controllers/SubLinks.js',
+    'OpsPortal/views/OpsPortal/OpsPortal.ejs',
+    'OpsPortal/views/OpsPortal/taskList.ejs',
+    'OpsPortal/portal-scratch.css',
+    'OpsPortal/opsportal.css',
+    'OpsPortal/opsportal-theme.css',
+'feedback/tpl.highlighter.ejs',
+'feedback/tpl.overview.ejs',
+'feedback/tpl.submitSuccess.ejs',
+'feedback/tpl.submitError.ejs',
+    function () {
+        System.import('appdev').then(function () {
+            steal.import(
+                'jquery',
+                'appdev',
+                'appdev/ad',
+                'appdev/control/control',
+                'appdev/comm/socket',
+                'appdev/labels/lang'
+            // ).then(
+            // 'js/jquery.sidr.min.js',
+            // ).then(
+                ).then(function () {
+                    steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
+                    System.import('opstools/UserProfile');
+                    
+                    // make sure $ is defined:
+                    var $ = typeof window.jQuery == 'undefined' ? AD.ui.jQuery : window.jQuery;
     
-    // create our opstools namespace for our tools.
-    if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
+                    // create our opstools namespace for our tools.
+                    if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
 
-    // create our OpsPortal namespace for our controllers.
-    if (typeof AD.controllers.OpsPortal == 'undefined') AD.controllers.OpsPortal = {};
-    AD.controllers.OpsPortal.OpsPortal = can.Control.extend({
-
-
-        init: function( element, options ) {
-            var self = this;
-            this.options = AD.defaults({
-                    templateDOM: '//OpsPortal/views/OpsPortal/OpsPortal.ejs',
-                    templateList: '//OpsPortal/views/OpsPortal/taskList.ejs'
-            }, options);
-
-            this.dataSource = this.options.dataSource; // AD.models.Projects;
-
-
-            this.hiddenElements = [];           // used to track which elements we have hidden
-
-
-            this.initDOM();                     // embedded list view
-            this.initPortal();                  // popup portal view
-            this.requestConfiguration();
-
-
-            // make sure we resize our display to the document/window
-            var sizeContent = function () {
-                self.resize();
-            };
-            AD.ui.jQuery(document).ready(sizeContent);
-            AD.ui.jQuery(window).resize(sizeContent);
-
-			// display progress bar as tools load
-			//this.progress(80, $('#opsportal-loading'));
-
-            // OK, one of the problems with resizing our tools comes when
-            // they are currently not displayed.  Some widgets (GenLists.js)
-            // need to evaluate their layout based upon the size of their
-            // existing headers.  But when that header isn't displayed, the
-            // reported size is 0.
-            // These tools need a chance to resize again once they are displayed
-            // So, those tools being 'opsportal.area.show'n need to resize
-            // now that they are displayed.
-            // This will force a global resize which will do the trick.
-            AD.comm.hub.subscribe('opsportal.area.show', function (key, data) {
-
-                setTimeout(sizeContent,4);
-
-            });
-
-        },
+                    //
+                    // OpsPortal 
+                    // 
+                    // The OpsPortal is a Single Page Application (SPA) that contains the tools
+                    // a user is allowed to see.
+                    //
+                    // It is designed to start out on an existing Web Page (Drupal, WordPress, 
+                    // etc...) and display a mini summary/ simple header + link.  Once clicked
+                    // it expands to fill up the whole browser area and allows you to work on 
+                    // the tools contained inside.
+                    //
+                    // The OpsPortal begins by attaching itself to it's provided DOM element
+                    // and show a 'taskList' view.
+                    //
+                    // It then requests from the server a configuration intended for this user.
+                    //
+                    // The configuration defines a set of Areas, and a set of Tools for each 
+                    // Area.
+                    //
+                    // The OpsPortal then loads the required Tool resources and then configures
+                    // them in the DOM accordingly.
+                    //
+                    // The OpsPortal has 3 Main Sections:
+                    //  - The Masthead:  the controller over the top of the page
+                    //  - The Menu:  A slide in Menu allowing you to switch to different Areas
+                    //  - The WorkArea: the place that displays the currently active Tool
+                    //
+                    // 
+                    //
+                    //
+                    AD.Control.extend('OpsPortal.OpsPortal', {
 
 
+                        init: function (element, options) {
+                            var self = this;
+                            this.options = AD.defaults({
+                                'portal-autoenter': false,
+                                templateDOM: '/OpsPortal/views/OpsPortal/OpsPortal.ejs',
+                                templateList: '/OpsPortal/views/OpsPortal/taskList.ejs',
+                                templateError: '/OpsPortal/views/OpsPortal/error.ejs'
+                            }, options);
 
-        createTool: function( tool) {
-            console.log(tool);
-        },
+
+                            this.hiddenElements = [];           // used to track which elements we have hidden
 
 
+                            this.elOptions();                   // search the attached element for config options.
 
-        displayPortal: function() {
+                            // this.initDOM();                     // embedded list view
+                            this.initPortal();                  // popup portal view
 
-            var self = this;
-            this.hiddenElements = [];
+                            // update loading progress for OpsPortal:
+                            AD.ui.loading.reset();
+                            AD.ui.loading.text(AD.lang.label.getLabel('opp.configuringTools'));
+                            AD.ui.loading.resources(2); // kicks off a new refresh of the bar
 
-            // take all the body.children  && hide them.
-            $('body').children().each(function(indx){
-                var $el = $(this);
-                if ($el != self.portalPopup) {
-                    $el.hide();
-                    self.hiddenElements.push($el);
-                }
-            });
 
-            // Now show our Portal:
-            this.portalPopup.show();
+                            this.requestConfiguration();
 
-        },
+
+                            // make sure we resize our display to the document/window
+                            var sizeContent = function () {
+                                self.resize();
+                            };
+                            AD.ui.jQuery(document).ready(sizeContent);
+                            AD.ui.jQuery(window).resize(sizeContent);
 
 
 
-        hidePortal: function() {
-
-            var self = this;
-            this.hiddenElements.forEach(function($el) {
-                $el.show();
-            });
-
-            // Now show our Portal:
-            this.portalPopup.hide();
-        },
+                            // display progress bar as tools load
+                            //this.progress(80, $('#opsportal-loading'))
+            
 
 
+                            // OK, one of the problems with resizing our tools comes when
+                            // they are currently not displayed.  Some widgets (GenLists.js)
+                            // need to evaluate their layout based upon the size of their
+                            // existing headers.  But when that header isn't displayed, the
+                            // reported size is 0.
+                            // These tools need a chance to resize again once they are displayed
+                            // So, those tools being 'opsportal.area.show'n need to resize
+                            // now that they are displayed.
+                            // This will force a global resize which will do the trick.
+                            AD.comm.hub.subscribe('opsportal.area.show', function (key, data) {
 
-        initDOM: function() {
+                                setTimeout(sizeContent, 4);
 
-            this.element.html(can.view(this.options.templateList, {} ));
+                            });
 
-
-//// TODO: determine size of el
-//// TODO: if large enough, display .list-content
-//// TODO: create 'bootstrap' routine to insert resources into web page
-
-//// FEATURE: Notifications : create mechanism for opstools to indicate how many tasks/todo's they want to register
-//// FEATURE: SubMenu's : display additional tools in an area using SubMenu's
-
-
-//            this.element.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
-        },
+                        },
 
 
 
-        // this is the popup Ops Portal that takes over the page:
-        initPortal:function() {
+                        /**
+                         * search the base element attributes for configuration options.
+                         *     
+                         * @return {nil} no return value
+                         */
+                        elOptions: function () {
+                            var _this = this;
 
-            this.portalPopup = AD.ui.jQuery('<div class="opsportal-portal-popup">');
-            this.portalPopup.hide();
-            this.portalPopup.html(can.view(this.options.templateDOM, {} ));
+                            var params = ['portal-autoenter'];
+                            params.forEach(function (key) {
 
-            this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.opsportal-menu-widget'));
-            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.opsportal-content'));
-//            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+                                var val = _this.element.attr(key);
+                                if (typeof val !== 'undefined') {
+                                    val = val.toLowerCase();
+                                    if (val == 'false') {
+                                        val = false;
+                                    }
+                                    _this.options[key] = val;
+                                }
+                            })
 
 
-            AD.ui.jQuery('body').append(this.portalPopup);
-
-        },
-
-
-
-        resize: function() {
-
-            var newHeight = $(window).height()  - this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
-
-            // notify of a resize action.
-            // -1px to ensure sub tools don't cause page scrolling.
-            AD.comm.hub.publish('opsportal.resize', { height: newHeight-1 });
-        },
+                        },
 
 
 
-        requestConfiguration: function() {
-            var self = this;
-//// For debugging:
-AD.comm.hub.subscribe('**', function(key, data){
-    console.log('pub:'+key);
-    console.log(data);
-});
-            AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
+                        initDOM: function () {
 
-                if (err) {
-                    // what to do here?
-                } else {
+                            this.element.html(can.view(this.options.templateList, {}));
 
-                    var defaultArea  = {};
 
-                    // choose 1st area as default just in case none specified:
-                    if (data.areas[0]) {
-                        defaultArea = data.areas[0];
-                    }
+                            //// TODO: determine size of el
+                            //// TODO: if large enough, display .list-content
+                            //// TODO: create 'bootstrap' routine to insert resources into web page
 
-                    // create each area
-                    for (var a=0; a < data.areas.length; a++) {
-                        AD.comm.hub.publish('opsportal.area.new', data.areas[a]);
-                        if(data.areas[a].isDefault) {
-                            defaultArea = data.areas[a];
+                            //// FEATURE: Notifications : create mechanism for opstools to indicate how many tasks/todo's they want to register
+                            //// FEATURE: SubMenu's : display additional tools in an area using SubMenu's
+
+
+                            //            this.element.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
+                        },
+
+
+
+                        initDOMError: function (errMsg) {
+                            this.element.html(can.view(this.options.templateError, { errorMessage: errMsg }));
+                            AD.lang.label.translate(this.element);
+                        },
+
+
+
+                        // this is the popup Ops Portal that takes over the page:
+                        initPortal: function () {
+
+                            this.portalPopup = AD.ui.jQuery('<div class="op-portal-popup">');
+                            this.portalPopup.hide();
+                            this.portalPopup.html(can.view(this.options.templateDOM, {}));
+
+                            this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.op-menu-widget'));
+                            this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.op-stage'));
+                            //            this.portalPopup.find('.opsportal-menu-trigger').sidr({name:'op-menu-widget',side:'left'});
+
+                            var SubLinks = AD.Control.get('OpsPortal.SubLinks');
+                            //this.subLinks = new SubLinks(this.portalPopup.find('.opsportal-nav-sub-list'));
+                            this.subLinks = new SubLinks(this.portalPopup.find('#op-masthead-sublinks'));
+                            this.dom = {};
+                            this.dom.resize = {};
+                            //this.dom.resize.masthead = this.portalPopup.find(".opsportal-container-masthead");
+                            this.dom.resize.masthead = this.portalPopup.find(".op-masthead");
+                            AD.ui.jQuery('body').append(this.portalPopup);
+
+
+                            AD.lang.label.translate(this.portalPopup);  // translate the current OpsPortal Labels
+                            
+                            $('#userprofile-menuitem').on('click', function(ev) {
+                                ev.preventDefault();
+                                AD.comm.hub.publish('opsportal.area.show', { area: 'UserProfile' });
+                            });
+                        },
+                        
+                        
+                        initFeedback: function() {
+                            
+                            var labels = {
+                                t: function(key) {
+                                    return AD.lang.label.getLabel(key) || key;
+                                }
+                            };
+                            var templates = {
+                                highlighter: can.view('/feedback/tpl.highlighter.ejs', labels),
+                                overview: can.view('/feedback/tpl.overview.ejs', labels),
+                                submitSuccess: can.view('/feedback/tpl.submitSuccess.ejs', labels),
+                                submitError: can.view('/feedback/tpl.submitError.ejs', labels),
+                            };
+                            for (var key in templates) {
+                                // can.view produces a document fragment. We need it to be a
+                                // plaintext string.
+                                templates[key] = templates[key].firstChild.innerHTML;
+                            }
+                            
+                            $.feedback({
+                                ajaxURL: '/opsportal/feedback',
+                                html2canvasURL: '/feedback/html2canvas.min.js',
+                                postHTML: false,
+                                tpl: templates,
+                                initButtonText: labels.t('Feedback')
+                            });
+                            
+                        },
+
+
+
+
+                        portalDisplay: function () {
+
+                            var self = this;
+                            this.hiddenElements = [];
+
+                            // take all the body.children  && hide them.
+                            $('body').children().each(function (indx) {
+                                var $el = $(this);
+                                if ($el != self.portalPopup) {
+                                    $el.hide();
+                                    self.hiddenElements.push($el);
+                                }
+                            });
+
+                            // Now show our Portal:
+                            this.portalPopup.show();
+                            
+                            // Add the Feedback widget
+                            if (this.isFeedbackEnabled) {
+                                this.initFeedback();
+                            }
+                            
+                            this.resize();
+
+                        },
+
+
+
+                        portalHide: function () {
+
+                            var self = this;
+                            this.hiddenElements.forEach(function ($el) {
+                                $el.show();
+                            });
+
+                            // Now hide our Portal:
+                            this.portalPopup.hide();
+                        },
+
+
+
+                        resize: function () {
+
+                            // The size we report to our Tools is window.height - masthead.height
+                            var hWindow = $(window).height();
+                            var hMasthead = this.dom.resize.masthead.outerHeight(true);
+                            console.log('//// resize: window.height:' + hWindow + ' masthead.outer:' + hMasthead);
+                            var newHeight = $(window).height() - hMasthead;  //this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
+
+                            // notify of a resize action.
+                            // -1px to ensure sub tools don't cause page scrolling.
+                            AD.comm.hub.publish('opsportal.resize', { height: newHeight - 1 });
+                        },
+
+
+
+                        requestConfiguration: function () {
+                            var self = this;
+            
+                            // //// For debugging:
+                            // AD.comm.hub.subscribe('**', function(key, data){
+                            //     console.log('pub:'+key);
+                            //     console.log(data);
+                            // });
+
+                            AD.ui.loading.completed(1);
+
+
+                            AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
+                                
+                                self.isFeedbackEnabled = data.feedback || false;
+                                
+                                AD.ui.loading.completed(1);  // just to show we have loaded the config.
+                                if (err) {
+
+
+                                    // what to do here?
+                                    var label = AD.lang.label.getLabel('opp.errorNoPermission') || ' You don\'t have permission.  Ask your administrator to grant you access. ';
+                                    self.initDOMError(label)
+
+                                } else {
+
+                                    // prepare our loading progress indicator:
+                                    AD.ui.loading.resources(data.areas.length);
+                                    AD.ui.loading.resources(data.tools.length);
+
+                                    var defaultArea = {};
+
+                                    // choose 1st area as default just in case none specified:
+                                    if (data.areas[0]) {
+                                        defaultArea = data.areas[0];
+                                    }
+
+                                    // create each area
+                                    for (var a = 0; a < data.areas.length; a++) {
+                                        AD.comm.hub.publish('opsportal.area.new', data.areas[a]);
+                                        if (data.areas[a].isDefault) {
+                                            defaultArea = data.areas[a];
+                                        }
+                                        AD.ui.loading.completed(1);
+                                    }
+
+
+                                    var defaultTool = {};
+
+                                    // assign 1st tool as our default to show
+                                    if (data.tools[0]) defaultTool[data.tools[0].area] = data.tools[0];
+
+                                    // create each tool
+                                    for (var t = 0; t < data.tools.length; t++) {
+                                        AD.comm.hub.publish('opsportal.tool.new', data.tools[t]);
+                                        if (data.tools[t].isDefault) defaultTool[data.tools[t].area] = data.tools[t];
+                                        AD.ui.loading.completed(1);
+                                    }
+                                    
+                                    // Create the User Profile tool
+                                    // (special case which is accessible for all
+                                    //  users and has no top-left menu item)
+                                    setTimeout(function() {
+                                        self.workArea.createArea({
+                                            icon: 'fa-cogs',
+                                            key: 'UserProfile',
+                                            label: 'User Profile',
+                                            isDefault: false,
+                                        });
+                                        self.workArea.listAreas.UserProfile.createTool({
+                                            area: 'UserProfile',
+                                            controller: 'UserProfile',
+                                            label: 'User Profile',
+                                            isDefault: true,
+                                        });
+                                        self.workArea.listAreas.UserProfile.element.hide();
+                                        AD.comm.hub.publish('opsportal.tool.show', {
+                                            area: 'UserProfile',
+                                            tool: 'UserProfile',
+                                        });
+                                    }, 50);
+
+
+                                    //// all tools should be created now
+
+                                    // make sure they all have resize()ed
+                                    self.resize();
+
+                                    // notify of our default Area:
+                                    // there can be only 1 ...
+                                    AD.comm.hub.publish('opsportal.area.show', { area: defaultArea.key });
+
+                                    // now notify all our default tools
+                                    for (var t in defaultTool) {
+                                        AD.comm.hub.publish('opsportal.tool.show', {
+                                            area: defaultTool[t].area,
+                                            tool: defaultTool[t].controller
+                                        });
+                                    }
+
+
+                                    // once everything is created, tell the menu slider to attach itself
+                                    self.portalPopup.find('#op-masthead-menu a:first-of-type').sidr({ name: 'op-menu-widget', side: 'left' });
+
+
+                                    // now show the Link to open the OpsPortal
+                                    self.initDOM();
+
+                                    AD.lang.label.translate(self.element);  // translate the OpsPortal task list
+
+
+                                    // notify everyone the opsportal is finished creating the Tools.
+                                    AD.comm.hub.publish('opsportal.ready', {});
+
+
+                                    // if our auto open setting is set, then 
+                                    if (self.options['portal-autoenter']) {
+
+                                        // auto click the Enter link:
+                                        self.element.find('.op-masthead a:first-of-type').click();
+                                    }
+
+                                }
+
+                            });
+
+                        },
+
+
+
+                        //'.opsportal-menu-trigger-text click' : function( $el, ev) {
+                        //'.opsportal-masthead a:first-of-type click' : function( $el, ev) {
+                        '.op-masthead a:first-of-type click': function ($el, ev) {
+                            //'.op-launch click' : function( $el, ev) {
+                            // this should show the Portal Popup
+                            this.portalDisplay();
+
+                            ev.preventDefault();
+                        },
+                        
+                        
+                        '.ad-item-add click': function ($el, ev) {
+
+                            ev.preventDefault();
+                        },
+
+
+                        /*
+                                '.apd-portal-menu-trigger click': function($el, ev) {
+                        
+                                    var width = this.menu.width();  //.toggle();
+                                    AD.comm.hub.publish('opsportal.menu.toggle', { width: width });
+                                }
+                        */
+                        'progress': function (percent, $element) {
+                            var progressBarWidth = percent * $element.width() / 100;
+                            $element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "%&nbsp;");
                         }
-                    }
 
-
-                    var defaultTool = {};
-
-                    // assign 1st tool as our default to show
-                    if (data.tools[0]) defaultTool[data.tools[0].area] = data.tools[0];
-
-                    // create each tool
-                    for (var t=0; t < data.tools.length; t++) {
-                        AD.comm.hub.publish('opsportal.tool.new', data.tools[t]);
-                        if (data.tools[t].isDefault) defaultTool[data.tools[t].area] = data.tools[t];
-                    }
-
-
-                    //// all tools should be created now
-
-                    // make sure they all have resize()ed
-                    self.resize();
-
-                    // notify of our default Area:
-                    // there can be only 1 ...
-                    AD.comm.hub.publish('opsportal.area.show', {area:defaultArea.key});
-
-                    // now notify all our default tools
-                    for (var t in defaultTool) {
-                        AD.comm.hub.publish('opsportal.tool.show', {
-                            area:defaultTool[t].area,
-                            tool:defaultTool[t].controller
-                        });
-                    }
-
-
-                    self.portalPopup.find('.opsportal-menu-trigger').sidr({name:'opsportal-menu-widget',side:'left'});
-
-                }
-
-            });
-
-        },
-
-
-
-        '.opsportal-menu-trigger-text click' : function( $el, ev) {
-
-            // this should show the Portal Popup
-            this.displayPortal();
-
-            ev.preventDefault();
-        },
-
-
-
-        '.ad-item-add click': function($el, ev) {
-
-            ev.preventDefault();
-        },
-
-
-/*
-        '.apd-portal-menu-trigger click': function($el, ev) {
-
-            var width = this.menu.width();  //.toggle();
-            AD.comm.hub.publish('opsportal.menu.toggle', { width: width });
-        }
-*/
-		'progress': function(percent, $element) {
-		    var progressBarWidth = percent * $element.width() / 100;
-			$element.find('div').animate({ width: progressBarWidth }, 500).html(percent + "%&nbsp;");
-		}
-
+                    });
+                });
+        });
     });
-
-
-});

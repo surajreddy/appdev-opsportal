@@ -1,8 +1,4 @@
-
-			<li>
-				<div class="opsportal-nav-list-item"  area="<%= area.key %>" >
-					<% if (area.key != 'profile'){ %><span class="badge pull-right">8</span><% } %>
-					<span class="icon opsportal-item-icon"><i class="fa fa-fw opsportal-icon-fw  <%= area.icon %>"></i></span><%= area.label %>
-				</div>
-			</li>
-			
+<li class="op-container" area="<%= area.key %>">
+	<% if (area.key != 'profile'){ %><span class="badge pull-right"></span><% } %>
+	<span class="icon op-icon"><i class="fa fa-fw op-icon-fw <%= area.icon %>"></i></span><%== AD.lang.label.getLabelSpan({ key: area.label, context:area.context }) %>
+</li>

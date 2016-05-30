@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dash Board</title>
+
+
+  
+  <!-- These resources are provided by a base install: -->  
+  <!-- For our mockup files, we link to these in a ../../mockups/ folder -->
+  <link  href="../../mockups/font-awesome.css" rel="stylesheet" />   
+  <link  href="../../mockups/bootstrap.min.css" rel="stylesheet" />   
+  <link  href="../../mockups/bootstrap-theme.min.css" rel="stylesheet" /> 
+  <script src="../../mockups/jquery-1.11.1.min.js" type="text/javascript" ></script>
+  <script src="../../mockups/bootstrap.min.js" type="text/javascript" ></script>
+  <script src="../../mockups/jquery.sidr.min.js" type="text/javascript" ></script>
+  <!--language switcher-->
+
+
+  <!-- These are provided by the current OpsPortal project -->
+  <link  href="../../js/bootstraptable/bootstrap-table.css" rel="stylesheet" /> 
+  <script src="../../js/bootstraptable/bootstrap-table.js" ></script> 
+  <link  href="../../OpsPortal/opsportal.css" rel="stylesheet" />   
+  <link  href="../../OpsPortal/portal-scratch.css" rel="stylesheet" />
+  <link  href="../../styles/opsportal/language-switcher.css" rel="stylesheet" />
+  <script src="../../js/typeahead.jquery.min.js" type="text/javascript" ></script>
+ 
+
+
+  <!-- These are for the current RBAC mockup -->
+  <link rel="stylesheet" type="text/css" href="RBAC.css"> 
+  <script src="mockup_setup.js" type="text/javascript" ></script>
+
+
+</head>
+<body>
+<!--TOP MENU-->  
+<div id="opsportal-top">
+    <div class="opsportal-container-masthead">
+      <div class="row">
+
+        <div id="mls" class="col-md-5 col-sm-5 col-xs-9">
+          <ul class="nav nav-pills">
+            <li>
+              <a class="opsportal-masthead-link opsportal-menu-trigger" href="#"><span class="icon"><i class="fa fa-bars"></i></span> <span class="opsportal-menu-trigger-text">Menu</span> &nbsp;<span class="badge">16</span></a>
+            </li>
+            <!-- begin language switcher -->
+            <li class="dropdown">
+              <a type="button" class="en" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-language fa-2 "></i> En
+              </a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">English</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Chinese</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Korean</a></li>
+                      <li role="presentation" class="divider"></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Manage Language</a></li>
+              </ul>            
+            </li>
+            <!-- end language switcher -->
+            <!--Switcheero-->
+            <li>
+              <a type="button"  class="en" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-refresh" style="margin-right:4px"></i>Switcheero :<span></span></a>
+                <div id="switcheerowrap" class="dropdown-menu padbot15 padtop15" role="menu" aria-labelledby="dLabel">
+                    <div class="col-md-12">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <select name="availableUser" class="selectuser off-botm20">
+                                    <option value="1">HR Admin</option>
+                                    <option value="2">System Admin</option>
+                                    <option value="3">Crisis Manager</option>
+                                    <option value="3">Marketing Manager</option>
+                                    <option value="3">Crisis Manager</option>
+                                    <option value="3">Sales Manager</option>
+                                    <option value="3">Lorem Manager</option>
+                                  </select>
+                                </div>
+                                <div class="col-md-6 align-center">
+                                  <button type="button" data-dismiss="modal" class="btn btn-primary">Switch</button>                   
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <input class="currentuser" placeholer="Current User"></input>
+                                </div>
+                                <div class="col-md-6 align-center">
+                                  <button type="button" data-dismiss="modal" class="btn btn-success">Reset</button>
+                                </div>
+                              </div>
+                    </div>        
+                </div> 
+            </li>
+            <!--END Switcheero-->
+          </ul>
+        </div>
+
+        <div class="col-md-7 col-sm-7 col-xs-3 ">
+          <div id="menu4wide" class="opsportal-nav-sub-list">
+            <ul class="list-unstyled list-inline">
+            <li><a href="#" class="opsportal-masthead-link" role="button">Sublink 1</a></li>
+            <li><a href="#" class="opsportal-masthead-link" role="button">Sublink 2</a></li>
+            <li><a href="#" class="opsportal-masthead-link" role="button">Sublink 3</a></li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <a id="drop3" style="display:none" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                  <i class="fa fa-bars lrgsicon"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+             </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+</div>
+<!--/TOP MENU-->
+<div class="panel panel-default" id="opsportal-container">
+    <!-- <div class="panel-body"> -->
+    <div class="opsportal-fill">
+        <div class="opsportal-menu-widget"></div>
+    <!-- <div id="opsportal-loading" class="opsportal-content opsportal-loading-global"><div></div></div> -->
+        <div class="opsportal-content">
+
+          <div class="opsportal-area-RBAC" style="display: block;">
+              <div class="opsportal-area-tool-RBAC">
+
+
+<!-- HTML Mockup Here -->
+               <!--LEFT SIDE BAR-->
+                <div id="opsportal-left-bar">
+                  <div id="leftbar-container">
+                    <div id="opsportal-left-title">
+                          <h4>Permission</h4>
+                    </div>
+
+                    <div id="menu_wrapper">
+                      <ul class="art-hmenu">  
+                        <li><a href="" class="rbac-menu" portal="users" rbac-show="rbac-users" ><i class="fa fa-users" ></i> Users</a></li>
+                        <li><a href="" class="rbac-menu" portal="roles" rbac-show="rbac-roles"><i class="fa fa-graduation-cap"></i> Roles</a></li>
+                        <li><a href="" class="rbac-menu" portal="scopes" rbac-show="rbac-scopes"><i class="fa fa-sitemap"></i>Scopes</a></li>   
+                      </ul>
+                    </div>                    
+                  </div>
+                </div>
+                <!--/LEFT SIDE BAR-->
+                <div id="opsportal-content-area">
+                  <div id="opsportal-widgets-area">
+
+                      <!--  ================= Users ================  -->
+                      <div class="rbac-display rbac-users" >
+                        <div class="opsportal-panel container">
+                            <ul id="crumbs">
+                              <li><a href="#" class="disabled">Users</a></li>
+                            </ul>
+                            <div class="opsportal-panel-heading container">
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
+                                    <!--Search and Filter-->
+                                    <div class="">
+                                      <!--Filter-->
+                                      <!--
+                                      <div class="col-xs-6 col-sm-6 col-md-6">
+                                          <form class="normalform" role="search">
+                                            <div class="">
+                                              <select class="form-control">
+                                                  <option value="one">-- Filter --</option>
+                                                  <option value="two">Two</option>
+                                                  <option value="three">Three</option>
+                                                  <option value="four">Four</option>
+                                                  <option value="five">Five</option>
+                                              </select>
+                                            </div>
+                                          </form>                                      
+                                      </div>
+                                      -->
+                                      <!--/Filter-->
+                                      <!--Search-->
+                                      <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+                                          <div class="form-group">
+                                              <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter typeahead" placeholder="Search for User">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                             </div> 
+                                          </div>
+                                      </div>
+                                      <!--/Search-->
+                                    </div>
+                                    <!--/Search and Filter-->  
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-right">
+
+                                </div>          
+                            </div>
+                            <div class="col-md-12">  
+                              <table id="userList" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <thead>
+                                    <tr class="tbhead">
+                                      <th data-field="username" class="align-center"># Assignment</th>
+                                      <th data-field="username" >User ID</th>
+                                      <th class="align-center">Option</th>
+                                      <th class="align-center">Status</th>
+                                    </tr>
+                                  </thead> 
+                                  <tbody> 
+                                      <tr class="template">
+                                        <td class="numAssignments" >[[= row.numAssignments() ]]</td>
+                                        <td><a href="" rbac-show="rbac-permissionlist" style="display:block;">[[= user.attr('username') ]]</a></td>
+                                        <td class="options" >
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="rbac-user-perm-quickview fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"  user-id="[[= row.id ]]" ></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="" rbac-show="rbac-addassignments" class="fa fa-plus fa-2 rbac-user-perm-add" user-id="[[= row.id ]]" ></a></span>
+                                        </td>
+                                        <td class="status" ><!-- 
+
+                                            var user = row;
+                                            var status = 'stats-red';
+                                            if (user.permission.length > 0) {
+                                              status = 'stats-green';
+                                            }
+                                          -->
+                                          <div class="img-thumbnail [[= status ]]"></div></td>
+                                      </tr>
+
+                                      <tr class="mockup" >
+                                        <td>2</td>
+                                        <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Rammel Olasiman</a></td>
+                                        <td>
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2"></a></span>
+                                        </td>
+                                        <td><div class="img-thumbnail stats-green"></div></td>
+                                      </tr>
+                                      <tr class="mockup" >
+                                        <td>3</td>
+                                        <td><a href="#permission-list" rbac-show="rbac-permissionlist" style="display:block;">Lucci Baldez</a></td>
+                                        <td>
+                                          <span data-toggle="tooltip" data-placement="left" title="Quick View"><a href="" class="fa fa-eye fa-2 offset-9" data-toggle="modal" data-target=".view-assignment"></a></span>
+                                          <span data-toggle="tooltip" data-placement="left" title="Add Assignment to this user"><a href="#add-assignment" rbac-show="rbac-addassignments" class="fa fa-plus fa-2"></a></span>
+                                        </td>
+                                        <td><div class="img-thumbnail stats-green"></div></td>
+                                      </tr>
+                                      </tbody>
+                              </table>
+                            </div>
+
+                             <!--Pagination-->
+                             <!-- 
+                            <div class="col-md-12 padtop10">
+                              <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 align-right">
+                                    <button id="dLabel" class="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Display 50
+                                      <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="20">20</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="50">50</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="100">100</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="300">300</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="1000">1000</a></li>
+                                    </ul>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-12 align-center off-botm20 off-top10">
+                                    <ul class="pagination nav" style="vertical-align:bottom">
+                                      <li><a href="#"><span aria-hidden="true">&laquo;</span><span class=""></span></a></li>
+                                      <li><a href="#">1</a></li>
+                                      <li><a href="#">2</a></li>
+                                      <li><a href="#">3</a></li>
+                                      <li><a href="#">4</a></li>
+                                      <li><a href="#">5</a></li>
+                                      <li><a href="#"><span aria-hidden="true">&raquo;</span><span class=""></span></a></li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                            -->
+                            <!--/Pagination-->                         
+                        </div>
+
+                        <!--Modal for view assignment in user-->
+                        <div class="modalcenter modal fade view-assignment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <table class="rbac-user-table-assignments table table-bordered table-hover box-shadow">
+                                  <thead>
+                                    <tr class="tbhead">
+                                      <th>Role</th>
+                                      <th>Scope</a></th>
+                                      <th>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <!-- if (list.length > 0) {
+
+                                      list.forEach(function(perm){ 
+
+                                        var currRole = "no role found";
+                                        var listScopeIDs = [];
+
+                                        listRoles.forEach(function(role){
+                                            if ((role.id == perm.role)
+                                                || (role.id == perm.role.id)) {
+                                                currRole = role.role_label;
+                                            }
+                                        })
+
+                                        // now use the proper permission entry to gather all the scopes.
+                                        listPermissions.forEach(function(p){
+                                            if (p.id == perm.id) {
+                                                p.scope.forEach(function(scope){
+                                                    listScopeIDs.push(scope.id);
+                                                })
+                                            }
+                                        })
+
+                                        var listScopeNames = [];
+                                        listScopes.forEach(function(scope){
+                                            if (listScopeIDs.indexOf(scope.id) != -1) {
+                                                listScopeNames.push(scope.label)
+                                            }
+                                        })
+
+                                    -->
+                                    <tr>
+                                      <td>[[= currRole ]]</td>
+                                      <td>[[= listScopeNames.join(' | ') ]]</td>
+                                      <td>Enabled</td>
+                                    </tr>
+                                    <!--  })
+
+                                    } else {
+
+                                    -->
+                                    <tr>
+                                      <td colspan="3"> No Assignments </td>
+                                    </tr>
+                                    <!-- }  -->
+                                    <tr class="mockup" >
+                                      <td>System Admin</td>
+                                      <td>I.T Dept. | M.I.Ss Dept.</td>
+                                      <td>Disabled</td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                                <div class="modal-footer">
+                                <button type="button" class="btn" data-dismiss="modal">Close</button>
+                              </div>  
+                            </div>
+                          
+                          </div>
+                        </div>    
+                        <!--/Modal for view assignment in user-->
+                      </div>  
+                      <!--  ================= /End Users ================  -->
+
+
+                      <!--  ================= Add Assignments ================  -->
+                      <div class="rbac-display rbac-addassignments"  style="display:none;">
+                          <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span class="rbac-addassignments-userID">Linel Sedillo</span></h5>
+                          <div class="opsportal-panel container">
+                            <ul id="crumbs">
+                                <li><a href="#" rbac-show="rbac-users">Users</a></li>
+                                <li><a href="#" rbac-show="rbac-permissionlist">Permission List</a></li>
+                                <li><a href="#" class="disabled">Add Assignment</a></li>
+                            </ul>                                                      
+                            <div class="row off-botm10 padtop20">
+                              <div class="col-md-12 rbac-addassignments-form">  
+                                    <!--Role-->
+                                    <div class="col-sm-6 col-md-6">
+                                      <h3>Role</h3>
+                                      <p>Select Role from the list</p>
+                                      <div class="form-group">
+                                        <select class="rslist rbac-addassignments-roleList" name="role" multiple="multiple">
+                                          <!-- roles.forEach(function(role){ --> 
+                                          <option value="[[= role.id ]]">[[= role.role_label ]]</option>
+                                          <!-- }) -->
+                                          <option class="mockup" value="2">System Admin</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Marketing Manager</option>
+                                          <option class="mockup" value="3">Crisis Manager</option>
+                                          <option class="mockup" value="3">Sales Manager</option>
+                                          <option class="mockup" value="3">Lorem Manager</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!--Scope-->
+                                    <div class="col-sm-6 col-md-6 form-group">
+                                      <h3>Scope</h3>
+                                      <p>To Edit Scope to this user, select Scope from the list</p>
+                                      <div class="form-group rbac-addassignments-scopeList">
+                                        <!-- scopes.forEach(function(scope){ -->
+                                        <div class="checkbox">
+                                          <label><input type="checkbox" name="scope" value="[[= scope.id ]]"> [[= scope.attr('label') ]]</input></label>
+                                        </div>
+                                        <!-- }) -->
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region NE</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region SR</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
+                                        <input class="mockup" type="checkbox"><span class="mockup">Region 10</span></input><br class="mockup">
+                                      </div>        
+                                    </div>
+                              </div>      
+                            </div> 
+
+                            <div style="clear:both;"></div>
+                            
+                            <div class="col-sm-4 col-md-4 pull-right">
+                                  <div class="input-group-btn">
+                                      <button class="off-botm20 btn float-right btn-primary rbac-addassignments-save" ><i class="fa fa-save offset-5"></i>Save</button>
+                                      <button class="off-botm20 btn btn-default float-right rbac-addassignments-cancel" ><i class="fa fa-save offset-5"></i>Cancel</button>
+                                  </div>    
+                            </div>
+                          </div>
+                      </div>
+                      <!--  ================= /End Add Assignments ================  -->
+                      <!--  ================= Permission List ================  -->
+                      <div class="rbac-display rbac-permissionlist"  style="display:none;">
+                        <h5 id="user" class="align-left"><i class="fa fa-user offset-5 user-icon"></i><span>Linel Sedillo</span></h5>
+                        <div class="opsportal-panel container">
+                            <ul id="crumbs">
+                                <li><a href="#" rbac-show="rbac-users">Users</a></li>
+                                <li><a class="disabled">Permission List</a></li>
+                            </ul>                          
+                            <div class="opsportal-panel-heading container">
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
+                                    <!--Container of Search and Filter-->
+                                    <div class="">
+                                      <!--Filter-->
+                                      <div class="col-xs-12 col-sm-6 col-md-6">
+                                          <form class="normalform" role="search">
+                                            <div class="">
+                                              <select class="form-control">
+                                                  <option value="one">-- Filter --</option>
+                                                  <option value="two">Two</option>
+                                                  <option value="three">Three</option>
+                                                  <option value="four">Four</option>
+                                                  <option value="five">Five</option>
+                                              </select>
+                                            </div>
+                                          </form>                                      
+                                      </div>
+                                      <!--/Filter-->
+                                      <!--Search-->
+                                      <div class="searchbar col-xs-12 col-sm-6 col-md-6">
+                                        <form class="normalform align-right" role="search">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
+                                                <div class="input-group-btn">
+                                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                      </div>
+                                      <!--/Search-->
+                                    </div>
+                                    <!--/Container of Search and Filter-->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-right">
+                                    <!--Add Button-->
+                                    <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
+                                          <div class="input-group-btn">
+                                            <a class="col-xs-12 col-sm-12 btn" rbac-show="rbac-addassignments" href="#add-assignment"><i class="fa fa-plus"></i> Add</a>
+                                          </div>
+                                    </div> 
+                                    <!--/Add Button-->
+                                </div>          
+                            </div>
+
+                            <div class="col-md-12">
+                              <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <thead>
+                                    <tr class="tbhead">
+                                      <th></th>
+                                      <th>Role</th>
+                                      <th>Scope</td>
+                                      <th class="align-center">Action</th>
+                                      <th class="align-center">Status</th>
+                                    </tr>
+                                  </thead>
+                   
+                                  <tbody> 
+                                    <tr>
+                                      <td><input type="checkbox"></td>
+                                      <td>HR Admin</td>
+                                      <td>Region 10 | Marketing Dept</td>
+                                      <td>
+                                        <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-assignment" class="fa fa-edit fa-2 offset-9"  data-toggle="modal" data-target=".add-assignment"></a></span>
+                                        <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                      </td>
+                                      <td>Enabled</td>
+                                    </tr>
+                                    <tr>
+                                      <td><input type="checkbox"></td>
+                                      <td>System Admin</td>
+                                      <td>I.T Dept | M.I.S Dept</td>
+                                      <td>
+                                        <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-assignment" class="fa fa-edit fa-2 offset-9"  data-toggle="modal" data-target=".add-assignment"></a></span>
+                                        <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                      </td>
+                                      <td>Disabled</td>
+                                    </tr>
+                                  </tbody>
+
+                              </table>
+                            </div>
+
+                             <!--Pagination-->
+                            <div class="col-md-12 padtop10">
+                              <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 align-right">
+                                    <button id="dLabel" class="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Display 50
+                                      <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="20">20</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="50">50</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="100">100</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="300">300</a></li>
+                                        <li><a href="javascript:void(0);" class="pagination-items-page" data-items="1000">1000</a></li>
+                                    </ul>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-12 align-center off-botm20 off-top10">
+                                    <ul class="pagination nav" style="vertical-align:bottom">
+                                      <li><a href="#"><span aria-hidden="true">&laquo;</span><span class=""></span></a></li>
+                                      <li><a href="#">1</a></li>
+                                      <li><a href="#">2</a></li>
+                                      <li><a href="#">3</a></li>
+                                      <li><a href="#">4</a></li>
+                                      <li><a href="#">5</a></li>
+                                      <li><a href="#"><span aria-hidden="true">&raquo;</span><span class=""></span></a></li>
+                                    </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <!--/Pagination-->
+                            <div class="opsportal-divider"></div>
+                            <!--Enable and Disable Action-->
+                            <div class="col-md-12 off-botm10">
+                                <div class="col-sm-7 col-md-7 pull-left">
+
+                                    <form class="navbar-form">
+                                      <div class="input-group col-md-12">
+                                      <div class="row">  
+                                        <div class="col-xs-6 col-md-4 col-sm-6">
+                                        <select class="form-control">
+                                          <option value="one">-- Enable or Disable --</option>
+                                          <option value="two">Enable</option>
+                                          <option value="two">Disable</option>
+                                        </select>
+                                        </div>
+
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <div class="input-group-btn">
+                                              <button class="btn" type="submit">Apply</button>
+                                            </div>
+                                        </div>
+                                      </div>
+                                      </div>
+                                    </form>
+                                
+                                    </div>
+                            </div>                            
+                            <!--/Enable and Disable Action-->
+                        </div>             
+                      </div>
+
+                        <!--Modal Edit for Assignment-->
+                        <div class="modal fade add-assignment" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                            <div class="row">
+                                    <!--Scope-->
+                                    <div class="col-sm-12 col-md-12 off-botm20">
+                                <h3>Scope</h3>
+                                        <p>Select Scope from the list</p>
+                                <div class="rslist">
+                                  <input type="checkbox" checked>Region SW</input><br>
+                                  <input type="checkbox" checked>Region NE</input><br>
+                                  <input type="checkbox" checked>Region SR</input><br>
+                                  <input type="checkbox" checked>Region 10</input><br>
+                                  <input type="checkbox" checked>Region 10</input><br>
+                                </div>        
+                                    </div>
+                              
+                              <div class="col-sm-4 col-md-4 pull-right">
+                                <div class="input-group-btn">
+                                  <button class="btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                </div>
+                              </div>
+                            </div>
+                            </div>  
+                          </div>
+                        </div>    
+                        <!--/Modal Add/Edit for Assignment-->
+
+                      <!--  ================= /End Permission List ================  -->
+
+                      <!--  ================= Roles  ================  -->
+                      <div class="rbac-display rbac-roles" style="display:none">
+                          <div class="opsportal-panel container">
+                            <ul id="crumbs">
+                              <li><a href="#" class="disabled">Roles</a></li>
+                            </ul>  
+                            <div class="opsportal-panel-heading container">                            
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-left">
+                                    <!--Container of Search and Filter-->
+                                    <div class="">
+                                      <!--Filter-->
+                                      <!-- 
+                                      <div class="col-xs-6 col-sm-6 col-md-6">
+                                          <form class="normalform" role="search">
+                                            <div class="offset-10">
+                                              <select class="form-control">
+                                                  <option value="one">-- Filter --</option>
+                                                  <option value="two">Two</option>
+                                                  <option value="three">Three</option>
+                                                  <option value="four">Four</option>
+                                                  <option value="five">Five</option>
+                                              </select>
+                                            </div>
+                                          </form>                                      
+                                      </div>
+                                      -->
+                                      <!--/Filter-->
+                                      <!--Search-->
+                                      <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+                                        <form class="normalform align-right" role="search">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control autocomplete-filter" placeholder="Search" name="q">
+                                                <div class="input-group-btn">
+                                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                      </div>
+                                      <!--/Search-->
+                                    </div>
+                                    <!--/Container of Search and Filter-->
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-6 pull-right">
+                                    <!--Add Button-->
+                                    <div class="col-xs-12 col-sm-3 col-md-2 addbtn">
+                                          <div class="input-group-btn">
+                                            <a class="col-xs-12 col-sm-12 btn rbac-role-addButton" rbac-show="rbac-role-addroles" href=""><i class="fa fa-plus"></i> Add</a>
+                                          </div>
+                                    </div> 
+                                    <!--/Add Button-->
+                                </div>          
+                            </div>
+                                 
+                            <div class="col-md-12">                                
+                              <table id="rolelist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                  <thead>
+                                    <tr class="tbhead">
+                                      <th>Role Name</th>
+                                      <th>Role Description</th>
+                                      <th class="align-center">Action</th> 
+                                    </tr>
+                                  </thead>                              
+                                  <tbody>  
+                                  <tr>
+                                    <td>HR Admin</td>
+                                    <td>Edit Information | Add Employee | Approve Edit Info</td>
+                                    <td class="actions" >
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9 rbac-role-list-edit" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9 rbac-role-list-clone" role-id="[[= row.id ]]"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2 rbac-role-list-delete" role-id="[[= row.id ]]"></a></span>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>System Admin</td>
+                                    <td>Manage Servers | Manage Database</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-roles" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" ></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Crisis Manager</td>
+                                    <td>View Accident Reports | View Statistic Report</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="#edit-roles" rbac-show="rbac-editroles" class="fa fa-edit fa-2 offset-9" ></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>    
+                                  </tbody>
+                              </table>
+
+                            </div>     
+                          
+                            <!--Pagination-->   
+                            <!--
+                              <div class="col-md-12 padtop10">
+                                <div class="row">
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-right">
+                                      <button id="dLabel" class="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Display 50
+                                        <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="20">20</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="50">50</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="100">100</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="300">300</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="1000">1000</a></li>
+                                      </ul>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12 align-center off-botm20 off-top10">
+                                      <ul class="pagination nav" style="vertical-align:bottom">
+                                        <li><a href="#"><span aria-hidden="true">&laquo;</span><span class=""></span></a></li>
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li><a href="#"><span aria-hidden="true">&raquo;</span><span class=""></span></a></li>
+                                      </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            -->
+                            <!--/Pagination-->  
+
+                          </div>
+                      </div>
+                      <!--  ================= /END Roles  ================  -->
+                      
+                      <!--  ================= /Add Roles  ================  -->
+                      <div class="rbac-display rbac-role-addroles" style="display:none">
+                        <div class="opsportal-panel container">
+                        <ul id="crumbs">
+                            <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
+                            <li><a href="#" class="disabled">Add Role</a></li>
+                        </ul>
+                          <div class="col-md-12 padtop20 off-top10">
+                              <form>
+                                <div class="form-group">
+                                <label for="role_label">Role Name</label>
+                                <input type="text" class="form-control" name="role_label" placeholder="Enter Role Name">
+                                </div>
+                                <div class="form-group">
+                                <label for="role_description">Description</label>
+                                <textarea class="form-control" rows="3" name="role_description"></textarea>
+                                </div>
+                              </form> 
+
+                              <!--Tab-->  
+                              <div class="clear"></div> 
+                              <ul class="nav nav-tabs" role="tablist" id="myTab">
+                                <li role="presentation" class="active">
+                                  <a data-target="#ap" aria-controls="home" role="tab" data-toggle="tab">Action Permission</a>
+                                </li>
+                                <li role="presentation">
+                                  <a data-target="#dfp" aria-controls="profile" role="tab" data-toggle="tab">Data Field Permission</a>
+                                </li>
+                              </ul>
+
+                              <div class="tab-content">
+                                <!--Action Permission-->
+                                <div role="tabpanel" class="tab-pane active" id="ap">
+                                  <!-- 
+                                  <div class="col-sm-6 col-md-6 pull-right">
+                                    <form class="navbar-form" role="search" style="text-align:right">
+                                      <div class="input-group col-md-6">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                      </select>
+                                      </div>
+                                    </form>    
+                                  </div>
+                                  -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-add-actionsearch" placeholder="Search" name="q">
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
+                                  <div class="clear"></div>    
+                                  <table id="permissionlist"  data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                      <thead>
+                                      <tr class="tbhead">
+                                        <th></th>
+                                        <th>Description</th>
+                                        <th>Scope</td>
+                                        <th class="align-center">Action</th>
+                                      </tr>
+                                      </thead>                                    
+                                      <tbody>
+                                      <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>HR Admin</td>
+                                        <td>Region 10 | Marketing Dept</td>
+                                        <td class="action" ><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
+                                      </tr>
+                                      <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>System Admin</td>
+                                        <td>I.T Dept | M.I.S Dept</td>
+                                        <td><span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2"></a></span></td>
+                                      </tr>
+                                      </tbody>
+                                  </table>  
+                                </div>
+                                <!--/Action Permission-->
+                                <!--Data Field Permission-->
+                                <div role="tabpanel" class="tab-pane" id="dfp">
+                                  <!--Data Field Permission-->
+                                  <div role="tabpanel" class="tab-pane" id="dfp">
+                                    <div class="container-fluid">
+                                    <div class="row">
+                                      <!--LEFT COLUMN-->
+                                      <div class="col-md-5">
+                                      <div id="dfp-filter" class="col-sm-5 pull-left">
+                                        <form role="search" style="text-align:right">
+                                          <div class="input-group">
+                                            <select class="form-control">
+                                              <option value="one">-- Filter --</option>
+                                              <option value="two">Two</option>
+                                              <option value="three">Three</option>
+                                              <option value="four">Four</option>
+                                              <option value="five">Five</option>
+                                            </select>
+                                          </div>
+                                        </form>    
+                                      </div>      
+                                      <select class="rslist" name="availableRoles" multiple="multiple">
+                                        <option value="1">HR Admin</option>
+                                        <option value="2">System Admin</option>
+                                        <option value="3">Crisis Manager</option>
+                                        <option value="3">Marketing Manager</option>
+                                        <option value="3">Crisis Manager</option>
+                                      </select>     
+                                      </div>
+                                      <!--RIGHT COLUMN-->
+                                      <div class="col-md-7">
+                                        <div class="off-top10 input-group col-md-12 col-sm-8 col-xs-12">
+                                          <form class="form-horizontal">
+                                            
+                                            <div class="form-group col-md-12 col-sm-12 nopadLR">
+                                              <label class="nopadLR control-label col-md-8 col-sm-2 col-xs-6 align-right">Update Selected Fields</label>
+                                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <select class="form-control input-group">
+                                                  <option value="one">-- Filter --</option>
+                                                  <option value="two">Two</option>
+                                                  <option value="three">Three</option>
+                                                  <option value="four">Four</option>
+                                                  <option value="five">Five</option>
+                                                </select>
+                                              </div>
+                                            </div>
+                                          </form>    
+                                        </div>        
+                                      
+                                        <table id="dataFieldPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="clear table table-bordered table-hover">
+                                          <thead>
+                                          <tr class="tbhead">
+                                            <th></th>
+                                            <th>Data Field</th>
+                                            <th>Status</td>
+                                          </tr>
+                                          </thead>                                        
+                                          <tbody>
+                                          <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Phonetype_id</td>
+                                            <td>Edit Self</td>
+                                          </tr>
+                                          <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Phone Comment</td>
+                                            <td>View</td>
+                                          </tr>
+                                          <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Phone_countrycode</td>
+                                            <td>No Access</td>
+                                          </tr>           
+                                          <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>phone_number</td>
+                                            <td>Edit Self</td>
+                                          </tr>           
+                                          </tbody>
+                                        </table>
+
+                                        <div class="col-md-12 col-sm-8 col-xs-12">
+                                          <form class="navbar-form" role="search" style="text-align:left">
+                                            Add and delete rows permission
+                                            <div class="input-group input-group col-md-8">
+                                              <select class="form-control input-group">
+                                                <option value="one">----</option>
+                                                <option value="two">New Access</option>
+                                                <option value="three">View</option>
+                                                <option value="four">Edit Self</option>
+                                                <option value="five">Edit Others</option>
+                                              </select>
+                                            </div>
+                                          </form>    
+                                        </div>
+                                      </div>
+                                    </div>
+                                    </div>
+                                  </div>                
+                                  <!--/Data Field Permission-->
+                                </div>
+                              </div>
+                          </div>
+
+                          <div class="opsportal-divider off-botm20"></div>  
+                          <div class="col-sm-12 col-md-12 col-xs-12 pull-right off-botm10">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <!--SAVE AND SAVE RETURN-->
+                                      <div class="sns">
+                                        <div class="input-group-btn">
+                                          <button class="btn btn-primary float-right rbac-roles-addrole-create" type="submit"><i class="fa fa-save offset-5"></i>Create</button>
+                                          <button class="btn float-right rbac-roles-addrole-cancel" type="submit"><i class="fa fa-cancel offset-5"></i>Cancel</button>
+                                        </div>  
+                                      </div>
+                                      <!--SAVE AND SAVE RETURN-->  
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--  ================= /END Add Roles  ================  -->
+
+                      <!--  ================= Edit Roles  ================  -->
+                      <div class="rbac-display rbac-role-editrole" style="display:none">
+                        <div class="opsportal-panel container">
+                          <ul id="crumbs">
+                              <li><a href="#" rbac-show="rbac-roles">Roles</a></li>
+                              <li><a href="#" class="disabled">Edit Role</a></li>
+                          </ul>                          
+                          <div class="col-md-12 off-top10">
+                              <form>
+                                <div class="form-group">
+                                <label for="exampleInputEmail1">Role Name</label>
+                                <input class="form-control" name="role_label" >
+                                </div>
+                                <div class="form-group">
+                                <label for="exampleInputPassword1">Description</label>
+                                <textarea class="form-control" rows="3" name="role_description" >Everyone in the SW and Conference Fee 2014</textarea>
+                                </div>
+                              </form> 
+
+                              <!--Tab-->  
+                              <div class="clear"></div> 
+                              <ul class="nav nav-tabs" role="tablist" id="myTab">
+                                <li role="presentation" class="active">
+                                  <a data-target="#editap" aria-controls="home" role="tab" data-toggle="tab">Action Permission</a>
+                                </li>
+                                <li role="presentation">
+                                  <a data-target="#editdfp" aria-controls="profile" role="tab" data-toggle="tab">Data Field Permission</a>
+                                </li>
+                              </ul>
+
+                              <div class="tab-content">
+
+                                <!--Action Permission-->
+                                <div role="tabpanel" class="tab-pane active" id="editap">
+                                  <!--
+                                  <div class="col-sm-6 col-md-6 pull-right">
+                                    <form class="navbar-form" role="search" style="text-align:right">
+                                      <div class="input-group col-md-6">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                      </select>
+                                      </div>
+                                    </form>    
+                                  </div>
+                                -->
+                                  <!--Container of Search and Filter-->
+                                  <div class="">
+                                    <!--Search-->
+                                    <div class="searchbar col-xs-6 col-sm-6 col-md-6">
+
+                                          <div class="input-group">
+                                              <input type="text" class="form-control autocomplete-filter rbac-role-edit-actionsearch" placeholder="Search" >
+                                              <div class="input-group-btn">
+                                                  <button class="btn" ><i class="fa fa-search"></i></button>
+                                              </div>
+                                          </div>
+
+                                    </div>
+                                    <!--/Search-->
+                                  </div>
+                                  <!--/Container of Search and Filter-->
+                                  <div class="clear"></div>    
+                                  <table id="roleEditPermissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                      <thead>
+                                      <tr class="tbhead">
+                                        <th></th>
+                                        <th>Description</th>
+                                        <th>Scope</td>
+                                        <th class="align-center">Action</th>
+                                      </tr>
+                                      </thead>                                    
+                                      <tbody>
+                                      <tr>
+                                        <td><input type="checkbox" checked></td>
+                                        <td contenteditable="false">HR Admin</td>
+                                        <td contenteditable="false">Region 10 | Marketing Dept</td>
+                                        <td class="action"><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
+                                      </tr>
+                                      <tr>
+                                        <td><input type="checkbox" checked></td>
+                                        <td contenteditable="false">System Admin</td>
+                                        <td contenteditable="false">I.T Dept | M.I.S Dept</td>
+                                        <td><a href="#" class="editbtn fa fa-edit fa-2"></a></td>
+                                      </tr>
+                                      </tbody>
+                                  </table>  
+                                </div>
+                                <!--/Action Permission-->
+                                <!--Data Field Permission-->
+                                <div role="tabpanel" class="tab-pane" id="editdfp">
+                                    <div class="container-fluid">
+                                    <div class="row">
+                                      <!--LEFT COLUMN-->
+                                      <div class="col-md-5">
+                                      <div id="dfp-filter" class="pull-left">
+                                        <form class="navbar-form" role="search" style="text-align:right">
+                                        <div class="input-group">
+                                        <select class="form-control">
+                                          <option value="one">-- Filter --</option>
+                                          <option value="two">Two</option>
+                                          <option value="three">Three</option>
+                                          <option value="four">Four</option>
+                                          <option value="five">Five</option>
+                                        </select>
+                                        </div>
+                                        </form>    
+                                      </div>      
+                                      <select class="rslist" name="availableRoles" multiple="multiple">
+                                        <option value="1" selected>HR Admin</option>
+                                        <option value="2" selected>System Admin</option>
+                                        <option value="3">Crisis Manager</option>
+                                        <option value="3">Marketing Manager</option>
+                                        <option value="3">Crisis Manager</option>
+                                      </select>     
+                                      </div>
+                                      <!--RIGHT COLUMN-->
+                                      <div class="col-md-7">
+                                      <div class="pull-right input-group col-md-8">
+                                        <form class="navbar-form" role="search" style="text-align:right">
+                                        <label>Update Selected Fields</label>
+                                        <div class="input-group input-group col-md-7">
+                                        <select class="form-control input-group">
+                                          <option value="one">-- Filter --</option>
+                                          <option value="two">Two</option>
+                                          <option value="three">Three</option>
+                                          <option value="four">Four</option>
+                                          <option value="five">Five</option>
+                                        </select>
+                                        </div>
+                                        </form>    
+                                      </div>        
+                                      
+                                      <table id="permissionlist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                        <thead>
+                                          <tr class="tbhead">
+                                            <th></th>
+                                            <th>Data Field</th>
+                                            <th>Status</td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                          <td><input type="checkbox" checked></td>
+                                          <td>Phonetype_id</td>
+                                          <td>Edit Self</td>
+                                        </tr>
+                                        <tr>
+                                          <td><input type="checkbox" checked></td>
+                                          <td>Phone Comment</td>
+                                          <td>View</td>
+                                        </tr>
+                                        <tr>
+                                          <td><input type="checkbox" checked></td>
+                                          <td>Phone_countrycode</td>
+                                          <td>No Access</td>
+                                        </tr>           
+                                        <tr>
+                                          <td><input type="checkbox" checked></td>
+                                          <td>phone_number</td>
+                                          <td>Edit Self</td>
+                                        </tr>           
+                                        </tbody>
+                                      </table>      
+                                      <div class="pull-left input-group col-md-5">
+                                        <form class="navbar-form" role="search" style="text-align:left">
+                                        Add and delete rows permission
+                                        <div class="input-group input-group col-md-8">
+                                        <select class="form-control input-group">
+                                          <option value="one">----</option>
+                                          <option value="two">New Access</option>
+                                          <option value="three">View</option>
+                                          <option value="four">Edit Self</option>
+                                          <option value="five">Edit Others</option>
+                                        </select>
+                                        </div>
+                                        </form>    
+                                      </div>
+
+
+                                      </div>
+                                    </div>
+                                    </div>
+                                </div>                
+                                <!--/Data Field Permission-->
+
+                              </div>
+                          </div>
+
+                          <div class="opsportal-divider off-botm20"></div>  
+                          <div class="col-sm-12 col-md-12 col-xs-12 pull-right off-botm10">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <!--SAVE AND SAVE RETURN-->
+                                      <div class="sns">
+                                        <div class="input-group-btn">
+                                          <button class="btn btn-primary float-right rbac-roles-editrole-save" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                                          <button class="btn float-right rbac-roles-editrole-cancel" ><i class="fa fa-cancel offset-5"></i>Cancel</button>
+                                        </div>  
+                                      </div>
+                                      <!--SAVE AND SAVE RETURN-->  
+                                </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                      <!--  ================= /END Edit Roles  ================  -->
+                      
+                      <!--  ================= Scopes  ================  -->
+                      <div class="rbac-display rbac-scopes" style="display:none">
+                        <div class="opsportal-panel container">
+                            <ul id="crumbs">
+                                <li><a href="#" class="disabled">Scope</a></li>
+                            </ul>
+                            <div class="opsportal-panel-heading container">
+                                <div class="col-xs-6 col-sm-6 col-md-6 pull-left">
+                                    <!--Search and Filter-->
+                                    <div class="row">
+                                      <!--Filter-->
+                                      <div class="col-xs-12 col-sm-12 col-md-6">
+                                          <form class="normalform" role="search">
+                                            <div class="">
+                                              <select class="form-control">
+                                                  <option value="one">-- Filter --</option>
+                                                  <option value="two">Two</option>
+                                                  <option value="three">Three</option>
+                                                  <option value="four">Four</option>
+                                                  <option value="five">Five</option>
+                                              </select>
+                                            </div>
+                                          </form>                                      
+                                      </div>
+                                      <!--/Filter-->
+                                    </div>
+                                    <!--/Search and Filter-->  
+                                </div>
+
+                                <div class="col-xs-6 col-sm-6 col-md-6 pull-right">
+                                      <!--Add Button-->
+                                      <div class=" col-xs-12 col-sm-3 col-md-2 addbtn">
+                                            <div class="input-group-btn">
+                                              <a class="col-xs-12 col-sm-12 btn float-right" rbac-show="rbac-addscopes" href="#add-scopes"><i class="fa fa-plus"></i> Add</a>
+                                            </div>
+                                      </div> 
+                                      <!--/Add Button-->
+                                </div>          
+                            </div>
+                            <br />
+                            <div class="col-md-12">  
+                            <table id="scopelist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                <thead>
+                                  <tr class="tbhead">
+                                    <th>Scope Name</th>
+                                    <th>Description</th>
+                                    <th class="align-center">Action</th>
+                                  </tr>
+                                </thead>                                
+                                <tbody>
+                                  <tr>
+                                    <td>Region SW</td>
+                                    <td>Description of this Lorem Ipsum</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Region NE</td>
+                                    <td>Description of this Lorem Ipsum</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Region SR</td>
+                                    <td>Description of this Lorem Ipsum</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>        
+                                  <tr>
+                                    <td>Region BJ</td>
+                                    <td>Description of this Lorem Ipsum</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr> 
+                                  <tr>
+                                    <td>Region MC</td>
+                                    <td>Description of this Lorem Ipsum</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <!--Pagination-->   
+                            <div class="col-md-12 padtop10">
+                                <div class="row">
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-right">
+                                      <button id="dLabel" class="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Display 50
+                                        <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="20">20</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="50">50</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="100">100</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="300">300</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="1000">1000</a></li>
+                                      </ul>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12 align-center off-botm20 off-top10">
+                                      <ul class="pagination nav" style="vertical-align:bottom">
+                                        <li><a href="#"><span aria-hidden="true">&laquo;</span><span class=""></span></a></li>
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li><a href="#"><span aria-hidden="true">&raquo;</span><span class=""></span></a></li>
+                                      </ul>
+                                  </div>
+                                </div>
+                            </div>
+                            <!--/Pagination--> 
+                        </div>
+
+
+
+                      </div>
+                      <!--  ================= /END Scopes  ================  -->
+                      <!--  ================= Add Scopes  ================  -->
+                      <div class="rbac-display rbac-addscopes" style="display:none">
+                        <div class="opsportal-panel container" >
+                            <ul id="crumbs">
+                                <li><a href="#" rbac-show="rbac-scopes">Scopes</a></li>
+                                <li><a href="#" class="disabled">Add Scopes</a></li>
+                            </ul>                          
+                          <div class="col-md-12 padtop20">
+                            <div style="margin-bottom:30px;">
+                            <form>
+                              <div class="form-group">
+                              <label for="exampleInputEmail1">Scope Name:</label>
+                              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names">
+                              </div>
+                              <div class="form-group">
+                              <label for="exampleInputPassword1">Description:</label>
+                              <textarea class="form-control" rows="3"></textarea>
+                              </div>
+                              <div class="form-group">
+                              <label for="exampleInputEmail1">Condition:</label>
+                              <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Role Names">
+                              </div>    
+                            </form>
+                            </div>
+                            <!--add and filter-->
+                            <div class="row off-botm10">
+                              <div class="col-md-6 col-sm-6 col-xs-6"><p>Click <i class="fa fa-plus" style="text-decoration:underline;color:#337AB7"></i> below to add the Rule Set to the Scope Condition. Use "and" or "or" and parenthesis between Rule Sets to create the Scope Condition</p></div>
+                              <!--filter--> 
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="col-sm-9 col-md-10 col-xs-6">
+                                  <form class="navbar-form align-right " role="search">
+                                    <div class="input-group col-md-6 col-xs-12">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                      </select>
+                                    </div>
+                                  </form>    
+                                </div>
+                                
+                                <!--Add Button-->         
+                                <div class="col-sm-3 col-md-2 col-xs-3 addbtn">
+                                    <div class="input-group-btn">
+                                      <a class="btn" type="submit" href="#add-scopes"><i class="fa fa-plus"></i> Add</a>
+                                    </div>
+                                </div>
+                                <!--Add Button-->     
+                              </div>
+                              <!--/filter-->  
+                            </div>
+                            <!--/add and filter-->
+                            <!--TABLE DATA-->
+                            <table id="addscopelist" data-toggle="table" data-cache="false" data-height="299" class="table table-bordered table-hover">
+                                <thead>
+                                  <tr class="tbhead">
+                                    <th>Add</th>
+                                    <th>Rule Set Name</th>
+                                    <th>Rule Set Decription</th>
+                                    <th class="align-center">Action</th>
+                                  </tr>
+                                </thead>                                
+                                <tbody>                                
+                                <tr>
+                                  <td><a href="#add-rule" class="fa fa-plus" data-toggle="modal" data-target=".add-rule-set"></a></td>
+                                  <td>Region SW</td>
+                                  <td>All active staff in SW Region</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td><a href="#add-rule" class="fa fa-plus" data-toggle="modal" data-target=".add-rule-set"></td>
+                                  <td>Conference Fee 2014</td>
+                                  <td>Everyone who has paid the conference fee for 2014</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                  <td><a href="#add-role" class="fa fa-plus" data-toggle="modal" data-target=".add-rule-set"></td>
+                                  <td>Woman SW</td>
+                                  <td>all female staff in SW Region</td>
+                                    <td>
+                                      <span data-toggle="tooltip" data-placement="left" title="Edit"><a href="" class="fa fa-edit fa-2 offset-9" data-toggle="modal" data-target=".edit-rule-set"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Clone"><a href="#" data-toggle="modal" data-target=".clone-confirm" class="clone fa fa-copy fa-2 offset-9"></a></span>
+                                      <span data-toggle="tooltip" data-placement="left" title="Delete"><a href="#delete-assignment" data-toggle="modal" data-target=".delete-confirm" class="fa fa-close fa-2"></a></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--/TABLE DATA-->
+                            <div style="clear:both"></div>    
+                          </div>
+                          <!--Pagination-->   
+                          <div class="col-md-12 padtop10">
+                            <div class="row">
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-left">Display 244 result(s)</div>
+                                  <div class="col-xs-6 col-sm-6 col-md-6 align-right">
+                                      <button id="dLabel" class="" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Display 50
+                                        <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="20">20</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="50">50</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="100">100</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="300">300</a></li>
+                                          <li><a href="javascript:void(0);" class="pagination-items-page" data-items="1000">1000</a></li>
+                                      </ul>
+                                  </div>
+                            </div>
+                            <div class="row">
+                                  <div class="col-md-12 align-center off-botm20 off-top10">
+                                      <ul class="pagination nav" style="vertical-align:bottom">
+                                        <li><a href="#"><span aria-hidden="true">&laquo;</span><span class=""></span></a></li>
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li><a href="#"><span aria-hidden="true">&raquo;</span><span class=""></span></a></li>
+                                      </ul>
+                                  </div>
+                            </div>
+                          </div>
+                          <!--/Pagination-->
+                          <div class="opsportal-divider off-botm20"></div>      
+                          <div class="input-group-btn">
+                              <button class="offset-10 off-botm20 btn float-right" type="submit"><i class="fa fa-save offset-5"></i>Save</button>
+                          </div>
+
+                        </div>
+
+                        <!--Modal for Add Rule Set-->
+                        <div class="modalcenter modal fade add-rule-set" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <div style="margin-bottom:30px;overflow:hidden">
+                              <form>
+                                <div class="form-group">
+                                <label for="exampleInputEmail1">Rule Set Name</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Rule Set Names" value="">
+                                </div>
+                                <div class="form-group">
+                                <label for="exampleInputPassword1">Description</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                              </form>
+                              </div>
+                              <!---->
+                              <div class="fcv-field">
+                                <!--matches-->
+                                <div class="row">
+                                  <div class="col-sm-12 col-md-12">
+                                    <form class="navbar-form align-right " role="search">
+                                      <label class="offset-5">Matches</label>
+                                      <div class="input-group col-md-3">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                      </select>
+                                      </div>
+                                    </form>    
+                                  </div>          
+                                </div>
+                                <!--/matches-->
+                                <div class="opsportal-divider off-botm10 "></div>   
+                                <!--labels-->
+                                <div class="row">
+                                  <div class="col-md-4"><label>Field</label></div>
+                                  <div class="col-md-3"><label>Condition</label></div>
+                                  <div class="col-md-3"><label>Value</label></div>
+                                  <div class="col-md-2"></div>
+                                </div>
+                                <!--Entry-->
+                                <div class="row">
+                                  <!--Field-->
+                                  <div class="col-md-4">
+                                    <ul>
+                                      <li></li>
+                                    </ul>
+                                    <div class="input-group col-md-10">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                       </select>
+                                    </div>
+                                  </div>
+                                  <!--/Field-->
+                                  <!--Condition-->
+                                  <div class="col-md-3">
+                                    <ul>
+                                      <li></li>
+                                    </ul>
+                                    <div class="input-group col-md-10">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                       </select>
+                                    </div>          
+                                  </div>
+                                  <!--/Condition-->
+                                  <!--Value-->
+                                  <div class="col-md-3">
+                                    
+                                    <ul>
+                                      <li></li>
+                                    </ul>
+                                    <div class="input-group col-md-10">
+                                      <select class="form-control">
+                                        <option value="one">-- Filter --</option>
+                                        <option value="two">Two</option>
+                                        <option value="three">Three</option>
+                                        <option value="four">Four</option>
+                                        <option value="five">Five</option>
+                                       </select>
+                                    </div>          
+                                  </div>
+                                  <!--/Value-->
+                                  <div class="col-md-2">
+                                    <ul>
+                                      <li></li>
+                                    </ul>         
+                                    <button type="button" class="btn fa fa-plus" data-dismiss="modal"></button>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--/-->
+                              <!--Save-->
+                              <div class="modal-footer">
+                                <button type="button" class="btn" data-dismiss="modal">save</button>
+                              </div>
+                              <!--/Save-->
+                            </div>
+                          
+                          </div>
+                        </div>    
+                        <!--/Modal for Add-->
+
+
+                      </div>
+                      <!--  ================= /END Add Scopes  ================  -->
+                  </div>
+                </div>
+
+
+
+<!-- End HTML Mockup -->
+
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+<!--Confirmation for Delete-->
+<div class="modal confirm-dc fade delete-confirm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+      </div>  
+    </div>
+  
+  </div>
+</div>
+<!--/Confirmation for Delete-->
+
+<!--Confirmation for Clone-->
+<div class="modal confirm-dc fade clone-confirm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+        <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Clone</button>
+      </div>  
+    </div>
+  
+  </div>
+</div>
+<!--/Confirmation for Clone-->
+<!--Modal for Edit Rule Set-->
+<div class="modalcenter modal fade edit-rule-set" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div style="margin-bottom:30px;overflow:hidden">
+      <form>
+        <div class="form-group">
+        <label for="exampleInputEmail1">Rule Set Name</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" value="Region SW Name">
+        </div>
+        <div class="form-group">
+        <label for="exampleInputPassword1">Description</label>
+        <textarea class="form-control" rows="3">All Men in SW Region older that 44 (born>=1971)</textarea>
+        </div>
+      </form>
+      </div>
+      <!---->
+      <div class="fcv-field">
+        <!--matches-->
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <div class="row">
+              <div class="col-md-6 col-sm-6 col-xs-6"></div>
+
+              <div class="col-md-6 col-sm-6 col-xs-6">
+                <form class="form-horizontal align-right " role="search">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Matches</label>
+                    <div class="col-md-9 col-sm-9 col-xs-9">
+                      <select class="form-control">
+                        <option value="one">----</option>
+                        <option value="two">All</option>
+                        <option value="three">Lorem</option>
+                        <option value="four">Ipsum</option>
+                        <option value="five">Dolor</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>    
+          </div>          
+        </div>
+        <!--/matches-->
+        <div class="opsportal-divider off-botm10 "></div>   
+        <!--labels-->
+        <div class="row nomargin">
+          <div class="col-md-4 col-sm-4 col-xs-4"><label>Field</label></div>
+          <div class="col-md-3 col-sm-3 col-xs-3"><label>Condition</label></div>
+          <div class="col-md-3 col-sm-3 col-xs-3"><label>Value</label></div>
+          <div class="col-md-2 col-sm-2 col-xs-2"></div>
+        </div>
+        <!--Entry-->
+        <div class="row fcv-field-scroll nomargin">
+          <!--Field-->
+          <div class="col-md-4 col-sm-4 col-xs-4">
+            <ul>
+              <li>Team Location</li>
+              <li>Gender</li>
+              <li>Birth Date</li>
+              <li>Birth Place</li>
+              <li>Lorem</li>
+              <li>Ipsum</li>
+              <li>Dolor</li>
+            </ul>
+            <div class="input-group col-md-10">
+              <select class="form-control">
+                <option value="one">-- Filter --</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+                <option value="four">Four</option>
+                <option value="five">Five</option>
+               </select>
+            </div>
+          </div>
+          <!--/Field-->
+          <!--Condition-->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <ul>
+              <li>Is in the scope of</li>
+              <li>[ = ]</li>
+              <li>[ >= ]</li>
+              <li>Lorem</li>
+              <li>Ipsum</li>
+              <li>Dolor</li>              
+            </ul>
+            <div class="input-group col-md-10">
+              <select class="form-control">
+                <option value="one">-- Filter --</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+                <option value="four">Four</option>
+                <option value="five">Five</option>
+               </select>
+            </div>          
+          </div>
+          <!--/Condition-->
+          <!--Value-->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <ul>
+              <li>China SW</li>
+              <li>Male</li>
+              <li>1970-01-01</li>
+              <li>Lorem</li>
+              <li>Ipsum</li>
+              <li>Dolor</li>              
+            </ul>
+            <div class="input-group col-md-10">
+              <select class="form-control">
+                <option value="one">-- Filter --</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+                <option value="four">Four</option>
+                <option value="five">Five</option>
+               </select>
+            </div>          
+          </div>
+          <!--/Value-->
+          <div id="value" class="col-md-2 col-sm-2 col-xs-2">
+            <ul>
+              <li><button type="button" class="btn fa fa-minus"></button></li>
+              <li><button type="button" class="btn fa fa-minus"></button></li>
+              <li><button type="button" class="btn fa fa-minus"></button></li>
+            </ul>         
+            <button type="button" class="btn fa fa-plus"></button>
+          </div>
+        </div>
+      </div>
+      <!--/-->
+      <!--Save-->
+      <div class="modal-footer">
+        <button type="button" class="btn" data-dismiss="modal">save</button>
+      </div>
+      <!--/Save-->
+    </div>
+  
+  </div>
+</div>    
+<!--/Modal for Edit-->
+</body>
+</html>

@@ -8,8 +8,7 @@
  *
  */
 module.exports = function(req, res, next) {
-    // only continue if current user has an actionKey in one of their
-    // permissions.
+
 
     var areaHash = {};
     var tools = [];
@@ -35,7 +34,8 @@ module.exports = function(req, res, next) {
 
     var data = {
             areas:areas,
-            tools:tools
+            tools:tools,
+            feedback: (config.feedback && config.feedback.enabled) || false
     };
 
 
@@ -71,6 +71,8 @@ function processPermission(user, permission) {
 
     return ok;
 }
+
+
 function processTool( areaHash, tools, user, area, tool ) {
 
     // for this tool, check each possible permission settings
