@@ -118,7 +118,7 @@ steal(
                                     width:220
                                 });
                                 _this.dom.userSearch.AD.filter(function(value){
-
+                                    value = value.toLowerCase();
                                     _this.dom.userGrid.filter(function(obj){ //here it filters data!
                                         return obj.username.toLowerCase().indexOf(value)>=0;
                                     })
@@ -192,6 +192,7 @@ steal(
 
 
                                     pager:{
+                                        template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
                                       container:"paging_here",
                                       // size:8,
                                       group:5
