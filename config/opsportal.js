@@ -96,11 +96,13 @@ module.exports.opsportal = {
           // Define the Administration Area
           icon:'fa-cogs',
           key:'PortalAdmin',
-          label:'Administration',
+          label:'opp.areaAdministration',
+          context:'opsportal',
           tools:[{
                   // Roles and Permissions
                   controller:'RBAC',
-                  label:'Permissions',
+                  label:'opp.areaAdministration',
+                  context:'opsportal',
                   isDefault: true,
                   permissions:[
                       'adcore.admin'

@@ -187,7 +187,9 @@ steal(
 
                             this.portalPopup = AD.ui.jQuery('<div class="op-portal-popup">');
                             this.portalPopup.hide();
-                            this.portalPopup.html(can.view(this.options.templateDOM, {}));
+                            this.portalPopup.html(can.view(this.options.templateDOM, {
+                                baseURL: AD.config.getValue('siteBaseURL') || ''
+                            }));
 
                             this.menu = new AD.controllers.OpsPortal.MenuList(this.portalPopup.find('.op-menu-widget'));
                             this.workArea = new AD.controllers.OpsPortal.WorkArea(this.portalPopup.find('.op-stage'));
@@ -231,9 +233,11 @@ steal(
                                 templates[key] = templates[key].firstChild.innerHTML;
                             }
                             
+                            var baseURL = AD.config.getValue('siteBaseURL');
+                            
                             $.feedback({
-                                ajaxURL: '/opsportal/feedback',
-                                html2canvasURL: '/feedback/html2canvas.min.js',
+                                ajaxURL: baseURL + '/opsportal/feedback',
+                                html2canvasURL: baseURL + '/feedback/html2canvas.min.js',
                                 postHTML: false,
                                 tpl: templates,
                                 initButtonText: labels.t('Feedback')

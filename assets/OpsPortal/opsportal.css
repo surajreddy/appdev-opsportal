@@ -192,8 +192,7 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 
 /* =OpsPortal Tables */
 .op-table { 
-	border: 1px solid #cccccc; 
-	margin-top: 15px; 
+	border: 1px solid #cccccc;
 }
 .op-table th { 
 	padding: 15px !important; 
@@ -302,6 +301,12 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 	border-top: 1px solid rgba(0,0,0,0.1); 
 	text-align: center; 
 	width: 100%; 
+}
+
+.op-list {
+    position: relative;
+    list-style: none;
+    padding: 0;
 }
 
 

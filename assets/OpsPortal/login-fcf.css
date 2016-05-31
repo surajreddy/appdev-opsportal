@@ -1,0 +1,119 @@
+/*FCF Login*/
+
+.bordergray { border-top: 1px solid #4E4E4E;}
+.selected {background-color:#BBD3D7 !important; opacity: 1;}
+
+.icon-title img {width:63px;height:69px;}
+.icon-title span {
+	font-size:36px;
+	vertical-align:middle;
+	margin-left:20px;
+	color:#fff;
+	}
+	
+
+#fcf-login {
+	display: block;
+    background: #bbd3d7;
+    position: relative;
+    max-width: 550px;
+	-webkit-border-radius: 20px;
+	-webkit-border-top-right-radius: 0;
+	-moz-border-radius: 20px;
+	-moz-border-radius-topright: 0;
+	border-radius: 20px;
+	border-top-right-radius: 0;
+    margin: 120px auto;
+	overflow:hidden;
+}
+
+#head {background-color:#fff;}
+
+.op-list li a {
+	width: 50%;
+    position: relative;
+    float: left;
+    text-align: center;
+    line-height: 52px;
+    height: 52px;
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 16px;
+	cursor: pointer;
+	}
+	
+	
+.logmod_form {
+  border-top: 1px solid #e5e5e5;
+}
+.logmod_alter {
+  display: block;
+  position: relative;
+  margin-top: 7px;
+}
+.logmod_alter::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.logmod_alter .connect:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+.connect {
+  overflow: hidden;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 72px;
+  line-height: 72px;
+  text-decoration: none;
+}
+.connect::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.connect:focus, .connect:hover, .connect:visited {
+  color: #FFF;
+  text-decoration: none;
+}
+.connect-icon {
+  vertical-align: middle;
+  float: left;
+  width: 70px;
+  text-align: center;
+  font-size: 22px;
+}
+.connect-context {
+  vertical-align: middle;
+  text-align: center;
+}
+.connect.facebook {
+  background: #3b5998;
+  color: #FFF;
+}
+.connect.facebook a {
+  color: #FFF;
+}
+.connect.facebook .connect-icon {
+  background: #283d68;
+}
+.connect.googleplus {
+  background: #dd4b39;
+  color: #FFF;
+	-webkit-border-bottom-right-radius: 20px;
+	-webkit-border-bottom-left-radius: 20px;
+	-moz-border-radius-bottomright: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;  
+}
+.connect.googleplus a {
+  color: #FFF;
+}
+.connect.googleplus .connect-icon {
+  background: #b52f1f;
+}

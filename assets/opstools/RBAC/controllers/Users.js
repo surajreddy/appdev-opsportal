@@ -118,7 +118,7 @@ steal(
                                     width:220
                                 });
                                 _this.dom.userSearch.AD.filter(function(value){
-
+                                    value = value.toLowerCase();
                                     _this.dom.userGrid.filter(function(obj){ //here it filters data!
                                         return obj.username.toLowerCase().indexOf(value)>=0;
                                     })
@@ -192,6 +192,7 @@ steal(
 
 
                                     pager:{
+                                        template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
                                       container:"paging_here",
                                       // size:8,
                                       group:5
@@ -706,11 +707,11 @@ steal(
                                 gridHeight -= pager.$height;
                                 gridHeight -= this.dom.userSearch.$height;
 
-                //// TODO: try to figure out how many rows would fit into available space
-                ////    then adjust ycount to fit that.
-                ////        gridHeight -= heightOf1Row (to accomodate the header)
-                ////        numrows = gridHeight / heightOf1Row
-                ////        
+//// TODO: try to figure out how many rows would fit into available space
+////    then adjust ycount to fit that.
+////        gridHeight -= heightOf1Row (to accomodate the header)
+////        numrows = gridHeight / heightOf1Row
+////        
 
                                 // this.dom.userGrid.define('height', gridHeight);
                                 // this.dom.userGrid.resize();

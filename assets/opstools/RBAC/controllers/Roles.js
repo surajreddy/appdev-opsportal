@@ -84,9 +84,9 @@ steal(
                                     width:300
                                 });
                                 _this.dom.roleSearch.AD.filter(function(value){
-
+                                    value = value.toLowerCase();
                                     _this.dom.roleGrid.filter(function(obj){ //here it filters data!
-                                        return obj.role_label.indexOf(value)>=0;
+                                        return obj.role_label.toLowerCase().indexOf(value)>=0;
                                     })
                                 });
 
@@ -117,6 +117,7 @@ steal(
                                     navigation:"true",      
 
                                     pager:{
+                                        template:"{common.prev()} {common.pages()} {common.next()}",
                                         container:"pgb",
                                         size:8,
                                         group:5,
@@ -251,8 +252,9 @@ steal(
                                     width:300
                                 });
                                 _this.dom.roleSearchActions.AD.filter(function(value){
+                                    value = value.toLowerCase();
                                     _this.dom.actionGrid.filter(function(obj){ 
-                                        return obj.action_key.indexOf(value)>=0;
+                                        return obj.action_key.toLowerCase().indexOf(value)>=0;
                                     })
                                 });
 
@@ -303,10 +305,11 @@ steal(
 
 
                                     pager:{
+                                        template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
                                         container:"rbac-pager-actions",
                                         size:5,
                                         group:5,
-                                        width:300
+                                        width:400
                                     },
 
 
@@ -597,19 +600,9 @@ steal(
                             })
                             .then(function(data){
 
-                                // now do a full find for this entry, so we have all the filled out info:
-                                Roles.findOne({ id:data.id })
-                                .fail(function(err){
-                                    AD.error.log('Error looking up new role.', {error:err, role:data});
-                                    dfd.reject();
-                                })
-                                .then(function(newRole){
-
-                                    // console.log('... new cloned Role:', newRole);
-                                    newRole.translate();
-
-                                    dfd.resolve(newRole);
-                                });
+                                // AD.Model's should now auto findOne() created data
+                                data.translate();
+                                dfd.resolve(data);
 
                             });
 
