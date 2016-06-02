@@ -86,7 +86,28 @@ steal(
 
                             //           this.element.html(can.view(this.options.templateDOM, {} ));
 
+                        },
+
+
+                        ready: function() {
+                            var dfd = AD.sal.Deferred();
+
+                            var allAreasReady = [];
+                            for (var k in this.listAreas) {
+                                allAreasReady.push(this.listAreas[k].ready());
+                            }
+
+                            $.when.apply(null, allAreasReady)
+                            .fail(function(err){
+                                dfd.reject(err);
+                            })
+                            .then(function(){
+                                dfd.resolve();
+                            })
+
+                            return dfd;
                         }
+                        
 
 
                     });
