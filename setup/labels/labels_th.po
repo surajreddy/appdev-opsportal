@@ -335,3 +335,9 @@ msgstr "[th]Language"
 msgid "Choose your default language for the web site:"
 msgstr "[th]Choose your default language for the web site:"
 
+#. path: opsportal
+#. code: th
+#. key: rbac.users.isActive
+msgid "Is Active"
+msgstr "[th]Is Active"
+

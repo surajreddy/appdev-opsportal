@@ -87,10 +87,6 @@ function setupSocket() {
 
     AD.ui.loading.completed(7);  // 
 
-    //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
-    //// TODO: or scan for any elements with appdev-opsportal="true" attribute
-    //// TODO: or scan the <scripts  opsportal-element="#divID" ... >
-
     // search the DOM for [appdev-opsportal] attribute
 
     if (allPortals.length > 0) {
