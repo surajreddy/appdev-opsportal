@@ -275,3 +275,69 @@ msgstr "แลก"
 msgid "Logout"
 msgstr "ลงชื่อออก"
 
+#. path: opsportal
+#. code: th
+#. key: site.user.info
+msgid "Information"
+msgstr "[th]Information"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.username
+msgid "Username"
+msgstr "[th]Username"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.password
+msgid "Password"
+msgstr "[th]Password"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.newPassword
+msgid "New Password"
+msgstr "[th]New Password"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.confirmPassword
+msgid "Confirm Password"
+msgstr "[th]Confirm Password"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.update
+msgid "Update"
+msgstr "[th]Update"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.email
+msgid "Email"
+msgstr "[th]Email"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.emailAddress
+msgid "Email address"
+msgstr "[th]Email address"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.language
+msgid "Language"
+msgstr "[th]Language"
+
+#. path: opsportal
+#. code: th
+#. key: site.user.chooseLanguage
+msgid "Choose your default language for the web site:"
+msgstr "[th]Choose your default language for the web site:"
+
+#. path: opsportal
+#. code: th
+#. key: rbac.users.isActive
+msgid "Is Active"
+msgstr "[th]Is Active"
+

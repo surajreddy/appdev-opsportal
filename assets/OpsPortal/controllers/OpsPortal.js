@@ -74,7 +74,9 @@ steal(
                         init: function (element, options) {
                             var self = this;
                             this.options = AD.defaults({
-                                'portal-autoenter': false,
+                                'appdev-opsportal':'default',   // which configuration to load
+                                'portal-autoenter': false,      // auto enter the opsportal
+                                'portal-theme' : '',            // no additional theme to load.
                                 templateDOM: '/OpsPortal/views/OpsPortal/OpsPortal.ejs',
                                 templateList: '/OpsPortal/views/OpsPortal/taskList.ejs',
                                 templateError: '/OpsPortal/views/OpsPortal/error.ejs'
@@ -139,7 +141,7 @@ steal(
                         elOptions: function () {
                             var _this = this;
 
-                            var params = ['portal-autoenter'];
+                            var params = ['appdev-opsportal', 'portal-autoenter', 'portal-theme'];
                             params.forEach(function (key) {
 
                                 var val = _this.element.attr(key);
@@ -148,7 +150,14 @@ steal(
                                     if (val == 'false') {
                                         val = false;
                                     }
-                                    _this.options[key] = val;
+                                    if (val == 'true') {
+                                        val = true;
+                                    }
+
+                                    // only set the value if it wasn't an empty string.
+                                    if (val != '') {
+                                        _this.options[key] = val;
+                                    }
                                 }
                             })
 
@@ -295,7 +304,7 @@ steal(
                             var hWindow = $(window).height();
                             var hMasthead = this.dom.resize.masthead.outerHeight(true);
                             console.log('//// resize: window.height:' + hWindow + ' masthead.outer:' + hMasthead);
-                            var newHeight = $(window).height() - hMasthead;  //this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
+                            var newHeight = hWindow - hMasthead;  //this.portalPopup.find(".opsportal-container-masthead").outerHeight(true);
 
                             // notify of a resize action.
                             // -1px to ensure sub tools don't cause page scrolling.
@@ -415,16 +424,70 @@ steal(
                                     AD.lang.label.translate(self.element);  // translate the OpsPortal task list
 
 
-                                    // notify everyone the opsportal is finished creating the Tools.
-                                    AD.comm.hub.publish('opsportal.ready', {});
+
+                                    // wait for all tools to finish loading
+                                    self.workArea.ready()
+                                    .fail(function(err){
+                                        AD.error.log('... workArea.ready()  failed!', err);
+                                    })
+                                    .then(function(){
+
+                                        // notify everyone the opsportal is finished creating the Tools.
+                                        AD.comm.hub.publish('opsportal.ready', {});
 
 
-                                    // if our auto open setting is set, then 
-                                    if (self.options['portal-autoenter']) {
+                                        // wait for all tools to be loaded before 
+                                        // loading any portal-theme, so this one has final
+                                        // say!
+                                        if (self.options['portal-theme'] != '') {
 
-                                        // auto click the Enter link:
-                                        self.element.find('.op-masthead a:first-of-type').click();
-                                    }
+                                            var theme = self.options['portal-theme']+'.css';
+                                            steal(theme);
+                                            
+                                        }
+
+                                        // if our auto open setting is set, then 
+                                        if (self.options['portal-autoenter']) {
+
+                                            // auto click the Enter link:
+                                            self.element.find('.op-masthead a:first-of-type').click();
+                                        }
+                                        
+                                    })
+                                    
+
+
+                                    
+//// NOTE:  the old way.  
+////        seems more responsive with the auto login, but technically everything isn't loaded yet ... 
+
+                                    // // notify everyone the opsportal is finished creating the Tools.
+                                    // AD.comm.hub.publish('opsportal.ready', {});
+
+
+                                    // if (self.options['portal-theme'] != '') {
+
+                                    //     // wait for all tools to be loaded before 
+                                    //     // loading any portal-theme, so this one has final
+                                    //     // say!
+
+                                    //     self.workArea.ready()
+                                    //     .fail(function(err){
+                                    //         AD.error.log('... workArea.ready()  failed!', err);
+                                    //     })
+                                    //     .then(function(){
+                                    //         var theme = self.options['portal-theme']+'.css';
+                                    //         steal(theme);
+                                    //     })
+                                        
+                                    // }
+
+                                    // // if our auto open setting is set, then 
+                                    // if (self.options['portal-autoenter']) {
+
+                                    //     // auto click the Enter link:
+                                    //     self.element.find('.op-masthead a:first-of-type').click();
+                                    // }
 
                                 }
 

@@ -50,6 +50,7 @@ steal(
                             this.isActive = false;      // is our tool the active one?
                             this.isAreaActive = false;  // is our area the active area?
 
+                            this.dfdReady = AD.sal.Deferred(); // when we are loaded
 
                             // we were provided the Application's Controller name
                             // if it exists, then create an instance of it on the DOM:
@@ -101,6 +102,7 @@ steal(
                                             if (tempController._resize) {
                                                 self.controller.resize(tempController._resize);
                                             }
+                                            self.dfdReady.resolve();
                                         } else {
                                             console.warn('controller (' + name + ').Tool()   not found!');
                                             console.warn('... waiting to try again');
@@ -116,7 +118,9 @@ steal(
                                         }, 100);
                                     }
                                 } else {
-                                    console.error('too many attempts to wait for [' + name + '] to load!');
+                                    var msg = 'too many attempts to wait for [' + name + '] to load!';
+                                    console.error(msg);
+                                    self.dfdReady.reject(msg);
                                 }
                             }
                             delayedLoad(controllerName, 0);
@@ -197,6 +201,12 @@ steal(
 
                             this.element.html(can.view(this.options.templateDOM, {}));
 
+                        },
+
+
+
+                        ready: function() {
+                            return this.dfdReady;
                         },
 
 
