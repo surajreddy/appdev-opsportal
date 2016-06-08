@@ -750,6 +750,10 @@ steal(
                                 var user = this.data.usersCollection.getItem(id);
 
                                 // show loading message on PermissionGrid
+                                var loadingLabel =  AD.lang.label.getLabel('rbac.user.loadingPermissions', user.username) || '* Loading Permissions for '+user.username;
+                                this.dom.userPermissions.showOverlay("<i class=\"fa fa-spinner\"></i> "+loadingLabel);
+
+
                                 var Permission = AD.Model.get('opstools.RBAC.Permission');
                                 Permission.findAll({user:user.id})
                                 .fail(function(err){
@@ -784,7 +788,7 @@ steal(
                                     _this.userAssignmentUpdate();
 
                                     // remove loading overlay
-
+                                    _this.dom.userPermissions.hideOverlay();
                                 })
 
                             }

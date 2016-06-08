@@ -341,3 +341,27 @@ msgstr "[th]Choose your default language for the web site:"
 msgid "Is Active"
 msgstr "[th]Is Active"
 
+#. path: opsportal
+#. code: th
+#. key: rbac.user.loadingPermissions
+msgid "Loading Permissions for %s"
+msgstr "[th]Loading Permissions for %s"
+
+#. path: opsportal
+#. code: th
+#. key: rbac.scopes.search
+msgid "search for scopes"
+msgstr "[th]search for scopes"
+
+#. path: opsportal
+#. code: th
+#. key: rbac.scopes.add
+msgid "add"
+msgstr "[th]add"
+
+#. path: opsportal
+#. code: th
+#. key: rbac.scopes.cancel
+msgid "Cancel*"
+msgstr "[th]Cancel*"
+

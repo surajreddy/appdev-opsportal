@@ -55,6 +55,7 @@ steal(
                             // we were provided the Application's Controller name
                             // if it exists, then create an instance of it on the DOM:
                             var controllerName = this.options.data.controller;
+                            var instanceOptions = this.options.data.options || {};
 
             
                             // if (AD.controllers.opstools[controllerName]) {
@@ -95,7 +96,7 @@ steal(
                                     if (AD.controllers.opstools[name]) {
                                         if (AD.controllers.opstools[name].Tool) {
                                             var tempController = self.controller;
-                                            self.controller = new AD.controllers.opstools[name].Tool(self.element);
+                                            self.controller = new AD.controllers.opstools[name].Tool(self.element, instanceOptions);
                                             if (tempController._needsUpdate) {
                                                 self.controller.needsUpdate();
                                             }
@@ -104,15 +105,13 @@ steal(
                                             }
                                             self.dfdReady.resolve();
                                         } else {
-                                            console.warn('controller (' + name + ').Tool()   not found!');
-                                            console.warn('... waiting to try again');
+                                            console.warn('controller (' + name + ').Tool()   not found! ... waiting to try again');
                                             setTimeout(function () {
                                                 delayedLoad(name, count + 1);
                                             }, 100);
                                         }
                                     } else {
-                                        console.warn('controller (' + name + ') not found!');
-                                        console.warn('... waiting to try again');
+                                        console.warn('controller (' + name + ') not found!  ... waiting to try again');
                                         setTimeout(function () {
                                             delayedLoad(name, count + 1);
                                         }, 100);
