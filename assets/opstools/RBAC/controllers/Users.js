@@ -750,6 +750,7 @@ steal(
                                 var user = this.data.usersCollection.getItem(id);
 
                                 // show loading message on PermissionGrid
+                                this.dom.userPermissions.clearAll();
                                 var loadingLabel =  AD.lang.label.getLabel('rbac.user.loadingPermissions', user.username) || '* Loading Permissions for '+user.username;
                                 this.dom.userPermissions.showOverlay("<i class=\"fa fa-spinner\"></i> "+loadingLabel);
 

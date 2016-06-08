@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/appdevdesigns/appdev-opsportal",
   "dependencies": {
-    "ad-utils": "git://github.com/appdevdesigns/ad-utils",
+    "ad-utils": "appdevdesigns/ad-utils",
     "github": "0.2.4",
     "async": "^1.5.2",
     "steal-tools": "^0.13.3"
