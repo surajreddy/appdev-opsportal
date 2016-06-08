@@ -439,7 +439,7 @@ steal(
                         /**
                          * @loadActions
                          *
-                         * reques the list of Action definitions from the server, and
+                         * request the list of Action definitions from the server, and
                          * load them into our actionGrid.
                          */
                         loadActions: function() {
