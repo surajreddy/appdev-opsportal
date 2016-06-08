@@ -13,7 +13,7 @@ System.import('appdev').then(function () {
         } else {
             AD.ui.loading.attach(allPortals[0]);
         }
-        AD.ui.loading.text('<i class="fa fa-spinner" aria-hidden="true"></i>');  //' OpsPortal ...');
+        AD.ui.loading.text('<i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>');  //' OpsPortal ...');
         AD.ui.loading.resources(19);  // increase the number of resources to load
 
         loadJqueryUi();

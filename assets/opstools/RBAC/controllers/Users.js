@@ -752,7 +752,7 @@ steal(
                                 // show loading message on PermissionGrid
                                 this.dom.userPermissions.clearAll();
                                 var loadingLabel =  AD.lang.label.getLabel('rbac.user.loadingPermissions', user.username) || '* Loading Permissions for '+user.username;
-                                this.dom.userPermissions.showOverlay("<i class=\"fa fa-spinner\"></i> "+loadingLabel);
+                                this.dom.userPermissions.showOverlay("<i class=\"fa fa-spinner fa-pulse\"></i> "+loadingLabel);
 
 
                                 var Permission = AD.Model.get('opstools.RBAC.Permission');
