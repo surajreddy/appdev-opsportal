@@ -242,7 +242,7 @@ steal(
                                 templates[key] = templates[key].firstChild.innerHTML;
                             }
                             
-                            var baseURL = AD.config.getValue('siteBaseURL');
+                            var baseURL = AD.config.getValue('siteBaseURL') || '';
                             
                             $.feedback({
                                 ajaxURL: baseURL + '/opsportal/feedback',
