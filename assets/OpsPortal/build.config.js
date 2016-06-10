@@ -232,6 +232,7 @@ module.exports = {
 				"bootstrap-table",
 				"bootstrapValidator",
 				"bootbox",
+				"dropzone",
 
 				'js/GenericList',
 

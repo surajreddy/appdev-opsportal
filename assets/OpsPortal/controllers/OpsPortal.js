@@ -25,9 +25,7 @@ steal(
                 'appdev/ad',
                 'appdev/control/control',
                 'appdev/comm/socket',
-                'appdev/labels/lang',
-                'dropzone',
-                'exif'
+                'appdev/labels/lang'
             // ).then(
             // 'js/jquery.sidr.min.js',
             // ).then(
