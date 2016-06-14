@@ -52,6 +52,11 @@ module.exports = {
 
       //// tools will be gathered from config/opsportal.js
       //// and matched against a user's permissions.
+
+
+      // NOTE: api/policies/OpsPortalUserConfig.js
+      // compiles this information into res.appdev.opsportalconfig
+      //
       
       /*
             var tools = [
@@ -61,7 +66,11 @@ module.exports = {
       var tools = [];
       var data = res.appdev.opsportalconfig;
       for (var d=0; d< data.tools.length; d++) {
-          tools.push(data.tools[d].controller);
+          var c = data.tools[d];
+
+          if (c.isController) {
+              tools.push(c.controller);
+          }
       }
       
       
@@ -89,7 +98,8 @@ module.exports = {
       } else {
         AD.log('<yellow>warn:</yellow> socket.id not registered. ');
       }
-      ADCore.comm.success(res, { session:'registered'});
+      res.AD.success({ session:'registered'});
+      // ADCore.comm.success(res, { session:'registered'});
   },
   
   
@@ -221,6 +231,33 @@ module.exports = {
         }
     });
     
+  },
+
+
+  /**
+   * GET /opsportal/view/:key
+   *
+   * Return the json view definition for an OPTool view.
+   */
+  view:function(req,res) {
+    var key = req.param('key');
+
+    res.AD.success({ all:'good', key:key });
+
+
+    /*
+    {
+      objects:[
+        'object.key',
+        'object.key2'
+      ],
+      templateDOM: '/url/to/dom/template.ejs',
+      view:{
+        'page.key': { },
+        'page2.key': { }
+      }
+    }
+    */
   }
 
 
