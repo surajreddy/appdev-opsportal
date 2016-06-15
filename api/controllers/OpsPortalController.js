@@ -242,19 +242,27 @@ module.exports = {
   view:function(req,res) {
     var key = req.param('key');
 
-    res.AD.success({ all:'good', key:key });
+    var data = {
+      objects:{
+        'opstool.Application.MobileDonor':'opstool/Application/models/MobileDonor.js',
+        'opstool.Application.projects':'opstool/Application/models/projects.js'
+      },
+      controller:{
+        'opstool.Application.TestApp' : 'opstool/Application/controllers/TestApp.js'
+      }
+    }
+
+    res.AD.success(data);
 
 
     /*
     {
-      objects:[
-        'object.key',
-        'object.key2'
-      ],
-      templateDOM: '/url/to/dom/template.ejs',
-      view:{
-        'page.key': { },
-        'page2.key': { }
+      objects:{
+        'application.object1':'opstools/Application/models/object1.js',
+        'application.object2':'opstools/Application/models/object2.js'
+      },
+      controller:{
+        'application.page' : 'opstools/Application/controllers/page.js'
       }
     }
     */

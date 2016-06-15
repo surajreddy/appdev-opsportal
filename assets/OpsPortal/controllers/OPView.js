@@ -22,7 +22,18 @@ steal(
 					//						loaded controller to attach it's 
 					// 						webix components to. 
 					//
-					// 
+					// The Data returned from the options.url should contain:
+					//		data.objects 	: a Hash of the object models to load
+					//							{
+					//								'application.object1': 'opstool/[Application]/models/[object1].js',
+					//								'application.object2': 'opstool/[Application]/models/[object2].js',
+					//							}
+					//
+					//		data.controller : a Hash of the UI controller to load
+					//							{
+					//								'application.page' : 'opstool/[Application]/controllers/[page].js'
+					//							}
+					//
 
 					// Namespacing conventions:
 					// AD.Control.OpsTool.extend('[ToolName]', [{ static },] {instance} );
@@ -56,11 +67,55 @@ console.error('*** OPView.init() *** ');
 								})
 								.then(function( viewData ){
 
-
-									_this.initDOM();
-
 									// now begin to load any dependent models and controllers:
-console.error('... viewData:', viewData);
+
+									var objectsReady = [];
+									viewData.objects = viewData.objects || {};
+									for(var k in viewData.objects) {
+										objectsReady.push(AD.Model.ready(k));
+										steal(viewData.objects[k]);  // loads the model
+									}
+
+									$.when.apply($, objectsReady)
+									.fail(function(err){
+										AD.error.log('Error loading OPView objects:'+_this.options.url, {objects: viewData.objects, error:err });
+										_this.dfdReady.reject(err);
+									})
+									.then(function(){
+
+										// all objects are loaded, now load the controller(s)
+
+										var controllersReady = [];
+										viewData.controller = viewData.controller || {};
+										for(var k in viewData.controller) {
+											controllersReady.push(AD.Control.ready(k));
+											steal(viewData.controller[k]);
+										}
+
+										_this.initDOM(viewData.controller);
+
+										$.when.apply($, controllersReady)
+										.fail(function(err){
+											AD.error.log('Error loading OPView controller:'+_this.options.url, {controller: viewData.controller, error:err });
+											_this.dfdReady.reject(err);
+
+										})
+										.then(function(){
+
+
+											for(var k in viewData.controller) {
+
+												// NOTE:  jQuery and '.' notations!
+												var id = AD.util.string.replaceAll(k, '.', '_');
+												var $el = _this.element.find("#"+id);
+												AD.Control.new(k, $el, {});
+											}
+console.error('... OPView.init() : controller should be loaded now! :');
+										})
+
+									})
+									
+
 
 								})
 							} else {
@@ -78,11 +133,15 @@ console.error('... OPView.init() : no url provided to this OPView!');
 
 
 
-						initDOM: function () {
+						initDOM: function (hashControllers) {
 
-							// insert the container <div> for the controller that will 
-							// attach webix to this:
-							var div = '<div id="'+this.options.key+'"></div>';
+							var div = '';
+							for(var k in hashControllers) {
+								// insert the container <div> for the controller that will 
+								// attach webix to this:
+								var id = AD.util.string.replaceAll(k, '.', '_');
+								div += '<div id="'+id+'"></div>';
+							}
 							this.element.html(div);
 						},
 
