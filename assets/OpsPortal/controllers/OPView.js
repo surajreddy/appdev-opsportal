@@ -53,7 +53,6 @@ steal(
 
 							// Call parent init
 							this._super(element, options);
-console.error('*** OPView.init() *** ');
 							
 							// a Deferred representing if our view is ready
 							this.dfdReady = AD.sal.Deferred();
@@ -70,11 +69,16 @@ console.error('*** OPView.init() *** ');
 									// now begin to load any dependent models and controllers:
 
 									var objectsReady = [];
-									viewData.objects = viewData.objects || {};
-									for(var k in viewData.objects) {
-										objectsReady.push(AD.Model.ready(k));
-										steal(viewData.objects[k]);  // loads the model
-									}
+									viewData.objects = viewData.objects || [];
+									viewData.objects.forEach(function(object){
+										if ((object.key) && (object.path)) {
+											objectsReady.push(AD.Model.ready(object.key));
+											steal(object.path);  // loads the model
+										} else {
+
+											AD.error.log('Invalid definition for an object provided.', {object: object, viewdata:viewData, url:_this.options.url});
+										}
+									})
 
 									$.when.apply($, objectsReady)
 									.fail(function(err){
@@ -86,11 +90,16 @@ console.error('*** OPView.init() *** ');
 										// all objects are loaded, now load the controller(s)
 
 										var controllersReady = [];
-										viewData.controller = viewData.controller || {};
-										for(var k in viewData.controller) {
-											controllersReady.push(AD.Control.ready(k));
-											steal(viewData.controller[k]);
-										}
+										viewData.controller = viewData.controller || [];
+										viewData.controller.forEach(function(controller){ 
+											if ((controller.key) && (controller.path)) {
+												controllersReady.push(AD.Control.ready(controller.key));
+												steal(controller.path);
+											} else {
+
+												AD.error.log('Invalid definition for a controller provided.', {controller: controller, viewdata:viewData, url:_this.options.url})
+											}
+										})
 
 										_this.initDOM(viewData.controller);
 
@@ -103,13 +112,19 @@ console.error('*** OPView.init() *** ');
 										.then(function(){
 
 
-											for(var k in viewData.controller) {
+											viewData.controller.forEach(function(controller){ 
 
-												// NOTE:  jQuery and '.' notations!
-												var id = AD.util.string.replaceAll(k, '.', '_');
-												var $el = _this.element.find("#"+id);
-												AD.Control.new(k, $el, {});
-											}
+												if ((controller.key) && (controller.path)) {
+													// NOTE:  jQuery and '.' notations!
+													var id = AD.util.string.replaceAll(controller.key, '.', '_');
+													var $el = _this.element.find("#"+id);
+													AD.Control.new(controller.key, $el, {});
+												}
+
+											})
+_this.translate();
+
+
 console.error('... OPView.init() : controller should be loaded now! :');
 										})
 
@@ -133,65 +148,26 @@ console.error('... OPView.init() : no url provided to this OPView!');
 
 
 
-						initDOM: function (hashControllers) {
+						initDOM: function (arrayControllers) {
 
 							var div = '';
-							for(var k in hashControllers) {
+
+							arrayControllers = arrayControllers || [];
+							arrayControllers.forEach(function(controller){ 
+							
 								// insert the container <div> for the controller that will 
 								// attach webix to this:
-								var id = AD.util.string.replaceAll(k, '.', '_');
+								var id = AD.util.string.replaceAll(controller.key, '.', '_');
 								div += '<div id="'+id+'"></div>';
-							}
+							})
 							this.element.html(div);
-						},
-
-
-						initControllers: function () {
-
-							this.controllers = {};  // hold my controller references here.
-
-							var AppList = AD.Control.get('opstools.BuildApp.AppList'),
-								AppWorkspace = AD.Control.get('opstools.BuildApp.AppWorkspace');
-
-							this.controllers.AppList = new AppList(this.element.find(".ab-app-list"), { selectedAppEvent: this.CONST.APP_SELECTED });
-							this.controllers.AppWorkspace = new AppWorkspace(this.element.find(".ab-app-workspace"), { backToAppPageEvent: this.CONST.GO_TO_APP_PAGE });
-						},
-
-
-						initEvents: function () {
-							var self = this;
-
-							self.controllers.AppList.element.on(self.CONST.APP_SELECTED, function (event, app) {
-								self.element.find(".ab-app-list").hide();
-
-								self.controllers.AppWorkspace.setApplication(app);
-								self.element.find(".ab-app-workspace").show();
-								self.controllers.AppWorkspace.resize(self.data.height);
-							});
-
-							self.controllers.AppWorkspace.element.on(self.CONST.GO_TO_APP_PAGE, function (event) {
-								self.element.find(".ab-app-workspace").hide();
-								self.element.find(".ab-app-list").show();
-								self.controllers.AppList.resetState();
-								self.controllers.AppList.resize(self.data.height);
-							});
 						},
 
 
 						ready:function() {
 							return this.dfdReady;
-						},
-
-
-						resize: function (data) {
-							this._super(data);
-							// this.data.height = data.height;
-
-							// $('.ab-main-container').height(data.height);
-
-							// this.controllers.AppList.resize(data.height);
-							// this.controllers.AppWorkspace.resize(data.height);
 						}
+
 
 					});
 

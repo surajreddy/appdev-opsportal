@@ -243,13 +243,13 @@ module.exports = {
     var key = req.param('key');
 
     var data = {
-      objects:{
-        'opstool.Application.MobileDonor':'opstool/Application/models/MobileDonor.js',
-        'opstool.Application.projects':'opstool/Application/models/projects.js'
-      },
-      controller:{
-        'opstool.Application.TestApp' : 'opstool/Application/controllers/TestApp.js'
-      }
+      objects:[
+          { key:'opstool.Application.MobileDonor', path:'opstool/Application/models/MobileDonor.js'},
+          { key:'opstool.Application.projects',    path:'opstool/Application/models/projects.js'}
+      ],
+      controller:[
+          { key:'opstool.Application.TestApp',     path:'opstool/Application/controllers/TestApp.js'}
+      ]
     }
 
     res.AD.success(data);
