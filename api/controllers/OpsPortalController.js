@@ -242,6 +242,26 @@ module.exports = {
   view:function(req,res) {
     var key = req.param('key');
 
+    OPView.findOne({key:key})
+    .then(function(view){
+
+      if (view) {
+        var data = {
+          objects:view.objects,
+          controller:view.controller
+        }
+
+        res.AD.success(data);
+      } else {
+        res.AD.error("View not found.", 404);
+      }
+      return null;
+    })
+    .catch(function(err){
+      ADCore.error.log("Error looking up OPView", {error:err, key:key });
+      res.AD.error(err);
+    });
+/*
     var data = {
       objects:[
           { key:'opstool.Application.MobileDonor', path:'opstool/Application/models/MobileDonor.js'},
@@ -251,21 +271,9 @@ module.exports = {
           { key:'opstool.Application.TestApp',     path:'opstool/Application/controllers/TestApp.js'}
       ]
     }
+*/
+    // res.AD.success(data);
 
-    res.AD.success(data);
-
-
-    /*
-    {
-      objects:{
-        'application.object1':'opstools/Application/models/object1.js',
-        'application.object2':'opstools/Application/models/object2.js'
-      },
-      controller:{
-        'application.page' : 'opstools/Application/controllers/page.js'
-      }
-    }
-    */
   }
 
 
