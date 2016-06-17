@@ -3,11 +3,17 @@
 //     waits: !1,
 //     has: 'js/jquery.min.js canjs/can.jquery.js appdev/ad.js js/OpenAjax.js appdev/comm/hub.js appdev/util/uuid.js js/async.js appdev/util/async.js appdev/config/config.js appdev/model/model.js appdev/labels/lang.js appdev/labels/label.js appdev/sal/web-jquery.js appdev/comm/service.js js/dependencies/sails.io.js appdev/comm/socket.js appdev/widgets/ad_ui_reauth/ad_ui_reauth.css appdev/widgets/ad_ui_reauth/ad_ui_reauth.js appdev/auth/reauth.js appdev/UIController.js appdev/control/control.js appdev/appdev.js'.split( ' ' )
 // } );
-
+var allPortals = $('[appdev-opsportal]');
 System.import('appdev').then(function () {
     steal.import('appdev/ad').then(function () {
-        AD.ui.loading.attach('#portal');
-        AD.ui.loading.text(' OpsPortal ...');
+
+        if (allPortals.length ==0) {
+            // default to previous #portal method.
+            AD.ui.loading.attach('#portal');
+        } else {
+            AD.ui.loading.attach(allPortals[0]);
+        }
+        AD.ui.loading.text('<i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>');  //' OpsPortal ...');
         AD.ui.loading.resources(19);  // increase the number of resources to load
 
         loadJqueryUi();
@@ -28,7 +34,8 @@ function loadJqueryUi() {
 }
 
 function loadBootstrapStyle() {
-    steal.import('bootstrap',
+    steal.import(
+        'bootstrap',
         'bootstrap.css',
         'styles/bootstrap-theme.min.css',
         'styles/jquery.sidr.dark.css',
@@ -44,10 +51,12 @@ function loadBootstrapStyle() {
     // 'GenericList.js',
         'FilteredBootstrapTable',
         'OpsButtonBusy',
-        'font-awesome.css').then(
-            function () {
-                loadBootstrapPlugins();
-            });
+        'font-awesome.css'
+
+    ).then(
+        function () {
+            loadBootstrapPlugins();
+        });
 }
 
 function loadBootstrapPlugins() {
@@ -78,12 +87,18 @@ function setupSocket() {
 
     AD.ui.loading.completed(7);  // 
 
-    //// TODO: get the divID from the calling url:  /opsportal/bootup/[divID]:
-    //// TODO: or scan for any elements with appdev-opsportal="true" attribute
-    //// TODO: or scan the <scripts  opsportal-element="#divID" ... >
+    // search the DOM for [appdev-opsportal] attribute
 
-    // attach our OpsPortal to this ID :
-    new AD.controllers.OpsPortal.OpsPortal('#portal');
+    if (allPortals.length > 0) {
+        allPortals.each(function(indx, portal){
+            new AD.controllers.OpsPortal.OpsPortal(portal);
+        })
+    } else {
+        console.log('opsportal: defaulting to old #portal loading method.');
+        // attach our OpsPortal to this ID :
+        new AD.controllers.OpsPortal.OpsPortal('#portal');
+    }
+
 
     // register our socket connection
     AD.comm.socket.get({ url: '/opsportal/socket/register' })

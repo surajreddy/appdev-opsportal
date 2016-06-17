@@ -52,6 +52,11 @@ module.exports = {
 
       //// tools will be gathered from config/opsportal.js
       //// and matched against a user's permissions.
+
+
+      // NOTE: api/policies/OpsPortalUserConfig.js
+      // compiles this information into res.appdev.opsportalconfig
+      //
       
       /*
             var tools = [
@@ -61,7 +66,11 @@ module.exports = {
       var tools = [];
       var data = res.appdev.opsportalconfig;
       for (var d=0; d< data.tools.length; d++) {
-          tools.push(data.tools[d].controller);
+          var c = data.tools[d];
+
+          if (c.isController) {
+              tools.push(c.controller);
+          }
       }
       
       
@@ -89,7 +98,8 @@ module.exports = {
       } else {
         AD.log('<yellow>warn:</yellow> socket.id not registered. ');
       }
-      ADCore.comm.success(res, { session:'registered'});
+      res.AD.success({ session:'registered'});
+      // ADCore.comm.success(res, { session:'registered'});
   },
   
   
@@ -221,6 +231,49 @@ module.exports = {
         }
     });
     
+  },
+
+
+  /**
+   * GET /opsportal/view/:key
+   *
+   * Return the json view definition for an OPTool view.
+   */
+  view:function(req,res) {
+    var key = req.param('key');
+
+    OPView.findOne({key:key})
+    .then(function(view){
+
+      if (view) {
+        var data = {
+          objects:view.objects,
+          controller:view.controller
+        }
+
+        res.AD.success(data);
+      } else {
+        res.AD.error("View not found.", 404);
+      }
+      return null;
+    })
+    .catch(function(err){
+      ADCore.error.log("Error looking up OPView", {error:err, key:key });
+      res.AD.error(err);
+    });
+/*
+    var data = {
+      objects:[
+          { key:'opstool.Application.MobileDonor', path:'opstool/Application/models/MobileDonor.js'},
+          { key:'opstool.Application.projects',    path:'opstool/Application/models/projects.js'}
+      ],
+      controller:[
+          { key:'opstool.Application.TestApp',     path:'opstool/Application/controllers/TestApp.js'}
+      ]
+    }
+*/
+    // res.AD.success(data);
+
   }
 
 

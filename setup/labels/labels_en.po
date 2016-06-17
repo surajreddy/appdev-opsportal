@@ -275,3 +275,93 @@ msgstr "Switcheroo"
 msgid "Logout"
 msgstr "Logout"
 
+#. path: opsportal
+#. code: en
+#. key: site.user.info
+msgid "Information"
+msgstr "Information"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.username
+msgid "Username"
+msgstr "Username"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.password
+msgid "Password"
+msgstr "Password"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.newPassword
+msgid "New Password"
+msgstr "New Password"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.confirmPassword
+msgid "Confirm Password"
+msgstr "Confirm Password"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.update
+msgid "Update"
+msgstr "Update"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.email
+msgid "Email"
+msgstr "Email"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.emailAddress
+msgid "Email address"
+msgstr "Email address"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.language
+msgid "Language"
+msgstr "Language"
+
+#. path: opsportal
+#. code: en
+#. key: site.user.chooseLanguage
+msgid "Choose your default language for the web site:"
+msgstr "Choose your default language for the web site:"
+
+#. path: opsportal
+#. code: en
+#. key: rbac.users.isActive
+msgid "Is Active"
+msgstr "Is Active"
+
+#. path: opsportal
+#. code: en
+#. key: rbac.user.loadingPermissions
+msgid "Loading Permissions for %s"
+msgstr "Loading Permissions for %s"
+
+#. path: opsportal
+#. code: en
+#. key: rbac.scopes.search
+msgid "search for scopes"
+msgstr "search for scopes"
+
+#. path: opsportal
+#. code: en
+#. key: rbac.scopes.add
+msgid "add"
+msgstr "add"
+
+#. path: opsportal
+#. code: en
+#. key: rbac.scopes.cancel
+msgid "Cancel*"
+msgstr "Cancel*"
+

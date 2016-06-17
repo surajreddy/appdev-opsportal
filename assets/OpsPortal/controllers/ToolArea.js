@@ -109,6 +109,27 @@ steal(
                         initDOM: function () {
 
                             this.element.html(can.view(this.options.templateDOM, {}));
+                        },
+
+
+                        ready: function() {
+                            var dfd = AD.sal.Deferred();
+                            var _this = this;
+
+                            var allToolsReady = [];
+                            for (var k in this.listTools) {
+                                allToolsReady.push(this.listTools[k].ready());
+                            }
+
+                            $.when.apply(null, allToolsReady)
+                            .fail(function(err){
+                                dfd.reject(err);
+                            })
+                            .then(function(){
+                                dfd.resolve();
+                            })
+
+                            return dfd;
                         }
 
 

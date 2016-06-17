@@ -84,9 +84,9 @@ steal(
                                     width:300
                                 });
                                 _this.dom.roleSearch.AD.filter(function(value){
-
+                                    value = value.toLowerCase();
                                     _this.dom.roleGrid.filter(function(obj){ //here it filters data!
-                                        return obj.role_label.indexOf(value)>=0;
+                                        return obj.role_label.toLowerCase().indexOf(value)>=0;
                                     })
                                 });
 
@@ -117,6 +117,7 @@ steal(
                                     navigation:"true",      
 
                                     pager:{
+                                        template:"{common.prev()} {common.pages()} {common.next()}",
                                         container:"pgb",
                                         size:8,
                                         group:5,
@@ -251,8 +252,9 @@ steal(
                                     width:300
                                 });
                                 _this.dom.roleSearchActions.AD.filter(function(value){
+                                    value = value.toLowerCase();
                                     _this.dom.actionGrid.filter(function(obj){ 
-                                        return obj.action_key.indexOf(value)>=0;
+                                        return obj.action_key.toLowerCase().indexOf(value)>=0;
                                     })
                                 });
 
@@ -303,10 +305,11 @@ steal(
 
 
                                     pager:{
+                                        template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
                                         container:"rbac-pager-actions",
                                         size:5,
                                         group:5,
-                                        width:300
+                                        width:400
                                     },
 
 
@@ -436,7 +439,7 @@ steal(
                         /**
                          * @loadActions
                          *
-                         * reques the list of Action definitions from the server, and
+                         * request the list of Action definitions from the server, and
                          * load them into our actionGrid.
                          */
                         loadActions: function() {

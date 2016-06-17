@@ -68,7 +68,9 @@ steal(
 
                         initDOM: function () {
 
-                            this.element.html(can.view(this.options.templateDOM, {}));
+                            this.element.html(can.view(this.options.templateDOM, {
+                                baseURL: AD.config.getValue('siteBaseURL') || ''
+                            }));
 
                         },
 
