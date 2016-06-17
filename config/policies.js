@@ -14,11 +14,14 @@ var path = require('path');
 var ADCore = require(path.join(process.cwd(), 'api', 'services', 'ADCore.js'));
 var serviceStack = ADCore.policy.serviceStack([ 'opsPortalUserConfig' ]);
 
+var opviewStack = ADCore.policy.serviceStack([ 'opsViewPermission']);
+
 module.exports = {
 
     'appdev-opsportal/OpsPortalController': {
         config: serviceStack,
-        requirements:serviceStack
+        requirements:serviceStack,
+        view: opviewStack
     }
 
 };

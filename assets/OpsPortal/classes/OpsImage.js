@@ -158,6 +158,7 @@ System.import('can').then(function () {
                                         $(_this.element).append(img);
                                         // img.css('width', _this.option('width', options));
                                         $(_this.element).trigger('load');
+
                                         dfd.resolve(img);
                                     }
                                 });

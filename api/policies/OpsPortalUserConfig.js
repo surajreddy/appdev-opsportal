@@ -97,12 +97,20 @@ function processTool( areaHash, tools, user, area, tool ) {
                 areaHash[area.key] = areaInfo;
             }
 
+// add default value for .isController
+            if (typeof tool.isController == 'undefined') {
+                tool.isController = true;
+            }
+
+
             // add the tool
             var toolInfo = {
                     area:area.key,
                     controller:tool.controller,
                     label:tool.label,
-                    isDefault:tool.isDefault
+                    isDefault:tool.isDefault,
+                    isController:tool.isController,
+                    options: tool.options || {}
             };
             tools.push(toolInfo);
             break;

@@ -8,6 +8,7 @@ steal(
     'OpsPortal/controllers/MenuList.js',
     'OpsPortal/controllers/WorkArea.js',
     'OpsPortal/controllers/SubLinks.js',
+'OpsPortal/controllers/OPView.js',
     'OpsPortal/views/OpsPortal/OpsPortal.ejs',
     'OpsPortal/views/OpsPortal/taskList.ejs',
     'OpsPortal/portal-scratch.css',
@@ -43,7 +44,7 @@ steal(
                     //// 
                     //// Dropzone patch
                     ////
-                    //// photos taken by smartphones are actually stored in 
+                    //// photos taken by smartphones can actually be stored in 
                     //// landscape mode even if they are portraits.  the .jpg 
                     //// have extra EXIF data that tells the app to rotate them.
                     ////
