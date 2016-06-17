@@ -61,6 +61,13 @@ steal(
 							if (this.options.url != '') {
 								AD.comm.service.get({ url: this.options.url })
 								.fail(function(err){
+
+//// TODO:  OPView error message if err is a 403: forbidden
+////        display a "You don't have permission to view this page. Please contact your Administrator." message
+
+//// TODO:  server side should post an alert: for a system administrator to review the NavBar permission for this OPView
+////        and make sure it actually specifies this "op.view.key"+".view"  permission
+
 									AD.error.log('Error loading OPView url:'+_this.options.url, {url: _this.options.url, error:err });
 									_this.dfdReady.reject(err);
 								})
@@ -115,35 +122,32 @@ steal(
 											viewData.controller.forEach(function(controller){ 
 
 												if ((controller.key) && (controller.path)) {
-													// NOTE:  jQuery and '.' notations!
-													var id = AD.util.string.replaceAll(controller.key, '.', '_');
-													var $el = _this.element.find("#"+id);
-													AD.Control.new(controller.key, $el, {});
+
+													// NOTE:  jQuery and '.' notations! Painful.
+													//        just remap '.' to '_'
+													var id = "#"+AD.util.string.replaceAll(controller.key, '.', '_');
+													var $el = _this.element.find(id);
+													AD.Control.new(controller.key, $el, { id: id });
 												}
 
-											})
-_this.translate();
+											});
 
 
-console.error('... OPView.init() : controller should be loaded now! :');
+											_this.translate();
+
 										})
 
 									})
 									
 
 
-								})
+								});
+
 							} else {
-console.error('... OPView.init() : no url provided to this OPView!');
+
+								console.error('... OPView.init() : no url provided to this OPView!');
 							}
 
-							// this.data = {};
-
-							// this.initDOM();
-							// this.initControllers();
-							// this.initEvents();
-
-							// this.translate();
 						},
 
 
@@ -152,6 +156,7 @@ console.error('... OPView.init() : no url provided to this OPView!');
 
 							var div = '';
 
+							// create a DIV for each defined controller
 							arrayControllers = arrayControllers || [];
 							arrayControllers.forEach(function(controller){ 
 							
@@ -167,7 +172,6 @@ console.error('... OPView.init() : no url provided to this OPView!');
 						ready:function() {
 							return this.dfdReady;
 						}
-
 
 					});
 
