@@ -1,0 +1,53 @@
+<!-- 
+#  Appdev Label Info:
+#label_context:opsportal
+#language_code:en
+-->
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h2>
+				<span app-label-key="optheme.header">OP Theme</span>
+			</h2>
+			<p>
+				<span app-label-key="optheme.description">Choose a theme or create a new one:</span>
+			</p>
+			<div class="row">
+				<div class="col-md-6">
+					<h2>
+						<span app-label-key="optheme.currentThemes">Current Themes:</span>
+					</h2>
+					<select multiple class="no-boxbord optheme-list" name="theme">
+                      <!-- themes.forEach(function(theme){  --> 
+                      <option class='optheme-list-item' value="[[= theme.name ]]">[[= theme.name ]]</option>
+                      <!--  }) -->
+                    </select>
+					<button type="button" class="btn btn-primary optheme-default">
+						<i class="fa"></i><span app-label-key="optheme.setDefault">Default</span>
+					</button>
+				</div>
+				<div class="col-md-6">
+					<form id="optheme-form" >
+						<div class="form-group">
+							<label for="exampleInputEmail1">
+								<span app-label-key="optheme.themeName">Theme Name</span>
+							</label>
+							<input class="form-control" name="name" />
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail1">
+								some value
+							</label>
+							<input class="form-control" name="value1" />
+						</div>
+					</form> 
+					<button type="button" class="btn op-btn btn-primary optheme-addTheme">
+					    <i class="fa"></i><span app-label-key="optheme.addTheme">Create Theme</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

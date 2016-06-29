@@ -563,6 +563,23 @@ steal(
                                             var theme = self.options['portal-theme']+'.css';
                                             steal(theme);
                                             
+                                        } else {
+
+//// TODO: refactor this to be part of the /opsportal/config  response:
+AD.comm.service.get({url:'/optheme/theme'})
+.fail(function(err){
+    AD.error.log('Error getting OPTheme.theme', {error:err });
+})
+.done(function(theme){
+    // now try to load the selected theme:
+    // remove the first '/' if there
+    var parts = theme.name.split('/');
+    if (parts[0] == '') { parts.shift() };
+    theme.name = parts.join('/');
+    
+    if (theme.name[0] == '/') theme.name[0] = '';
+    steal(theme.name);
+})      
                                         }
 
                                         // if our auto open setting is set, then 

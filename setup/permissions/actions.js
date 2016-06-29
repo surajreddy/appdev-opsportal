@@ -32,6 +32,10 @@ module.exports = {
             action_key:'opsportal.view', 
             action_description:'Allows the user to access the opsportal.' 
         },
+        { 
+            action_key:'opsportal.theme.view', 
+            action_description:'Allows the user to access the theme builder.' 
+        },
         // { 
         //     action_key:'adcore.permission.test2', 
         //     action_description:'Just for Testing' 

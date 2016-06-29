@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<!--
+
+    Client side unit tests for the opstools/OPTheme application, via mocha-phantomjs.
+
+    Node.js module dependencies:
+        mocha
+        chai
+
+    USAGE:
+        mocha-phantomjs test-all.html
+        (also manually viewable in a web browser)
+
+-->
+<head>
+    <title>opstools/OPTheme Test</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../../../node_modules/mocha/mocha.css" />
+    <script src="../../../../node_modules/mocha/mocha.js"></script>
+    <script src="../../../../node_modules/chai/chai.js"></script>
+    <script src="../../../../../../assets/js/jquery.min.js"></script>
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../../../../../../assets/steal/steal.js?opstools/OPTheme/tests/test_all_loader.js"></script>
+</body>
+</html>

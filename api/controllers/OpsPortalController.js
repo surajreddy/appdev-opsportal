@@ -246,6 +246,7 @@ module.exports = {
     .then(function(view){
 
       if (view) {
+
         var data = {
           objects:view.objects,
           controller:view.controller

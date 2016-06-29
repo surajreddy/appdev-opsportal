@@ -8,7 +8,7 @@ System.import('can').then(function () {
             // Namespacing conventions:
             // AD.classes.[application].[Class]  --> Object
             if (typeof AD.classes.opsportal == 'undefined') AD.classes.opsportal = {};
-            AD.classes.opsportal.OpsTool = can.Control.extend({
+            AD.classes.opsportal.OpsTool = AD.classes.UIController.extend({    // can.Control.extend({
 
                 init: function (element, options) {
                     var self = this;

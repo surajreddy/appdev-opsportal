@@ -108,6 +108,18 @@ module.exports.opsportal = {
                       'adcore.admin'
                       , 'adcore.developer'
                   ]
+              },
+              {
+                  // Roles and Permissions
+                  controller:'OPTheme',
+                  label:'opp.areaTheme',
+                  context:'opsportal',
+                  isDefault: false,
+                  permissions:[
+                      'adcore.admin'
+                      , 'adcore.developer'
+                      , 'opsportal.theme.view'
+                  ]
               }
 
               // User management Interface here...

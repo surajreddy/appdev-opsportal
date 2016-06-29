@@ -33,3 +33,8 @@ assets/mockups/*
 # Deployed apps should consider commenting this line out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
+
+
+# ignore the OPTheme templates directory
+assets/opstools/OPTheme/themes/*
+!assets/opstools/OPTheme/themes/.gitkeep

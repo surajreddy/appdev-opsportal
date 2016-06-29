@@ -14,6 +14,13 @@ module.exports = {
     'get /opsportal/view/:key' : 'appdev-opsportal/OpsPortalController.view',
     
     'post /opsportal/feedback': 'appdev-opsportal/OpsPortalController.feedback',
+
+
+    // OPTheme Routes
+    'get  /optheme' 		: 'appdev-opsportal/OPThemeController.list',
+    'post /optheme' 		: 'appdev-opsportal/OPThemeController.create',
+    'post /optheme/default' : 'appdev-opsportal/OPThemeController.default',
+    'get  /optheme/theme'	: 'appdev-opsportal/OPThemeController.theme' 
     
 
 };
