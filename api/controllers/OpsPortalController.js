@@ -34,8 +34,15 @@ module.exports = {
 
   _config: {},
 
-  // Fixture Data:
-  // Use this for initial design and testing
+  /**
+   * get /opsportal/config
+   *
+   * returns the JSON description of the OPs Portal layout 
+   * for the current user.
+   *
+   * the actual JSON is compiled in the policy: 
+   * api/policies/OpsPortalUserConfig.js and stored in res.appdev.opsportalconfig
+   */
   config:function(req, res) {
       
       ADCore.comm.success(res, res.appdev.opsportalconfig);
@@ -43,7 +50,22 @@ module.exports = {
 
 
 
-
+  /**
+   * get /opsportal/requirements
+   *
+   * returns a javascript file that dynamically loads the opstools
+   * required for the users view of the opsportal.
+   *
+   * the user's opstools needed is compiled in the policy: 
+   * api/policies/OpsPortalUserConfig.js and stored in 
+   * res.appdev.opsportalconfig
+   *
+   * Here we parse out the controllers that need to load and return
+   * them as a series of System.import('opstools/'+controller) commands.
+   *
+   * the view template is located at: 
+   * [sails]/views/appdev-opsportal/opsportal/requirements.ejs
+   */
   requirements: function(req, res) {
 
 
