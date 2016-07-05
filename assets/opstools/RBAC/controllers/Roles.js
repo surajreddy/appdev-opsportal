@@ -366,9 +366,25 @@ steal(
                          * @param {int} id  the unique id of the action to work with
                          */
                         actionChecked: function(id) {
-                    // console.log('... actionChecked:', id);
+
+// PROBLEM: if you add the action model directly to the role.actions list, 
+// then updates to the list will then be recorded on the model directly.
+//
+// this is a problem when actionUncheck() removes the item from the list,
+// for some reason the can.List thinks that instead of having removed an item,
+// each element is updated with the data from the next element in the list.
+// 
+// which means our original model will update it's data with the model's data
+// next to it.  We loose our .id and in future actionChecked() calls, we no
+// longer can find that model, Dogs and Cats living together, .... Mass hysteria!
+//
+// SOLUTION:  instead of storing the model itself, we just store the .attr() values
+// for the model.
+
+
                             // get current action
-                            var action = this.data.actionsCollection.AD.getModel(id);
+                            var actionModel = this.data.actionsCollection.AD.getModel(id);
+                            var action = actionModel.attr();
                             var role = this.data.rolesCollection.AD.currModel();
 
                             if (role.actions) {
@@ -394,26 +410,22 @@ steal(
                          * @param {int} id  the unique id of the action to work with
                          */
                         actionUnChecked: function(id) {
-                    // console.log('... actionUnChecked:', id);
 
-                            var action = this.data.actionsCollection.AD.getModel(id);
+                            // var action = this.data.actionsCollection.AD.getModel(id);
                             var role = this.data.rolesCollection.AD.currModel();
 
                             if (role.actions) {
-                                var pos = -1;
-                                role.actions.each(function(a, i){
-                                    if (a.id == action.id) {
-                                        pos = i;
-                                    }
-                                });
-                                if (pos != -1) {
-                                    role.actions.splice(pos,1);
-                                }
+
+                                role.actions.replace(role.actions.filter(function(action) {
+                                  return action.id != id;
+                                }))
+
+
                             } 
 
                             return role.save()
                             .fail(function(err){
-                                AD.error.log('Roles:actionChecked(): error saving action to role:', {error:err, action:action.attr(), role:role.attr() });
+                                AD.error.log('Roles:actionUnChecked(): error removing action from role:', {error:err, id: id, role:role.attr() });
                             });
 
                         },
