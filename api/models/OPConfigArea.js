@@ -20,11 +20,26 @@ migrate:'alter',
 
     icon : { type: 'string' },
 
-    isDefault : { type: 'bool' },
+    isDefault : { type: 'boolean', defaultsTo:false },
 
     label : { type: 'string' },
 
     context : { type: 'string' }
+  },
+
+  afterCreate: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'created'});
+    cb();
+  },
+
+  afterUpdate: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'updated'});
+    cb();
+  },
+
+  afterDestroy: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'destroyed'});
+    cb();
   }
 };
 

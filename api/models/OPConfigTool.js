@@ -20,7 +20,7 @@ migrate:'alter',
     icon : { type: 'string' },
 
     isDefault : { 
-      type: 'bool',
+      type: 'boolean',
       defaultsTo: false
     },
 
@@ -28,9 +28,11 @@ migrate:'alter',
 
     context : { type: 'string' },
 
+    controller : { type: 'string' },
+
     isController : { 
-      type: 'bool',
-      defaultsTo:true
+      type: 'boolean',
+      defaultsTo : true
     },
 
     options : { type: 'json', defaultsTo:{} }

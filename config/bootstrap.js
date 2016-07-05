@@ -13,6 +13,14 @@ module.exports = function (cb) {
 
 	AD.module.permissions(path.join(__dirname, '..', 'setup', 'permissions'), cb);
 
+
+    // cause our navigation cache to flush on the following events:
+    // ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE, function(message, data){
+    //     OPSPortal.NavBar.cache.flush();
+    // });
+    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,  OPSPortal.NavBar.cache.flush);
+    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE, OPSPortal.NavBar.cache.flush);
+
 };
 
 // Add CSRF route exclusion
