@@ -15,6 +15,14 @@ migrate:'alter',
   attributes: {
 
     /*
+     * key: a unique string that identifies this tool definition.
+     *
+     * ex: key: 'opsportal.rbac, hris.profile, appbuilder.designer'
+     */
+    key : {  type: 'string' },
+
+
+    /*
      * permissions: a string representing which PermissionAction.action_keys are
      * required for this tool.
      *
@@ -65,7 +73,16 @@ migrate:'alter',
      *
      * { 'viewKey' : '{string} which OPView.key to to load.' }
      */
-    options : { type: 'json', defaultsTo:{} }
+    options : { type: 'json', defaultsTo:{} },
+
+
+    /*
+     * version: {string} the current version of the definition.
+     *
+     * if a tooldefinition in the settings/opstool/opstools.js doesn't match
+     * with this version, then update the setting.
+     */
+     version : { type: 'string' }
   }
 };
 

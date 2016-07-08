@@ -9,9 +9,26 @@
  */
 var path = require('path');
 var AD = require('ad-utils');
+var async = require('async');
+
 module.exports = function (cb) {
 
-	AD.module.permissions(path.join(__dirname, '..', 'setup', 'permissions'), cb);
+    async.series([
+
+        // make sure our permissions are setup:
+        function(next) {
+            AD.module.permissions(path.join(__dirname, '..', 'setup', 'permissions'), next);
+        },
+
+        // make sure our OpsTool Defintions are setup:
+        function(next) {
+            OPSPortal.NavBar.ToolDefinition.setupPath(path.join(__dirname, '..', 'setup', 'opstools', 'opstools.js'), next);
+        }
+
+    ],function(err, result){
+        cb(err);
+    });
+	
 
 
     // cause our navigation cache to flush on the following events:
