@@ -6,17 +6,59 @@
  */
 var fs = require('fs');
 var path = require('path');
+var sass = require('node-sass');
 var pathToThemeFolder = path.join(__dirname, '..', '..', 'assets', 'opstools', 'OPTheme','themes');
 
+// Path to directory where all sass declarations are in place
+var pathToImportFolder = path.join(pathToThemeFolder, '..', 'scss');
+
 var currentTheme = '';
+var themeContent = '';
 
+// Read default theme template content
+var themeTemplate = fs.readFile(pathToImportFolder + '/main.scss', 'utf8', function (err, content) {
+	if (err) {
+		ADCore.error.log('Cannot read theme template', {error: err});
+		throw err;
+	}
+	themeContent = content;
+});
 
-var themeTemplate = [
-'body { ',
-'	background-color: [value1] !important;',
-'}'
-].join('\n');
+/**
+ * Get inputs and turn them into css properties declarations
+ * @param  {inputs} variables [css properties which user chose]
+ * @return {string}           [Custom css]
+ */
+var getCustomVariables = function (variables) {
 
+	var output = '';
+	Object.keys(variables).forEach(function (key) {
+		if (!key) { // filter out any blank value so it retains theme default color
+			return '';
+		} else {
+			output += '$' + key + ':' + variables[key] + ';';
+		}
+	});
+
+	return output;
+}
+
+/**
+ * Write theme file to storage
+ * @param  {string} name  [User chosen name]
+ * @param  {string} theme [Whole theme content (custom + template)]
+ * @return {void}
+ */
+var writeTheme = function (name, theme) {
+
+	var themeName = name.replace(/ /g,"_").trim().toLowerCase();
+	fs.writeFile(pathToThemeFolder + '/' + themeName + '.css', theme, function (err, result) {
+		if (err) {
+			ADCore.error.log('Error writing theme file', {error: err});
+			throw err;
+		}
+	});
+}
 
 module.exports = {
 
@@ -29,29 +71,36 @@ module.exports = {
 	  	var params = req.allParams();
 	  	var name = req.param('name');
 
-console.log('... params:', params);
+		// TODO: do what you need to do here to run SASS and create a new theme in the pathToThemeFolder
+		// for now my simple test example:
 
-// TODO: do what you need to do here to run SASS and create a new theme in the pathToThemeFolder
-// for now my simple test example:
-
-// TODO: error checking on existing files and overwriting.
+		// TODO: error checking on existing files and overwriting.
 
 	  	if (name) {
-	  		var currTemplate = themeTemplate;
-	  		for (var p in params) {
-	  			currTemplate = currTemplate.replace('['+p+']', params[p]);
-	  		}
 
-	  		var fileName = path.join(pathToThemeFolder, name+'.css');
-	  		fs.writeFile(fileName, currTemplate, function(err){
+	  		// fetch color values
+	  		var customVariables = getCustomVariables(params.vars);
 
-	  			if (err) {
-	  				ADCore.error.log('Error saving new theme', { error:err, name:fileName, contents:currTemplate });
-	  				res.AD.error('Error writing file.');
-	  			} else {
-	  				res.AD.success('theme created.');
-	  			}
-	  		})
+	  		// compile sass
+	  		sass.render({
+				data: customVariables + themeContent,  // prepend custom variables so they can override default template
+				includePaths: [
+					pathToImportFolder  // node-sass will look into these paths if it encounter any @import in template
+				]
+				}, function(err, result) {
+					if (err) {
+						res.AD.error('Error compiling theme');
+						return false;
+					}
+					try {
+						writeTheme(name, result.css);
+					} catch (err) {
+						res.AD.err('Error writing theme');
+					}
+				}
+			);
+
+			res.AD.success('Theme created');
 
 	  	} else {
 	  		res.AD.error('name is required');
@@ -67,7 +116,7 @@ console.log('... params:', params);
 	  	var name = req.param('name');
 
 // TODO: make this a permanent setting
-// 
+//
 // but for now:
 		currentTheme = name;
 
@@ -80,7 +129,7 @@ console.log('... params:', params);
 	  list:function(req, res) {
 	  	// return all the themes currently defined in the system.
 
-	  	// read in the files in 
+	  	// read in the files in
 	  	fs.readdir(pathToThemeFolder, function(err, files){
 	  		if (err) {
 	  			ADCore.error.log('Error reading OPTheme.theme folder', {error:err, path:pathToThemeFolder });
@@ -89,14 +138,13 @@ console.log('... params:', params);
 	  			res.AD.error(newError);
 	  		} else {
 
-	  			var filesToIgnore = ['.DS_Store', '.gitkeep'];
+	  			var filesToIgnore = ['.DS_Store', '.gitkeep', '.gitignore'];
 	  			var themes = [];
 	  			files.forEach(function(file){
 	  				if (filesToIgnore.indexOf(file) == -1) {
 		  				themes.push({ name: file });
 		  			}
 	  			});
-// console.log('... themes:', themes);
 	  			res.AD.success(themes);
 	  		}
 	  	})
@@ -107,9 +155,9 @@ console.log('... params:', params);
 		theme: function(req, res) {
 			// called by OpsPortal when loading.  if a theme is returned, it
 			// will be loaded.
-			// 
+			//
 			// must return the pathToTheme as it relates to the [sails]/assets directory
-			// 
+			//
 			// if nothing then return {}
 			// else
 			// return { name: 'path/to/theme.css' }
@@ -125,6 +173,6 @@ console.log('... params:', params);
 
 			res.AD.success(result);
 		}
-	
+
 };
 

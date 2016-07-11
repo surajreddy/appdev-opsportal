@@ -1,4 +1,3 @@
-
 steal(
 	// List your Controller's dependencies here:
 	//'opstools/OPTheme/models/Projects.js',
@@ -7,7 +6,7 @@ steal(
         System.import('appdev').then(function() {
 			steal.import('appdev/ad',
 				'appdev/control/control').then(function() {
-					//'appdev/widgets/ad_delete_ios/ad_delete_ios',			
+					//'appdev/widgets/ad_delete_ios/ad_delete_ios',
 
 					// Namespacing conventions:
 					// AD.Control.extend('[application].[controller]', [{ static },] {instance} );
@@ -27,6 +26,7 @@ steal(
 							this.data = {};
 
 							this.loadDOM();
+
 						},
 
 
@@ -48,18 +48,16 @@ steal(
 						initDOM: function() {
 							var _this = this;
 
-
 							// Transform the encoded ejs template into an actual EJS template
 							this.list = this.element.find('.optheme-list');		// attach to the list <select>
                             var listTemplate = this.domToTemplate(this.list);	// convert contents of list to an ejs template string
-                            can.view.ejs('OPTHEME_LIST', listTemplate);			// convert string to actual EJS renderer 
+                            can.view.ejs('OPTHEME_LIST', listTemplate);			// convert string to actual EJS renderer
                             this.list.html(''); 								// clear the list.
-			
+
 
                             // attach our buttons
                             this.buttonDefault = new AD.op.ButtonBusy(this.element.find('.optheme-default'));
 							this.buttonSave = new AD.op.ButtonBusy(this.element.find('.optheme-addTheme'));
-
 
 							// now load our data:
 							this.loadData();
@@ -80,7 +78,9 @@ steal(
 								_this.data.themes = list;
 								_this.list.html(can.view('OPTHEME_LIST', {themes:list}))
 
-							})
+							});
+
+
 						},
 
 
@@ -90,6 +90,10 @@ steal(
 							// do whatever you need to do to validate the form.
 							var values = this.values();
 
+							if (!values.name) {
+								AD.error.log('Please provide a theme name');
+								return false;
+							}
 
 							// if they are all valid
 							return true;
@@ -133,7 +137,7 @@ steal(
 
 									// should now update your list of current themes
 									_this.loadData();
-									
+
 								})
 
 							}
@@ -144,7 +148,7 @@ steal(
 
 						'.optheme-default click': function($el, ev) {
 							// when the default theme button is clicked,
-							// find which theme is selected, and then 
+							// find which theme is selected, and then
 							// update the server with that info
 							var _this = this;
 
@@ -176,7 +180,7 @@ steal(
 						'.optheme-list-item click': function($el, ev) {
 							// when an item in the theme list is clicked
 							// make sure only it has the .selected class assigned
-					
+
 
 							// all options remove selected class
 							this.list.find('option').each(function(i, el){
