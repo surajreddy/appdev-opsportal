@@ -86,8 +86,14 @@ module.exports = {
                     return null;
                 })
             }
+            return null;
+        })
+        .catch(function(err) {
+            ADCore.error.log('OPSPortal.view.createOrUpdate(): error while finding key', {error:err, key:key});
+            cb && cb(err);
+            dfd.reject(err);
+            return null;
         });
-
 
         return dfd;
     },
