@@ -1,0 +1,19 @@
+body {
+  background: $bodyBG;
+}
+
+.op-masthead, #op-menu-widget {
+  background: $headerBG;
+}
+
+.op-masthead {
+  color: $headerColor;
+}
+
+.op-widget-horizontal-nav {
+  background: $navBG;
+}
+
+.rbac-menu a {
+  color: $navColor;
+}
