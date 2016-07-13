@@ -27,6 +27,14 @@ migrate:'alter',
     context : { type: 'string' }
   },
 
+  beforeCreate: function(values, cb) {
+
+    // make sure there are no '.' in .key
+    // and while we are at it, proper kebobCase()
+    values.key = _.kebobCase(values.key);
+    cb();
+  },
+
   afterCreate: function(record, cb) {
     ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'created'});
     cb();

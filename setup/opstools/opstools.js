@@ -7,7 +7,7 @@ module.exports = [
 
     { 
         key:'opsportal.rbac', 
-        permissions:'adcore.admin, adcore.developer', 
+        permissions:'adcore.admin, adcore.developer, opsportal.rbac.view', 
         icon:'fa-users', 
         label:'opp.toolPermissions', 
         context:'opsportal', 
