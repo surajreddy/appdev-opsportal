@@ -36,6 +36,9 @@ module.exports = {
 
   // Fixture Data:
   // Use this for initial design and testing
+  /**
+   * GET /opsportal/config
+   */
   config:function(req, res) {
       
       ADCore.comm.success(res, res.appdev.opsportalconfig);
@@ -43,7 +46,9 @@ module.exports = {
 
 
 
-
+  /**
+   * GET /appdev/config/data.js
+   */
   requirements: function(req, res) {
 
 
