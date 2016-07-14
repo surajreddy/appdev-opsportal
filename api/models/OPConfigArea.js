@@ -4,6 +4,7 @@
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
+var _ = require('lodash');
 
 module.exports = {
 
@@ -31,7 +32,7 @@ migrate:'alter',
 
     // make sure there are no '.' in .key
     // and while we are at it, proper kebobCase()
-    values.key = _.kebobCase(values.key);
+    values.key = _.kebabCase(values.key);
     cb();
   },
 

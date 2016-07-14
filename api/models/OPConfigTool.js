@@ -17,6 +17,8 @@ migrate:'alter',
     areas : {  collection: 'OPConfigArea', via: 'tools' },
     permissions : {  collection: 'PermissionAction', via: 'tools' },
 
+    key : {  type: 'string' },
+
     icon : { type: 'string' },
 
     isDefault : { 

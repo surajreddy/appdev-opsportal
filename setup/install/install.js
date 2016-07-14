@@ -873,7 +873,7 @@ var createPermission = function(done) {
 					verifyInstanceActions(def, tools[0], done);
 				} else {
 
-					var fields = ['icon', 'isDefault', 'label', 'context', 'controller', 'isController', 'options'];
+					var fields = ['key', 'icon', 'isDefault', 'label', 'context', 'controller', 'isController', 'options'];
 					var data = {};
 					fields.forEach(function(field) {
 						data[field] = defInstance[field];
