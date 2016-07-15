@@ -10,8 +10,8 @@ module.exports = {
 
   tableName:'op_config_area',
 
-  connection:'appdev_default',
-migrate:'alter',
+//   connection:'appdev_default',
+// migrate:'alter',
 
   attributes: {
 

@@ -15,7 +15,7 @@ migrate:'alter',
   attributes: {
 
     areas : {  collection: 'OPConfigArea', via: 'tools' },
-    permissions : {  collection: 'PermissionAction', via: 'tools' },
+    permissions : {  collection: 'PermissionAction', via: 'tools', dominant:true },
 
     key : {  type: 'string' },
 

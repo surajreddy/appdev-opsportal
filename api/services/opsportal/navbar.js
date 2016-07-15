@@ -110,6 +110,19 @@ var NavBar = module.exports = {
         create:function(areaDef, cb) {
             var dfd = AD.sal.Deferred();
 
+            if((_.isFunction(areaDef)) && (_.isUndefined(cb))) {
+                cb = areaDef;
+                areaDef = undefined;
+            }
+
+            if (_.isUndefined(areaDef)) {
+                var error = new Error('areaDef parameter is required');
+                error.code = "E_MISSINGPARAM";
+                if (cb) cb(error);
+                dfd.reject(error);
+                return dfd;
+            }
+
             OPSPortal.NavBar.Area.exists(areaDef.key, function(err, isThere){
 
                 if (err) {
@@ -119,8 +132,8 @@ var NavBar = module.exports = {
 
                     if (isThere) {
                         
-                        if (cb) cb(null);
-                        dfd.resolve();
+                        if (cb) cb(null, null);
+                        dfd.resolve(null);
 
                     } else {
                         
@@ -174,7 +187,37 @@ var NavBar = module.exports = {
         link: function(linkDef, cb) {
             var dfd = AD.sal.Deferred();
 
-console.log('... OPSPortal.NavBar.Area.link() :');
+// console.log('... OPSPortal.NavBar.Area.link() :');
+            // Verify linkDef is provided.
+            if((_.isFunction(linkDef)) && (_.isUndefined(cb))) {
+                cb = linkDef;
+                linkDef = undefined;
+            }
+
+            if (_.isUndefined(linkDef)) {
+                var error = new Error('linkDef parameter is required');
+                error.code = "E_MISSINGPARAM";
+                if (cb) cb(error);
+                dfd.reject(error);
+                return dfd;
+            }
+
+
+            // Verify linkDef has requried fields:
+            var requiredFields = ['keyArea', 'keyTool', 'instance'];
+            var fieldsMissing = [];
+            requiredFields.forEach(function(key){
+                if (_.isUndefined(linkDef[key])) {
+                    fieldsMissing.push(key);
+                }
+            })
+            if (fieldsMissing.length > 0) {
+                var error = new Error('linkDef is missing required fields ['+ fieldsMissing.join(',')+']');
+                error.code = "E_MISSINGPARAM";
+                if (cb) cb(error);
+                dfd.reject(error);
+                return dfd;
+            }
 
             // find the Area
             // find the ToolDef
@@ -193,7 +236,7 @@ console.log('... OPSPortal.NavBar.Area.link() :');
 
                 // 1) find the Area:
                 function findArea(next){
-console.log('... finding Area['+linkDef.keyArea+'] ');
+// console.log('... finding Area['+linkDef.keyArea+'] ');
                     OPConfigArea.find({key:linkDef.keyArea})
                     .populateAll()
                     .exec(function(err, areas){
@@ -204,11 +247,12 @@ console.log('... finding Area['+linkDef.keyArea+'] ');
 
                             if ((areas) && (areas.length >0)) {
                                 navArea = areas[0];
-console.log('... fully populated area:', navArea);
+// console.log('... fully populated area:', navArea);
                                 next();
                             } else {
                                 var msg = 'No OPConfigArea with matching key:'+linkDef.keyArea;
                                 var error = new Error(msg);
+                                error.code = 'E_AREANOTFOUND';
                                 ADCore.error.log(msg, { error:error, keyArea:linkDef.keyArea });
                                 next(error);
                             }
@@ -232,7 +276,7 @@ console.log('... fully populated area:', navArea);
                     // did we find one?
                     if (navTool) {
 
-console.log('... Area['+linkDef.keyArea+'] was already linked to a tool ['+linkDef.keyTool+'] :', navTool);
+// console.log('... Area['+linkDef.keyArea+'] was already linked to a tool ['+linkDef.keyTool+'] :', navTool);
 
                         // let's pull up a fully populated version:
                         OPConfigTool.find({id: navTool.id})
@@ -246,7 +290,7 @@ console.log('... Area['+linkDef.keyArea+'] was already linked to a tool ['+linkD
                                 if ((tools) && (tools.length > 0)) {
 
                                     navTool = tools[0];
-console.log('... fully populated navTool found: ', navTool);
+// console.log('... fully populated navTool found: ', navTool);
                                     next();
 
                                 } else {
@@ -262,7 +306,7 @@ console.log('... fully populated navTool found: ', navTool);
                         })
 
                     } else {
-console.log('... no existing tool ['+linkDef.keyTool+'] found.');
+// console.log('... no existing tool ['+linkDef.keyTool+'] found.');
                         next();
                     }
 
@@ -288,7 +332,7 @@ console.log('... no existing tool ['+linkDef.keyTool+'] found.');
                                 if ((defs) && (defs.length>0)) {
 
                                     navToolDef = defs[0];
-console.log('... found ToolDef:', navToolDef);
+// console.log('... found ToolDef:', navToolDef);
                                     next();
 
                                 } else {
@@ -296,6 +340,7 @@ console.log('... found ToolDef:', navToolDef);
                                     // unexpected
                                     var msg = 'OPSPortal.NavBar.Area.link() : Did not find a matching ToolDefinition.key:'+linkDef.keyTool;
                                     var error = new Error(msg);
+                                    error.code = 'E_TOOLNOTFOUND';
                                     ADCore.error.log(msg, { error:error, key:linkDef.keyTool, linkDef:linkDef });
                                     next(error);
                                 }
@@ -337,44 +382,11 @@ console.log('... found ToolDef:', navToolDef);
                 },
 
 
-                // 3) Make sure current instance matches the provided .instance data
-                function verifyToolSettings(next) {
-
-                    var hasUpdate = false;
-                    var ignoreKeys = ['key', 'permissions'];
-                    _.forIn(linkDef.instance, function(val, key) {
-                        // if not one of our ignored keys:
-                        if (ignoreKeys.indexOf(key) == -1) {
-
-                            // if the values don't match, then update it.
-                            if (navTool[key] != val) {
-console.log('... updating existing key['+key+'] : '+val);
-                                navTool[key] = val;
-                                hasUpdate = true;
-                            }
-                        }
-                    });
-
-                    if (hasUpdate) {
-
-                        // save our changes
-                        navTool.save(function(err, newTool) {
-console.log('... current navTool:', navTool);
-                            next();
-                        });
-
-                    } else {
-
-                        // nothing to do, so continue
-                        next();
-                    }
-
-                },
-//// TODO: what about .options  ???   Do we have to have a seperate step to merge in data?
-//// or simply do an overwrite like in step 3?
-
-
-                // 4) make sure Permissions match any passed in:
+                //// NOTE: at this point we have fully populated navTool.permissions values.
+                ////       once we do a .save() we lose the populations on the base object
+                ////       so work with those populated values first so we don't have
+                ////       to lookup the object again.
+                // 3) make sure Permissions match any passed in:
                 function verifyToolPermission(next) {
 
 
@@ -410,14 +422,14 @@ console.log('... current navTool:', navTool);
                             return p.action_key;
                         })
 
-console.log('... givenPermissions:', givenPermissions);
-console.log('... existingPerms:', existingPermissions);
+// console.log('... givenPermissions:', givenPermissions);
+// console.log('... existingPerms:', existingPermissions);
 
                         var permsToAdd = _.difference(givenPermissions, existingPermissions);
                         var permsToRemove = _.difference(existingPermissions, givenPermissions);
 
-console.log('... permsToAdd:', permsToAdd);
-console.log('... permsToRemove:', permsToRemove);
+// console.log('... permsToAdd:', permsToAdd);
+// console.log('... permsToRemove:', permsToRemove);
 
                         // remove existing permissions:
                         permsToRemove.forEach(function(perm){
@@ -455,14 +467,58 @@ console.log('... permsToRemove:', permsToRemove);
                 },
 
 
+                // 4) Make sure current instance matches the provided .instance data
+                function verifyToolSettings(next) {
+
+                    var hasUpdate = false;
+                    var ignoreKeys = ['key', 'permissions', 'options'];
+                    _.forIn(linkDef.instance, function(val, key) {
+                        // if not one of our ignored keys:
+                        if (ignoreKeys.indexOf(key) == -1) {
+
+                            // if the values don't match, then update it.
+                            if (navTool[key] != val) {
+// console.log('... updating existing key['+key+'] : '+val);
+                                navTool[key] = val;
+                                hasUpdate = true;
+                            }
+                        }
+                    });
+
+                    // make sure options are properly updated:
+                    if (!_.isUndefined(linkDef.instance.options)) {
+// console.log('... updating existing options:', navTool);
+                        navTool.options = _.assign(navTool.options, linkDef.instance.options);
+                        hasUpdate = true;
+                    } 
+
+                    if (hasUpdate) {
+
+                        // save our changes
+                        navTool.save(function(err, newTool) {
+
+// console.log('... current navTool:', navTool);
+                            next();
+                       
+                        });
+
+                    } else {
+
+                        // nothing to do, so continue
+                        next();
+                    }
+
+                },
+
+
                 // 5) Make sure Tool is linked to Area
                 function verifyToolLinked(next) {
 
                     if (wasLinked) {
-console.log('... navTool is already Linked to navArea.');
+// console.log('... navTool is already Linked to navArea.');
                         next();
                     } else {
-console.log('... linking navArea <--> navTool');
+// console.log('... linking navArea <--> navTool');
 
                         navArea.tools.add(navTool);
                         navArea.save(function(err){
@@ -478,6 +534,7 @@ console.log('... linking navArea <--> navTool');
 
                     }
                 }
+
 
             ],function(err){
                 if (err) {
@@ -495,9 +552,6 @@ console.log('... linking navArea <--> navTool');
 
 
     ToolDefinition: {
-
-
-
 
     	/** 
     	 * OPSPortal.NavBar.ToolDefinition.create()

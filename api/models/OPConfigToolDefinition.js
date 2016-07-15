@@ -9,8 +9,8 @@ module.exports = {
 
   tableName:'op_config_tooldefinition',
 
-  connection:'appdev_default',
-migrate:'alter',
+//   connection:'appdev_default',
+// migrate:'alter',
 
   attributes: {
 
