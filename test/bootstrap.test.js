@@ -40,6 +40,7 @@ before(function(done) {
 
       // Populate the DB with the fixture data
       barrels.populate(function(err){
+        ADCore.queue.publish(AD.test.events.TEST_BARRELS_POPULATED, {});
         done(err);
       })
         

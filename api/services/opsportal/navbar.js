@@ -21,7 +21,7 @@ var __cacheValues = {}; // hash of {  'user.guid' : opsportal.config }
 						// layout.
 
 
-var __cacheToolDefs = null;  // hash of { 'tooldef.key': true }
+var __cacheToolDefs = null;  // hash of { 'tooldef.key': {definitionObject} }
 						// this is a cache of all the current 
 						// OPConfigToolDefinition values that are defined in 
 						// the DB.
@@ -194,7 +194,7 @@ var NavBar = module.exports = {
                 linkDef = undefined;
             }
 
-            if (_.isUndefined(linkDef)) {
+            if ((_.isUndefined(linkDef)) || (_.isNull(linkDef))) {
                 var error = new Error('linkDef parameter is required');
                 error.code = "E_MISSINGPARAM";
                 if (cb) cb(error);
@@ -571,53 +571,105 @@ var NavBar = module.exports = {
     	create: function(def, cb) {
     		var dfd = AD.sal.Deferred();
 
+
+            // sort out params.
+            if (_.isFunction(def)) {
+                cb = def;
+                def = undefined;
+            }
+
+            // make sure def is defined.
+            if ((_.isUndefined(def)) || (_.isNull(def))) {
+
+                // this is a problem!
+                var err = new Error('Missing required parameter: def');
+                err.code = 'E_MISSINGPARAM';
+                if (cb) cb(err);
+                dfd.reject(err);
+                return dfd;
+            }
+
+
     		function onError(err) {
     			if (cb) cb(err);
 	    		dfd.reject(err);
 	    		return null;
     		}
 
-    		// make sure our cached list exists
-    		loadToolDefs(function(err){
+            // verify all ToolDefinition fields are provided:
+            var hasMissing = false;
+            var ignoreFields = ['id', 'createdAt', 'updatedAt'];
+            var fields = _.keys(sails.models.opconfigtooldefinition.attributes);
+            fields.some(function(f){
+                if (ignoreFields.indexOf(f) == -1) {
 
-    			if (err) {
-    				onError(err);
-    			} else {
+                    if (_.isUndefined(def[f])) {
 
-					OPSPortal.NavBar.ToolDefinition.exists(def.key, function(err, isThere){
-						if (err) {
-							onError(err);
-						} else {
+                        // this is a problem!
+                        var msg = "Missing required field : "+f;
+                        var error = new Error(msg);
+                        ADCore.error.log(error, {
+                            definition:def, 
+                            missingField:f, 
+                            TDAttributes:sails.models.opconfigtooldefinition.attributes
+                        });
 
-							if (!isThere) {
+                        onError(error);
+                        hasMissing = true;
+                    }
+                    
+                }
+                return hasMissing;
+            });
 
-			    				// now create the new definition:
-					    		OPConfigToolDefinition.create(def)
-					    		.then(function(newDef){
+            if (!hasMissing) {
 
-					    			__cacheToolDefs[newDef.key] = newDef;
+        		// make sure our cached list exists
+        		loadToolDefs(function(err){
 
-					    			if (cb) cb(null, newDef);
-					    			dfd.resolve(newDef);
-					    			return null;
-					    		})
-					    		.catch(function(err){
-					    			return onError(err);
-					    		});
+        			if (err) {
+        				onError(err);
+        			} else {
 
-							} else {
+    					OPSPortal.NavBar.ToolDefinition.exists(def.key, function(err, isThere){
+    						if (err) {
+    							onError(err);
+    						} else {
 
-								// return existing definition
-								var newDef = __cacheToolDefs[def.key];
-								if (cb) cb(null, newDef);
-					    		dfd.resolve(newDef);
-							}
-						}
-					})
+    							if (!isThere) {
 
-		    	}
+    			    				// now create the new definition:
+    					    		OPConfigToolDefinition.create(def)
+                                    .exec(function(err, newDef){
 
-	    	});
+                                        if (err) {
+                                            return onError(err);
+                                        } else {
+                                            __cacheToolDefs[newDef.key] = newDef;
+
+                                            if (cb) cb(null, newDef);
+                                            dfd.resolve(newDef);
+
+                                            return null;
+                                        }
+                                    })
+
+    							} else {
+
+    								// return existing definition
+    								var newDef = __cacheToolDefs[def.key];
+    								if (cb) cb(null, newDef);
+    					    		dfd.resolve(newDef);
+
+    							}
+    						}
+    					})
+
+    		    	}
+
+    	    	});
+
+            }
 
     		return dfd;
     	},
@@ -644,6 +696,7 @@ var NavBar = module.exports = {
     				dfd.reject(err);
     			} else {
     				var isThere = !_.isUndefined( __cacheToolDefs[key] );
+
     				if (cb) cb(null, isThere);
     				dfd.resolve( isThere );
     			}
@@ -671,6 +724,24 @@ var NavBar = module.exports = {
     	 */
     	setup: function(defs, cb) {
     		var dfd = AD.sal.Deferred();
+
+            // sort out params.
+            if (_.isFunction(defs)) {
+                cb = defs;
+                defs = undefined;
+            }
+
+            // make sure defs is defined.
+            if (_.isUndefined(defs)) {
+
+                // this is a problem!
+                var err = new Error('Missing required parameter: defs');
+                err.code = 'E_MISSINGPARAM';
+                if (cb) cb(err);
+                dfd.reject(err);
+                return dfd;
+            }
+
 
     		// make sure defs is an array:
     		if (! _.isArray(defs)) {
@@ -728,7 +799,6 @@ var NavBar = module.exports = {
 				    		} else {
 
 				    			// same one, so move along... 
-// console.log('... tool def ['+def.key+'] matches current definition');
 				    			onDone();
 				    		}
 
@@ -761,6 +831,22 @@ var NavBar = module.exports = {
     	 *					 cb(err);
     	 */
     	setupPath: function(pathToDefinition, cb) {
+
+            // correct missing pathToDef but provided cb
+            if (_.isFunction(pathToDefinition)) {
+                cb = pathToDefinition;
+                pathToDefinition = undefined;
+            }
+
+            if (_.isUndefined(pathToDefinition)) {
+
+                // this is a problem!
+                var error = new Error('Missing required parameter: pathToDefinition');
+                error.code = 'E_MISSINGPARAM';
+                if (cb) cb(error);
+                return;
+            }
+
 
     		// check if we can access the file
 			fs.access(pathToDefinition, fs.R_OK | fs.F_OK, function(err) {
@@ -798,21 +884,56 @@ var NavBar = module.exports = {
 
 			var dfd = AD.sal.Deferred();
 
-			// now create the new definition:
+
+            // correct missing pathToDef but provided cb
+            if (_.isFunction(def)) {
+                cb = def;
+                def = undefined;
+            }
+
+            // make sure def is defined
+            if (_.isUndefined(def)) {
+
+                // this is a problem!
+                var error = new Error('Missing required parameter: def');
+                error.code = 'E_MISSINGPARAM';
+                if (cb) cb(error);
+                dfd.reject(error);
+                return dfd;
+            }
+
+            // make sure there is a def.key
+            if (_.isUndefined(def.key)) {
+
+                // this is a problem!
+                var error = new Error('Missing required property: key');
+                error.code = 'E_MISSINGKEY';
+                if (cb) cb(error);
+                dfd.reject(error);
+                return dfd;
+            }
+
+
+			// now update the definition:
     		OPConfigToolDefinition.update({key:def.key}, def)
-    		.then(function(newDef){
+            .exec(function(err, newDef){ 
+                if (err) {
 
-    			__cacheToolDefs[def.key] = newDef;
+                    if (cb) cb(err);
+                    dfd.reject(err);
 
-    			if (cb) cb(null, newDef);
-    			dfd.resolve(newDef);
-    			return null;
-    		})
-    		.catch(function(err){
-    			if (cb) cb(err);
-    			dfd.reject(err);
-    			return null;
-    		});
+                } else {
+
+                    if (_.isArray(newDef)) {
+                        newDef = newDef[0]; // should only match 1!
+                    }
+
+                    __cacheToolDefs[def.key] = newDef;
+
+                    if (cb) cb(null, newDef);
+                    dfd.resolve(newDef);
+                }
+            });
 
 			return dfd;
 
@@ -837,26 +958,55 @@ NavBar.cache.flush = function() {
 // loadToolDefs
 // make sure we have our tool definitions loaded in our cache.
 // @param {fn} cb  nodejs style callback for when all defs are loaded.
+var __dfdLoad = null;
 function loadToolDefs(cb) {
 	if (__cacheToolDefs) {
+        __dfdLoad = null;    // reset the dfd marker
 		cb();
 	} else {
 
-		OPConfigToolDefinition.find()
-		.catch(function(err){
-			cb(err);
-			return null;
-		})
-		.done(function(list){
-			__cacheToolDefs = {};
-			if ((list) && (list.length)) {
+        if (__dfdLoad) {
 
-				list.forEach(function(def){
-					__cacheToolDefs[def.key]=def;
-				})
-			}
-			cb();
-			return null;
-		})
+            __dfdLoad.done(function(err){
+                cb();
+            })
+
+        } else {
+
+    		__dfdLoad = OPConfigToolDefinition.find()
+    		.catch(function(err){
+    			cb(err);
+    			return null;
+    		})
+    		.done(function(list){
+    			__cacheToolDefs = {};
+    			if ((list) && (list.length)) {
+
+    				list.forEach(function(def){
+    					__cacheToolDefs[def.key]=def;
+    				})
+    			}
+    			cb();
+    			return null;
+    		})
+        }
 	}
 }
+
+
+
+/**
+ * AD.test.events.TEST_BARRELS_POPULATED
+ *
+ * make sure our cache entries are 'flushed' after barrels have
+ * populated the db.  This will make sure our cache values reflect
+ * our intended fixture data.
+ */
+ADCore.queue.subscribe(AD.test.events.TEST_BARRELS_POPULATED, function(){
+
+    console.log('**** OPSPortal.NavBar : flushing Cache After Barrels Populated!');
+
+    // flush the cache once Barrels have Populated the DB:
+    __cacheValues = {};
+    __cacheToolDefs = null;
+});
