@@ -1039,16 +1039,16 @@ var createDefaultAdminArea = function(done) {
 			}
 
 
-			//// NOTE:  because I created these external fn() to handle each step, 
-			////        I now have to send in the defaultArea
-			////        
-			def.__defaultArea = defaultArea;
-
 
 			// Process:
 			// for each tool definition:
 			// 		createToolDef -> createToolInstance -> verifyInstanceActions -> linkToAdminSpace -> onDone
 			toolDefs.forEach(function(def){
+
+				//// NOTE:  because I created these external fn() to handle each step, 
+				////        I now have to send in the defaultArea
+				////        
+				def.__defaultArea = defaultArea;
 
 				// if already created
 				if (hashDefinitions[def.key]) {
