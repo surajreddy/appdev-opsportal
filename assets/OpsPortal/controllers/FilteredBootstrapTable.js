@@ -4,6 +4,7 @@ System.import('appdev').then(function () {
         'jquery',
         'appdev/ad',
         'appdev/control/control',
+        'appdev/sal/web-jquery',
         'typeahead'
     //        'opstools/FCFActivities/models/Projects.js',
     //        'appdev/widgets/ad_delete_ios/ad_delete_ios.js',
