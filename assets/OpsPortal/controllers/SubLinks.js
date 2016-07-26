@@ -2,6 +2,7 @@ System.import('appdev').then(function () {
     steal.import(
         'appdev/ad',
         'appdev/control/control',
+        'appdev/sal/web-jquery',
         'appdev/comm/socket'
         ).then(function () {
 

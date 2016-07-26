@@ -132,12 +132,22 @@ System.import('can').then(function () {
                 },
 
 
+                /**
+                 *
+                 * @param {obj} options 
+                 *              options.shouldAppend : false
+                 */
                 loadURL:function(url, options) {
                     var _this = this;
                     var dfd = AD.sal.Deferred();
 
                     this.ori = 0;
                     this.blob = null;
+
+                    options = options || {};
+                    if (typeof options.shouldAppend == 'undefined') {
+                        options.shouldAppend = true;
+                    }
 
 
                     var xhr = new XMLHttpRequest();  
@@ -155,7 +165,9 @@ System.import('can').then(function () {
                                     if(err) {
                                         dfd.reject(img);
                                     } else {
-                                        $(_this.element).append(img);
+                                        if (options.shouldAppend) {
+                                            $(_this.element).append(img);
+                                        }
                                         // img.css('width', _this.option('width', options));
                                         $(_this.element).trigger('load');
 
