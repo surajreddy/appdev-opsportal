@@ -95,8 +95,16 @@ module.exports = {
               tools.push(c.controller);
           }
       }
-      
-      
+
+
+      // Special Requirement: OPNavEdit
+      // if the user has permission to access opsportal.opnavedit.view
+      // also load the OPNavEdit controller.
+      if (req.AD.user().hasPermission('opsportal.opnavedit.view')) {
+        tools.push('OPNavEdit');
+      }
+
+
       res.view({
           environment:sails.config.environment,
           listTools:tools,

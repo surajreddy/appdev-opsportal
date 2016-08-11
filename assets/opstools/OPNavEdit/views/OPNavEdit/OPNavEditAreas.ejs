@@ -1,0 +1,22 @@
+<div class="op-navbar-lpanel op-widget">
+  
+    <!---->
+    <ul id="op-navbar-left" class="op-list sortableMenu">
+    	<% var L = AD.lang.label.getLabelSpan %>
+    	<% can.each(areas, function(area,indx){ %>
+        <li>
+            <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
+            <a  class="ops-navbar-menuItem" ><%= L( area.label) %></a>
+            <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
+        </li>
+    	<% }) %>
+    </ul>
+     <!--/-->
+     <!---->       
+    <ul class="op-list op-navbar-add">
+          <li class="op-css-off-botm50"><a class="add showPopover" data-html="true" data-toggle="popover"><i class="fa fa-plus" aria-hidden="true"></i> Add</a></li>
+          <li class="op-css-off-top20"><a id="op-navbar-save" class="" href="#save"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</a></li>
+    </ul>                            
+	<!--/-->                           
+
+</div>

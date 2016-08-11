@@ -128,7 +128,7 @@ steal(
                         loadUsers:function() {
                             var _this = this;
 
-                            console.log('... loading Users');
+                            // console.log('... loading Users');
                             var User = AD.Model.get('opstools.RBAC.SiteUser');
                             User.findAll()
                             .fail(function(err){

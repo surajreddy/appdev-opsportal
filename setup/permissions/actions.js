@@ -35,6 +35,10 @@ module.exports = {
         { 
             action_key:'opsportal.rbac.view', 
             action_description:'Allows the user to access the Roles And Permissions Tool.' 
+        },
+        { 
+            action_key:'opsportal.opnavedit.view', 
+            action_description:'Allows the user to edit the Ops Portal Navigation.' 
         }
     ]
 

@@ -1,0 +1,141 @@
+
+.op-navbar-editbutton{
+	color: #fff;
+    text-align: center;
+    display: block;
+    margin: 0px 0 10px; 
+    padding-top: 10px;
+	}
+	
+	
+.op-navbar-lpanel {
+	background:#444;
+	width:200px;
+	min-height:315px;
+	display:none;
+	padding-bottom:5px;
+	}
+
+.op-navbar-lpanel .container .col-sm-6:first-child {border-right:2px solid #736d6d;}	
+		
+
+.op-navbar-add {padding:0; text-align:center;}
+.op-navbar-add li {opacity:1 !important; }
+.op-navbar-add li a{color:#fff; }
+
+.addtbtn .add, .savebtn .btn { width: 100% !important;}
+
+
+#op-navbar-edittools .popover {width:276px;}
+
+th, label {
+/*	color:#5D95D5;*/
+	font-size:14px;
+	font-weight:normal;	
+}
+
+
+
+.popover-content h4, .popover-title .close{ color:#fff !important; opacity:1; }
+
+.popover-title .close {margin:0 !important;}
+	
+
+
+
+
+#op-navbar-left li a {
+	display:inline-block;
+	color:#fff;
+
+	padding: 5px 5px;
+}
+
+#op-navbar-left li .close {
+	padding: 0px;
+}
+
+#op-navbar-left li {
+	border: 1px solid #fff;
+	padding:0;
+	margin:18px 15px;
+}
+
+.op-navbar-item-edit {
+	float: right;
+    display: block;
+    width: 18px;
+    height: 30px;
+    padding-top: 8px;
+	color:#fff;	
+
+	}
+
+#op-navbar-left { padding:0;}
+
+
+#op-navbar-tool li .showbtmPopover {
+    display: block;
+    color: #fff;
+    float: right;
+}
+
+#op-navbar-tool li .toollink {
+	display: inline-block;
+    color: #fff;
+    padding: 5px 5px;
+}
+
+#op-navbar-tool .sort-handle {
+    display: block;
+    background-color: #fff;
+    width: 20px;
+    height: 32px;
+    float: left;
+    margin-right: 0px;
+}
+
+.op-navbar-tool li .close {
+	margin: 0;
+}
+
+#op-navbar-tool li{
+	display:block;
+	min-width: 92px;
+    border: 1px solid #fff;
+    padding: 0;
+    margin: 0px 8px;	
+	cursor:pointer;
+}
+.op-navbar-tool .sort-handle{
+	display:block;
+    background-color: #fff;
+    width: 20px;
+	height: 32px;
+    float: left;
+    margin-right: 0px;	
+}
+
+
+
+.op-navbar-tool {margin-top:16px;}
+
+
+
+.sort-handle {
+	display:block;
+    background-color: #fff;
+    width: 25px;
+    height: 30px;
+    float: left;
+	text-align:center;
+	
+	}
+
+.sort-handle i { vertical-align: -webkit-baseline-middle; }
+#op-navbar-tool .sort-handle i {
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+

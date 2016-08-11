@@ -203,17 +203,28 @@ steal(
 
 
                             this.hiddenElements = [];           // used to track which elements we have hidden
+                            
+
 
 
                             this.elOptions();                   // search the attached element for config options.
 
                             // this.initDOM();                     // embedded list view
+                            this.dfdPortalReady = AD.sal.Deferred();
                             this.initPortal();                  // popup portal view
 
                             // update loading progress for OpsPortal:
                             AD.ui.loading.reset();
                             AD.ui.loading.text(AD.lang.label.getLabel('opp.configuringTools'));
                             AD.ui.loading.resources(2); // kicks off a new refresh of the bar
+
+                            
+
+                            // if we receive a notification that our OPNavEdit tool is loaded, then
+                            // make sure it is installed.
+                            AD.comm.hub.subscribe('opsportal.admin.opnavedit', function(key, data){
+                                self.installOPNavEdit();
+                            });
 
 
                             this.requestConfiguration();
@@ -339,6 +350,9 @@ steal(
                                 ev.preventDefault();
                                 AD.comm.hub.publish('opsportal.area.show', { area: 'UserProfile' });
                             });
+
+                            this.dfdPortalReady.resolve();
+
                         },
                         
                         
@@ -370,6 +384,23 @@ steal(
                                 tpl: templates,
                                 initButtonText: labels.t('Feedback')
                             });
+                            
+                        },
+
+
+
+                        // Special Case 2: OPNavEdit
+                        // the /requirements will return the OPNavEdit tool to 
+                        // be loaded.
+                        // After it is loaded, then it will emit an 'opsportal.admin.opnavedit' event
+                        // we will listen for that event and install the OPNavEdit controller ontop of our .element
+                        installOPNavEdit:function() {
+                            var _this = this;
+
+                            this.dfdPortalReady.then(function(){
+                                var OPNavEditController = AD.Control.OpsTool.get('OPNavEdit');
+                                new OPNavEditController(_this.portalPopup, {});
+                            })
                             
                         },
 
@@ -491,6 +522,7 @@ steal(
                                         AD.ui.loading.completed(1);
                                     }
                                     
+
                                     // Create the User Profile tool
                                     // (special case which is accessible for all
                                     //  users and has no top-left menu item)
@@ -513,6 +545,7 @@ steal(
                                             tool: 'UserProfile',
                                         });
                                     }, 50);
+
 
 
                                     //// all tools should be created now
