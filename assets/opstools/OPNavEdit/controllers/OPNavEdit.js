@@ -3,6 +3,7 @@ steal(
 	// List your Controller's dependencies here:
 	'opstools/OPNavEdit/models/OPConfigArea.js',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
+	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
 	function() {
 		System.import('appdev').then(function() {
 			steal.import('appdev/ad',
@@ -18,6 +19,7 @@ steal(
 							var self = this;
 							options = AD.defaults({
 								templateDOMAreas: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
+								templateDOMAreaForm: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
 								resize_notification: 'OPNavEdit.resize',
 								tool: null   // the parent opsPortal Tool() object
 							}, options);
@@ -26,7 +28,17 @@ steal(
 							// Call parent init
 							this._super(element, options);
 
+
+							this.dom = {};
+							this.dom.area = null;
+							this.dom.tools = null;
+
+							this.events = {};
+							this.events.lastArea = null;
+
 							this.initDOM();
+							this.initEvents();
+
 						},
 
 
@@ -35,8 +47,9 @@ steal(
 							var _this = this;
 //// LEFT OFF HERE:
 
-// verify newly added area list is hidden.
-// clicking Edit will display the area list.
+// make sure the popups are attached to the current Areas in the list.
+// replace icon selector with input and icon display.
+
 // OPConfigArea route should be protected by our opsportal.opnavedit.view permission.
 
 							var menuFooter = $(this.element.find('#op-menu-widget .op-widget-footer'));
@@ -51,8 +64,6 @@ steal(
 							this.loadAreas()
 							.fail(function(err){
 								AD.error.log("Error loading OPNavEdit.Areas", err);
-								// console.error('!!! error loading Areas!');
-
 							})
 							.then(function(Areas){
 
@@ -60,11 +71,37 @@ steal(
 								can.view(_this.options.templateDOMAreas, {areas:Areas}, function(frag){
 									
 									_this.element.find('.op-stage').append(frag);
+									_this.dom.area = _this.element.find('.op-navbar-lpanel');
+									_this.dom.area.hide(); // make sure it is hidden.
 
 								});
 							})
 
 
+
+						},
+
+
+						/*
+						 * @function initEvents
+						 *
+						 * prepare the event listeners
+						 */
+						initEvents: function() {
+
+							var _this = this;
+
+							// listen for area show notifications.
+                            AD.comm.hub.subscribe('opsportal.area.show', function (key, data) {
+
+                            	// we just passively keep track of the last area.show event
+                            	// so we know which one to return to once we exit our 
+                            	// tool.
+                            	if (data.area != 'opnavedit') {
+	                            	_this.events.lastArea = data;
+	                            }
+
+                            });
 
 						},
 
@@ -77,6 +114,15 @@ steal(
 
 						'.op-navbar-editbutton click': function($el, ev) {
 console.error('*** Click! ***');
+							
+							// hide all other areas
+							AD.comm.hub.publish('opsportal.area.show', { area: 'opnavedit' });
+
+							// show our area
+							this.dom.area.show();
+
+							// close the slide in menu:
+							AD.ui.jQuery.sidr('close', 'op-menu-widget');
 
 							ev.preventDefault();
 						}

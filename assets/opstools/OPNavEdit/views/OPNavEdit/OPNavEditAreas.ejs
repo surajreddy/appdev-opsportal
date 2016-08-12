@@ -6,7 +6,7 @@
     	<% can.each(areas, function(area,indx){ %>
         <li>
             <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
-            <a  class="ops-navbar-menuItem" ><%= L( area.label) %></a>
+            <a  class="ops-navbar-menuItem" ><%== L( area.label) %></a>
             <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
         </li>
     	<% }) %>
