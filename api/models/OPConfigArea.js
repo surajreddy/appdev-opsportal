@@ -25,7 +25,9 @@ module.exports = {
 
     label : { type: 'string' },
 
-    context : { type: 'string' }
+    context : { type: 'string' },
+
+    weight  : { type: 'integer', defaultsTo:0 }
   },
 
   beforeCreate: function(values, cb) {

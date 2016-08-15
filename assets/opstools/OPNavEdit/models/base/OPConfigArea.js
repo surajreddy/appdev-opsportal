@@ -10,7 +10,7 @@ steal(function() {
 				create: 'POST /appdev-opsportal/opconfigarea',
 				update: 'PUT /appdev-opsportal/opconfigarea/{id}',
 				destroy: 'DELETE /appdev-opsportal/opconfigarea/{id}',
-				describe: function() { return { 'key':'string', 'icon':'string', 'isDefault':'bool', 'label':'string', 'context':'string' };  },
+				describe: function() { return { 'key':'string', 'icon':'string', 'isDefault':'bool', 'label':'string', 'context':'string', 'weight':'integer' };  },
 				associations:['tools'], 
 				// multilingualFields:[ 'field', 'field2' ],
 				// validations: {
