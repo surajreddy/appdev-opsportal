@@ -43,6 +43,54 @@ steal(
 
 
 
+						initAreaPopups:function() {
+							var _this = this;
+
+							// for each area icon not already initialized.
+							this.dom.area.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
+								
+								// get it's area model
+								var $icon = $(icon);
+								var area = $icon.parent().data('area');
+
+								// render popup view
+								can.view(_this.options.templateDOMAreaForm, {area:area}, function(frag){
+
+									$icon.popover({
+							            placement: 'right',
+							            title: AD.lang.label.getLabelSpan(area.label) + ' <a class="close" href="#">&times;</a>',
+							            trigger: 'click',
+							            html: true,
+							            content: function () {
+							                return $('<div>').append($(frag).clone()).html();
+							            }
+
+							        }).on('shown.bs.popover', function(e) {
+							            //console.log('shown triggered');
+							            // 'aria-describedby' is the id of the current popover
+							            var current_popover = '#' + $(e.target).attr('aria-describedby');
+							            var $cur_pop = $(current_popover);
+							          
+							            $cur_pop.find('.close').click(function(){
+							                //console.log('close triggered');
+							                $cur_pop.popover('hide');
+							            });
+							          
+							            $cur_pop.find('.OK').click(function(){
+							                //console.log('OK triggered');
+							               $cur_pop.popover('hide');
+							                
+							            });
+							        });
+								});
+
+							});
+
+							//
+						},
+
+
+
 						initDOM: function() {
 							var _this = this;
 //// LEFT OFF HERE:
@@ -76,7 +124,7 @@ steal(
 
 
 									_this.initSort();
-
+									_this.initAreaPopups();
 								});
 							})
 

@@ -5,7 +5,6 @@
 -->
 <div class="op-navbar-lpanel op-widget">
 	<div style="display:none;">
-	  Labels not in HTML but needed in tool:
 	  <span app-label-key="opnavedit.Add">Add</span>
 	  <span app-label-key="opnavedit.Save">Save</span>
 	  <span app-label-key="opnavedit.Edit">Edit</span>
@@ -17,7 +16,7 @@
         <li <%= (el) -> can.data(el, 'area', area) %> >
             <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
             <a  class="ops-navbar-menuItem" ><%== L( area.label) %>(<%= area.attr('weight') %>)</a>
-            <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
+            <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover" aria-hidden="true"></i>
         </li>
     	<% }) %>
     </ul>
