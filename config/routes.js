@@ -17,8 +17,7 @@ module.exports = {
 
 
     // OPNavEdit routes:
-    'put  /opnavedit/arealabel': 'appdev-opsportal/OpNavEditController.arealabel'
-    
+
 
 };
 

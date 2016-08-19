@@ -1,7 +1,7 @@
 
 steal(
 	// List your Controller's dependencies here:
-	'opstools/OPNavEdit/models/OPConfigArea.js',
+	// 'opstools/OPNavEdit/models/OPConfigArea.js',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
 	function() {
@@ -106,31 +106,31 @@ steal(
 
 											var values = form.values();
 console.log('... values:', values);
-											// if the label has changed:
-											if (values.label != AD.lang.label.getLabel(area.label)) {
-console.log('    ... updating label:', values.label);
-												// update our UI label:
-												AD.lang.label.setLabel(area.label, values.label);
+// 											// if the label has changed:
+// 											if (values.label != AD.lang.label.getLabel(area.label)) {
+// console.log('    ... updating label:', values.label);
+// 												// update our UI label:
+// 												AD.lang.label.setLabel(area.label, values.label);
 
-												// tell our server about the new label update
-												var params = {
-													key: area.label,
-													label: values.label
-												}
-												AD.comm.service.put({url:'/opnavedit/arealabel', params:params})
-												.fail(function(err){
-													AD.error.log('Error updating Area Label:', { error:err });
-												})
-												.then(function(response){
-													// manually update the icon's text (since)
-													$icon.parent().find('.ops-navbar-menuItem').html(values.label);
-													$cur_pop.find('.popover-title').html(myTitle());
-console.log('... update response:', response);
-												})
-											}
+// 												// tell our server about the new label update
+// 												var params = {
+// 													key: area.label,
+// 													label: values.label
+// 												}
+// 												AD.comm.service.put({url:'/opnavedit/arealabel', params:params})
+// 												.fail(function(err){
+// 													AD.error.log('Error updating Area Label:', { error:err });
+// 												})
+// 												.then(function(response){
+// 													// manually update the icon's text (since)
+// 													$icon.parent().find('.ops-navbar-menuItem').html(values.label);
+// 													$cur_pop.find('.popover-title').html(myTitle());
+// console.log('... update response:', response);
+// 												})
+// 											}
 
 
-											area.attr('icon', values.icon);
+											area.attr(values);
 											area.save()
 											.fail(function(err){
 												busySave.ready();
@@ -225,7 +225,7 @@ console.log('... update response:', response);
 	                            	_this.events.lastArea = data;
 
 	                            	// make sure our area is hidden:
-	                            	_this.dom.area.hide();
+	                            	if(_this.dom.area) _this.dom.area.hide();
 	                            }
 
                             });
@@ -306,8 +306,21 @@ console.log('... update response:', response);
 						 * @return {deferred}
 						 */
 						loadAreas: function() {
-							var Areas = AD.Model.get('opstools.OPNavEdit.OPConfigArea');
-							return Areas.findAll({ where:{}, sort:'weight'});
+							var dfd = AD.sal.Deferred();
+
+							var Areas = AD.Model.get('opsportal.navigation.OPConfigArea');
+							Areas.findAll({ where:{}, sort:'weight'})
+							.fail(function(err){
+								dfd.reject(err);
+							})
+							.then(function(list){
+								list.forEach(function(l){
+									if (l.translate) l.translate();
+								})
+								dfd.resolve(list);
+							});
+
+							return dfd;
 						},
 
 

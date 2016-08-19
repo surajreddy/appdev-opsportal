@@ -11,7 +11,7 @@ module.exports = {
   tableName:'op_config_area',
 
 //   connection:'appdev_default',
-// migrate:'alter',
+migrate:'alter',
 
   attributes: {
 
@@ -23,11 +23,28 @@ module.exports = {
 
     isDefault : { type: 'boolean', defaultsTo:false },
 
-    label : { type: 'string' },
+    weight  : { type: 'integer', defaultsTo:0 },
 
-    context : { type: 'string' },
 
-    weight  : { type: 'integer', defaultsTo:0 }
+    //// MULTILINGUAL Model Fields:
+    // this will pull in the translations using .populate('translations')
+    translations:{
+        collection:'OPConfigAreaTrans',
+        via:'area'
+    },
+
+    translate:function(code) {
+        return ADCore.model.translate({
+            model:this,         // this instance of a Model
+            code:code,          // the language code of the translation to use.
+            ignore:['area']     // don't include this field when translating
+        });
+    },
+
+    _Klass: function() {
+        return OPConfigArea;
+    }
+
   },
 
   beforeCreate: function(values, cb) {

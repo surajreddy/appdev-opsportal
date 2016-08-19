@@ -45,14 +45,14 @@ steal(
                             this.listTools = {};
 
 
-                            // listen for new tool notifications.
-                            AD.comm.hub.subscribe('opsportal.tool.new', function (key, data) {
+                            // // listen for new tool notifications.
+                            // AD.comm.hub.subscribe('opsportal.tool.new', function (key, data) {
 
-                                // if this tool is for my area, then create it.
-                                if (self.options.key == data.area) {
-                                    self.createTool(data);
-                                }
-                            });
+                            //     // if this tool is for my area, then create it.
+                            //     if (self.options.key == data.area) {
+                            //         self.createTool(data);
+                            //     }
+                            // });
 
 
                             // listen for area show notifications.

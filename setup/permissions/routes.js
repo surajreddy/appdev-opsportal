@@ -33,6 +33,9 @@ module.exports = {
 	//// or ... do we want that too? 
 	
     '/opsportal/requirements' : [ 'opsportal.view' ],
-    '/opsportal/config' : [ 'opsportal.view' ]
+    '/opsportal/config' : [ 'opsportal.view' ],
+
+    'get /appdev-opsportal/opconfigarea' : [ 'opsportal.view' ],	// everyone can get opconfigarea
+    '/appdev-opsportal/opconfigarea' : [ 'opsportal.opnavedit.view' ]  // must have opnavedit to do any other action to opconfigarea
 
 };

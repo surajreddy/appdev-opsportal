@@ -4,7 +4,7 @@ steal(function() {
 
 			// Namespacing conventions:
 			// AD.Model.Base.extend("[application].[Model]" , { static }, {instance} );  --> Object
-			AD.Model.Base.extend("opstools.OPNavEdit.OPConfigArea", {
+			AD.Model.Base.extend("opsportal.navigation.OPConfigArea", {
 				findAll: 'GET /appdev-opsportal/opconfigarea',
 				findOne: 'GET /appdev-opsportal/opconfigarea/{id}',
 				create: 'POST /appdev-opsportal/opconfigarea',
@@ -12,7 +12,7 @@ steal(function() {
 				destroy: 'DELETE /appdev-opsportal/opconfigarea/{id}',
 				describe: function() { return { 'key':'string', 'icon':'string', 'isDefault':'bool', 'label':'string', 'context':'string', 'weight':'integer' };  },
 				associations:['tools'], 
-				// multilingualFields:[ 'field', 'field2' ],
+multilingualFields:[ 'label' ],
 				// validations: {
 				//     "role_label" : [ 'notEmpty' ],
 				//     "role_description" : [ 'notEmpty' ]

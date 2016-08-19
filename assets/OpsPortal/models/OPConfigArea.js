@@ -1,12 +1,13 @@
 steal(
-'opstools/OPNavEdit/models/base/OPConfigArea.js',
+'OpsPortal/models/base/OPConfigArea.js',
 function() {
     System.import('appdev').then(function() {
 		steal.import('appdev/model/model').then(function() {
 
 			// Namespacing conventions:
 			// AD.Model.extend('[application].[Model]', {static}, {instance} );  --> Object
-			AD.Model.extend('opstools.OPNavEdit.OPConfigArea', {
+			AD.Model.extend('opsportal.navigation.OPConfigArea', {
+				useSockets:true
 				/*
 					findAll: 'GET /appdev-opsportal/opconfigarea',
 					findOne: 'GET /appdev-opsportal/opconfigarea/{id}',

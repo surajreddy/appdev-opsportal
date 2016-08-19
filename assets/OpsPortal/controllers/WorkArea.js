@@ -81,6 +81,15 @@ steal(
                         },
 
 
+                        createTool: function(tool) {
+                            
+                            var toolArea = this.listAreas[tool.area];
+                            if (toolArea){
+                                toolArea.createTool(tool);
+                            }
+                        },
+
+
 
                         initDOM: function () {
 

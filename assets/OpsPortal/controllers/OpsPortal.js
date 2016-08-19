@@ -8,6 +8,7 @@ steal(
     'OpsPortal/controllers/MenuList.js',
     'OpsPortal/controllers/WorkArea.js',
     'OpsPortal/controllers/SubLinks.js',
+    'OpsPortal/models/OPConfigArea.js',
 'OpsPortal/controllers/OPView.js',
     'OpsPortal/views/OpsPortal/OpsPortal.ejs',
     'OpsPortal/views/OpsPortal/taskList.ejs',
@@ -205,7 +206,8 @@ steal(
                             this.hiddenElements = [];           // used to track which elements we have hidden
                             
 
-
+                            this.data = {};
+                            this.data.listAreas = null;
 
                             this.elOptions();                   // search the attached element for config options.
 
@@ -227,7 +229,11 @@ steal(
                             });
 
 
-                            this.requestConfiguration();
+                            this.loadNavData()
+                            .then(function(){
+                                self.requestConfiguration();
+                            });
+                            
 
 
                             // make sure we resize our display to the document/window
@@ -406,6 +412,32 @@ steal(
 
 
 
+                        loadNavData: function() {
+                            var dfd = AD.sal.Deferred();
+                            var _this = this;
+                            
+
+                            var OPConfigArea = AD.Model.get('opsportal.navigation.OPConfigArea');
+                            OPConfigArea.findAll()
+                            .fail(function(err){
+                                dfd.reject(err);
+                            })
+                            .then(function(list){
+                                list.forEach(function(l){
+                                    if (l.translate) l.translate();
+
+                                })
+                                _this.data.listAreas = list;
+
+                                _this.menu.loadAreas(list);
+
+                                dfd.resolve(list);
+                            })
+                            return dfd;
+                        },
+
+
+
 
                         portalDisplay: function () {
 
@@ -465,6 +497,8 @@ steal(
 
                         requestConfiguration: function () {
                             var self = this;
+                            var _this = this;
+
             
                             // //// For debugging:
                             // AD.comm.hub.subscribe('**', function(key, data){
@@ -502,9 +536,15 @@ steal(
 
                                     // create each area
                                     for (var a = 0; a < data.areas.length; a++) {
-                                        AD.comm.hub.publish('opsportal.area.new', data.areas[a]);
-                                        if (data.areas[a].isDefault) {
-                                            defaultArea = data.areas[a];
+
+                                        var newArea = data.areas[a];
+
+                                        _this.menu.createArea(newArea);
+                                        _this.subLinks.createArea(newArea);
+                                        _this.workArea.createArea(newArea);
+
+                                        if (newArea.isDefault) {
+                                            defaultArea = newArea;
                                         }
                                         AD.ui.loading.completed(1);
                                     }
@@ -517,8 +557,13 @@ steal(
 
                                     // create each tool
                                     for (var t = 0; t < data.tools.length; t++) {
-                                        AD.comm.hub.publish('opsportal.tool.new', data.tools[t]);
-                                        if (data.tools[t].isDefault) defaultTool[data.tools[t].area] = data.tools[t];
+
+                                        var newTool = data.tools[t];
+
+                                        _this.subLinks.createLink(newTool);
+                                        _this.workArea.createTool(newTool);
+
+                                        if (newTool.isDefault) defaultTool[newTool.area] = newTool;
                                         AD.ui.loading.completed(1);
                                     }
                                     
