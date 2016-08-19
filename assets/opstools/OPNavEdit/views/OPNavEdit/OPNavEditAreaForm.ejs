@@ -10,7 +10,7 @@
     <div class="form-group">
       <label class="col-sm-3 op-css-nopadL control-label op-css-lbl-title"><%== L('opnavedit.Label') %>:</label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" name="menuLabel" value="<%== LT( area.label) %>">
+        <input type="text" class="form-control" name="label" value="<%== LT( area.label) %>">
       </div>
     </div>
     <!--/Caption-->
@@ -19,20 +19,15 @@
     <div class="form-group">
         <label class="col-sm-3 control-label op-css-nopadL op-css-lbl-title"><%== L('opnavedit.Icons') %>:</label>
         <div class="col-sm-9">
-                <select class="form-control">
-                          <option value="one">Special Icon Selector<option>
-                          <option value="two">Two</option>
-                          <option value="three">Three</option>
-                          <option value="four">Four</option>
-                          <option value="five">Five</option>
-                </select> 
+                <input type="text" class="form-control" name="icon" value="<%== area.attr('icon') %>"><br><span><%== L('opnavedit.ex') %>:&nbsp;</span><span class="fa icon-example <%== area.attr('icon') %>"></span>
         </div>
     </div>
     <!--/Date-->
 
   </div>
 
-  <button class="btn btn-primary" style="margin-right:20px"><%== L('opnavedit.Delete') %></button>
-  <button class="btn btn-primary OK" style="margin-right:20px"><%== L('opnavedit.Cancel') %></button>
-  <button id="save" class="btn btn-primary"><%== L('opnavedit.Save') %></button>
+  <button id="save" class="btn btn-primary op-nav-button-save pull-right"><i class="fa"></i><%== L('opnavedit.Save') %></button>
+  <button class="btn btn-primary op-nav-button-cancel pull-right" style="margin-right:10px"><%== L('opnavedit.Cancel') %></button>
+  <button class="btn btn-primary " style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Delete') %></button>
+  
 </div>

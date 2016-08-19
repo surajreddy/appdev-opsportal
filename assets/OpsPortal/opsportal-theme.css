@@ -24,7 +24,7 @@ h1, h2, h3, h4, h5 { color: #666666; }
 .tooltip.left .tooltip-arrow { border-left-color: #333333; }
 .tooltip.bottom .tooltip-arrow, .tooltip.bottom-left .tooltip-arrow, .tooltip.bottom-right .tooltip-arrow { border-bottom-color: #333333; }
 .popover, .popover-title { background-color: #333333; color: #ffffff; }
-.popover-title { border-bottom-color: #666666; }
+.popover-title { border-bottom-color: #666666; text-align:right; }
 .popover.right .arrow, .popover.right .arrow:after { border-right-color: #333333; }
 .btn, .btn:hover, .btn:focus, a.btn, a.btn:hover, a.btn:visited { color: #fff; border-color: transparent !important;}
 

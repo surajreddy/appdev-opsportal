@@ -56,6 +56,8 @@
 
 }
 
+#op-navbar-left .popover-title { line-height: 25px; }
+
 .op-navbar-item-edit {
 	float: right;
     display: block;

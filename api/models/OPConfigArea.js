@@ -33,7 +33,7 @@ module.exports = {
   beforeCreate: function(values, cb) {
 
     // make sure there are no '.' in .key
-    // and while we are at it, proper kebobCase()
+    // and while we are at it, proper kebabCase()
     values.key = _.kebabCase(values.key);
     cb();
   },

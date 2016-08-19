@@ -1,6 +1,6 @@
 <!-- 
 #  Appdev Label Info:
-#label_context:opsportal
+#label_context:opnavedit
 #language_code:en
 -->
 <div class="op-navbar-lpanel op-widget">
@@ -8,14 +8,20 @@
 	  <span app-label-key="opnavedit.Add">Add</span>
 	  <span app-label-key="opnavedit.Save">Save</span>
 	  <span app-label-key="opnavedit.Edit">Edit</span>
+	  <span app-label-key="opnavedit.Delete">Delete</span>
+	  <span app-label-key="opnavedit.Cancel">Cancel</span>
+	  <span app-label-key="opnavedit.MenuItemProperties">Menu Area Properties</span>
+	  <span app-label-key="opnavedit.Label">Label</span>
+	  <span app-label-key="opnavedit.Icons">Icons</span>
+	  <span app-label-key="opnavedit.ex">ex</span>
 	</div>
     <!---->
-    <ul id="op-navbar-left" class="op-list sortableMenu">
+    <ul id="op-navbar-left" class="sortableMenu">
     	<% var L = AD.lang.label.getLabelSpan %>
     	<% can.each(areas, function(area,indx){ %>
         <li <%= (el) -> can.data(el, 'area', area) %> >
             <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
-            <a  class="ops-navbar-menuItem" ><%== L( area.label) %>(<%= area.attr('weight') %>)</a>
+            <a  class="ops-navbar-menuItem" ><%== L( area.attr('label')) %>(<%= area.attr('weight') %>)</a>
             <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover" aria-hidden="true"></i>
         </li>
     	<% }) %>
@@ -23,8 +29,8 @@
      <!--/-->
      <!---->       
     <ul class="op-list op-navbar-add">
-          <li class="op-css-off-botm50"><a class="add showPopover" data-html="true" data-toggle="popover"><i class="fa fa-plus" aria-hidden="true"></i><%== L('opnavedit.Add') %></a></li>
-          <li class="op-css-off-top20"><a class="op-navbar-save" href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i><%== L('opnavedit.Save') %></a></li>
+          <li class="op-css-off-botm50"><a class="add showPopover" data-html="true" data-toggle="popover"><i class="fa fa-plus" aria-hidden="true"></i> <%== L('opnavedit.Add') %></a></li>
+          <li class="op-css-off-top20"><a class="op-navbar-save" href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> <%== L('opnavedit.Save') %></a></li>
     </ul>                            
 	<!--/-->                           
 

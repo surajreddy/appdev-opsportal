@@ -54,35 +54,103 @@ steal(
 								var area = $icon.parent().data('area');
 
 								// render popup view
-								can.view(_this.options.templateDOMAreaForm, {area:area}, function(frag){
+								function myTitle () {
+									return AD.lang.label.getLabelSpan(area.label) + ' <a class="close" href="#">&times;</a>'
+								}
 
-									$icon.popover({
-							            placement: 'right',
-							            title: AD.lang.label.getLabelSpan(area.label) + ' <a class="close" href="#">&times;</a>',
-							            trigger: 'click',
-							            html: true,
-							            content: function () {
-							                return $('<div>').append($(frag).clone()).html();
-							            }
+								$icon.popover({
+						            placement: 'right',
+						            title: myTitle(),
+						            trigger: 'click',
+						            html: true,
+						            content: function () {
+						                return _this.renderer.popupArea({area:area});
+						            }
 
-							        }).on('shown.bs.popover', function(e) {
-							            //console.log('shown triggered');
-							            // 'aria-describedby' is the id of the current popover
-							            var current_popover = '#' + $(e.target).attr('aria-describedby');
-							            var $cur_pop = $(current_popover);
-							          
-							            $cur_pop.find('.close').click(function(){
-							                //console.log('close triggered');
-							                $cur_pop.popover('hide');
-							            });
-							          
-							            $cur_pop.find('.OK').click(function(){
-							                //console.log('OK triggered');
-							               $cur_pop.popover('hide');
-							                
-							            });
-							        });
-								});
+						        }).on('shown.bs.popover', function(e) {
+						            //console.log('shown triggered');
+						            // 'aria-describedby' is the id of the current popover
+						            var current_popover = '#' + $(e.target).attr('aria-describedby');
+						            var $cur_pop = $(current_popover);
+
+
+						            // setup the form
+						            var form = new AD.op.Form($cur_pop);
+						            form.addField('label', 'string', { notEmpty:{} } );
+						            form.addField('icon', 'string', { notEmpty:{} } );
+						            form.attach();
+
+						            
+
+						          	// process close / cancel clicks
+						            $cur_pop.find('.close').click(function(){
+						                $icon.click();
+						            });
+						          
+						            $cur_pop.find('.op-nav-button-cancel').click(function(){
+						               $icon.click();
+						            });
+
+						            var iconData = $cur_pop.find('[name="icon"]');
+						            iconData.change(function(ev){
+						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val())
+						            })
+						            
+						            // process [save] click
+						            var buttonSave = $cur_pop.find('.op-nav-button-save');
+						            var busySave = new AD.op.ButtonBusy(buttonSave);
+						            buttonSave.click(function(){
+										if (form.isValid()) {
+
+											busySave.busy();
+
+											var values = form.values();
+console.log('... values:', values);
+											// if the label has changed:
+											if (values.label != AD.lang.label.getLabel(area.label)) {
+console.log('    ... updating label:', values.label);
+												// update our UI label:
+												AD.lang.label.setLabel(area.label, values.label);
+
+												// tell our server about the new label update
+												var params = {
+													key: area.label,
+													label: values.label
+												}
+												AD.comm.service.put({url:'/opnavedit/arealabel', params:params})
+												.fail(function(err){
+													AD.error.log('Error updating Area Label:', { error:err });
+												})
+												.then(function(response){
+													// manually update the icon's text (since)
+													$icon.parent().find('.ops-navbar-menuItem').html(values.label);
+													$cur_pop.find('.popover-title').html(myTitle());
+console.log('... update response:', response);
+												})
+											}
+
+
+											area.attr('icon', values.icon);
+											area.save()
+											.fail(function(err){
+												busySave.ready();
+												AD.error.log('Error saving Area', {error:err});
+
+											})
+											.then(function(updatedArea){
+												busySave.ready();
+												$icon.click();
+											})
+
+										}
+						            });
+						        });
+
+
+						        $icon.attr('op-navbar-init', true);
+////// LEFT OFF HERE:
+
+							
 
 							});
 
@@ -93,6 +161,11 @@ steal(
 
 						initDOM: function() {
 							var _this = this;
+
+
+							// prepare our Area Popup html renderer
+							this.renderer = {}
+							this.renderer.popupArea = can.view.render(this.options.templateDOMAreaForm);
 //// LEFT OFF HERE:
 
 // make sure the popups are attached to the current Areas in the list.
