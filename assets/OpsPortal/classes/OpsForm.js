@@ -517,6 +517,7 @@ steal('OpsPortal/classes/ValidationDateGreaterThanField.js',
                                     }
                                     return this.validator.isValid();
                                 }
+                                console.warn('... Opsform.isValid() : no validator.  Did you .attach() the form?');
                                 return false;
                             },
 

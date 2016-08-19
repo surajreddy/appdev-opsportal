@@ -61,7 +61,7 @@ steal(
                                 .append(can.view(this.options.templateItem, { area: area }));
 
                             // translate the new area
-                            AD.lang.label.translate(this.element.find('.' + area.key));
+                            AD.lang.label.translate(this.element.find('[area="' + area.key+'"]'));
                         },
 
 
