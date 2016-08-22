@@ -28,6 +28,8 @@ steal(
 							// Call parent init
 							this._super(element, options);
 
+							this.data = {};
+							this.data.listAreas = null;
 
 							this.dom = {};
 							this.dom.area = null;
@@ -46,16 +48,25 @@ steal(
 						initAreaPopups:function() {
 							var _this = this;
 
-							// for each area icon not already initialized.
-							this.dom.area.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
+
+							function createAreaPopup( options) {
 								
 								// get it's area model
-								var $icon = $(icon);
+								var $icon = $(options.elIcon);
+								var Model = AD.Model.get('opsportal.navigation.OPConfigArea');
 								var area = $icon.parent().data('area');
+								var isAdd = false;
+
+								// in the case of the [+] Add  button, there is not a current area
+								// so create a new empty one:
+								if( typeof area == 'undefined') {
+									area = new Model({label:'', icon:''});
+									isAdd = true;
+								}
 
 								// render popup view
 								function myTitle () {
-									return AD.lang.label.getLabelSpan(area.label) + ' <a class="close" href="#">&times;</a>'
+									return '&nbsp;<a class="close" href="#">&times;</a>'
 								}
 
 								$icon.popover({
@@ -64,7 +75,7 @@ steal(
 						            trigger: 'click',
 						            html: true,
 						            content: function () {
-						                return _this.renderer.popupArea({area:area});
+						                return _this.renderer.popupArea({area:area, isAdd:isAdd});
 						            }
 
 						        }).on('shown.bs.popover', function(e) {
@@ -105,31 +116,12 @@ steal(
 											busySave.busy();
 
 											var values = form.values();
+
+											if (isAdd){
+												values.key = values.label;
+												values.weight = _this.data.listAreas.length;
+											}
 console.log('... values:', values);
-// 											// if the label has changed:
-// 											if (values.label != AD.lang.label.getLabel(area.label)) {
-// console.log('    ... updating label:', values.label);
-// 												// update our UI label:
-// 												AD.lang.label.setLabel(area.label, values.label);
-
-// 												// tell our server about the new label update
-// 												var params = {
-// 													key: area.label,
-// 													label: values.label
-// 												}
-// 												AD.comm.service.put({url:'/opnavedit/arealabel', params:params})
-// 												.fail(function(err){
-// 													AD.error.log('Error updating Area Label:', { error:err });
-// 												})
-// 												.then(function(response){
-// 													// manually update the icon's text (since)
-// 													$icon.parent().find('.ops-navbar-menuItem').html(values.label);
-// 													$cur_pop.find('.popover-title').html(myTitle());
-// console.log('... update response:', response);
-// 												})
-// 											}
-
-
 											area.attr(values);
 											area.save()
 											.fail(function(err){
@@ -138,21 +130,61 @@ console.log('... values:', values);
 
 											})
 											.then(function(updatedArea){
+												if (isAdd) {
+													_this.data.listAreas.push(area);
+													area = new Model({label:'', icon:''});
+													// pushing to the list automatically updated the DOM
+													// but we have to recreate the popups on the new elements:
+													_this.initAreaPopups();
+													_this.initSort();
+												}
 												busySave.ready();
 												$icon.click();
 											})
 
 										}
 						            });
+
+						            // process [delete] click
+						            var buttonDelete = $cur_pop.find('.op-nav-button-del');
+						            var busyDelete = new AD.op.ButtonBusy(buttonDelete);
+						            buttonDelete.click(function(){
+						            	busyDelete.busy();
+
+						            	area.destroy()
+						            	.fail(function(err){
+						            		busyDelete.ready();
+						            		AD.error.log('Error destroying Area', {error:err});
+						            	})
+						            	.then(function(){
+						            		
+						            		_this.initAreaPopups();
+											_this.initSort();
+						            		busyDelete.ready();
+						            	})
+						            })
 						        });
 
 
 						        $icon.attr('op-navbar-init', true);
-////// LEFT OFF HERE:
 
-							
+							}
 
+
+							// for each area icon not already initialized.
+							this.dom.area.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
+								
+								createAreaPopup({
+									elIcon:icon
+								});
+								
 							});
+
+							this.dom.area.find('.op-navbar-add:not([op-navbar-init])').each(function(indx, el){
+								createAreaPopup({
+									elIcon:el
+								})
+							})
 
 							//
 						},
@@ -176,7 +208,7 @@ console.log('... values:', values);
 							var menuFooter = $(this.element.find('#op-menu-widget .op-widget-footer'));
 							menuFooter.prepend([
 '<div class="op-navbar-editbutton">',
-'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' + AD.lang.label.getLabelSpan('opnavedit.Edit'),
+'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;' + AD.lang.label.getLabelSpan('opnavedit.Edit'),
 '</div>'
 							].join('\n'));
 
@@ -307,6 +339,7 @@ console.log('... values:', values);
 						 */
 						loadAreas: function() {
 							var dfd = AD.sal.Deferred();
+							var _this = this;
 
 							var Areas = AD.Model.get('opsportal.navigation.OPConfigArea');
 							Areas.findAll({ where:{}, sort:'weight'})
@@ -317,6 +350,7 @@ console.log('... values:', values);
 								list.forEach(function(l){
 									if (l.translate) l.translate();
 								})
+								_this.data.listAreas = list;
 								dfd.resolve(list);
 							});
 

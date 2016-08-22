@@ -1,6 +1,5 @@
 <div id="popup-content" >
   <% var L = AD.lang.label.getLabelSpan %>
-  <% var LT = AD.lang.label.getLabel %>
   <h4><%== L( 'opnavedit.MenuItemProperties' ) %></h4>
   <div class="form-horizontal">
 
@@ -28,6 +27,8 @@
 
   <button id="save" class="btn btn-primary op-nav-button-save pull-right"><i class="fa"></i><%== L('opnavedit.Save') %></button>
   <button class="btn btn-primary op-nav-button-cancel pull-right" style="margin-right:10px"><%== L('opnavedit.Cancel') %></button>
-  <button class="btn btn-primary " style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Delete') %></button>
+  <% if (!isAdd) { %>
+  <button class="btn btn-primary  op-nav-button-del" style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Delete') %></button>
+  <% } %>
   
 </div>

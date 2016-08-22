@@ -14,6 +14,7 @@
 	  <span app-label-key="opnavedit.Label">Label</span>
 	  <span app-label-key="opnavedit.Icons">Icons</span>
 	  <span app-label-key="opnavedit.ex">ex</span>
+    <span app-label-key="opnavedit.NewArea">New Area</span>
 	</div>
     <!---->
     <ul id="op-navbar-left" class="sortableMenu">
@@ -21,16 +22,16 @@
     	<% can.each(areas, function(area,indx){ %>
         <li <%= (el) -> can.data(el, 'area', area) %> >
             <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
-            <a  class="ops-navbar-menuItem" ><%== area.attr('label') %>(<%= area.attr('weight') %>)</a>
+            <i class="fa <%= area.attr('icon') %>"></i>&nbsp;<a  class="ops-navbar-menuItem" ><%== area.attr('label') %>(<%= area.attr('weight') %>)</a>
             <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showPopover" data-html="true" data-toggle="popover" aria-hidden="true"></i>
         </li>
     	<% }) %>
     </ul>
      <!--/-->
      <!---->       
-    <ul class="op-list op-navbar-add">
-          <li class="op-css-off-botm50"><a class="add showPopover" data-html="true" data-toggle="popover"><i class="fa fa-plus" aria-hidden="true"></i> <%== L('opnavedit.Add') %></a></li>
-          <li class="op-css-off-top20"><a class="op-navbar-save" href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> <%== L('opnavedit.Save') %></a></li>
+    <ul class="op-list op-navbar-area-menu">
+          <li class="op-css-off-botm50"><a class="op-navbar-add add showPopover" data-html="true" data-toggle="popover"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;<%== L('opnavedit.Add') %></a></li>
+          <li class="op-css-off-top20"><a class="op-navbar-save" href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;<%== L('opnavedit.Save') %></a></li>
     </ul>                            
 	<!--/-->                           
 

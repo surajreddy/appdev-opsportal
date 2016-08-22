@@ -19,9 +19,9 @@
 .op-navbar-lpanel .container .col-sm-6:first-child {border-right:2px solid #736d6d;}	
 		
 
-.op-navbar-add {padding:0; text-align:center;}
-.op-navbar-add li {opacity:1 !important; }
-.op-navbar-add li a{color:#fff; }
+.op-navbar-area-menu {padding:0; text-align:center;}
+.op-navbar-area-menu li {opacity:1 !important; }
+.op-navbar-area-menu li a{color:#fff; }
 
 .addtbtn .add, .savebtn .btn { width: 100% !important;}
 
