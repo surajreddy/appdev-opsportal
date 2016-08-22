@@ -5,13 +5,14 @@
 -->
 <!--Edit Tools-->
 <div id="op-navbar-edittools" class="col-lg-11 col-xs-9" style="display:none">
+
     <% can.each(areas, function(area, indx){ %>
         <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none">
-            <% can.each(area.tools, function(tool, indx){ %>
-
+            <% can.each(area.tools, function(simpleTool, indx){ %>
+                <% var tool = hashTools[simpleTool.id] %>
                 <li>
                     <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
-                    <a class="toollink" href="#"><%= tool.label %></a>
+                    <a class="toollink" href="#"><%= tool.attr('label') %></a>
                     
                     <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showbtmPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
                 </li>  

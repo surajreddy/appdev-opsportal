@@ -219,14 +219,16 @@ steal(
 							].join('\n'));
 
 // 
-							// Build the Area List:
-							this.loadAreas()
+							// Build the Editors:
+							var dfdAreas = this.loadAreas()
 							.fail(function(err){
 								AD.error.log("Error loading OPNavEdit.Areas", err);
 							})
 							.then(function(Areas){
 
-								// Async view loading.
+								// Async view loading:
+
+								// Load the Area Editing section
 								can.view(_this.options.templateDOMAreas, {areas:Areas}, function(frag){
 									
 									_this.element.find('.op-stage').append(frag);
@@ -238,7 +240,22 @@ steal(
 									_this.initAreaPopups();
 								});
 
-								can.view(_this.options.templateDOMTools, {areas:Areas}, function(frag){
+							})
+
+							var dfdTools = this.loadTools()
+							.fail(function(err){
+								AD.error.log("Error loading OPNavEdit.Tools ", err);
+							})
+
+							$.when(dfdAreas, dfdTools).done(function(Areas, Tools){
+
+								var hashTools = {};
+								Tools.forEach(function(t){
+									hashTools[t.id] = t;
+								})
+
+								// Load the Tool Editing Section
+								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:hashTools }, function(frag){
 
 									_this.element.find('#op-masthead-sublinks').after(frag);
 									_this.dom.tools = _this.element.find('#op-navbar-edittools');
@@ -367,6 +384,32 @@ steal(
 									if (l.translate) l.translate();
 								})
 								_this.data.listAreas = list;
+								dfd.resolve(list);
+							});
+
+							return dfd;
+						},
+
+
+						/**
+						 * @function loadTools
+						 * load the defined tools from the server.
+						 * @return {deferred}
+						 */
+						loadTools: function() {
+							var dfd = AD.sal.Deferred();
+							var _this = this;
+
+							var Tools = AD.Model.get('opsportal.navigation.OPConfigTool');
+							Tools.findAll({})
+							.fail(function(err){
+								dfd.reject(err);
+							})
+							.then(function(list){
+								list.forEach(function(l){
+									if (l.translate) l.translate();
+								})
+								_this.data.listTools = list;
 								dfd.resolve(list);
 							});
 

@@ -9,6 +9,7 @@ steal(
     'OpsPortal/controllers/WorkArea.js',
     'OpsPortal/controllers/SubLinks.js',
     'OpsPortal/models/OPConfigArea.js',
+    'OpsPortal/models/OPConfigTool.js',
 'OpsPortal/controllers/OPView.js',
     'OpsPortal/views/OpsPortal/OpsPortal.ejs',
     'OpsPortal/views/OpsPortal/taskList.ejs',
@@ -553,7 +554,7 @@ steal(
                                     var defaultTool = {};
 
                                     // assign 1st tool as our default to show
-                                    if (data.tools[0]) defaultTool[data.tools[0].area] = data.tools[0];
+                                    if (data.tools[0]) defaultTool[data.tools[0].areas[0].key] = data.tools[0];
 
                                     // create each tool
                                     for (var t = 0; t < data.tools.length; t++) {
@@ -563,7 +564,7 @@ steal(
                                         _this.subLinks.createLink(newTool);
                                         _this.workArea.createTool(newTool);
 
-                                        if (newTool.isDefault) defaultTool[newTool.area] = newTool;
+                                        if (newTool.isDefault) defaultTool[newTool.areas[0].key] = newTool;
                                         AD.ui.loading.completed(1);
                                     }
                                     
@@ -605,7 +606,7 @@ steal(
                                     // now notify all our default tools
                                     for (var t in defaultTool) {
                                         AD.comm.hub.publish('opsportal.tool.show', {
-                                            area: defaultTool[t].area,
+                                            area: defaultTool[t].areas[0].key,
                                             tool: defaultTool[t].controller
                                         });
                                     }

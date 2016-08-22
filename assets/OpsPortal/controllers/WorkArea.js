@@ -82,8 +82,8 @@ steal(
 
 
                         createTool: function(tool) {
-                            
-                            var toolArea = this.listAreas[tool.area];
+                            var areaKey = tool.areas[0].key;
+                            var toolArea = this.listAreas[areaKey];
                             if (toolArea){
                                 toolArea.createTool(tool);
                             }

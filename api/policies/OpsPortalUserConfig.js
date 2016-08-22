@@ -111,7 +111,7 @@ function processToolsRecursively( areaHash, tools, user, area, listTools, cb ) {
         // we need a fully populated OPConfigTool to check permissions:
         var tool = listTools.shift();
         OPConfigTool.findOne(tool.id)
-        .populate('permissions')
+        .populateAll()
         .exec(function(err, currTool){
 
         
@@ -122,8 +122,8 @@ function processToolsRecursively( areaHash, tools, user, area, listTools, cb ) {
                     // once we return true, we don't have to process any more.
                     // add area & tool to our list.
 
-        //// TODO: change the isDefault to lookup a user's last accessed
-        //// area/tool and make those the default
+//// TODO: change the isDefault to lookup a user's last accessed
+//// area/tool and make those the default
 
 
                     // if area not already added then add it
@@ -144,15 +144,16 @@ function processToolsRecursively( areaHash, tools, user, area, listTools, cb ) {
 
 
                     // add the tool
-                    var toolInfo = {
-                            area:area.key,
-                            controller:tool.controller,
-                            label:tool.label,
-                            isDefault:tool.isDefault,
-                            isController:tool.isController,
-                            options: tool.options || {}
-                    };
-                    tools.push(toolInfo);
+                    // var toolInfo = {
+                    //         area:area.key,
+                    //         controller:tool.controller,
+                    //         label:tool.label,
+                    //         isDefault:tool.isDefault,
+                    //         isController:tool.isController,
+                    //         options: tool.options || {}
+                    // };
+                    // tools.push(toolInfo);
+                    tools.push(currTool);
                     break;
                 }
             }

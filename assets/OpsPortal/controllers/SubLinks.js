@@ -2,6 +2,7 @@ System.import('appdev').then(function () {
     steal.import(
         'appdev/ad',
         'appdev/control/control',
+        'appdev/model/model',
         'appdev/sal/web-jquery',
         'appdev/comm/socket'
         ).then(function () {
@@ -98,10 +99,18 @@ System.import('appdev').then(function () {
 
             createLink: function (tool) {
 
-                var area = this.areaLinks[tool.area];
+                if (!tool.attr) {
+                    var Model = AD.Model.get('opsportal.navigation.OPConfigTool');
+                    tool = new Model(tool);
+                }
+
+                if (tool.translate) tool.translate();
+
+                var areaKey = tool.areas[0].key;
+
+                var area = this.areaLinks[areaKey]; 
                 if (area) {
                     area.append(can.view('OpsPortal_SubLinks_Item', { tool: tool }));
-
                 }
 
             },
@@ -181,7 +190,7 @@ System.import('appdev').then(function () {
             '.op-masthead-nav-link click': function ($el, ev) {
 
                 var tool = $el.data('tool');
-                AD.comm.hub.publish('opsportal.tool.show', { area: tool.area, tool: tool.controller });
+                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.controller });
                 ev.preventDefault();
             }
 

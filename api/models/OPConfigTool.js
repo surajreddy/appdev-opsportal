@@ -26,10 +26,6 @@ module.exports = {
       defaultsTo: false
     },
 
-    label : { type: 'string' },
-
-    context : { type: 'string' },
-
     controller : { type: 'string' },
 
     isController : { 
@@ -37,7 +33,42 @@ module.exports = {
       defaultsTo : true
     },
 
-    options : { type: 'json', defaultsTo:{} }
+    options : { type: 'json', defaultsTo:{} },
+
+
+    //// MULTILINGUAL Model Fields:
+    // this will pull in the translations using .populate('translations')
+    translations:{
+        collection:'OPConfigToolTrans',
+        via:'tool'
+    },
+
+    translate:function(code) {
+        return ADCore.model.translate({
+            model:this,         // this instance of a Model
+            code:code,          // the language code of the translation to use.
+            ignore:['tool']     // don't include this field when translating
+        });
+    },
+
+    _Klass: function() {
+        return OPConfigTool;
+    }
+  },
+
+  afterCreate: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:record, verb:'created'});
+    cb();
+  },
+
+  afterUpdate: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:record, verb:'updated'});
+    cb();
+  },
+
+  afterDestroy: function(record, cb) {
+    ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:record, verb:'destroyed'});
+    cb();
   }
 };
 

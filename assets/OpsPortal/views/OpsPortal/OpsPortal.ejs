@@ -17,7 +17,7 @@
 		    <!-- sublinks -->
 		    <div class="col-lg-11 col-md-11 col-xs-9" id="op-masthead-sublinks">
                 <ul class="list-unstyled list-inline" area="[[= area.key ]]">
-                    <li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- AD.lang.label.getLabelSpan({ key: tool.label, context:tool.context }) ]]</a></li>
+                    <li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- tool.attr('label') ]]</a></li>
                     <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 2</a></li>
                     <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 3</a></li>
                 </ul>
