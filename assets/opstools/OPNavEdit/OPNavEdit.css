@@ -71,19 +71,19 @@
 #op-navbar-left { padding:0; list-style: none;}
 
 
-#op-navbar-tool li .showbtmPopover {
+.op-navbar-tool li .showbtmPopover {
     display: block;
     color: #fff;
     float: right;
 }
 
-#op-navbar-tool li .toollink {
+.op-navbar-tool li .toollink {
 	display: inline-block;
     color: #fff;
     padding: 5px 5px;
 }
 
-#op-navbar-tool .sort-handle {
+.op-navbar-tool .sort-handle {
     display: block;
     background-color: #fff;
     width: 20px;
@@ -96,7 +96,7 @@
 	margin: 0;
 }
 
-#op-navbar-tool li{
+.op-navbar-tool li{
 	display:block;
 	min-width: 92px;
     border: 1px solid #fff;
@@ -135,7 +135,7 @@
 
 .sort-handle i { vertical-align: -webkit-baseline-middle; }
 
-#op-navbar-tool .sort-handle i {
+.op-navbar-tool .sort-handle i {
     -ms-transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);

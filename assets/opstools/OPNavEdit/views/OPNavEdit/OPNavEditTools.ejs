@@ -1,0 +1,40 @@
+<!-- 
+#  Appdev Label Info:
+#label_context:opnavedit
+#language_code:en
+-->
+<!--Edit Tools-->
+<div id="op-navbar-edittools" class="col-lg-11 col-xs-9" style="display:none">
+    <% can.each(areas, function(area, indx){ %>
+        <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none">
+            <% can.each(area.tools, function(tool, indx){ %>
+
+                <li>
+                    <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
+                    <a class="toollink" href="#"><%= tool.label %></a>
+                    
+                    <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showbtmPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
+                </li>  
+
+            <% }) %>               
+        </ul>  
+    <% }) %>
+                                   
+  
+        <ul class="ops-navbar-AddNewTool list-unstyled list-inline" style="display:none">
+            <li>
+              <div style="width:141px;float:left">
+                <select class="form-control">
+                  <option>Add new tool<option>
+                  <option value="two">tool 1</option>
+                  <option value="three">tool 2</option>
+                  <option value="four">tool 3</option>
+                  <option value="five">tool 4</option>
+                </select> 
+              </div>
+            </li>  
+
+        </ul>                 
+
+</div>                
+<!--/Edit Tools-->

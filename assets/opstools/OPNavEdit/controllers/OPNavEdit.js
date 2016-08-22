@@ -4,6 +4,7 @@ steal(
 	// 'opstools/OPNavEdit/models/OPConfigArea.js',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
+	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditTools.ejs',
 	function() {
 		System.import('appdev').then(function() {
 			steal.import('appdev/ad',
@@ -20,6 +21,7 @@ steal(
 							options = AD.defaults({
 								templateDOMAreas: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 								templateDOMAreaForm: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
+								templateDOMTools: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditTools.ejs',
 								resize_notification: 'OPNavEdit.resize',
 								tool: null   // the parent opsPortal Tool() object
 							}, options);
@@ -34,6 +36,7 @@ steal(
 							this.dom = {};
 							this.dom.area = null;
 							this.dom.tools = null;
+							this.dom.subLinks = null;
 
 							this.events = {};
 							this.events.lastArea = null;
@@ -117,11 +120,13 @@ steal(
 
 											var values = form.values();
 
+											// if this is an Add operation,
+											// make sure key and weight are also set.
 											if (isAdd){
 												values.key = values.label;
 												values.weight = _this.data.listAreas.length;
 											}
-console.log('... values:', values);
+
 											area.attr(values);
 											area.save()
 											.fail(function(err){
@@ -180,13 +185,14 @@ console.log('... values:', values);
 								
 							});
 
+							// make sure the [+] Add button is initialized if it hasn't already been
 							this.dom.area.find('.op-navbar-add:not([op-navbar-init])').each(function(indx, el){
 								createAreaPopup({
 									elIcon:el
 								})
 							})
 
-							//
+							
 						},
 
 
@@ -231,7 +237,17 @@ console.log('... values:', values);
 									_this.initSort();
 									_this.initAreaPopups();
 								});
+
+								can.view(_this.options.templateDOMTools, {areas:Areas}, function(frag){
+
+									_this.element.find('#op-masthead-sublinks').after(frag);
+									_this.dom.tools = _this.element.find('#op-navbar-edittools');
+									_this.dom.tools.hide();
+
+								})
 							})
+
+							this.dom.subLinks = this.element.find('#op-masthead-sublinks');
 
 
 
@@ -257,7 +273,7 @@ console.log('... values:', values);
 	                            	_this.events.lastArea = data;
 
 	                            	// make sure our area is hidden:
-	                            	if(_this.dom.area) _this.dom.area.hide();
+	                            	if(_this.dom.area) _this.resetDisplay();
 	                            }
 
                             });
@@ -358,6 +374,12 @@ console.log('... values:', values);
 						},
 
 
+						resetDisplay:function() {
+							this.dom.subLinks.show();
+							this.dom.tools.hide();
+						},
+
+
 						/**
 						 * .op-navbar-editbutton click
 						 * What happens when the edit button is clicked.
@@ -369,10 +391,35 @@ console.log('... values:', values);
 
 							// show our area
 							this.dom.area.show('slide', {direction: 'left'}, 400);
+							this.dom.subLinks.hide();
+							this.dom.tools.show();
+							this.dom.tools.find('[area-tools]').hide();
+							this.element.find('.ops-navbar-AddNewTool').hide();
 
 							// close the slide in menu:
 							AD.ui.jQuery.sidr('close', 'op-menu-widget');
 
+							ev.preventDefault();
+						},
+
+
+						/**
+						 * .ops-navbar-menuItem
+						 * clicking on the Area name in the Area List
+						 */
+						'.ops-navbar-menuItem click': function( $el, ev) {
+
+							var area = $el.parent().data('area');
+							if (area) {
+								// hide all area-tools sections
+								this.element.find('[area-tools]').hide();
+
+								// only show the one related to this area:
+								this.element.find('[area-tools="'+area.key+'"]').show();
+
+								// make sure the add list is shown
+								this.element.find('.ops-navbar-AddNewTool').show();
+							}
 							ev.preventDefault();
 						},
 
@@ -394,6 +441,9 @@ console.log('... values:', values);
 									// choose the first menu item, and click it:
 									_this.element.find('.op-menu-widget li:first').click();
 								}
+
+								// show the original Tool List:
+								_this.resetDisplay();
 
 								// close the slide in menu:
 								AD.ui.jQuery.sidr('close', 'op-menu-widget');
