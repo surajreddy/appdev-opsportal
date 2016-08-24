@@ -10,7 +10,7 @@ module.exports = {
   tableName:'op_config_tool',
 
 //   connection:'appdev_default',
-// migrate:'alter',
+migrate:'alter',
 
   attributes: {
 
@@ -34,6 +34,8 @@ module.exports = {
     },
 
     options : { type: 'json', defaultsTo:{} },
+
+    weight  : { type: 'integer', defaultsTo:0 },
 
 
     //// MULTILINGUAL Model Fields:

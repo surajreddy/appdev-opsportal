@@ -1,10 +1,11 @@
 
 steal(
 	// List your Controller's dependencies here:
-	// 'opstools/OPNavEdit/models/OPConfigArea.js',
+	'opstools/OPNavEdit/models/OPConfigToolDefinition.js',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
 	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditTools.ejs',
+	'opstools/OPNavEdit/views/OPNavEdit/OPNavEditToolForm.ejs',
 	function() {
 		System.import('appdev').then(function() {
 			steal.import('appdev/ad',
@@ -22,6 +23,7 @@ steal(
 								templateDOMAreas: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 								templateDOMAreaForm: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
 								templateDOMTools: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditTools.ejs',
+								templateDOMToolForm: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditToolForm.ejs',
 								resize_notification: 'OPNavEdit.resize',
 								tool: null   // the parent opsPortal Tool() object
 							}, options);
@@ -32,6 +34,8 @@ steal(
 
 							this.data = {};
 							this.data.listAreas = null;
+							this.data.listTools = null;
+							this.data.listToolDefs = null;
 
 							this.dom = {};
 							this.dom.area = null;
@@ -43,7 +47,6 @@ steal(
 
 							this.initDOM();
 							this.initEvents();
-
 						},
 
 
@@ -141,7 +144,7 @@ steal(
 													// pushing to the list automatically updated the DOM
 													// but we have to recreate the popups on the new elements:
 													_this.initAreaPopups();
-													_this.initSort();
+													_this.initSortArea();
 												}
 												busySave.ready();
 												$icon.click();
@@ -164,7 +167,7 @@ steal(
 						            	.then(function(){
 						            		
 						            		_this.initAreaPopups();
-											_this.initSort();
+											_this.initSortArea();
 						            		busyDelete.ready();
 						            	})
 						            })
@@ -197,6 +200,164 @@ steal(
 
 
 
+
+
+
+						initToolPopups:function() {
+							var _this = this;
+
+
+							function createToolPopup( options) {
+								
+								// get it's area model
+								var $icon = $(options.elIcon);
+								var Model = AD.Model.get('opsportal.navigation.OPConfigTool');
+								var tool = $icon.parent().data('tool');
+								var isAdd = false;
+
+								// in the case of the [+] Add  button, there is not a current area
+								// so create a new empty one:
+								if( typeof tool == 'undefined') {
+									tool = new Model({label:'', icon:''});
+									isAdd = true;
+								}
+
+								// render popup view
+								function myTitle () {
+									return '&nbsp;<a class="close" href="#">&times;</a>'
+								}
+
+								$icon.popover({
+						            placement: 'bottom',
+						            title: myTitle(),
+						            trigger: 'click',
+						            html: true,
+						            content: function () {
+						                return _this.renderer.popupTool({tool:tool, isAdd:isAdd});
+						            }
+
+						        }).on('shown.bs.popover', function(e) {
+						            //console.log('shown triggered');
+						            // 'aria-describedby' is the id of the current popover
+						            var current_popover = '#' + $(e.target).attr('aria-describedby');
+						            var $cur_pop = $(current_popover);
+
+
+						            // setup the form
+						            var form = new AD.op.Form($cur_pop);
+						            form.addField('label', 'string', { notEmpty:{} } );
+						            form.addField('icon', 'string', { notEmpty:{} } );
+						            form.attach();
+
+						            
+
+						          	// process close / cancel clicks
+						            $cur_pop.find('.close').click(function(){
+						                $icon.click();
+						            });
+						          
+						            $cur_pop.find('.op-nav-button-cancel').click(function(){
+						               $icon.click();
+						            });
+
+						            var iconData = $cur_pop.find('[name="icon"]');
+						            iconData.change(function(ev){
+						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val())
+						            })
+						            
+						            // process [save] click
+						            var buttonSave = $cur_pop.find('.op-nav-button-save');
+						            var busySave = new AD.op.ButtonBusy(buttonSave);
+						            buttonSave.click(function(){
+										if (form.isValid()) {
+
+											busySave.busy();
+
+											var values = form.values();
+
+											// if this is an Add operation,
+											// make sure key and weight are also set.
+											if (isAdd){
+											
+												values.weight = _this.data.listAreas.length;
+											}
+
+											if (typeof values.isDefault == 'undefined') {
+												values.isDefault = false;
+											} else {
+												values.isDefault = true;
+											}
+
+											tool.attr(values);
+											tool.save()
+											.fail(function(err){
+												busySave.ready();
+												AD.error.log('Error saving Tool', {error:err});
+
+											})
+											.then(function(updatedTool){
+												if (isAdd) {
+													_this.data.listTools.push(tool);
+													area = new Model({label:'', icon:''});
+													// pushing to the list automatically updated the DOM
+													// but we have to recreate the popups on the new elements:
+													_this.initToolPopups();
+													_this.initSortTools();
+												}
+												busySave.ready();
+												$icon.click();
+											})
+
+										}
+						            });
+
+						            // process [delete] click
+						            var buttonDelete = $cur_pop.find('.op-nav-button-del');
+						            var busyDelete = new AD.op.ButtonBusy(buttonDelete);
+						     //        buttonDelete.click(function(){
+						     //        	busyDelete.busy();
+
+						     //        	tool.destroy()
+						     //        	.fail(function(err){
+						     //        		busyDelete.ready();
+						     //        		AD.error.log('Error destroying Area', {error:err});
+						     //        	})
+						     //        	.then(function(){
+						            		
+						     //        		_this.initToolPopups();
+											// _this.initSortTools();
+						     //        		busyDelete.ready();
+						     //        	})
+						     //        })
+						        });
+
+
+						        $icon.attr('op-navbar-init', true);
+
+							}
+
+
+							// for each area icon not already initialized.
+							this.dom.tools.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
+								
+								createToolPopup({
+									elIcon:icon
+								});
+								
+							});
+
+							// // make sure the [+] Add button is initialized if it hasn't already been
+							// this.dom.area.find('.op-navbar-add:not([op-navbar-init])').each(function(indx, el){
+							// 	createAreaPopup({
+							// 		elIcon:el
+							// 	})
+							// })
+
+							
+						},
+
+
+
 						initDOM: function() {
 							var _this = this;
 
@@ -204,10 +365,8 @@ steal(
 							// prepare our Area Popup html renderer
 							this.renderer = {}
 							this.renderer.popupArea = can.view.render(this.options.templateDOMAreaForm);
+							this.renderer.popupTool = can.view.render(this.options.templateDOMToolForm);
 //// LEFT OFF HERE:
-
-// make sure the popups are attached to the current Areas in the list.
-// replace icon selector with input and icon display.
 
 // OPConfigArea route should be protected by our opsportal.opnavedit.view permission.
 
@@ -236,7 +395,7 @@ steal(
 									_this.dom.area.hide(); // make sure it is hidden.
 
 
-									_this.initSort();
+									_this.initSortArea();
 									_this.initAreaPopups();
 								});
 
@@ -247,7 +406,12 @@ steal(
 								AD.error.log("Error loading OPNavEdit.Tools ", err);
 							})
 
-							$.when(dfdAreas, dfdTools).done(function(Areas, Tools){
+							var dfdToolDefs = this.loadToolDefs()
+							.fail(function(err){
+								AD.error.log("Error loading OPNavEdit.ToolDefinitions ", err);
+							})
+
+							$.when(dfdAreas, dfdTools, dfdToolDefs).done(function(Areas, Tools, ToolDefs){
 
 								var hashTools = {};
 								Tools.forEach(function(t){
@@ -255,11 +419,41 @@ steal(
 								})
 
 								// Load the Tool Editing Section
-								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:hashTools }, function(frag){
+								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:hashTools, toolDefs:ToolDefs }, function(frag){
 
 									_this.element.find('#op-masthead-sublinks').after(frag);
 									_this.dom.tools = _this.element.find('#op-navbar-edittools');
 									_this.dom.tools.hide();
+
+
+									var select = _this.dom.tools.find('.ops-navbar-tooldeflist');
+									ToolDefs.forEach(function(definition){
+										if (definition.key) {
+											var option = new Option(definition.key, definition.key);
+											select.append($(option));
+										}
+									})
+									select.on('change', function(ev){
+
+//// LEFT OFF HERE:
+// get selected tooldef
+// get currently selected Area
+// call method to create new tool instance
+// *** hope Area and tools update themselves with new tool instance.
+										
+console.log('changed:'+ select.val() );
+									})
+
+									_this.initSortTools();
+									_this.initToolPopups();
+
+
+									// perform the initial sort of the tool elements by weight.
+									_this.dom.tools.find('ul').each(function(i, ul){
+										$(ul).find('li').sort(function(a, b){
+											return $(a).data('weight') > $(b).data('weight');
+										}).appendTo(ul);
+									});
 
 								})
 							})
@@ -299,11 +493,11 @@ steal(
 
 
 						/**
-						 * @function initSort
+						 * @function initSortArea
 						 * setup the sortable menu area
 						 * @return {deferred}
 						 */
-						initSort:function(){
+						initSortAreaOld:function(){
 							var _this = this;
 
 							this.dom.area.find( ".sortableMenu" ).sortable({
@@ -364,6 +558,98 @@ steal(
 						 //    this.dom.area.find( ".sortableMenu" ).disableSelection();
 						},
 
+						sortList: function( el, axis, objKey ) {
+
+							var $list = $(el);
+							$list.sortable({
+								revert: true,
+								handle: '.sort-handle',
+								cursor: 'move', 
+								axis: axis,
+								start:function(ev, ui) {
+									// mark current position in list
+									ui.item.data('start_pos', ui.item.index());
+								},
+								update:function(event, ui) {
+									var start_pos = ui.item.data('start_pos');
+									var index  = ui.item.index();
+
+// 									var numItems = _this.dom.area.find('.sortableMenu li').length;
+// 									for(var i=1;i <= numItems; i++){
+// 							            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + i + ')').data('area');
+// 							            if (area) {
+// 							            	area.attr('weight', i);
+// console.log('    ... area:', area);
+// 							            }
+// 							        }
+
+									if (start_pos < index) {
+
+								        //update the items before the re-ordered item
+								        for(var i=index; i >= 0; i--){
+								            var obj = $list.find('li:nth-child(' + (i+1) + ')').data(objKey);
+								            if (obj) {
+								            	obj.attr('weight', i);
+								            	obj.save()
+								            	.fail(function(err){
+								            		AD.error.log('Error updating ['+objKey+'] Weight.', err);
+								            	})
+								            }
+								        }
+
+								    }else {
+
+										var numItems = $list.find('li').length;
+
+								        //update the items after the re-ordered item
+								        for(var i=index;i <= numItems; i++){
+								            var obj = $list.find('li:nth-child(' + (i+1) + ')').data(objKey);
+								            if (obj) {
+								            	obj.attr('weight', i);
+								            	obj.save()
+								            	.fail(function(err){
+								            		AD.error.log('Error updating ['+objKey+'] Weight.', err);
+								            	})
+								            }
+								        }
+								    }
+
+								}
+							});
+							
+						},
+
+
+						/**
+						 * @function initSortTools
+						 * setup the sortable menu area
+						 * @return {deferred}
+						 */
+						initSortArea:function(){
+							var _this = this;
+
+							this.dom.area.find( ".sortableMenu" ).each(function(indx, el){
+
+								_this.sortList(el, 'y', 'area');
+							})
+						},
+
+
+
+						/**
+						 * @function initSortTools
+						 * setup the sortable menu area
+						 * @return {deferred}
+						 */
+						initSortTools:function(){
+							var _this = this;
+
+							this.dom.tools.find( ".sortableMenu" ).each(function(indx, el){
+
+								_this.sortList(el, 'x', 'tool');
+							})
+						},
+
 
 						/**
 						 * @function loadAreas
@@ -401,7 +687,7 @@ steal(
 							var _this = this;
 
 							var Tools = AD.Model.get('opsportal.navigation.OPConfigTool');
-							Tools.findAll({})
+							Tools.findAll({ where:{}, sort:'weight'})
 							.fail(function(err){
 								dfd.reject(err);
 							})
@@ -410,6 +696,29 @@ steal(
 									if (l.translate) l.translate();
 								})
 								_this.data.listTools = list;
+								dfd.resolve(list);
+							});
+
+							return dfd;
+						},
+
+
+						/**
+						 * @function loadToolDefss
+						 * load the tool definitions from the server.
+						 * @return {deferred}
+						 */
+						loadToolDefs: function() {
+							var dfd = AD.sal.Deferred();
+							var _this = this;
+
+							var ToolDefs = AD.Model.get('opsportal.navedit.OPConfigToolDefinition');
+							ToolDefs.findAll({})
+							.fail(function(err){
+								dfd.reject(err);
+							})
+							.then(function(list){
+								_this.data.listToolDefs = list;
 								dfd.resolve(list);
 							});
 

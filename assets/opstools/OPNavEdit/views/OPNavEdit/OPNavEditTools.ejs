@@ -10,11 +10,10 @@
         <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none">
             <% can.each(area.tools, function(simpleTool, indx){ %>
                 <% var tool = hashTools[simpleTool.id] %>
-                <li>
+                <li <%= (el) -> can.data(el, 'tool', tool) %> data-weight="<%= tool.attr('weight') %>" >
                     <div class="sort-handle"><i class="fa fa-sort" aria-hidden="true"></i></div>
-                    <a class="toollink" href="#"><%= tool.attr('label') %></a>
-                    
-                    <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showbtmPopover" data-html="true" data-toggle="popover"aria-hidden="true"></i>
+                    <a class="toollink" ><%= tool.attr('label') %>(<%= tool.attr('weight') %>)</a>
+                    <i class="op-navbar-item-edit fa fa-pencil-square-o fa-2 showbtmPopover" data-html="true" data-toggle="popover" aria-hidden="true"></i>
                 </li>  
 
             <% }) %>               
@@ -25,12 +24,8 @@
         <ul class="ops-navbar-AddNewTool list-unstyled list-inline" style="display:none">
             <li>
               <div style="width:141px;float:left">
-                <select class="form-control">
-                  <option>Add new tool<option>
-                  <option value="two">tool 1</option>
-                  <option value="three">tool 2</option>
-                  <option value="four">tool 3</option>
-                  <option value="five">tool 4</option>
+                <select class="ops-navbar-tooldeflist form-control">
+                  <option selected="selected" >Add new tool<option>  
                 </select> 
               </div>
             </li>  

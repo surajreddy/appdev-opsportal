@@ -18,7 +18,7 @@ steal(function() {
 				//     "role_description" : [ 'notEmpty' ]
 				// },
 				fieldId: 'id',
-				fieldLabel: 'key'
+				fieldLabel: 'label'
 			}, {
 				// model: function() {
 				//     return AD.Model.get('DelMe.OPConfigArea'); //AD.models.DelMe.OPConfigArea;
