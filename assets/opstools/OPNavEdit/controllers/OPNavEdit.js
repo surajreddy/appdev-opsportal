@@ -45,6 +45,8 @@ steal(
 							this.events = {};
 							this.events.lastArea = null;
 
+							this.selectedArea = null;
+
 							this.initDOM();
 							this.initEvents();
 						},
@@ -293,7 +295,6 @@ steal(
 											.fail(function(err){
 												busySave.ready();
 												AD.error.log('Error saving Tool', {error:err});
-
 											})
 											.then(function(updatedTool){
 												if (isAdd) {
@@ -314,21 +315,41 @@ steal(
 						            // process [delete] click
 						            var buttonDelete = $cur_pop.find('.op-nav-button-del');
 						            var busyDelete = new AD.op.ButtonBusy(buttonDelete);
-						     //        buttonDelete.click(function(){
-						     //        	busyDelete.busy();
+						            buttonDelete.click(function(){
+						            	busyDelete.busy();
 
-						     //        	tool.destroy()
-						     //        	.fail(function(err){
-						     //        		busyDelete.ready();
-						     //        		AD.error.log('Error destroying Area', {error:err});
-						     //        	})
-						     //        	.then(function(){
-						            		
-						     //        		_this.initToolPopups();
-											// _this.initSortTools();
-						     //        		busyDelete.ready();
-						     //        	})
-						     //        })
+						            	tool.destroy()
+						            	.fail(function(err){
+						            		busyDelete.ready();
+						            		AD.error.log('Error destroying Tool', {error:err});
+						            	})
+						            	.then(function(){
+						            	
+//// LEFT OFF HERE:
+// delete not working properly
+// updates are not pushed to screen.
+// Areas.tools[] are being overwritten in Can.List instead of removing an element!
+var tools = _this.selectedArea.tools;
+tools.replace(tools.filter(function(t) {
+  return t.id === tool.id;
+}));
+						     //        		var Area = _this.selectedArea.model();
+											// Area.findOne({id:_this.selectedArea.id})
+											// .fail(function(err){
+											// 	console.error('Error reloading our selected Area:', err);
+											// })
+											// .then(function(area){
+											// 	console.log('... reloaded Area:', area);
+
+											// 	busyDelete.ready();
+											// 	$icon.click();
+
+											// 	_this.initToolPopups();
+											// 	_this.initSortTools();
+											// })
+
+						            	})
+						            })
 						        });
 
 
@@ -418,12 +439,18 @@ steal(
 									hashTools[t.id] = t;
 								})
 
+								var hashToolDefs = {};
+								ToolDefs.forEach(function(td){
+									hashToolDefs[td.key] = td;
+								})
+
 								// Load the Tool Editing Section
 								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:hashTools, toolDefs:ToolDefs }, function(frag){
 
 									_this.element.find('#op-masthead-sublinks').after(frag);
 									_this.dom.tools = _this.element.find('#op-navbar-edittools');
 									_this.dom.tools.hide();
+									// _this.dom.tools.append('<')
 
 
 									var select = _this.dom.tools.find('.ops-navbar-tooldeflist');
@@ -436,12 +463,53 @@ steal(
 									select.on('change', function(ev){
 
 //// LEFT OFF HERE:
-// get selected tooldef
-// get currently selected Area
-// call method to create new tool instance
-// *** hope Area and tools update themselves with new tool instance.
-										
-console.log('changed:'+ select.val() );
+// limit opnavedit/tooldef route to permission!										
+
+
+										var keyToolDef = select.val();
+										var selectedToolDef = hashToolDefs[keyToolDef];
+										if (_this.selectedArea) {
+
+											// tell the server to create the new tool and link it!
+											AD.comm.service.post({url:'/opnavedit/newtool', params:{ toolDef:keyToolDef, area:_this.selectedArea.key}})
+											.fail(function(err){
+												AD.error.log('Error created OPNavEdit.newTool', {error:err});
+											})
+											.then(function(results){
+
+												// get the new Tool Instances:
+												_this.loadTools()
+												.fail(function(err){
+													AD.error.log('Error loading Tools again!', {error:err});
+												})
+												.then(function(listTools){
+
+													// search our hashTools and add any new ones
+													listTools.forEach(function(t){
+														if (!hashTools[t.id]) {
+															hashTools[t.id] = t;
+														}
+													})
+
+													// try to manually reload this area
+													// the updated .tools[] will trigger the 
+													// change in the display.
+													var Area = _this.selectedArea.model();
+													Area.findOne({id:_this.selectedArea.id})
+													.fail(function(err){
+														console.error('Error reloading our selected Area:', err);
+													})
+													.then(function(area){
+														console.log('... reloaded Area:', area);
+														select.val('add.new.tool');
+													})
+													
+												})
+												
+											})
+
+										}
+
 									})
 
 									_this.initSortTools();
@@ -763,6 +831,10 @@ console.log('changed:'+ select.val() );
 
 							var area = $el.parent().data('area');
 							if (area) {
+
+								// remember the last selected area
+								this.selectedArea = area; 
+
 								// hide all area-tools sections
 								this.element.find('[area-tools]').hide();
 

@@ -25,10 +25,16 @@
 
   </div>
 
-  <button id="save" class="btn btn-primary op-nav-button-save pull-right"><i class="fa"></i><%== L('opnavedit.Save') %></button>
-  <button class="btn btn-primary op-nav-button-cancel pull-right" style="margin-right:10px"><%== L('opnavedit.Cancel') %></button>
-  <% if (!isAdd) { %>
-  <button class="btn btn-primary  op-nav-button-del" style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Delete') %></button>
-  <% } %>
+  <div style="text-align:right">
+
+    <% if (!isAdd) { %>
+    <button class="btn btn-primary  op-nav-button-del" style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Delete') %></button>
+    <% } %>
+
+    <button class="btn btn-primary op-nav-button-cancel " style="margin-right:10px"><%== L('opnavedit.Cancel') %></button>
+
+    <button id="save" class="btn btn-primary op-nav-button-save " style="margin-right:10px"><i class="fa"></i><%== L('opnavedit.Save') %></button>
+
+  </div>
   
 </div>

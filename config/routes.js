@@ -17,7 +17,8 @@ module.exports = {
 
 
     // OPNavEdit routes:
-
+    'post /opnavedit/newtool' : 'appdev-opsportal/OPNavEditController.newTool',
+    
 
 };
 

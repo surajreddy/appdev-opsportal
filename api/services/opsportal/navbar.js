@@ -359,24 +359,38 @@ var NavBar = module.exports = {
                         next();
                     } else {
 
-                        var fields = ['key', 'icon', 'isDefault', 'label', 'context', 'controller', 'isController', 'options'];
+                        var fields = ['key', 'icon', 'isDefault', 'label', 'controller', 'isController', 'options'];
                         var data = {};
                         fields.forEach(function(field) {
                             data[field] = navToolDef[field];
                         });
 // console.log('... data to create new toolInstance :', data);
-                        OPConfigTool.create(data)
-                        .exec(function(err, tool){ 
-                            if (err) {
-// console.log('... ERROR: creating toolInstance :', err);
-                                ADCore.error.log('OPSPortal.NavBar.Area.link() : error creating our Tool Instance :', {error:err, data:data });
-                                next(err);
-                            } else {
-// console.log('... toolInstance created:', tool);
-                                navTool = tool;
-                                next();
-                            }
-                        });                       
+                        
+                        Multilingual.model.create({
+                            model:OPConfigTool,
+                            data:data
+                        })
+                        .fail(function(err){
+                            ADCore.error.log('OPSPortal.NavBar.Area.link() : error creating our Tool Instance :', {error:err, data:data });
+                            next(err);
+                        })
+                        .then(function(tool){
+                            navTool = tool;
+                            next();
+                        })
+                        
+//                         OPConfigTool.create(data)
+//                         .exec(function(err, tool){ 
+//                             if (err) {
+// // console.log('... ERROR: creating toolInstance :', err);
+//                                 ADCore.error.log('OPSPortal.NavBar.Area.link() : error creating our Tool Instance :', {error:err, data:data });
+//                                 next(err);
+//                             } else {
+// // console.log('... toolInstance created:', tool);
+//                                 navTool = tool;
+//                                 next();
+//                             }
+//                         });                       
                     }
 
                 },
