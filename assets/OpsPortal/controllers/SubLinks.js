@@ -129,6 +129,15 @@ System.import('appdev').then(function () {
             },
 
 
+            sortLinks:function() {
+
+                this.element.find('ul').each(function(i, ul){
+                    $(ul).find('li').sort(function(a, b){
+                        return parseInt($(a).attr('data-weight')) > parseInt($(b).attr('data-weight'));
+                    }).appendTo(ul);
+                });
+            },
+
 
             /**
              * @function updateToolLink

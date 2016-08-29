@@ -93,6 +93,18 @@ steal(
                         },
 
 
+                        sortAreas:function() {
+
+                            // perform the initial sort of the tool elements by weight.
+                            this.element.find('#op-list-menu').each(function(i, ul){
+                                $(ul).find('li').sort(function(a, b){
+                                    return parseInt($(a).attr('data-weight')) > parseInt($(b).attr('data-weight'));
+                                }).appendTo(ul);
+                            });
+
+                        },
+
+
 
                         //  When a menu item is clicked
                         //'.opsportal-nav-list-item click' : function($el, ev) {

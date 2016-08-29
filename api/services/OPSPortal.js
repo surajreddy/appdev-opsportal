@@ -21,7 +21,7 @@ module.exports = {
 
 	Events:{
 		PERM_STALE:'opsportal.permission.stale', // event issued when any of the permission settings change
-		NAV_STALE: 'opsportal.navigation.stale'	// event issued when any of the navigation config entries are changed.
+		NAV_STALE: 'opsportal_navigation_stale'	// event issued when any of the navigation config entries are changed.
 	},
     
 

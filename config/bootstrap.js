@@ -22,8 +22,13 @@ module.exports = function (cb) {
     // ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE, function(message, data){
     //     OPSPortal.NavBar.cache.flush();
     // });
-    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,  OPSPortal.NavBar.cache.flush);
-    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE, OPSPortal.NavBar.cache.flush);
+    function flushNavBar () {
+        OPSPortal.NavBar.cache.flush();
+        sails.sockets.blast(OPSPortal.Events.NAV_STALE, {update:true});
+    }
+
+    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,  flushNavBar);
+    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE, flushNavBar);
 
 };
 

@@ -266,6 +266,21 @@ steal(
 
                             });
 
+
+                            // 
+                            // If the OpsPortal Navigation data has changed, we will attempt
+                            // to reload our Navigation data and update our display.
+                            //
+                            // If any of our OPNavEdit data is changed, the server will 
+                            // socket.blast('opsportal.nav.stale'), so we listen for that
+                            // and then request another OpsPortal configuration.
+                            //
+                            AD.comm.socket.subscribe('opsportal_navigation_stale', function(key, data){
+                            // io.socket.on('opsportal_navigation_stale', function(data){
+
+                                self.updateConfiguration();
+                            })
+
                         },
 
 
@@ -549,6 +564,7 @@ steal(
                                         }
                                         AD.ui.loading.completed(1);
                                     }
+                                    _this.menu.sortAreas();
 
 
                                     var defaultTool = {};
@@ -567,7 +583,8 @@ steal(
                                         if (newTool.isDefault) defaultTool[newTool.areas[0].key] = newTool;
                                         AD.ui.loading.completed(1);
                                     }
-                                    
+                                    _this.subLinks.sortLinks();
+
 
                                     // Create the User Profile tool
                                     // (special case which is accessible for all
@@ -694,6 +711,12 @@ steal(
                         },
 
 
+                        updateConfiguration: function () {
+console.log(' *** time to update our config!');
+                            this.menu.sortAreas();
+                            this.subLinks.sortLinks();
+
+                        },
 
                         //'.opsportal-menu-trigger-text click' : function( $el, ev) {
                         //'.opsportal-masthead a:first-of-type click' : function( $el, ev) {
