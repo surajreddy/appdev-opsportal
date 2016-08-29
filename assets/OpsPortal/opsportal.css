@@ -143,6 +143,8 @@ a:hover, a:visited {
 
 .op-css-center {text-align:center}
 
+.op-css-nooverflow { overflow:visible; }
+
 /*.opsportal-col-centered { float: none !important; margin: 0 auto !important; }*/
 /*.opsportal-launch-box { margin: 30px auto; padding: 30px 15px; }*/
 

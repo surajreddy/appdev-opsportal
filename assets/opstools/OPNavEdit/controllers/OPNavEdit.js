@@ -19,6 +19,7 @@ steal(
 
 						init: function(element, options) {
 							var self = this;
+							var _this = this;
 							options = AD.defaults({
 								templateDOMAreas: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreas.ejs',
 								templateDOMAreaForm: '/opstools/OPNavEdit/views/OPNavEdit/OPNavEditAreaForm.ejs',
@@ -36,6 +37,7 @@ steal(
 							this.data.listAreas = null;
 							this.data.listTools = null;
 							this.data.listToolDefs = null;
+							this.data.resize = null;	// our spacing calculations 
 
 							this.dom = {};
 							this.dom.area = null;
@@ -49,6 +51,10 @@ steal(
 
 							this.initDOM();
 							this.initEvents();
+
+							AD.comm.hub.subscribe('opsportal.resize', function(key, data){
+								_this.resize(data);
+							});
 						},
 
 
@@ -202,9 +208,6 @@ steal(
 
 
 
-
-
-
 						initToolPopups:function() {
 							var _this = this;
 
@@ -326,27 +329,17 @@ steal(
 						            	.then(function(){
 						            	
 //// LEFT OFF HERE:
-// delete not working properly
-// updates are not pushed to screen.
-// Areas.tools[] are being overwritten in Can.List instead of removing an element!
-var tools = _this.selectedArea.tools;
-tools.replace(tools.filter(function(t) {
-  return t.id === tool.id;
-}));
-						     //        		var Area = _this.selectedArea.model();
-											// Area.findOne({id:_this.selectedArea.id})
-											// .fail(function(err){
-											// 	console.error('Error reloading our selected Area:', err);
-											// })
-											// .then(function(area){
-											// 	console.log('... reloaded Area:', area);
+// Review:
+// - reorder Areas & auto update the display
+// - load with no entry in select, then add first entry dynamically + show the <i> 
+// 
+											var tools = _this.selectedArea.tools;
+											tools.replace(tools.filter(function(t) {
+											  return t.id !== tool.id;
+											}));
 
-											// 	busyDelete.ready();
-											// 	$icon.click();
-
-											// 	_this.initToolPopups();
-											// 	_this.initSortTools();
-											// })
+											_this.initToolPopups();
+											_this.initSortTools();
 
 						            	})
 						            })
@@ -366,14 +359,6 @@ tools.replace(tools.filter(function(t) {
 								});
 								
 							});
-
-							// // make sure the [+] Add button is initialized if it hasn't already been
-							// this.dom.area.find('.op-navbar-add:not([op-navbar-init])').each(function(indx, el){
-							// 	createAreaPopup({
-							// 		elIcon:el
-							// 	})
-							// })
-
 							
 						},
 
@@ -453,7 +438,12 @@ tools.replace(tools.filter(function(t) {
 									// _this.dom.tools.append('<')
 
 
+						            var busyIcon = _this.element.find('.ops-navbar-toolspinner');
+									var busyToolAdd = new AD.op.ButtonBusy(busyIcon.parent());
+
 									var select = _this.dom.tools.find('.ops-navbar-tooldeflist');
+									var defaultOption = new Option(AD.lang.label.getLabel('opnavedit.AddNewTool') || 'Add New Tool', "add.new.tool");
+									select.append(defaultOption);
 									ToolDefs.forEach(function(definition){
 										if (definition.key) {
 											var option = new Option(definition.key, definition.key);
@@ -465,6 +455,7 @@ tools.replace(tools.filter(function(t) {
 //// LEFT OFF HERE:
 // limit opnavedit/tooldef route to permission!										
 
+										busyToolAdd.busy();
 
 										var keyToolDef = select.val();
 										var selectedToolDef = hashToolDefs[keyToolDef];
@@ -473,6 +464,7 @@ tools.replace(tools.filter(function(t) {
 											// tell the server to create the new tool and link it!
 											AD.comm.service.post({url:'/opnavedit/newtool', params:{ toolDef:keyToolDef, area:_this.selectedArea.key}})
 											.fail(function(err){
+												busyToolAdd.ready();
 												AD.error.log('Error created OPNavEdit.newTool', {error:err});
 											})
 											.then(function(results){
@@ -483,6 +475,8 @@ tools.replace(tools.filter(function(t) {
 													AD.error.log('Error loading Tools again!', {error:err});
 												})
 												.then(function(listTools){
+
+													busyToolAdd.ready();
 
 													// search our hashTools and add any new ones
 													listTools.forEach(function(t){
@@ -502,6 +496,8 @@ tools.replace(tools.filter(function(t) {
 													.then(function(area){
 														console.log('... reloaded Area:', area);
 														select.val('add.new.tool');
+														_this.initToolPopups();
+
 													})
 													
 												})
@@ -528,6 +524,7 @@ tools.replace(tools.filter(function(t) {
 
 							this.dom.subLinks = this.element.find('#op-masthead-sublinks');
 
+							this.dom.stage = $(this.element.find('.op-stage')[0]);  
 
 
 						},
@@ -800,6 +797,70 @@ tools.replace(tools.filter(function(t) {
 						},
 
 
+						resize:function(data){
+							var _this = this;
+
+							if (data) {
+								this.lastResize = data;
+							}
+
+							function verticalAdjustments (el) {
+
+								// find padding of el
+								var $el = $(el);
+								var spacing = 0;
+								spacing += parseInt($el.css('padding-top'));
+								spacing += parseInt($el.css('padding-bottom'));
+
+								// for each child, calculate sum of outer margins
+								$el.children().each(function(i, child){
+									var $child = $(child);
+									spacing += parseInt($child.css('margin-top'));
+									spacing += parseInt($child.css('margin-bottom'));
+								})
+
+								return spacing
+							}
+
+							if (!this.doResize) {
+
+								// queue up a resize operation
+								setTimeout(function(){
+
+									if (!_this.data.resize) {
+
+										// should calculate our resize values!
+										_this.data.resize = {};
+										_this.data.resize.verticalSpacing = verticalAdjustments(_this.element.find('.op-navbar-lpanel'));
+										_this.data.resize.heightMenu = _this.element.find('.op-navbar-area-menu').outerHeight();
+									}
+									// // we need to resize our menu area.
+									// var verticalSpacing = verticalAdjustments(_this.element.find('.op-navbar-lpanel'));
+									// _this.heightMenu = _this.element.find('.op-navbar-area-menu').outerHeight();
+									if (_this.data.resize.heightMenu) {
+										var newHeight = (_this.lastResize.height - _this.data.resize.heightMenu)- _this.data.resize.verticalSpacing-2;
+
+// console.log('... verticalSpacing:' + _this.data.resize.verticalSpacing);
+// console.log('... newHeight:'+ newHeight);
+										_this.element.find('#op-navbar-left').css('height',  newHeight+'px');
+										_this.element.find('.op-navbar-lpanel').css('height', _this.lastResize.height);
+									} else {
+										// heightMenu isn't properly calculated yet, so rest our resize data
+										_this.data.resize = null;
+									}
+									_this.doResize = false;
+
+								}, 250);
+								this.doResize = true;
+							}
+
+
+// this._super(data);
+// console.log('... OPNavEdit.resize():', data);
+
+						},
+
+
 						/**
 						 * .op-navbar-editbutton click
 						 * What happens when the edit button is clicked.
@@ -815,6 +876,11 @@ tools.replace(tools.filter(function(t) {
 							this.dom.tools.show();
 							this.dom.tools.find('[area-tools]').hide();
 							this.element.find('.ops-navbar-AddNewTool').hide();
+
+
+							//// FIX: for Area List CSS squish
+							this.dom.stage.addClass('op-css-nooverflow ');
+							this.dom.stage.css('overflow-y', 'visible');
 
 							// close the slide in menu:
 							AD.ui.jQuery.sidr('close', 'op-menu-widget');
@@ -854,6 +920,10 @@ tools.replace(tools.filter(function(t) {
 						 */
 						'.op-navbar-save click' : function ($el, ev) {
 							var _this = this;
+
+							//// FIX: for Area List CSS squish
+							this.dom.stage.removeClass('op-css-nooverflow');
+							this.dom.stage.css('overflow-y', '');
 
 							this.dom.area.hide('slide', {direction: 'left'}, 400, function(){ 
 							

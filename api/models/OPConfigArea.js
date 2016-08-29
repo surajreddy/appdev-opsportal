@@ -67,6 +67,14 @@ migrate:'alter',
 
   afterDestroy: function(record, cb) {
     ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'destroyed'});
+    if (!_.isArray(record)) {
+      record = [record];
+    }
+
+    Multilingual.model.removeTranslations({ model:this, records:record })
+    .fail(function(err){
+      console.log('!!!! error .removeTranslation() ', err);
+    });
     cb();
   }
 };
