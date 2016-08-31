@@ -199,7 +199,7 @@ System.import('appdev').then(function () {
             '.op-masthead-nav-link click': function ($el, ev) {
 
                 var tool = $el.data('tool');
-                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.controller });
+                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.uuid });
                 ev.preventDefault();
             }
 

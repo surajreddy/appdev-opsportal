@@ -85,7 +85,7 @@ steal(
                         createTool: function (tool) {
 
                             // add a new tool area div
-                            var divKey = 'opsportal-area-tool-' + tool.controller;
+                            var divKey = 'opsportal-area-tool-' + tool.uuid; // tool.controller;
                             var data = {
                                 key: divKey
                             }
@@ -94,7 +94,7 @@ steal(
 
                             // attach the Tool controller to the new div
                             var newTool = new AD.controllers.OpsPortal.Tool(this.element.find('.' + divKey), {
-                                key: tool.controller,
+                                key: tool.uuid,   // tool.controller,
                                 areaKey: this.options.key,
                                 data: tool
                             });

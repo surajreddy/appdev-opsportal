@@ -577,6 +577,8 @@ steal(
 
                                         var newTool = data.tools[t];
 
+                                        newTool.uuid = 'tool'+AD.util.uuid();
+
                                         _this.subLinks.createLink(newTool);
                                         _this.workArea.createTool(newTool);
 
@@ -624,7 +626,7 @@ steal(
                                     for (var t in defaultTool) {
                                         AD.comm.hub.publish('opsportal.tool.show', {
                                             area: defaultTool[t].areas[0].key,
-                                            tool: defaultTool[t].controller
+                                            tool: defaultTool[t].uuid     // controller
                                         });
                                     }
 
