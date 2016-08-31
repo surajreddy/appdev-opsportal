@@ -66,12 +66,16 @@ module.exports = {
    *
    * the view template is located at: 
    * [sails]/views/appdev-opsportal/opsportal/requirements.ejs
+   *
+   * @param {array} ignore  an array of controller names that should be skipped
+   *                (most likely they are already loaded.)
    */
   requirements: function(req, res) {
 
 
       res.setHeader('content-type', 'application/javascript');
 
+      var ignoreList = req.param('ignore') || [];
 
       //// tools will be gathered from config/opsportal.js
       //// and matched against a user's permissions.
@@ -92,7 +96,11 @@ module.exports = {
           var c = data.tools[d];
 
           if (c.isController) {
-              tools.push(c.controller);
+
+              // if this controller hasn't been given before
+              if (ignoreList.indexOf(c.controller) == -1) {
+                  tools.push(c.controller);
+              }
           }
       }
 
@@ -101,7 +109,9 @@ module.exports = {
       // if the user has permission to access opsportal.opnavedit.view
       // also load the OPNavEdit controller.
       if (req.AD.user().hasPermission('opsportal.opnavedit.view')) {
-        tools.push('OPNavEdit');
+          if (ignoreList.indexOf('OPNavEdit') == -1) {
+             tools.push('OPNavEdit');
+          }
       }
 
 

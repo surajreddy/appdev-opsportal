@@ -104,7 +104,8 @@
 }
 
 .op-navbar-tool li{
-	display:block;
+	display:inline-block;
+	float: none;
 	min-width: 92px;
     border: 1px solid #fff;
     padding: 0;
@@ -121,7 +122,17 @@
 }
 
 
-.op-navbar-tool {margin-top:16px;}
+ul.op-navbar-tool {
+	margin-top:16px;
+	overflow: inherit !important;
+	/*display: block;
+	white-space: nowrap;
+	overflow-x: scroll;
+	width: 1200px;*/
+
+}
+
+
 
 .ops-navbar-tooldeflist {
 	min-width: 150px;
@@ -129,12 +140,15 @@
     display: inline-block;
     border: none;
     padding: 0;
-    margin-left: 3px;
+    margin-left: 15px;
 }
 
 .ops-navbar-toolspinner {
 	display: inline-block;
 	color: #fff;
+	position: absolute;
+	left: 0px;
+	top: 10px;
 }
 
 .sort-handle {

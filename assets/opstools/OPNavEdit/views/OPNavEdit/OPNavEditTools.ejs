@@ -8,7 +8,7 @@
 <div id="op-navbar-edittools" class="col-lg-11 col-xs-9" style="display:none">
 
     <% can.each(areas, function(area, indx){ %>
-        <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none">
+        <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none;">
             <% can.each(area.tools, function(simpleTool, indx){ %>
                 <% var tool = hashTools[simpleTool.id] %>
                 <% if (tool) { %>
@@ -31,8 +31,9 @@
         
         <ul class="ops-navbar-AddNewTool list-unstyled list-inline" style="display:none">
             <li>
-              <div style="float:left">
-                <i class="ops-navbar-toolspinner fa" ></i>
+              
+              <div style="float:left;padding-right:15px">
+                <i class="ops-navbar-toolspinner fa"></i>
                 <select class="ops-navbar-tooldeflist form-control">
                   <!-- <option selected="selected" value="add.new.tool" ><%== L('opnavedit.AddNewTool') %><option>  --> 
                 </select> 

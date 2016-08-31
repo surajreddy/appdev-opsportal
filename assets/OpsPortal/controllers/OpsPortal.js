@@ -713,9 +713,17 @@ steal(
 
                         updateConfiguration: function () {
 console.log(' *** time to update our config!');
+                            
+// steal('opsportal/requirements.js'); 
                             this.menu.sortAreas();
                             this.subLinks.sortLinks();
-
+//// LEFT OFF HERE:
+// get current requirements, then request new requirements (ignore current)
+//
+// now request another config
+// find missing areas and create
+// find missing tools, and create
+// 
                         },
 
                         //'.opsportal-menu-trigger-text click' : function( $el, ev) {
