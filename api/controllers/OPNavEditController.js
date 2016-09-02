@@ -15,9 +15,9 @@ module.exports = {
 		var keyToolDef = req.param('toolDef');
 		var permissions = null;
 
-console.log('... newTool:');
-console.log('    -> toolDef:'+keyToolDef);
-console.log('    -> area:'+keyArea);
+// console.log('... newTool:');
+// console.log('    -> toolDef:'+keyToolDef);
+// console.log('    -> area:'+keyArea);
 
 		async.series([
 
@@ -30,7 +30,7 @@ console.log('    -> area:'+keyArea);
                 	} else {
                 		if ((defs) && (defs.length>0)) {
                 			permissions = defs[0].permissions;
-console.log('    -> permissions:'+permissions);
+// console.log('    -> permissions:'+permissions);
                 			next();
                 		} else {
 

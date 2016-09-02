@@ -551,6 +551,7 @@ var NavBar = module.exports = {
 
 
             ],function(err){
+                ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:navTool, verb:'created'});
                 if (err) {
                     if (cb) cb(err);
                     dfd.reject(err);

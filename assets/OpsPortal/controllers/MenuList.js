@@ -63,7 +63,7 @@ steal(
                             if (this.data.areas) {
 
                                 var area = this.data.areaHash[areaData.key];
-                            
+
                                 this.element.find('.op-widget-body > ul')
                                 //this.element.find('#op-list-menu')
                                     .append(can.view(this.options.templateItem, { area: area }));
@@ -75,11 +75,20 @@ steal(
                             }
                         },
 
+
                         loadAreas: function(list) {
                             var _this = this;
                             this.data.areas = list;
                             list.forEach(function(area){
                                 _this.data.areaHash[area.key] = area;
+                            })
+
+                            // every time a new item is added to this list
+                            // create a Hash entry for our view lookups.
+                            list.bind('add', function(a,newAreas,c,d,e){
+                                newAreas.forEach(function(area){
+                                    _this.data.areaHash[area.key] = area;
+                                })
                             })
                         },
 
@@ -90,6 +99,19 @@ steal(
                                 baseURL: AD.config.getValue('siteBaseURL') || ''
                             }));
 
+                        },
+
+
+                        removeArea: function (areaData) {
+                            // console.log(area);
+
+                            if (this.data.areas) {
+                                var area = this.data.areaHash[areaData.key];
+                                this.element.find('li[area="'+area.key+'"]').remove();
+
+                            } else {
+                                console.error('MenuList.removeArea() called before our loadAreas()!');
+                            }
                         },
 
 

@@ -54,18 +54,14 @@ module.exports = {
   /**
    * get /opsportal/requirements
    *
-   * returns a javascript file that dynamically loads the opstools
-   * required for the users view of the opsportal.
+   * returns a list of controllers that need to be loaded by the OpsPortal
    *
    * the user's opstools needed is compiled in the policy: 
    * api/policies/OpsPortalUserConfig.js and stored in 
    * res.appdev.opsportalconfig
    *
    * Here we parse out the controllers that need to load and return
-   * them as a series of System.import('opstools/'+controller) commands.
-   *
-   * the view template is located at: 
-   * [sails]/views/appdev-opsportal/opsportal/requirements.ejs
+   * them as a series of controller names.  
    *
    * @param {array} ignore  an array of controller names that should be skipped
    *                (most likely they are already loaded.)
@@ -83,8 +79,8 @@ module.exports = {
 
       // NOTE: api/policies/OpsPortalUserConfig.js
       // compiles this information into res.appdev.opsportalconfig
-      //
-      
+
+
       /*
             var tools = [
                          'HrisAdminObjects'
@@ -114,12 +110,11 @@ module.exports = {
           }
       }
 
-
-      res.view({
+      res.AD.success({          
           environment:sails.config.environment,
-          listTools:tools,
-          layout:false
+          listTools:tools
       });
+
   },
 
 

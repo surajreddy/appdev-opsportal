@@ -28,12 +28,35 @@ steal(
                 'appdev/ad',
                 'appdev/control/control',
                 'appdev/comm/socket',
+                'appdev/comm/service',
                 'appdev/labels/lang'
             // ).then(
             // 'js/jquery.sidr.min.js',
             // ).then(
                 ).then(function () {
-                    steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
+
+                    var ____op_loaded_controllers = [];
+                    function loadRequirements() {
+                        // steal('opsportal/requirements.js'); // this returns the steal() for loading each OpsTool
+               
+                        return AD.comm.service.get({
+                            url:'/opsportal/requirements.js',
+                            params:{ ignore:____op_loaded_controllers }
+                        })
+                        .fail(function(err){
+                            AD.error.log('Error loading requirements.', {error:err});
+                        })
+                        .then(function(data){
+                            data.listTools.forEach(function(tool){
+                                ____op_loaded_controllers.push(tool);
+                                System.import("opstools/"+tool);
+                            })
+                            return data;
+                        })
+                    }
+                    loadRequirements();
+
+
                     System.import('opstools/UserProfile');
                     
                     // make sure $ is defined:
@@ -209,6 +232,9 @@ steal(
 
                             this.data = {};
                             this.data.listAreas = null;
+                            this.data.lastConfig = null;        // the last opsportal/config received
+                            this.data.loadedControllers = [];   // the list of controllers already loaded.
+                            this.data.updateInProgress = false; // is there a current config update in progress?
 
                             this.elOptions();                   // search the attached element for config options.
 
@@ -281,6 +307,67 @@ steal(
                                 self.updateConfiguration();
                             })
 
+                        },
+
+
+
+                        createArea:function(newArea, cb) {
+                            var _this = this;
+
+                            // the step to actually create the Area
+                            function doAdd() {
+                                _this.menu.createArea(newArea);
+                                _this.subLinks.createArea(newArea);
+                                _this.workArea.createArea(newArea);
+
+                                if (cb) cb();
+                            }
+
+
+                            // first make sure the newArea already exists in 
+                            // the definitions we loaded from the server:
+                            var isFound = false;
+                            this.data.listAreas.forEach(function(area){
+                                if (area.key == newArea.key) {
+                                    isFound = true;
+                                }
+                            })
+
+                            // if it is already there, then just add it.
+                            if (isFound) {
+                                doAdd();
+                            } else {
+
+                                // else, gotta look up the new Area
+                                var OPConfigArea = AD.Model.get('opsportal.navigation.OPConfigArea');
+                                OPConfigArea.findAll({key:newArea.key})
+                                .fail(function(err){
+                                    AD.error.log('Error finding new OPConfigArea by key.', {error:err, key:newArea.key });
+                                    if (cb) cb(err);
+                                })
+                                .then(function(list){
+                                    list.forEach(function(l){
+                                        if (l.translate) l.translate();
+                                        _this.data.listAreas.push(l);
+                                    })
+                                    doAdd();
+                                })
+                            }
+                            
+                        },
+
+
+
+                        /**
+                         * Step through each of our sub systems to create a Tool:
+                         *     
+                         * @return {nil} no return value
+                         */
+                        createTool:function(newTool) {
+
+                            // newTool.uuid = 'tool'+AD.util.uuid();
+                            this.subLinks.createLink(newTool);
+                            this.workArea.createTool(newTool);
                         },
 
 
@@ -444,7 +531,6 @@ steal(
 
                                 })
                                 _this.data.listAreas = list;
-
                                 _this.menu.loadAreas(list);
 
                                 dfd.resolve(list);
@@ -496,6 +582,34 @@ steal(
 
 
 
+                        /**
+                         * Step through each of our sub systems to remove an Area
+                         *     
+                         * @return {nil} no return value
+                         */
+                        removeArea:function(oldArea) {
+
+                            this.menu.removeArea(oldArea);
+                            this.subLinks.removeArea(oldArea);
+                            this.workArea.removeArea(oldArea);
+
+                        },
+
+
+
+                        /**
+                         * Step through each of our sub systems to remove a Tool
+                         *     
+                         * @return {nil} no return value
+                         */
+                        removeTool:function(oldTool) {
+
+                            this.subLinks.removeLink(oldTool);
+                            this.workArea.removeTool(oldTool);
+                        },
+
+
+
                         resize: function () {
 
                             // The size we report to our Tools is window.height - masthead.height
@@ -527,7 +641,9 @@ steal(
 
                             AD.comm.service.get({ url:'/opsportal/config' }, function (err, data) {
                                 
-                                self.isFeedbackEnabled = data.feedback || false;
+                                _this.data.lastConfig = data;
+
+                                _this.isFeedbackEnabled = data.feedback || false;
                                 
                                 AD.ui.loading.completed(1);  // just to show we have loaded the config.
                                 if (err) {
@@ -535,7 +651,7 @@ steal(
 
                                     // what to do here?
                                     var label = AD.lang.label.getLabel('opp.errorNoPermission') || ' You don\'t have permission.  Ask your administrator to grant you access. ';
-                                    self.initDOMError(label)
+                                    _this.initDOMError(label)
 
                                 } else {
 
@@ -555,9 +671,7 @@ steal(
 
                                         var newArea = data.areas[a];
 
-                                        _this.menu.createArea(newArea);
-                                        _this.subLinks.createArea(newArea);
-                                        _this.workArea.createArea(newArea);
+                                        _this.createArea(newArea);
 
                                         if (newArea.isDefault) {
                                             defaultArea = newArea;
@@ -577,10 +691,10 @@ steal(
 
                                         var newTool = data.tools[t];
 
-                                        newTool.uuid = 'tool'+AD.util.uuid();
+                                        _this.data.loadedControllers.push(newTool.controller);
 
-                                        _this.subLinks.createLink(newTool);
-                                        _this.workArea.createTool(newTool);
+                                        _this.createTool(newTool);
+                                        
 
                                         if (newTool.isDefault) defaultTool[newTool.areas[0].key] = newTool;
                                         AD.ui.loading.completed(1);
@@ -592,19 +706,19 @@ steal(
                                     // (special case which is accessible for all
                                     //  users and has no top-left menu item)
                                     setTimeout(function() {
-                                        self.workArea.createArea({
+                                        _this.workArea.createArea({
                                             icon: 'fa-cogs',
                                             key: 'UserProfile',
                                             label: 'User Profile',
                                             isDefault: false,
                                         });
-                                        self.workArea.listAreas.UserProfile.createTool({
+                                        _this.workArea.listAreas.UserProfile.createTool({
                                             area: 'UserProfile',
                                             controller: 'UserProfile',
                                             label: 'User Profile',
                                             isDefault: true,
                                         });
-                                        self.workArea.listAreas.UserProfile.element.hide();
+                                        _this.workArea.listAreas.UserProfile.element.hide();
                                         AD.comm.hub.publish('opsportal.tool.show', {
                                             area: 'UserProfile',
                                             tool: 'UserProfile',
@@ -616,7 +730,7 @@ steal(
                                     //// all tools should be created now
 
                                     // make sure they all have resize()ed
-                                    self.resize();
+                                    _this.resize();
 
                                     // notify of our default Area:
                                     // there can be only 1 ...
@@ -626,24 +740,24 @@ steal(
                                     for (var t in defaultTool) {
                                         AD.comm.hub.publish('opsportal.tool.show', {
                                             area: defaultTool[t].areas[0].key,
-                                            tool: defaultTool[t].uuid     // controller
+                                            tool: defaultTool[t].id     // controller
                                         });
                                     }
 
 
                                     // once everything is created, tell the menu slider to attach itself
-                                    self.portalPopup.find('#op-masthead-menu a:first-of-type').sidr({ name: 'op-menu-widget', side: 'left' });
+                                    _this.portalPopup.find('#op-masthead-menu a:first-of-type').sidr({ name: 'op-menu-widget', side: 'left' });
 
 
                                     // now show the Link to open the OpsPortal
-                                    self.initDOM();
+                                    _this.initDOM();
 
-                                    AD.lang.label.translate(self.element);  // translate the OpsPortal task list
+                                    AD.lang.label.translate(_this.element);  // translate the OpsPortal task list
 
 
 
                                     // wait for all tools to finish loading
-                                    self.workArea.ready()
+                                    _this.workArea.ready()
                                     .fail(function(err){
                                         AD.error.log('... workArea.ready()  failed!', err);
                                     })
@@ -656,18 +770,18 @@ steal(
                                         // wait for all tools to be loaded before 
                                         // loading any portal-theme, so this one has final
                                         // say!
-                                        if (self.options['portal-theme'] != '') {
+                                        if (_this.options['portal-theme'] != '') {
 
-                                            var theme = self.options['portal-theme']+'.css';
+                                            var theme = _this.options['portal-theme']+'.css';
                                             steal(theme);
                                             
                                         }
 
                                         // if our auto open setting is set, then 
-                                        if (self.options['portal-autoenter']) {
+                                        if (_this.options['portal-autoenter']) {
 
                                             // auto click the Enter link:
-                                            self.element.find('.op-masthead a:first-of-type').click();
+                                            _this.element.find('.op-masthead a:first-of-type').click();
                                         }
                                         
                                     })
@@ -714,18 +828,125 @@ steal(
 
 
                         updateConfiguration: function () {
-console.log(' *** time to update our config!');
-                            
-// steal('opsportal/requirements.js'); 
-                            this.menu.sortAreas();
-                            this.subLinks.sortLinks();
-//// LEFT OFF HERE:
-// get current requirements, then request new requirements (ignore current)
-//
-// now request another config
-// find missing areas and create
-// find missing tools, and create
-// 
+                            var _this = this;
+
+                            if (!this.data.updateInProgress) {
+                                this.data.updateInProgress = true;
+
+
+                                // NOTE: in the process of editing a Nav Configuration
+                                // multiple changes will be fired and multiple 
+                                // .updateConfigurations() will be called.
+                                //
+                                // However, an immediate call to /opsportal/config
+                                // will rebuild the config before all possible config 
+                                // updates are in place.  
+                                //
+                                // This timeout is an attempt to give the server some time
+                                // to make all the updates before requesting a new config.
+                                setTimeout(function(){
+
+                                    loadRequirements();
+
+                                    AD.comm.service.get({ url:'/opsportal/config' })
+                                    .fail(function(err){
+                                        AD.error.log('Error reloading opsportal/config', {error:err});
+                                    })
+                                    .then(function(newConfig){
+
+                                        function difference(a, b, field) {
+                                            // what is in a that is not in b:
+                                            var diff = [];
+                                            field = field || 'id';
+
+                                            a.forEach(function(iA) {
+                                                var isThere = false;
+                                                b.forEach(function(iB){
+                                                    if (iA[field] == iB[field]) {
+                                                        isThere = true;
+                                                    }
+                                                })
+                                                if (!isThere) {
+                                                    diff.push(iA);
+                                                }
+                                            })
+
+                                            return diff;
+                                        }
+                                        var newAreas = difference(newConfig.areas, _this.data.lastConfig.areas, 'key');
+                                        var missingAreas = difference(_this.data.lastConfig.areas, newConfig.areas, 'key');
+
+
+                                        var newTools = difference(newConfig.tools, _this.data.lastConfig.tools, 'id');
+                                        var missingTools = difference(_this.data.lastConfig.tools, newConfig.tools, 'id');
+
+
+
+                                        // NOTE: .createArea() is now Async, so make sure it completes
+                                        // before calling the rest.
+                                        //
+                                        // newAreas.forEach(function(area){
+                                        //     _this.createArea(area);
+                                        // });
+
+
+                                        // a recursive fn to process each item in a given list:
+                                        function recurseAreas(list, cb) {
+                                            if (list.length == 0) {
+                                                cb();
+                                            } else {
+                                                var curr = list.shift();
+                                                _this.createArea(curr, function(err){
+                                                    if (err) cb(err)
+                                                    else {
+                                                        recurseAreas(list, cb);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        recurseAreas(newAreas, function(err){
+                                        
+
+                                            if (err) {
+
+                                                // ???
+                                                // not sure what to do here.
+                                                console.log('... OpsPortal.Navigation update failed:', err);
+
+                                            } else {
+
+
+                                                // remove tools before you remove their Area:
+                                                missingTools.forEach(function(tool){
+                                                    _this.removeTool(tool);
+                                                });
+
+
+                                                missingAreas.forEach(function(area){
+                                                    _this.removeArea(area);
+                                                });
+
+                                                // Make sure you add new Tools after you create the 
+                                                // new Areas
+                                                newTools.forEach(function(tool){
+                                                    _this.createTool(tool);
+                                                });
+
+
+
+                                                _this.menu.sortAreas();
+                                                _this.subLinks.sortLinks();
+
+                                                _this.data.lastConfig = newConfig;
+                                                _this.data.updateInProgress = false;
+                                            }
+
+                                        });
+                                    })
+
+                                }, 1000);
+
+                            }
                         },
 
                         //'.opsportal-menu-trigger-text click' : function( $el, ev) {

@@ -107,12 +107,29 @@ System.import('appdev').then(function () {
                 if (tool.translate) tool.translate();
 
                 var areaKey = tool.areas[0].key;
-
                 var area = this.areaLinks[areaKey]; 
                 if (area) {
                     area.append(can.view('OpsPortal_SubLinks_Item', { tool: tool }));
                 }
 
+            },
+
+
+
+            removeArea: function (area) {
+                // console.log(area);
+
+                this.element.find('[area="' + area.key + '"]').remove();
+                delete this.areaLinks[area.key];
+
+            },
+
+
+
+            removeLink: function (tool) {
+                // console.log(area);
+
+                this.element.find('[op-tool-id="' + tool.id + '"]').remove();
             },
 
 
@@ -199,7 +216,7 @@ System.import('appdev').then(function () {
             '.op-masthead-nav-link click': function ($el, ev) {
 
                 var tool = $el.data('tool');
-                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.uuid });
+                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.id });
                 ev.preventDefault();
             }
 

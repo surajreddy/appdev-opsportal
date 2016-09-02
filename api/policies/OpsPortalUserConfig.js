@@ -26,7 +26,6 @@ module.exports = function(req, res, next) {
 
     } else {
 
-
         var config = sails.config.opsportal;
 
         OPConfigArea.find().populateAll()
@@ -58,7 +57,7 @@ module.exports = function(req, res, next) {
                     // res.appdev.opsportalconfig
                     if (!res.appdev) res.appdev = {};
                     res.appdev.opsportalconfig = data;
-console.log('... opsportal config data:', data);
+
                     OPSPortal.NavBar.cache(user.GUID(), data);
                     next();
 
