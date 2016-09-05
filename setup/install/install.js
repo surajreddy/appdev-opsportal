@@ -851,7 +851,9 @@ var createPermission = function(done) {
 
 	function createToolInstance( def, defInstance, done) {
 
-		var condition = {label: defInstance.label, context:defInstance.context, controller:defInstance.controller};
+		var condition = { controller:defInstance.controller }; // OPConfigTool is now multilingual.
+		// var condition = { label: defInstance.label, context:defInstance.context,  controller:defInstance.controller};
+
 // console.log('... '+def.key+': condition to search for toolInstances:', condition);
 // console.log();
 
@@ -873,22 +875,28 @@ var createPermission = function(done) {
 					verifyInstanceActions(def, tools[0], done);
 				} else {
 
-					var fields = ['key', 'icon', 'isDefault', 'label', 'context', 'controller', 'isController', 'options'];
+					var fields = ['key', 'icon', 'isDefault', 'label', 'controller', 'isController', 'options'];
 					var data = {};
 					fields.forEach(function(field) {
 						data[field] = defInstance[field];
 					});
 // console.log('... '+def.key+': data to create new toolInstance :', data);
-					OPConfigTool.create(data)
-					.exec(function(err, tool){ 
-						if (err) {
-// console.log('... '+def.key+': ERROR: creating toolInstance :', err);
-							done(err);
-						} else {
-// console.log('... '+def.key+': toolInstance created:', tool);
-							verifyInstanceActions(def, tool, done);
-						}
-					});
+					OPConfigTool.createMultilingual(data)
+					.fail(function(err){
+						done(err);
+					})
+					.then(function(tool){
+						verifyInstanceActions(def, tool, done);
+					})
+// 					.exec(function(err, tool){ 
+// 						if (err) {
+// // console.log('... '+def.key+': ERROR: creating toolInstance :', err);
+// 							done(err);
+// 						} else {
+// // console.log('... '+def.key+': toolInstance created:', tool);
+// 							verifyInstanceActions(def, tool, done);
+// 						}
+// 					});
 				}
 			}
 		})
