@@ -950,9 +950,11 @@ var createDefaultAdminArea = function(done) {
 // AD.log('... hashPermissions:', hashPermissions);
 
 				next();
+				return null;
 			})
 			.catch(function(err){
 				next(err);
+				return null;
 			})
 		}, 
 

@@ -47,7 +47,7 @@ module.exports = {
      * the OPConfigTool entry can overwrite this for the tool instance.
      */
     label : { type: 'string' },
-    context : { type: 'string' },
+    // context : { type: 'string' },
 
 
     /*
