@@ -76,6 +76,10 @@ migrate:'alter',
       console.log('!!!! error .removeTranslation() ', err);
     });
     cb();
+  },
+
+  createMultilingual: function(data) {
+    return Multilingual.model.create({ model: OPConfigArea, data: data });
   }
 };
 

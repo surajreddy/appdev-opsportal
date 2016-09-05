@@ -71,6 +71,10 @@ migrate:'alter',
   afterDestroy: function(record, cb) {
     ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:record, verb:'destroyed'});
     cb();
+  },
+
+  createMultilingual: function(data) {
+    return Multilingual.model.create({ model: OPConfigTool, data: data });
   }
 };
 

@@ -973,8 +973,7 @@ var createDefaultAdminArea = function(done) {
 				key:'site-default-admin',
 				icon:'fa-cogs',
 				isDefault:0,
-				label:'opp.areaAdministration',
-				context:'opsportal'
+				label:'Administration'
 			}
 
 			OPConfigArea.find({key: adminSpace.key})
@@ -993,17 +992,25 @@ var createDefaultAdminArea = function(done) {
 
 					} else {
 
-						OPConfigArea.create(adminSpace)
-						.exec(function(err, area){
-							if (err){
-								next(err);
-							} else {
-// AD.log('::::: area:', area);
-								defaultArea = area;
-// AD.log('... created defaultArea:', defaultArea);
-								next();
-							}
+						OPConfigArea.createMultilingual(adminSpace)
+						.fail(function(err){
+							next(err);
 						})
+						.then(function(area){
+							defaultArea = area;
+							next();
+						})
+// 						OPConfigArea.create(adminSpace)
+// 						.exec(function(err, area){
+// 							if (err){
+// 								next(err);
+// 							} else {
+// // AD.log('::::: area:', area);
+// 								defaultArea = area;
+// // AD.log('... created defaultArea:', defaultArea);
+// 								next();
+// 							}
+// 						})
 
 					}
 				}
