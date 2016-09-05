@@ -7,25 +7,36 @@ module.exports = [
 
     { 
         key:'opsportal.rbac', 
-        permissions:'adcore.admin, adcore.developer, opsportal.rbac.view', 
+        permissions:'opsportal.rbac.view', 
         icon:'fa-users', 
-        label:'opp.toolPermissions', 
-        context:'opsportal', 
+        label:'Ops Portal Permissions', 
+        // context:'opsportal', 
         controller:'RBAC', 
         isController:true, 
         options:{}, 
         version:'0' 
-    // },
-    // { 
-    //     key:'opsportal.theme', 
-    //     permissions:'adcore.admin, adcore.developer, opsportal.theme.view', 
-    //     icon:'fa-file-image-o', 
-    //     label:'opp.toolTheme', 
-    //     context:'opsportal', 
-    //     controller:'OPTheme', 
-    //     isController:true, 
-    //     options:{}, 
-    //     version:'0' 
+    },
+    { 
+        key:'opsportal.theme', 
+        permissions:'opsportal.theme.view', 
+        icon:'fa-file-image-o', 
+        label:'Ops Portal Theme', 
+        // context:'opsportal', 
+        controller:'OPTheme', 
+        isController:true, 
+        options:{}, 
+        version:'0' 
+    },
+    { 
+        key:'opsportal.navigation', 
+        permissions:'opsportal.opnavedit.view', 
+        icon:'fa-compass', 
+        label:'Ops Portal Navigation', 
+        // context:'opsportal', 
+        controller:'OPNavEdit', 
+        isController:true, 
+        options:{}, 
+        version:'0' 
     }
 
 

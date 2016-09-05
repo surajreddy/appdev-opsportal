@@ -359,7 +359,7 @@ var NavBar = module.exports = {
                         next();
                     } else {
 
-                        var fields = ['key', 'icon', 'isDefault', 'label', 'controller', 'isController', 'options'];
+                        var fields = ['key', 'icon', 'isDefault', 'label', /*'controller',*/ 'isController', 'options'];
                         var data = {};
                         fields.forEach(function(field) {
                             data[field] = navToolDef[field];
