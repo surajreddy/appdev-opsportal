@@ -631,7 +631,16 @@ var createScope = function(done) {
  */
 var verifyActions = function(done) {
 
-	var actionKeys = ['opsportal.view', 'adcore.admin'];
+	// these are the default 
+	var actionKeys = ['opsportal.view', 'adcore.admin' ];
+
+	// make sure all our default OpsPortal tools are accessable to our Admin user:
+	var defaultOpsTools = require(path.join(__dirname, '..', 'opstools', 'opstools.js'))
+	if (defaultOpsTools) {
+		defaultOpsTools.forEach(function(tool){
+			actionKeys.push(tool.permissions);
+		})
+	}
 
 	// if environment is not production then make sure 'adcore.developer' exists as well.
 	if (!Data.isProduction) {
