@@ -27,17 +27,6 @@ module.exports = [
     //     options:{}, 
     //     version:'0' 
     // },
-    { 
-        key:'opsportal.navigation', 
-        permissions:'opsportal.opnavedit.view', 
-        icon:'fa-compass', 
-        label:'Ops Portal Navigation', 
-        // context:'opsportal', 
-        controller:'OPNavEdit', 
-        isController:true, 
-        options:{}, 
-        version:'0' 
-    }
 
 
 ];

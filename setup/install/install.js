@@ -632,13 +632,13 @@ var createScope = function(done) {
 var verifyActions = function(done) {
 
 	// these are the default 
-	var actionKeys = ['opsportal.view', 'adcore.admin' ];
+	var actionKeys = [ 'adcore.admin' ];
 
-	// make sure all our default OpsPortal tools are accessable to our Admin user:
-	var defaultOpsTools = require(path.join(__dirname, '..', 'opstools', 'opstools.js'))
-	if (defaultOpsTools) {
-		defaultOpsTools.forEach(function(tool){
-			actionKeys.push(tool.permissions);
+	// make sure all our default OpsPortal action permissions are assigned to our Admin user:
+	var defaultOpsActions = require(path.join(__dirname, '..', 'permissions', 'actions.js'))
+	if (defaultOpsActions) {
+		defaultOpsActions.actions.forEach(function(action){
+			actionKeys.push(action.action_key);
 		})
 	}
 
