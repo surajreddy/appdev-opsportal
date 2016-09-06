@@ -34,12 +34,8 @@ module.exports = {
         },
         { 
             action_key:'opsportal.theme.view', 
-            action_description:'Allows the user to access the theme builder.' 
-        },
-        // { 
-        //     action_key:'adcore.permission.test2', 
-        //     action_description:'Just for Testing' 
-        // }
+            action_description:'Allows the user to edit the Ops Portal Theme Editor.' 
+        }
     ]
 
 };
