@@ -34,10 +34,15 @@ module.exports = {
 
   _config: {},
 
-  // Fixture Data:
-  // Use this for initial design and testing
+
   /**
-   * GET /opsportal/config
+   * get /opsportal/config
+   *
+   * returns the JSON description of the OPs Portal layout 
+   * for the current user.
+   *
+   * the actual JSON is compiled in the policy: 
+   * api/policies/OpsPortalUserConfig.js and stored in res.appdev.opsportalconfig
    */
   config:function(req, res) {
       
@@ -47,13 +52,26 @@ module.exports = {
 
 
   /**
-   * GET /appdev/config/data.js
+   * get /opsportal/requirements
+   *
+   * returns a list of controllers that need to be loaded by the OpsPortal
+   *
+   * the user's opstools needed is compiled in the policy: 
+   * api/policies/OpsPortalUserConfig.js and stored in 
+   * res.appdev.opsportalconfig
+   *
+   * Here we parse out the controllers that need to load and return
+   * them as a series of controller names.  
+   *
+   * @param {array} ignore  an array of controller names that should be skipped
+   *                (most likely they are already loaded.)
    */
   requirements: function(req, res) {
 
 
       res.setHeader('content-type', 'application/javascript');
 
+      var ignoreList = req.param('ignore') || [];
 
       //// tools will be gathered from config/opsportal.js
       //// and matched against a user's permissions.
@@ -61,8 +79,8 @@ module.exports = {
 
       // NOTE: api/policies/OpsPortalUserConfig.js
       // compiles this information into res.appdev.opsportalconfig
-      //
-      
+
+
       /*
             var tools = [
                          'HrisAdminObjects'
@@ -74,16 +92,29 @@ module.exports = {
           var c = data.tools[d];
 
           if (c.isController) {
-              tools.push(c.controller);
+
+              // if this controller hasn't been given before
+              if (ignoreList.indexOf(c.controller) == -1) {
+                  tools.push(c.controller);
+              }
           }
       }
-      
-      
-      res.view({
+
+
+      // Special Requirement: OPNavEdit
+      // if the user has permission to access opsportal.opnavedit.view
+      // also load the OPNavEdit controller.
+      if (req.AD.user().hasPermission('opsportal.opnavedit.view')) {
+          if (ignoreList.indexOf('OPNavEdit') == -1) {
+             tools.push('OPNavEdit');
+          }
+      }
+
+      res.AD.success({          
           environment:sails.config.environment,
-          listTools:tools,
-          layout:false
+          listTools:tools
       });
+
   },
 
 

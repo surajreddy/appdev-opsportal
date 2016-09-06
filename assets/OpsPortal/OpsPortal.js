@@ -76,7 +76,8 @@ function loadBootstrapPlugins() {
         'feedback/feedback.min.css',
         'feedback/feedback.min',
         
-        'site/labels/OpsPortal'
+        'site/labels/OpsPortal',
+        'site/labels/OpNavEdit'
         )
         .then(function () {
             setupSocket();

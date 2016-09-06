@@ -50,6 +50,7 @@ var Main = function() {
 	    verifyActions,
 	    associateRoleToActions,
 	    createPermission,
+	    createDefaultAdminArea,   	// create an admin area in the OpsPortal
 	    markComplete
 //// TODO: insert system version in system DB table
 
@@ -630,7 +631,16 @@ var createScope = function(done) {
  */
 var verifyActions = function(done) {
 
-	var actionKeys = ['opsportal.view', 'adcore.admin'];
+	// these are the default 
+	var actionKeys = ['opsportal.view', 'adcore.admin' ];
+
+	// make sure all our default OpsPortal tools are accessable to our Admin user:
+	var defaultOpsTools = require(path.join(__dirname, '..', 'opstools', 'opstools.js'))
+	if (defaultOpsTools) {
+		defaultOpsTools.forEach(function(tool){
+			actionKeys.push(tool.permissions);
+		})
+	}
 
 	// if environment is not production then make sure 'adcore.developer' exists as well.
 	if (!Data.isProduction) {
@@ -743,6 +753,349 @@ var createPermission = function(done) {
 	
 }
 
+
+	//// 
+	//// Extra Utility Fn() for the createDefaultAdminArea() step.
+	////
+
+	function linkToAdminSpace (def, toolInstance, done) {
+
+		var defaultArea = def.__defaultArea;
+// console.log('... '+def.key+': defaultArea to Link to:', defaultArea);
+
+		var isFound = false;
+		toolInstance.areas.forEach(function(area){
+			if (area.id == defaultArea.id) {
+				isFound = true;
+			}
+		});
+
+		// if instance is already found to be connected to the defaultArea:
+		if (isFound) {
+// console.log('... '+def.key+': looks like toolInstance already linked to defaultArea');
+			// we're done.
+			done();
+
+		} else {
+
+			toolInstance.areas.add(defaultArea);
+			toolInstance.save(function(err, nti){
+				if (err) {
+					done(err);
+				} else {
+// console.log('... '+def.key+': linked toolInstance to defaultArea');
+					done();
+				}
+			})
+		}
+	}
+
+
+
+	function verifyInstanceActions(def, toolInstance, done) {
+
+		var actionsToAdd = [];
+
+		// figure out which actions are currently in the toolInstance
+		var currentActionHash = {};
+		toolInstance.permissions.forEach(function(action){
+			currentActionHash[action.action_key] = action;
+		});
+// console.log('... '+def.key+': currentActionHash:', currentActionHash);
+		// figure out which actions in our definition we are missing
+		var desiredActions = def.permissions.split(',');
+		desiredActions.forEach(function(dA){
+			dA = dA.trim();
+			if (!currentActionHash[dA]) {
+				actionsToAdd.push(dA);
+			}
+		})
+
+// console.log('... '+def.key+': actions to add:', actionsToAdd);
+		if (actionsToAdd.length == 0) {
+// console.log('... '+def.key+': nothing to add,  --> linkToAdminSpace');
+			// nothing to add, so continue on
+			linkToAdminSpace(def, toolInstance, done);
+		} else {
+
+			// Gather all those action instnaces
+			PermissionAction.find({action_key:actionsToAdd})
+			.exec(function(err, foundActions){
+				if (err) {
+					done(err);
+				} else {
+
+					if (foundActions.length == 0) {
+
+// console.log('... '+def.key+': wanted to add these permission actions:', actionsToAdd);
+// console.log('... '+def.key+':    -> but did not find them in the PermissionAction model!');
+
+						// nothing to add, so continue on
+						linkToAdminSpace(def, toolInstance, done);
+
+					} else {
+
+
+						// now add each of those actions to our toolInstance
+						foundActions.forEach(function(fA){
+							toolInstance.permissions.add(fA);
+						})
+
+						// and save it.
+						toolInstance.save(function(err, newToolInstance){
+							if (err) {
+								done(err);
+							} else {
+// console.log('... '+def.key+': foundActions added:', foundActions);
+								// move on to linking the toolInstance to the AdminSpace
+								linkToAdminSpace(def, toolInstance, done);
+							}
+						})
+					}
+				}
+			})
+		}
+	}
+
+
+	function createToolInstance( def, defInstance, done) {
+
+		var condition = { controller:defInstance.controller }; // OPConfigTool is now multilingual.
+		// var condition = { label: defInstance.label, context:defInstance.context,  controller:defInstance.controller};
+
+// console.log('... '+def.key+': condition to search for toolInstances:', condition);
+// console.log();
+
+		OPConfigTool.find(condition)
+		.populateAll()
+		.exec(function(err, tools) {
+
+			if (err) {
+// console.log('... '+def.key+': ERROR: finding existing toolInstances :', err);
+				done(err);
+			} else {
+
+// console.log('... '+def.key+': tools found matching our example:', tools);
+
+				if ((tools) && (tools.length > 0)) {
+// console.log('... '+def.key+': toolInstance already matches our def:', tools);
+// console.log('... '+def.key+': moving to verifyInstanceActions');
+					// instance exists
+					verifyInstanceActions(def, tools[0], done);
+				} else {
+
+					var fields = ['key', 'icon', 'isDefault', 'label', 'controller', 'isController', 'options'];
+					var data = {};
+					fields.forEach(function(field) {
+						data[field] = defInstance[field];
+					});
+// console.log('... '+def.key+': data to create new toolInstance :', data);
+					OPConfigTool.createMultilingual(data)
+					.fail(function(err){
+						done(err);
+					})
+					.then(function(tool){
+						verifyInstanceActions(def, tool, done);
+					})
+// 					.exec(function(err, tool){ 
+// 						if (err) {
+// // console.log('... '+def.key+': ERROR: creating toolInstance :', err);
+// 							done(err);
+// 						} else {
+// // console.log('... '+def.key+': toolInstance created:', tool);
+// 							verifyInstanceActions(def, tool, done);
+// 						}
+// 					});
+				}
+			}
+		})
+	}
+
+
+	var createToolDef = function(def, done) {
+
+		OPConfigToolDefinition.create(def)
+		.exec(function(err, tool) {
+
+			if (err) {
+// console.log('... '+def.key+': ERROR: creating new toolDef :', err);
+				done(err);
+			} else {
+// console.log('... '+def.key+': created new toolDef :', tool);
+
+				createToolInstance(def, tool, done);
+
+			}
+		});
+
+	}
+
+
+/**
+ * @function createDefaultAdminArea
+ *
+ * Setup the default OpsPortal Areas for an Administrator.
+ *
+ */
+var createDefaultAdminArea = function(done) {
+
+// AD.log('... createDefaultAdminArea:');
+
+	var hashPermissions = {};		// hash of action.key : {action obj}
+	var hashDefinitions = {};		// hash of toolDefinition.key : {Tool Definition obj}
+	var defaultArea 	= null;		// the Admin OpsPortal Area
+	var tooldefs 		= null;		// all tools defined by the OpsPortal 
+
+	async.series([
+
+		// load all the current Action Permissions:
+		function(next){
+
+			PermissionAction.find()
+			.then(function(actions){
+				actions.forEach(function(action){
+					hashPermissions[action.action_key] = action;
+				})
+// AD.log('... hashPermissions:', hashPermissions);
+
+				next();
+				return null;
+			})
+			.catch(function(err){
+				next(err);
+				return null;
+			})
+		}, 
+
+
+		// load all the current ToolDefinitions:
+		function(next){
+
+			OPConfigToolDefinition.find()
+			.then(function(definitions){
+				definitions.forEach(function(definition){
+					hashDefinitions[definition.key] = definition;
+				})
+// AD.log('... hashDefinitions:', hashDefinitions);
+
+				next();
+			})
+			.catch(function(err){
+				next(err);
+			})
+		}, 
+
+
+		// create the Admin Space:
+		function(next) {
+			var adminSpace = {
+				key:'site-default-admin',
+				icon:'fa-cogs',
+				isDefault:0,
+				label:'Administration'
+			}
+
+			OPConfigArea.find({key: adminSpace.key})
+			.populateAll()
+			.exec(function(err, area){
+
+				if (err){ 
+					next(err);
+				} else {
+
+					if ((area) && (area.length > 0)) {
+// AD.log('::::: area:', area);
+						defaultArea = area[0];
+// AD.log('... found defaultArea:', defaultArea);
+						next();
+
+					} else {
+
+						OPConfigArea.createMultilingual(adminSpace)
+						.fail(function(err){
+							next(err);
+						})
+						.then(function(area){
+							defaultArea = area;
+							next();
+						})
+// 						OPConfigArea.create(adminSpace)
+// 						.exec(function(err, area){
+// 							if (err){
+// 								next(err);
+// 							} else {
+// // AD.log('::::: area:', area);
+// 								defaultArea = area;
+// // AD.log('... created defaultArea:', defaultArea);
+// 								next();
+// 							}
+// 						})
+
+					}
+				}
+			})
+
+		},
+
+
+		// load in the opsportal tooldefs
+		function(next) {
+			var pathDefs = path.join(__dirname, '..', 'opstools','opstools.js');
+			toolDefs = require(pathDefs);
+// AD.log('... toolDefs: ', toolDefs);
+
+			next();
+		},
+
+
+		// for each toolDef
+		function(next){
+
+
+			var numDone = 0;
+			var onDone = function(err){
+				if (err) {
+					next(err);
+				} else {
+					numDone ++;
+					if (numDone >= toolDefs.length) {
+						next();
+					}
+				}
+			}
+
+
+
+			// Process:
+			// for each tool definition:
+			// 		createToolDef -> createToolInstance -> verifyInstanceActions -> linkToAdminSpace -> onDone
+			toolDefs.forEach(function(def){
+
+				//// NOTE:  because I created these external fn() to handle each step, 
+				////        I now have to send in the defaultArea
+				////        
+				def.__defaultArea = defaultArea;
+
+				// if already created
+				if (hashDefinitions[def.key]) {
+// console.log('... '+def.key+': already has definition -> jump to createToolInstance');
+					// jump to createToolInstance
+					createToolInstance(def, hashDefinitions[def.key], onDone);
+
+				} else {
+
+					// create tool
+					createToolDef(def, onDone);
+				}
+
+			});
+		}
+
+	], function(err, results){
+		done(err);
+	});
+
+}
 
 
 /**

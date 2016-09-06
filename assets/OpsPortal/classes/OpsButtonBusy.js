@@ -82,14 +82,18 @@ System.import('can').then(function () {
 
 
                 disable: function () {
-                    this.element.attr('disabled', 'disabled');
-                    this.element.addClass('disabled');
+                    if (this.element) {
+                        this.element.attr('disabled', 'disabled');
+                        this.element.addClass('disabled');
+                    }
                 },
 
 
                 enable: function () {
-                    this.element.removeAttr('disabled');
-                    this.element.removeClass('disabled');
+                    if(this.element) {
+                        this.element.removeAttr('disabled');
+                        this.element.removeClass('disabled');
+                    }
                 },
 
 

@@ -71,6 +71,80 @@ a:hover, a:visited {
 	opacity: 1; 
 	border: 0;
 }
+
+
+
+.op-css-lbl-title {font-size:15px;line-height:15px;}
+
+.op-css-lbl-title span {font-size:12px; font-style:italic}
+
+
+.op-css-nopadLR {
+	padding-left:0 !important;
+	padding-right:0 !important; 
+}
+
+.op-css-nopadR {padding-right:0}
+.op-css-nopadL {padding-left:0}
+
+.op-css-nomargintop {margin-top:0}
+
+.op-css-nomargin {
+	margin-left:0 !important;
+	margin-right:0 !important;
+	}
+
+
+.op-css-off-top20 {margin-top:20px;}
+
+.op-css-off-botm5 {
+	margin-bottom:5px;
+}
+
+.op-css-off-botm10 {
+	margin-bottom:10px;
+}
+
+.op-css-off-botm50 {
+	margin-bottom:50px !important;
+}
+
+.op-css-off-botm10 {
+	margin-bottom:10px;
+}
+
+.op-css-off-botm8 {
+	margin-bottom:8px;
+}
+
+.op-css-padtop20 {
+	padding-top: 20px;
+}
+
+.op-css-padtop2 {
+	padding-top: 2px;
+}
+
+.op-css-padleft5 {padding-left:5px;}
+
+.op-css-padtop10 {
+	padding-top: 10px;
+}
+
+.op-css-padtop15 {
+	padding-top: 15px !important;
+}
+
+.op-css-padbot15 { padding-bottom:15px !important;}
+
+.op-css-padbot10 { padding-bottom:10px !important;}
+	
+.op-css-padbot55 { padding-bottom:55px !important;}
+
+.op-css-center {text-align:center}
+
+.op-css-nooverflow { overflow:visible; }
+
 /*.opsportal-col-centered { float: none !important; margin: 0 auto !important; }*/
 /*.opsportal-launch-box { margin: 30px auto; padding: 30px 15px; }*/
 
@@ -101,12 +175,12 @@ the .op-widget class can contain a .op-widget-masthead class, a .op-widget-body 
 
 #op-masthead-menu { 
 	float: left;
-	width: 50%;
+/*	width: 50%; */
 }
 
 #op-masthead-nav { 
 	float: right; 
-	width: 50%;
+	width: 94%;
 }
 #op-masthead-nav ul { 
 	position: relative; 

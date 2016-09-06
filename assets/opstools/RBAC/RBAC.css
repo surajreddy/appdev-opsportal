@@ -7,6 +7,7 @@
 */
 
 /* Reset user-agent styles */
+/*
 * {
   margin: 0;
   padding: 0;
@@ -25,10 +26,11 @@ p {font-size:14px;}
 
 
 th, label {
-/*	color:#5D95D5;*/
 	font-size:14px;
 	font-weight:normal;	
 }
+
+*/
 
 .nobgcolor {background-color:transparent !important;}
 .align-left { text-align:left;}
@@ -223,7 +225,7 @@ th, label {
 
 .center {text-align:center}
 
-.btn {
+/*.btn {
 	border-radius: 3px !important;
 
 }
@@ -245,7 +247,7 @@ a:focus {
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
 	display: inline-block;
 	padding: 4px 6px;
-	margin-bottom: 10px;
+	margin-bottom: 10px; 
 	font-size: 14px;
 	line-height: 20px;
 	color: #555555;
@@ -253,7 +255,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-}
+}*/
 
 .wrapper {top:74px}
 
@@ -320,14 +322,14 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 /* OVERIDE FROM OTHER CSS FILES */
 
-.badge {
+/*.badge {
 	border-radius:50%;
 	padding:5px;
 	position:relative;
 	bottom:12px;
-	}
+	}*/
 
-.op-list li a {
+li.rbac-menu a {
 	opacity:1;
 }	
 

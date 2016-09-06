@@ -2,6 +2,8 @@ System.import('appdev').then(function () {
     steal.import(
         'appdev/ad',
         'appdev/control/control',
+        'appdev/model/model',
+        'appdev/sal/web-jquery',
         'appdev/comm/socket'
         ).then(function () {
 
@@ -97,12 +99,37 @@ System.import('appdev').then(function () {
 
             createLink: function (tool) {
 
-                var area = this.areaLinks[tool.area];
-                if (area) {
-                    area.append(can.view('OpsPortal_SubLinks_Item', { tool: tool }));
-
+                if (!tool.attr) {
+                    var Model = AD.Model.get('opsportal.navigation.OPConfigTool');
+                    tool = new Model(tool);
                 }
 
+                if (tool.translate) tool.translate();
+
+                var areaKey = tool.areas[0].key;
+                var area = this.areaLinks[areaKey]; 
+                if (area) {
+                    area.append(can.view('OpsPortal_SubLinks_Item', { tool: tool }));
+                }
+
+            },
+
+
+
+            removeArea: function (area) {
+                // console.log(area);
+
+                this.element.find('[area="' + area.key + '"]').remove();
+                delete this.areaLinks[area.key];
+
+            },
+
+
+
+            removeLink: function (tool) {
+                // console.log(area);
+
+                this.element.find('[op-tool-id="' + tool.id + '"]').remove();
             },
 
 
@@ -118,6 +145,15 @@ System.import('appdev').then(function () {
                 }
             },
 
+
+            sortLinks:function() {
+
+                this.element.find('ul').each(function(i, ul){
+                    $(ul).find('li').sort(function(a, b){
+                        return parseInt($(a).attr('data-weight')) > parseInt($(b).attr('data-weight'));
+                    }).appendTo(ul);
+                });
+            },
 
 
             /**
@@ -180,7 +216,7 @@ System.import('appdev').then(function () {
             '.op-masthead-nav-link click': function ($el, ev) {
 
                 var tool = $el.data('tool');
-                AD.comm.hub.publish('opsportal.tool.show', { area: tool.area, tool: tool.controller });
+                AD.comm.hub.publish('opsportal.tool.show', { area: tool.areas[0].key, tool: tool.id });
                 ev.preventDefault();
             }
 

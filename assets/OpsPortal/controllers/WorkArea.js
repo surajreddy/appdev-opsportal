@@ -50,6 +50,11 @@ steal(
                         },
 
 
+                        areaKey: function(area) {
+                            return 'opsportal-area-' + area.key;
+                        },
+
+
 
                         /**
                          * createArea
@@ -63,7 +68,7 @@ steal(
                         createArea: function (area) {
 
                             // add a new tool area div
-                            var areaKey = 'opsportal-area-' + area.key;
+                            var areaKey = this.areaKey(area); 
                             var data = {
                                 key: areaKey
                             }
@@ -78,6 +83,15 @@ steal(
 
                             // remember this area.
                             this.listAreas[area.key] = newArea;
+                        },
+
+
+                        createTool: function(tool) {
+                            var areaKey = tool.areas[0].key;
+                            var toolArea = this.listAreas[areaKey];
+                            if (toolArea){
+                                toolArea.createTool(tool);
+                            }
                         },
 
 
@@ -106,7 +120,38 @@ steal(
                             })
 
                             return dfd;
-                        }
+                        },
+
+
+
+                        /**
+                         * removeArea
+                         *
+                         * Removes the given ToolArea that matches the provided 
+                         * area description.
+                         *
+                         * @param {obj} area   the announced area definition.
+                         *                      { key:'AreaString' }
+                         */
+                        removeArea: function (area) {
+
+                            // remove the tool area div
+                            var areaKey = this.areaKey(area);
+                            this.element.find('div[area="'+areaKey+'"]').remove();
+
+                            // forget this area.
+                            delete this.listAreas[area.key];
+                        },
+
+
+
+                        removeTool: function(tool) {
+                            var areaKey = tool.areas[0].key;
+                            var toolArea = this.listAreas[areaKey];
+                            if (toolArea){
+                                toolArea.removeTool(tool);
+                            }
+                        },
                         
 
 

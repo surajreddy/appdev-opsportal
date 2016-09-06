@@ -93,21 +93,21 @@ System.import('can').then(function () {
                         if (typeof AD.controllers.opstools == 'undefined') AD.controllers.opstools = {};
                 
 
-                        // first lets figure out our namespacing:
-                        // Question: do we actually allow namespacing? 'HrisUserProfile.subTool.subsubTool'
-                        var nameList = name.split('.');
+                        // // first lets figure out our namespacing:
+                        // // Question: do we actually allow namespacing? 'HrisUserProfile.subTool.subsubTool'
+                        // var nameList = name.split('.');
 
-                        // for each remaining name segments, make sure we have a 
-                        // namespace container for it:
-                        var curr = AD.controllers.opstools;
-                        nameList.forEach(function (name) {
+                        // // for each remaining name segments, make sure we have a 
+                        // // namespace container for it:
+                        // var curr = AD.controllers.opstools;
+                        // nameList.forEach(function (name) {
 
-                            if (typeof curr[name] == 'undefined') {
-                                curr[name] = {};
-                            }
-                            curr = curr[name];
-                        })
-
+                        //     if (typeof curr[name] == 'undefined') {
+                        //         curr[name] = {};
+                        //     }
+                        //     curr = curr[name];
+                        // })
+                        var curr = _parseName(name);
 
                         // now let's create our final control:
                         // We subclass the UIController here so our UI controllers have
@@ -115,7 +115,35 @@ System.import('can').then(function () {
                         curr.Tool = AD.classes.opsportal.OpsTool.extend(staticDef, instanceDef);
                         can.extend(curr.Tool.prototype, can.event); // they are event emitters
 
+                    },
+
+
+                    get: function(name) {
+
+                        var curr = _parseName(name);
+                        return curr.Tool;
                     }
+                }
+
+
+                function _parseName(name) {
+
+                    // first lets figure out our namespacing:
+                    // Question: do we actually allow namespacing? 'HrisUserProfile.subTool.subsubTool'
+                    var nameList = name.split('.');
+
+                    // for each remaining name segments, make sure we have a 
+                    // namespace container for it:
+                    var curr = AD.controllers.opstools;
+                    nameList.forEach(function (name) {
+
+                        if (typeof curr[name] == 'undefined') {
+                            curr[name] = {};
+                        }
+                        curr = curr[name];
+                    })
+
+                    return curr;
                 }
 
             }

@@ -33,6 +33,17 @@ module.exports = {
 	//// or ... do we want that too? 
 	
     '/opsportal/requirements' : [ 'opsportal.view' ],
-    '/opsportal/config' : [ 'opsportal.view' ]
+    '/opsportal/config' : [ 'opsportal.view' ],
+
+    //// Blueprints: OpConfigArea, OpConfigTool
+    'get /appdev-opsportal/opconfigarea' : [ 'opsportal.view' ],	// everyone can get opconfigarea
+    '/appdev-opsportal/opconfigarea' : [ 'opsportal.opnavedit.view' ],  // must have opnavedit to do any other action to opconfigarea
+
+    'get /appdev-opsportal/opconfigtool' : [ 'opsportal.view' ],	// everyone can get opconfigtools
+    '/appdev-opsportal/opconfigtool' : [ 'opsportal.opnavedit.view' ],  // must have opnavedit to do any other action to opconfigarea
+
+
+    // OPNavEdit: routes:
+    '/opnavedit/' : [ 'opsportal.opnavedit.view' ]
 
 };

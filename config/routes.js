@@ -16,12 +16,15 @@ module.exports = {
     'post /opsportal/feedback': 'appdev-opsportal/OpsPortalController.feedback',
 
 
+
     // OPTheme Routes
     'get  /optheme' 		: 'appdev-opsportal/OPThemeController.list',
     'post /optheme' 		: 'appdev-opsportal/OPThemeController.create',
     'post /optheme/default' : 'appdev-opsportal/OPThemeController.default',
-    'get  /optheme/theme'	: 'appdev-opsportal/OPThemeController.theme' 
-    
+    'get  /optheme/theme'	: 'appdev-opsportal/OPThemeController.theme', 
 
+
+    // OPNavEdit routes:
+    'post /opnavedit/newtool' : 'appdev-opsportal/OPNavEditController.newTool'
 };
 

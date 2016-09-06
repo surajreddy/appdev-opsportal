@@ -17,14 +17,14 @@
 		    <!-- sublinks -->
 		    <div class="col-lg-11 col-md-11 col-xs-9" id="op-masthead-sublinks">
                 <ul class="list-unstyled list-inline" area="[[= area.key ]]">
-                    <li class="active" op-tool="[[= tool.controller ]]"><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- AD.lang.label.getLabelSpan({ key: tool.label, context:tool.context }) ]]</a></li>
+                    <li class="active" op-tool="[[= tool.controller ]]" data-weight="[[= tool.attr('weight') ]]" op-tool-id="[[= tool.id ]]" ><a href="#" class="op-masthead-nav-link" role="button" obj-embed="tool">[[- tool.attr('label') ]]</a></li>
                     <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 2</a></li>
                     <li class="mockup"><a href="#" class="" role="button" obj-embed="tool">Sublink 3</a></li>
                 </ul>
             </div>
             
             <!-- user options icon -->
-            <div class="dropdown col-lg-1 col-md-1 col-xs-3">
+            <div id="op-masthead-user" class="dropdown col-lg-1 col-md-1 col-xs-3">
                 <a id="user-options-icon" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-user fa-2x" id=""></i>
                 </a>
