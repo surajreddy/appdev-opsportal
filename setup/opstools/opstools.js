@@ -16,17 +16,17 @@ module.exports = [
         options:{}, 
         version:'0' 
     },
-    { 
-        key:'opsportal.theme', 
-        permissions:'opsportal.theme.view', 
-        icon:'fa-file-image-o', 
-        label:'Ops Portal Theme', 
-        // context:'opsportal', 
-        controller:'OPTheme', 
-        isController:true, 
-        options:{}, 
-        version:'0' 
-    },
+    // { 
+    //     key:'opsportal.theme', 
+    //     permissions:'opsportal.theme.view', 
+    //     icon:'fa-file-image-o', 
+    //     label:'Ops Portal Theme', 
+    //     // context:'opsportal', 
+    //     controller:'OPTheme', 
+    //     isController:true, 
+    //     options:{}, 
+    //     version:'0' 
+    // },
     { 
         key:'opsportal.navigation', 
         permissions:'opsportal.opnavedit.view', 
