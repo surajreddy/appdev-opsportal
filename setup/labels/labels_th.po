@@ -365,3 +365,63 @@ msgstr "[th]add"
 msgid "Cancel*"
 msgstr "[th]Cancel*"
 
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Add
+msgid "Add"
+msgstr "[th]Add"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Save
+msgid "Save"
+msgstr "[th]Save"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Edit
+msgid "Edit"
+msgstr "[th]Edit"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Delete
+msgid "Delete"
+msgstr "[th]Delete"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Cancel
+msgid "Cancel"
+msgstr "[th]Cancel"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.MenuItemProperties
+msgid "Menu Area Properties"
+msgstr "[th]Menu Area Properties"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Label
+msgid "Label"
+msgstr "[th]Label"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.Icons
+msgid "Icons"
+msgstr "[th]Icons"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.ex
+msgid "ex"
+msgstr "[th]ex"
+
+#. path: opsportal
+#. code: th
+#. key: opnavedit.NewArea
+msgid "New Area"
+msgstr "[th]New Area"
+
