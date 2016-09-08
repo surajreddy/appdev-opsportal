@@ -45,14 +45,14 @@ steal(
                             this.listTools = {};
 
 
-                            // listen for new tool notifications.
-                            AD.comm.hub.subscribe('opsportal.tool.new', function (key, data) {
+                            // // listen for new tool notifications.
+                            // AD.comm.hub.subscribe('opsportal.tool.new', function (key, data) {
 
-                                // if this tool is for my area, then create it.
-                                if (self.options.key == data.area) {
-                                    self.createTool(data);
-                                }
-                            });
+                            //     // if this tool is for my area, then create it.
+                            //     if (self.options.key == data.area) {
+                            //         self.createTool(data);
+                            //     }
+                            // });
 
 
                             // listen for area show notifications.
@@ -85,7 +85,7 @@ steal(
                         createTool: function (tool) {
 
                             // add a new tool area div
-                            var divKey = 'opsportal-area-tool-' + tool.controller;
+                            var divKey = this.keyTool(tool); // tool.controller;
                             var data = {
                                 key: divKey
                             }
@@ -94,14 +94,14 @@ steal(
 
                             // attach the Tool controller to the new div
                             var newTool = new AD.controllers.OpsPortal.Tool(this.element.find('.' + divKey), {
-                                key: tool.controller,
+                                key: tool.id,   // tool.controller,
                                 areaKey: this.options.key,
                                 data: tool
                             });
 
 
                             // remember this tool.
-                            this.listTools[tool.controller] = newTool;
+                            this.listTools[tool.id] = newTool;
                         },
 
 
@@ -109,7 +109,53 @@ steal(
                         initDOM: function () {
 
                             this.element.html(can.view(this.options.templateDOM, {}));
-                        }
+                        },
+
+
+                        keyTool:function(tool){
+                            return 'opsportal-area-tool-' + tool.id;
+                        },
+
+
+                        ready: function() {
+                            var dfd = AD.sal.Deferred();
+                            var _this = this;
+
+                            var allToolsReady = [];
+                            for (var k in this.listTools) {
+                                allToolsReady.push(this.listTools[k].ready());
+                            }
+
+                            $.when.apply(null, allToolsReady)
+                            .fail(function(err){
+                                dfd.reject(err);
+                            })
+                            .then(function(){
+                                dfd.resolve();
+                            })
+
+                            return dfd;
+                        },
+
+
+
+                        /**
+                         * removeTool
+                         *
+                         * Remove a Tool within our ToolArea.
+                         *
+                         * @param {obj} tool   the tool definition to remove.
+                         *                      { controller:'ToolControllerName' }
+                         */
+                        removeTool: function (tool) {
+
+                            // remove our tool's <div>
+                            var divKey = this.keyTool(tool); // tool.controller;
+                            this.element.find('.'+divKey).remove();
+
+                            // forget about this tool.
+                            delete this.listTools[tool.id];
+                        },
 
 
                     });

@@ -47,6 +47,8 @@ module.exports = {
         "font-awesome.css": "styles/font-awesome.css",  // "http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
         "GenericList": "js/GenericList.js",
 
+"load-image" : "js/load-image.all.min.js",
+"exif" : "js/exif.js",
 
         "dropzone": "js/dropzone/dropzone.min.js",
         "dropzone.css": "js/dropzone/dropzone.min.css",
@@ -167,9 +169,18 @@ module.exports = {
 			"format": "global",
 			"sideBundle": true
 		},
+    "js/load-image.all.min": {
+      "format": "global",
+      "sideBundle": true
+    },
+    "js/exif": {
+      "exports": "EXIF",
+      "format": "global",
+      "sideBundle": true
+    },
 		"js/dropzone/dropzone.min": {
-            "exports": "Dropzone",
-			"deps": ['js/dropzone/dropzone.min.css'],
+      "exports": "Dropzone",
+			"deps": ['js/dropzone/dropzone.min.css', 'js/exif' ],
 			"format": "global",
 			"sideBundle": true
 		},
@@ -221,6 +232,7 @@ module.exports = {
 				"bootstrap-table",
 				"bootstrapValidator",
 				"bootbox",
+				"dropzone",
 
 				'js/GenericList',
 

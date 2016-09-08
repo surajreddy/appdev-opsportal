@@ -74,17 +74,20 @@ System.import('can').then(function () {
 
                     resize: function (data) {
 
-                        // the outer height of my .op-widget should be: data.height
-                        this.element.css("height", data.height + "px");
-                
-                
-                        // the height of our body section  should be the height of our widget - mastHead - footer
-             
-                        var footerHeight = this.element.find(".op-widget-footer").outerHeight(true);
+                        if (data) {
+                            
+                            // the outer height of my .op-widget should be: data.height
+                            this.element.css("height", data.height + "px");
+                    
+                    
+                            // the height of our body section  should be the height of our widget - mastHead - footer
+                 
+                            var footerHeight = this.element.find(".op-widget-footer").outerHeight(true);
 
-                        var mastheadHeight = this.element.find(".op-widget-masthead").outerHeight(true);
+                            var mastheadHeight = this.element.find(".op-widget-masthead").outerHeight(true);
 
-                        this.element.find('.op-widget-body').css("height", (data.height - mastheadHeight - footerHeight) + "px");
+                            this.element.find('.op-widget-body').css("height", (data.height - mastheadHeight - footerHeight) + "px");
+                        }
                     }
 
 

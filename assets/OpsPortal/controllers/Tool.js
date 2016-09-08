@@ -50,10 +50,12 @@ steal(
                             this.isActive = false;      // is our tool the active one?
                             this.isAreaActive = false;  // is our area the active area?
 
+                            this.dfdReady = AD.sal.Deferred(); // when we are loaded
 
                             // we were provided the Application's Controller name
                             // if it exists, then create an instance of it on the DOM:
                             var controllerName = this.options.data.controller;
+                            var instanceOptions = this.options.data.options || {};
 
             
                             // if (AD.controllers.opstools[controllerName]) {
@@ -94,29 +96,30 @@ steal(
                                     if (AD.controllers.opstools[name]) {
                                         if (AD.controllers.opstools[name].Tool) {
                                             var tempController = self.controller;
-                                            self.controller = new AD.controllers.opstools[name].Tool(self.element);
+                                            self.controller = new AD.controllers.opstools[name].Tool(self.element, instanceOptions);
                                             if (tempController._needsUpdate) {
                                                 self.controller.needsUpdate();
                                             }
                                             if (tempController._resize) {
                                                 self.controller.resize(tempController._resize);
                                             }
+                                            self.dfdReady.resolve();
                                         } else {
-                                            console.warn('controller (' + name + ').Tool()   not found!');
-                                            console.warn('... waiting to try again');
+                                            console.warn('controller (' + name + ').Tool()   not found! ... waiting to try again');
                                             setTimeout(function () {
                                                 delayedLoad(name, count + 1);
                                             }, 100);
                                         }
                                     } else {
-                                        console.warn('controller (' + name + ') not found!');
-                                        console.warn('... waiting to try again');
+                                        console.warn('controller (' + name + ') not found!  ... waiting to try again');
                                         setTimeout(function () {
                                             delayedLoad(name, count + 1);
                                         }, 100);
                                     }
                                 } else {
-                                    console.error('too many attempts to wait for [' + name + '] to load!');
+                                    var msg = 'too many attempts to wait for [' + name + '] to load!';
+                                    console.error(msg);
+                                    self.dfdReady.reject(msg);
                                 }
                             }
                             delayedLoad(controllerName, 0);
@@ -180,7 +183,9 @@ steal(
                                 if (this.isActive) {
 
                                     // make sure my controller knows to resize();
-                                    this.controller.resize(this.sizeData);
+                                    if (this.sizeData) { 
+                                        this.controller.resize(this.sizeData); 
+                                    }
                                     this.controller.trigger('opsportal.tool.show', {});
                                 }
 
@@ -197,6 +202,12 @@ steal(
 
                             this.element.html(can.view(this.options.templateDOM, {}));
 
+                        },
+
+
+
+                        ready: function() {
+                            return this.dfdReady;
                         },
 
 
@@ -234,8 +245,11 @@ steal(
                                         this.isActive = true;
 
                                         // remember: show() first then resize()
-                                        this.element.show();
-                                        this.controller.resize(this.sizeData);
+                                        if (this.element) this.element.show();
+
+                                        if (this.sizeData) {
+                                            this.controller.resize(this.sizeData);
+                                        }
                                         // can.event.dispatch.call(this.controller, 'opsportal.tool.show', {});
                                         this.controller.trigger('opsportal.tool.show', {});
                                     }
@@ -247,7 +261,8 @@ steal(
                                         //// this is a switch AWAY from our tool
                         
                                         this.isActive = false;
-                                        this.element.hide();
+                                        if (this.element) this.element.hide();
+
                                         // can.event.dispatch.call(this.controller, 'opsportal.tool.hide', {});
                                         this.controller.trigger('opsportal.tool.hide', {});
                                     }

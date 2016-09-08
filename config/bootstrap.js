@@ -9,9 +9,26 @@
  */
 var path = require('path');
 var AD = require('ad-utils');
+var async = require('async');
+
 module.exports = function (cb) {
 
-	AD.module.permissions(path.join(__dirname, '..', 'setup', 'permissions'), cb);
+    // handle our common bootstrap setup instructions:
+        // - verify permissions are created
+        // - verify opsportal tool definitions are defined.
+    AD.module.bootstrap(__dirname, cb);
+
+    // cause our navigation cache to flush on the following events:
+    // ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE, function(message, data){
+    //     OPSPortal.NavBar.cache.flush();
+    // });
+    function flushNavBar () {
+        OPSPortal.NavBar.cache.flush();
+        sails.sockets.blast(OPSPortal.Events.NAV_STALE, {update:true});
+    }
+
+    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,  flushNavBar);
+    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE, flushNavBar);
 
 };
 
