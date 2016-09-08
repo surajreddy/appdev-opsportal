@@ -52,8 +52,13 @@ steal(
 							this.initDOM();
 							this.initEvents();
 
-							AD.comm.hub.subscribe('opsportal.resize', function(key, data){
-								_this.resize(data);
+
+							this.resizeID = AD.comm.hub.subscribe('opsportal.resize', function(key, data){
+								if (_this.element) {
+									_this.resize(data);
+								} else {
+									AD.comm.hub.unsubscribe(_this.resizeID);
+								}
 							});
 						},
 

@@ -889,6 +889,7 @@ steal(
                                         //     _this.createArea(area);
                                         // });
 
+                                        var hashNewAreas = {};
 
                                         // a recursive fn to process each item in a given list:
                                         function recurseAreas(list, cb) {
@@ -896,6 +897,7 @@ steal(
                                                 cb();
                                             } else {
                                                 var curr = list.shift();
+                                                hashNewAreas[curr.key] = '.'; // save the place.
                                                 _this.createArea(curr, function(err){
                                                     if (err) cb(err)
                                                     else {
@@ -929,6 +931,12 @@ steal(
                                                 // Make sure you add new Tools after you create the 
                                                 // new Areas
                                                 newTools.forEach(function(tool){
+                                                    var area = tool.areas[0];
+                                                    if ((hashNewAreas[area.key] == '.') 
+                                                        || (tool.isDefault)){
+
+                                                        hashNewAreas[area.key] = tool;
+                                                    }
                                                     _this.createTool(tool);
                                                 });
 
@@ -936,6 +944,15 @@ steal(
 
                                                 _this.menu.sortAreas();
                                                 _this.subLinks.sortLinks();
+
+
+                                                // for each newArea announce a default tool.
+                                                for(var h in hashNewAreas) {
+                                                    AD.comm.hub.publish('opsportal.tool.show', {
+                                                        area: h,
+                                                        tool: hashNewAreas[h].id     // controller
+                                                    });
+                                                }
 
                                                 _this.data.lastConfig = newConfig;
                                                 _this.data.updateInProgress = false;
