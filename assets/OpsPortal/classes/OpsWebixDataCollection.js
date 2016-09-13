@@ -122,23 +122,19 @@ steal(
 						return this.getModel(id);
 					}
 
-					dc.AD.setModelObject = function( Model) {
-						dc.AD.__Model = Model;
-					}
+					// dc.AD.setModelObject = function( Model) {
+					// 	dc.AD.__Model = Model;
+					// }
 
-		dc.AD.getModelObject = function() {
-			if (dc.AD.__Model) {
-				return dc.AD.__Model;
-			}
-			if (List.length > 0) {
-				dc.AD.__Model = List[0].Model()
-			} else {
-				// outta luck!
-				// TODO: for Pong to figure out. :)
-			}
-			return dc.AD.__Model;
-console.log(List);
-		}
+					dc.AD.getModelObject = function() {
+						if (dc.AD.__list._Klass) {
+							return dc.AD.__list._Klass;
+						} else {
+							console.warn('! List object does not have _Klass set!', dc.AD.__list);
+						}
+						
+						return null;
+					}
 
 					// dc.AD.getModel(id)
 					dc.AD.getModel = function(id) {
