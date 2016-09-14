@@ -183,7 +183,9 @@ steal(
                                 if (this.isActive) {
 
                                     // make sure my controller knows to resize();
-                                    this.controller.resize(this.sizeData);
+                                    if (this.sizeData) { 
+                                        this.controller.resize(this.sizeData); 
+                                    }
                                     this.controller.trigger('opsportal.tool.show', {});
                                 }
 
@@ -243,8 +245,11 @@ steal(
                                         this.isActive = true;
 
                                         // remember: show() first then resize()
-                                        this.element.show();
-                                        this.controller.resize(this.sizeData);
+                                        if (this.element) this.element.show();
+
+                                        if (this.sizeData) {
+                                            this.controller.resize(this.sizeData);
+                                        }
                                         // can.event.dispatch.call(this.controller, 'opsportal.tool.show', {});
                                         this.controller.trigger('opsportal.tool.show', {});
                                     }
@@ -256,7 +261,8 @@ steal(
                                         //// this is a switch AWAY from our tool
                         
                                         this.isActive = false;
-                                        this.element.hide();
+                                        if (this.element) this.element.hide();
+
                                         // can.event.dispatch.call(this.controller, 'opsportal.tool.hide', {});
                                         this.controller.trigger('opsportal.tool.hide', {});
                                     }

@@ -137,17 +137,14 @@ var NavBar = module.exports = {
 
                     } else {
                         
-                        OPConfigArea.create(areaDef)
-                        .exec(function(err, newArea){
-
-                            if (err) {
-                                if (cb) cb(err);
-                                dfd.reject(err);
-                            } else {
-                                if (cb) cb(null, newArea);
-                                dfd.resolve(newArea);
-                            }
-
+                        OPConfigArea.createMultilingual(areaDef)
+                        .fail(function(err){
+                            if (cb) cb(err);
+                            dfd.reject(err);
+                        })
+                        .then(function(newArea){
+                            if (cb) cb(null, newArea);
+                            dfd.resolve(newArea);
                         })
 
                     }

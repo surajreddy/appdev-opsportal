@@ -122,6 +122,20 @@ steal(
 						return this.getModel(id);
 					}
 
+					// dc.AD.setModelObject = function( Model) {
+					// 	dc.AD.__Model = Model;
+					// }
+
+					dc.AD.getModelObject = function() {
+						if (dc.AD.__list._Klass) {
+							return dc.AD.__list._Klass;
+						} else {
+							console.warn('! List object does not have _Klass set!', dc.AD.__list);
+						}
+						
+						return null;
+					}
+
 					// dc.AD.getModel(id)
 					dc.AD.getModel = function(id) {
 						var model = null;
