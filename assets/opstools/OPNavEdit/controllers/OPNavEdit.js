@@ -60,6 +60,13 @@ steal(
 									AD.comm.hub.unsubscribe(_this.resizeID);
 								}
 							});
+
+
+							AD.comm.socket.subscribe('opsportal_navigation_editor_stale', function(message, data) {
+		                        
+		                        // reload our areas
+		                        _this.loadAreas();
+		                    });
 						},
 
 
@@ -731,18 +738,46 @@ steal(
 							var _this = this;
 
 							var Areas = AD.Model.get('opsportal.navigation.OPConfigArea');
-							Areas.findAll({ where:{}, sort:'weight'})
-							.fail(function(err){
-								dfd.reject(err);
-							})
-							.then(function(list){
-								list.forEach(function(l){
-									if (l.translate) l.translate();
-								})
-								_this.data.listAreas = list;
-								dfd.resolve(list);
-							});
+							if (!this.data.listAreas) {
 
+								// first time through
+								Areas.findAll({ where:{}, sort:'weight'})
+								.fail(function(err){
+									dfd.reject(err);
+								})
+								.then(function(list){
+									list.forEach(function(l){
+										if (l.translate) l.translate();
+									})
+									_this.data.listAreas = list;
+									dfd.resolve(list);
+								});
+
+							} else {
+
+								// Second time through, probably an update to the Area info
+								// try to load the ones we haven't already loaded:
+								var currIDs = [];
+								_this.data.listAreas.forEach(function(area){
+									currIDs.push(area.id);
+								})
+
+								Areas.findAll({ where:{ id:{ '!': currIDs }}, sort:'weight'})
+								.fail(function(err){
+									dfd.reject(err);
+								})
+								.then(function(list){
+									list.forEach(function(l){
+										if (l.translate) l.translate();
+
+										// and push them to our current listAreas
+										_this.data.listAreas.push(l);
+									})
+									dfd.resolve(list);
+								});
+
+							}
+							
 							return dfd;
 						},
 

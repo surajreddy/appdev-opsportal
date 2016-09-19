@@ -27,8 +27,13 @@ module.exports = function (cb) {
         sails.sockets.blast(OPSPortal.Events.NAV_STALE, {update:true});
     }
 
-    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,  flushNavBar);
-    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE, flushNavBar);
+    function updateNavEditor () {
+        sails.sockets.blast(OPSPortal.Events.NAV_EDIT_STALE, {update:true});
+    }
+
+    ADCore.queue.subscribe(OPSPortal.Events.NAV_STALE,      flushNavBar);
+    ADCore.queue.subscribe(OPSPortal.Events.PERM_STALE,     flushNavBar);
+    ADCore.queue.subscribe(OPSPortal.Events.NAV_EDIT_STALE, updateNavEditor);
 
 };
 
