@@ -70,6 +70,7 @@ steal(
                             this.portals = {};  // a hash of portals managed by RBAC:
 
                             this.data = {};     // hold any data we are working with.
+                            this.data.uuid = 'RBAC'+AD.util.uuid(); // make our UI reference unique
                             this.data.users = [];
                             this.data.permissions = [];  // all permission fields
                             this.data.roles = [];   // all the roles in the system
@@ -100,12 +101,12 @@ steal(
                         initDOM: function () {
                             var _this = this;
 
-                            this.element.html(can.view(this.options.templateDOM, {} ));
+                            this.element.html(can.view(this.options.templateDOM, { uuid: this.data.uuid } ));
 
                             
                             var controllers = {
-                                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{} },
-                                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{} },
+                                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{ uuid: this.data.uuid } },
+                                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{ uuid: this.data.uuid } },
                                 // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
                             }
 
@@ -188,22 +189,25 @@ steal(
 
                         portalShow: function(portalKey) {
 
-                            this.element.find('#topmenu li.selected').removeClass('selected');
+                            if (this.element) {
 
-                            for (var p in this.portals) {
+                                this.element.find('#topmenu li.selected').removeClass('selected');
+
+                                for (var p in this.portals) {
 // TODO: open this up when we implement scopes.
 if (portalKey!='Scopes'){
-                                if (p.toLowerCase() == portalKey.toLowerCase()) {
+                                    if (p.toLowerCase() == portalKey.toLowerCase()) {
 
-                                    this.portals[p].show();
-                                    this.data.lastPortalShown = p;
+                                        this.portals[p].show();
+                                        this.data.lastPortalShown = p;
 
-                                    this.element.find('[rbac-menu="'+p+'"]').addClass('selected');
+                                        this.element.find('[rbac-menu="'+p+'"]').addClass('selected');
 
-                                } else {
-                                    this.portals[p].hide();
-                                }
+                                    } else {
+                                        this.portals[p].hide();
+                                    }
 }
+                                }
                             }
 
                         },
@@ -211,47 +215,51 @@ if (portalKey!='Scopes'){
 
 
                         resize:function(data) {
-                            this._super();
 
-                            var totalHeight = data.height;
+                            if (this.element) {
 
+                                this._super();
 
-                            // update the containing Div to height
-                            // this div is total Height, since it contains the menuBar:
-                            this.element.css('height', totalHeight + 'px');
+                                var totalHeight = data.height;
 
 
-
-                            // find the height of the menu bar (selected item has a dropdown arrow)
-                            // this shouldn't change, so only do it 1x
-                            if (!this.data.resize.menuBar) {
-
-                                var selectedMenuItem = this.element.find('li.selected.rbac-menu');
-                                this.data.resize.menuBar = selectedMenuItem.outerHeight(true);
-                            }
+                                // update the containing Div to height
+                                // this div is total Height, since it contains the menuBar:
+                                this.element.css('height', totalHeight + 'px');
 
 
-                            // Total area for the available space of the tool, will be the
-                            // givenheight - (heightOfMenuBar)
-                            this.data.resize.available = totalHeight - this.data.resize.menuBar;
 
+                                // find the height of the menu bar (selected item has a dropdown arrow)
+                                // this shouldn't change, so only do it 1x
+                                if (!this.data.resize.menuBar) {
 
-                            // send  displayed portal a resize(availableHeight);
-
-                            if (this.element.is(':visible')) {
-                                if (!this.data.hasBeenShown) {
-
-                                    // tell our portal to show() itself:
-                                    this.portalShow(this.data.lastPortalShown);
-                                    this.data.hasBeenShown = true;
+                                    var selectedMenuItem = this.element.find('li.selected.rbac-menu');
+                                    this.data.resize.menuBar = selectedMenuItem.outerHeight(true);
                                 }
-                            }
 
 
-                            // pass a resize() call to the currently shown portal:
-                            var portal = this.portals[this.data.lastPortalShown];
-                            if (portal.resize) {
-                                portal.resize( { height: this.data.resize.available } );
+                                // Total area for the available space of the tool, will be the
+                                // givenheight - (heightOfMenuBar)
+                                this.data.resize.available = totalHeight - this.data.resize.menuBar;
+
+
+                                // send  displayed portal a resize(availableHeight);
+
+                                if (this.element.is(':visible')) {
+                                    if (!this.data.hasBeenShown) {
+
+                                        // tell our portal to show() itself:
+                                        this.portalShow(this.data.lastPortalShown);
+                                        this.data.hasBeenShown = true;
+                                    }
+                                }
+
+
+                                // pass a resize() call to the currently shown portal:
+                                var portal = this.portals[this.data.lastPortalShown];
+                                if (portal.resize) {
+                                    portal.resize( { height: this.data.resize.available } );
+                                }
                             }
                             
                         },
