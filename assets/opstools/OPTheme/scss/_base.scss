@@ -17,3 +17,38 @@ body {
 .rbac-menu a {
   color: $navColor;
 }
+
+/* Pagination */
+ul.pagination li a , button.webix_pager_item {
+	color : $paginationBtnColor;
+	background : $paginationBtnBG ;
+}
+
+ul.pagination li.active a, button.webix_pager_item_selected {
+	color : $paginationActiveBtnColor;
+	background : $paginationActiveBtnBG;
+}
+
+/* Buttons */
+.btn , .webix_el_box, .webix-btn {
+	color : $btnColor;
+	background : $btnBG;
+}
+
+/* Tabs */
+.nav-tabs li a, .webix_item_tab{
+	color : $navBtnColor;
+	background : $navBtnBG ;
+}
+
+.nav-tabs li.active a,.webix_item_tab webix_selected {
+	color : $navActiveBtnColor;
+	background : $navActiveBtnBG;
+}
+
+/* Datatables */
+table thead, .webix_ss_header  {
+	color : $tableHeaderColor;
+	background: $tableHeaderBG;
+}
+
