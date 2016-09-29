@@ -425,3 +425,15 @@ msgstr "ex"
 msgid "New Area"
 msgstr "New Area"
 
+#. path: opsportal
+#. code: en
+#. key: opp.reauth.required
+msgid "Re-login required"
+msgstr "Re-login required"
+
+#. path: opsportal
+#. code: en
+#. key: opp.reauth.submit
+msgid "Submit"
+msgstr "Submit"
+

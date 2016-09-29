@@ -713,6 +713,7 @@ steal(
                                             isDefault: false,
                                         });
                                         _this.workArea.listAreas.UserProfile.createTool({
+                                            id:'UserProfile',
                                             area: 'UserProfile',
                                             controller: 'UserProfile',
                                             label: 'User Profile',

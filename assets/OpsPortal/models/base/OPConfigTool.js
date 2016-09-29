@@ -11,7 +11,10 @@ steal(function() {
 				update: 'PUT /appdev-opsportal/opconfigtool/{id}',
 				destroy: 'DELETE /appdev-opsportal/opconfigtool/{id}',
 				describe: function() { return { 'icon':'string', 'isDefault':'bool', 'label':'string', 'context':'string', 'isController':'bool', 'options':'json', 'weight':'integer' };  },
-				associations:['areas', 'permissions'], 
+				associations:{
+					'areas':'opsportal.navigation.OPConfigArea', 
+					'permissions':'opstools.RBAC.PermissionAction'
+				}, 
 				multilingualFields:[ 'label' ],
 				// validations: {
 				//     "role_label" : [ 'notEmpty' ],
