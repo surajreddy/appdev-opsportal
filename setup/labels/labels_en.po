@@ -443,3 +443,15 @@ msgstr "Submit"
 msgid "Username and/or password not found"
 msgstr "Username and/or password not found"
 
+#. path: opsportal
+#. code: en
+#. key: opnavedit.ToolProperties
+msgid "Tool Properties"
+msgstr "Tool Properties"
+
+#. path: opsportal
+#. code: en
+#. key: opnavedit.isDefaultTool
+msgid "is default tool?"
+msgstr "is default tool?"
+
