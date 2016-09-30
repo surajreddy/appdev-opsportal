@@ -696,7 +696,14 @@ steal(
                                         _this.createTool(newTool);
                                         
 
+                                        // if we don't have a default for this tool's area => choose this tool
+                                        if (!defaultTool[newTool.areas[0].key]) {
+                                            defaultTool[newTool.areas[0].key] = newTool;
+                                        } 
+
+                                        // if this tool is defined as the default, then register it.
                                         if (newTool.isDefault) defaultTool[newTool.areas[0].key] = newTool;
+                                        
                                         AD.ui.loading.completed(1);
                                     }
                                     _this.subLinks.sortLinks();

@@ -437,3 +437,9 @@ msgstr "Re-login required"
 msgid "Submit"
 msgstr "Submit"
 
+#. path: opsportal
+#. code: en
+#. key: opp.auth.E_INVALIDAUTH
+msgid "Username and/or password not found"
+msgstr "Username and/or password not found"
+

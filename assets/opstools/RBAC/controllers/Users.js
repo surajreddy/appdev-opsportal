@@ -35,6 +35,7 @@ steal(
                             var self = this;
                             options = AD.defaults({
                                     // templateDOM: '//opstools/RBAC/views/Users/Users.ejs'
+                                    uuid:'a',
                                     eventAssignmentAdd : 'assign.add',
                                     eventPermissionList: 'perm.list'
                             }, options);
@@ -56,6 +57,10 @@ steal(
 
                         },
 
+
+                        uuid:function(key) {
+                            return key+this.options.uuid;
+                        },
 
 
                         initDOM: function () {
@@ -111,8 +116,8 @@ steal(
                                 ////   
                                 var lblPlaceholderSearchUser = AD.lang.label.getLabel('rbac.user.search') || 'Search *';              
                                 _this.dom.userSearch = AD.op.WebixSearch({
-                                    id:"searchuser",
-                                    container:"search1",
+                                    id:_this.uuid("searchuser"),
+                                    container:_this.uuid("search1"),
                                     view:"search",
                                     placeholder:lblPlaceholderSearchUser,
                                     width:220
@@ -136,8 +141,14 @@ steal(
                                 // Note that there is a SiteUser.id field. But the "User ID" column actually
                                 // refers to the SiteUser.username field instead.
                                 _this.dom.userGrid = webix.ui({
-                                    id:"usertable",
-                                    container:"userlist-tbl",
+                                    id:_this.uuid("usertable"),
+                                    container:_this.uuid("userlist-tbl"),
+
+//// LEFT OFF HERE:
+// keep updating the reference to our Webix containers so we can have multiple 
+// copies of RBAC loaded at once.
+// next:  footer pager
+
                                     view:"datatable",
                                     
                                     // Idea: how about combining the '#' column with the 'Status' column?
@@ -193,9 +204,9 @@ steal(
 
                                     pager:{
                                         template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-                                      container:"paging_here",
-                                      // size:8,
-                                      group:5
+                                        container:_this.uuid("paging_here"),
+                                        // size:8,
+                                        group:5
                                     },  
 
                                     on:{
@@ -218,8 +229,8 @@ steal(
                                 ////
                                 var lblNoUserSelected = AD.lang.label.getLabel('rbac.user.noUserSelected') || 'no user selected';
                                 _this.dom.userName = webix.ui({
-                                    id:"username",
-                                    container:"userdisplay",
+                                    id:_this.uuid("username"),
+                                    container:_this.uuid("userdisplay"),
                                     view:"form",
                 //                       hidden: true,
                                     elements:[
@@ -231,8 +242,6 @@ steal(
                                     paddingY: 8,
                                     paddingX: 0,
                                     margin: 0,
-
-
 
                                     width:185
                                     
@@ -247,9 +256,9 @@ steal(
                                 var lblHeaderScopes = AD.lang.label.getLabel('rbac.Scopes') || 'Scopes*';
                                 var lblHeaderEnabled = AD.lang.label.getLabel('rbac.users.enabled') || 'Enabled*';
                                 _this.dom.userPermissions = webix.ui({
-                                    container:"rolesNscopes",
+                                    container:_this.uuid("rolesNscopes"),
                                     view:"datatable",
-                                    id:"assignments",
+                                    id:_this.uuid("assignments"),
                                     columns:[
                                         { id:"role",   header:lblHeaderRoles,  width:180, template:function(obj){
                                             // var role = _this.roleForID(obj.role.id);
@@ -682,17 +691,20 @@ steal(
                          */
                         resize: function( data ) {
 
-                            var pager = this.dom.userGrid.getPager();
+                            // make sure we are still connected to the DOM ...
+                            if (this.element) { 
 
-                            if (data) {
+                                var pager = this.dom.userGrid.getPager();
 
-                                // the outer container for the userGrid will be increased
-                                this.element.find('div.rbac-user-div').css('height', data.height+'px');
+                                if (data) {
 
-                                // adjust the height of the userGrid:
-                                var gridHeight = data.height;
-                                gridHeight -= pager.$height;
-                                gridHeight -= this.dom.userSearch.$height;
+                                    // the outer container for the userGrid will be increased
+                                    this.element.find('div.rbac-user-div').css('height', data.height+'px');
+
+                                    // adjust the height of the userGrid:
+                                    var gridHeight = data.height;
+                                    gridHeight -= pager.$height;
+                                    gridHeight -= this.dom.userSearch.$height;
 
 //// TODO: try to figure out how many rows would fit into available space
 ////    then adjust ycount to fit that.
@@ -700,25 +712,27 @@ steal(
 ////        numrows = gridHeight / heightOf1Row
 ////        
 
-                                // this.dom.userGrid.define('height', gridHeight);
-                                // this.dom.userGrid.resize();
+                                    // this.dom.userGrid.define('height', gridHeight);
+                                    // this.dom.userGrid.resize();
+                                }
+
+                                this.dom.userGrid.adjust(); 
+                                
+                                // now update the related pager/searchbox with the proper $width
+                                pager.define('width', this.dom.userGrid.$width);
+                                
+                                // Leave space on the right for the "Add User" button
+                                this.dom.userSearch.define('width', this.dom.userGrid.$width - 80);
+
+
+                                // the userPermissions table:
+                                this.dom.userPermissions.adjust();
+
+                                // resize everything now:
+                                pager.resize();
+                                this.dom.userSearch.resize();
+
                             }
-
-                            this.dom.userGrid.adjust(); 
-                            
-                            // now update the related pager/searchbox with the proper $width
-                            pager.define('width', this.dom.userGrid.$width);
-                            
-                            // Leave space on the right for the "Add User" button
-                            this.dom.userSearch.define('width', this.dom.userGrid.$width - 80);
-
-
-                            // the userPermissions table:
-                            this.dom.userPermissions.adjust();
-
-                            // resize everything now:
-                            pager.resize();
-                            this.dom.userSearch.resize();
 
                         },
 
