@@ -26,7 +26,7 @@
 
           <!--Top Menu-->
           <div  class="op-widget-horizontal-nav">
-            <ul id="topmenu" class="op-list">
+            <ul id="topmenu<%= uuid %>" class="op-list rbac-topmenu">
               <li class="op-container selected rbac-menu" rbac-menu="Users">
                 <a  mockup-show="users" href="#user"><i class="fa fa-users"></i><br><strong>
                 <span app-label-key="rbac.Users">Users</span></strong><span class="badge"></span></a>
@@ -66,7 +66,7 @@
 
           <div class="op-container clear wrapper">
           <!--Users Area-->
-          <div id="users-area" class="op-container mockup-display users rbac-users">
+          <div id="users-area<%= uuid %>" class="op-container mockup-display users rbac-users<%= uuid %>">
             <div class="row nomargin">
                 <div class="col-lg-4 col-md-6 padbot55 rbac-user-div">
                 
@@ -81,7 +81,7 @@
                     <div class="input-group" id="search1<%= uuid %>"></div>
                   </div>
                   <div id="userlist-tbl<%= uuid %>" style="clear:both"></div>
-                  <div id="paging_here"></div>
+                  <div id="paging_here<%= uuid %>"></div>
                   <script type="text/javascript" charset="utf-8">
 
                   </script>
@@ -90,10 +90,10 @@
                 
                 <div class="col-lg-4 col-md-6  rbac-user-display">
                   <div class="form-inline">
-                    <div class="input-group" id="userdisplay"></div>
+                    <div class="input-group" id="userdisplay<%= uuid %>"></div>
                     <button  class="btn op-btn btn-primary pull-right off-top10 rbac-user-addPermission" app-label-key="rbac.user.add" >add</button>
                   </div>
-                  <div id="rolesNscopes" class="clear" style="height:240px"></div>
+                  <div id="rolesNscopes<%= uuid %>" class="clear" style="height:240px"></div>
                           
                 </div>
                 
@@ -204,23 +204,23 @@ console.log('... role:', role); -->
           </div>
           <!--/Users Area-->
           <!--Roles Area-->
-          <div id="roles-area" class="op-container mockup-display roles rbac-roles" style="display:none">
+          <div id="roles-area<%= uuid %>" class="op-container mockup-display roles rbac-roles<%= uuid %>" style="display:none">
             <div class="row op-container nomargin">
 
 
                 <div class="col-lg-4 ">
                   <div class=" form-inline" >
-                    <div class="input-group pull-left" id="search2"></div>
+                    <div class="input-group pull-left" id="search2<%= uuid %>"></div>
                     <button  class="btn op-btn btn-primary pull-right off-top10 rbac-role-addRole" app-label-key="rbac.user.add" >add</button>
                   </div>
-                  <div id="userlist-tbl-role" style="clear:both"></div>
-                  <div id="pgb"></div>
+                  <div id="userlist-tbl-role<%= uuid %>" style="clear:both"></div>
+                  <div id="pgb<%= uuid %>"></div>
                 </div>
               
 
                 
                 <div class="col-lg-8 rbac-roles-form">
-                  <div  id="rbac-roles-form">
+                  <div  id="rbac-roles-form<%= uuid %>">
                   
 <!--                   <div class="form-group">
                     <p class="lbl-title" app-label-key="rbac.roles.name">Role Name</p>
@@ -242,9 +242,9 @@ console.log('... role:', role); -->
                     <!-- Tab panes -->
                     <div class="tab-content padbot10 off-botm10">
                       <div role="tabpanel" class="tab-pane active" id="actionstab"  style="padding:17px;">
-                          <div class="input-group" id="rbac-search-actions"></div>
-                          <div id="rbac-grid-actions" style="clear:both;"></div>
-                          <div id="rbac-pager-actions"></div>
+                          <div class="input-group" id="rbac-search-actions<%= uuid %>"></div>
+                          <div id="rbac-grid-actions<%= uuid %>" style="clear:both;"></div>
+                          <div id="rbac-pager-actions<%= uuid %>"></div>
                       </div>
                       
                       <div role="tabpanel" class="tab-pane" id="datafieldtab"></div>

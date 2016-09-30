@@ -204,9 +204,9 @@ steal(
 
                                     pager:{
                                         template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-                                      container:"paging_here",
-                                      // size:8,
-                                      group:5
+                                        container:_this.uuid("paging_here"),
+                                        // size:8,
+                                        group:5
                                     },  
 
                                     on:{
@@ -229,8 +229,8 @@ steal(
                                 ////
                                 var lblNoUserSelected = AD.lang.label.getLabel('rbac.user.noUserSelected') || 'no user selected';
                                 _this.dom.userName = webix.ui({
-                                    id:"username",
-                                    container:"userdisplay",
+                                    id:_this.uuid("username"),
+                                    container:_this.uuid("userdisplay"),
                                     view:"form",
                 //                       hidden: true,
                                     elements:[
@@ -242,8 +242,6 @@ steal(
                                     paddingY: 8,
                                     paddingX: 0,
                                     margin: 0,
-
-
 
                                     width:185
                                     
@@ -258,9 +256,9 @@ steal(
                                 var lblHeaderScopes = AD.lang.label.getLabel('rbac.Scopes') || 'Scopes*';
                                 var lblHeaderEnabled = AD.lang.label.getLabel('rbac.users.enabled') || 'Enabled*';
                                 _this.dom.userPermissions = webix.ui({
-                                    container:"rolesNscopes",
+                                    container:_this.uuid("rolesNscopes"),
                                     view:"datatable",
-                                    id:"assignments",
+                                    id:_this.uuid("assignments"),
                                     columns:[
                                         { id:"role",   header:lblHeaderRoles,  width:180, template:function(obj){
                                             // var role = _this.roleForID(obj.role.id);

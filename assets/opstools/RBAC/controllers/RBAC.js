@@ -97,6 +97,11 @@ steal(
                         },
 
 
+                        uuid:function(key) {
+
+                            return key+this.data.uuid;
+                        },
+
 
                         initDOM: function () {
                             var _this = this;
@@ -105,8 +110,8 @@ steal(
 
                             
                             var controllers = {
-                                'opstools.RBAC.Users'               : { el: '.rbac-users',           opt:{ uuid: this.data.uuid } },
-                                'opstools.RBAC.Roles'               : { el: '.rbac-roles',           opt:{ uuid: this.data.uuid } },
+                                'opstools.RBAC.Users'               : { el: '.'+_this.uuid('rbac-users'),           opt:{ uuid: this.data.uuid } },
+                                'opstools.RBAC.Roles'               : { el: '.'+_this.uuid('rbac-roles'),           opt:{ uuid: this.data.uuid } },
                                 // 'opstools.RBAC.Scopes'               : { el: '.rbac-scopes',           opt:{}
                             }
 
@@ -191,7 +196,9 @@ steal(
 
                             if (this.element) {
 
-                                this.element.find('#topmenu li.selected').removeClass('selected');
+                                var idTopMenu = this.uuid("topmenu");
+
+                                this.element.find('#'+idTopMenu+' li.selected').removeClass('selected');
 
                                 for (var p in this.portals) {
 // TODO: open this up when we implement scopes.
