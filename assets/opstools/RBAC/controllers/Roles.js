@@ -31,6 +31,9 @@ steal(
                         init: function (element, options) {
                             var self = this;
                             options = AD.defaults({
+
+                                    uuid:'a',
+
                                     // templateDOM: '//opstools/RBAC/views/Roles/Roles.ejs'
                                     eventRoleAdd: 'role.add.clicked',
                                     eventRoleEdit: 'role.edit.clicked',
@@ -55,6 +58,10 @@ steal(
                         },
 
 
+                        uuid:function(key) {
+                            return key+this.options.uuid;
+                        },
+
 
                         initDOM: function () {
 
@@ -77,8 +84,8 @@ steal(
                                 ////  
                                 var lblPlaceholderSearch = AD.lang.label.getLabel('rbac.roles.search') || 'Search *';           
                                 _this.dom.roleSearch = AD.op.WebixSearch({
-                                    id:"searchroles",
-                                    container:"search2",
+                                    id:_this.uuid("searchroles"),
+                                    container:_this.uuid("search2"),
                                     view:"search",
                                     placeholder:lblPlaceholderSearch,
                                     width:300
@@ -97,8 +104,8 @@ steal(
                                 var lblHeaderName = AD.lang.label.getLabel('rbac.roles.name') || 'Name*';
                                 var lblHeaderDescription = AD.lang.label.getLabel('rbac.roles.description') || 'Description*';
                                 _this.dom.roleGrid = webix.ui({
-                                    id:"rolestable",
-                                    container:"userlist-tbl-role",
+                                    id:_this.uuid("rolestable"),
+                                    container:_this.uuid("userlist-tbl-role"),
                                     view:"datatable",
                                     // width:483,
 
@@ -118,7 +125,7 @@ steal(
 
                                     pager:{
                                         template:"{common.prev()} {common.pages()} {common.next()}",
-                                        container:"pgb",
+                                        container:_this.uuid("pgb"),
                                         size:8,
                                         group:5,
                                         width:300
@@ -197,9 +204,9 @@ steal(
                                 var labelDesc = AD.lang.label.getLabel('rbac.roles.description') || 'Role Description*';
                                 var placeHolderDesc = AD.lang.label.getLabel('rbac.roles.descriptionPlaceholder') || 'Role Description*';
                                 _this.dom.formRole = webix.ui({
-                                    container:'rbac-roles-form',
+                                    container:_this.uuid('rbac-roles-form'),
                                     view:"form",
-                                    id:'formRole',
+                                    id:_this.uuid('formRole'),
 
                                     elements:[
 
@@ -245,8 +252,8 @@ steal(
                                 ////
                                 var lblPlaceholderSearchActions = AD.lang.label.getLabel('rbac.roles.searchActions') || 'Search Actions*';           
                                 _this.dom.roleSearchActions = AD.op.WebixSearch({
-                                    id:"rbac-search-actions",
-                                    container:"rbac-search-actions",
+                                    id:_this.uuid("rbac-search-actions"),
+                                    container:_this.uuid("rbac-search-actions"),
                                     view:"search",
                                     placeholder:lblPlaceholderSearchActions,
                                     width:300
@@ -265,8 +272,8 @@ steal(
                                 ////
 
                                 _this.dom.actionGrid = webix.ui({
-                                    id:"rbacGridActions",
-                                    container:"rbac-grid-actions",
+                                    id:_this.uuid("rbacGridActions"),
+                                    container:_this.uuid("rbac-grid-actions"),
                                     view:"datatable",
                                     // width:993,
                                     editable:true,
@@ -306,7 +313,7 @@ steal(
 
                                     pager:{
                                         template:"{common.first()} {common.prev()} {common.pages()} {common.next()} {common.last()}",
-                                        container:"rbac-pager-actions",
+                                        container:_this.uuid("rbac-pager-actions"),
                                         size:5,
                                         group:5,
                                         width:400

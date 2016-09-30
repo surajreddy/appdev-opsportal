@@ -263,6 +263,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 .pgnav li {height:55px;}
 
+/*
 #topmenu li {
 	float:left;
 	display:block;
@@ -275,6 +276,21 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 #topmenu .badge {
 	font-size:10px;
 	}
+*/
+
+.rbac-topmenu li {
+	float:left;
+	display:block;
+	padding:10px 17px 0 22px;
+	text-align:center;
+	height:82px;
+	
+}
+
+.rbac-topmenu .badge {
+	font-size:10px;
+}
+
 
 .stats-green {
 
