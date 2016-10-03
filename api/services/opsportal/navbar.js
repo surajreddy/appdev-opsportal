@@ -228,6 +228,8 @@ var NavBar = module.exports = {
             var navTool = null;     // live instance of the OPConfigTool
             var wasLinked = false;  // navTool already linked to navArea?
 
+            var prevNavArea = null; // the orignial values of the navArea
+            var prevNavTool = null; // the original values of navTool.
 
             async.series([
 
@@ -244,6 +246,8 @@ var NavBar = module.exports = {
 
                             if ((areas) && (areas.length >0)) {
                                 navArea = areas[0];
+                                prevNavArea = navArea.toJSON();
+
 // console.log('... fully populated area:', navArea);
                                 next();
                             } else {
@@ -287,6 +291,8 @@ var NavBar = module.exports = {
                                 if ((tools) && (tools.length > 0)) {
 
                                     navTool = tools[0];
+prevNavTool = navTool.toJSON();
+
 // console.log('... fully populated navTool found: ', navTool);
                                     next();
 
@@ -373,6 +379,9 @@ var NavBar = module.exports = {
                         })
                         .then(function(tool){
                             navTool = tool;
+                            
+                            // keep connected devices updated:
+                            OPConfigTool.publishCreate(tool);
                             next();
                         })
                         
@@ -538,6 +547,16 @@ var NavBar = module.exports = {
                                 ADCore.error.log('Error linking navArea + navTool', {error:err, area:navArea, tool:navTool });
                                 next(err);
                             } else {
+
+                                OPConfigArea.find({id:navArea.id})
+                                .populate('tools')
+                                .exec(function(err, listAreas){
+                                    var fullArea = listAreas[0];
+                                    console.log('***> new navArea:', fullArea.toJSON() );
+                                    OPConfigArea.publishUpdate(navArea.id, fullArea.toJSON(), null, { previous:prevNavArea});
+                                })
+
+                                // don't wait for the publishUpdate
                                 next();
                             }
                              
@@ -549,6 +568,7 @@ var NavBar = module.exports = {
 
             ],function(err){
                 ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {tool:navTool, verb:'created'});
+                OPConfigTool.publishUpdate(navTool.id, navTool.toJSON(), null, { previous:prevNavTool });
                 if (err) {
                     if (cb) cb(err);
                     dfd.reject(err);

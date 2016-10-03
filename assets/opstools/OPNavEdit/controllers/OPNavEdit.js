@@ -38,6 +38,7 @@ steal(
 							this.data.listTools = null;
 							this.data.listToolDefs = null;
 							this.data.resize = null;	// our spacing calculations 
+							this.data.hashTools = {};
 
 							this.dom = {};
 							this.dom.area = null;
@@ -60,6 +61,26 @@ steal(
 									AD.comm.hub.unsubscribe(_this.resizeID);
 								}
 							});
+
+
+							AD.comm.socket.subscribe('opsportal_navigation_editor_stale', function(message, data) {
+		                        
+		                        // reload our areas
+		                        _this.loadAreas();
+		                    });
+
+							// if we are told about a new Tool being created
+		                    AD.comm.socket.subscribe('opconfigtool.created', function(message, data){
+
+		                    	// make sure we have a model instance of that tool in our Hash:
+		                    	if (!_this.data.hashTools[data.data.id]) {
+
+			                    	var Tool = AD.Model.get('opsportal.navigation.OPConfigTool');
+			                    	var newTool = new Tool(data.data);
+			                    	_this.data.hashTools[newTool.id] = newTool;
+			                    }
+
+		                    })
 						},
 
 
@@ -151,14 +172,14 @@ steal(
 
 											})
 											.then(function(updatedArea){
-												if (isAdd) {
-													_this.data.listAreas.push(area);
-													area = new Model({label:'', icon:''});
-													// pushing to the list automatically updated the DOM
-													// but we have to recreate the popups on the new elements:
-													_this.initAreaPopups();
-													_this.initSortArea();
-												}
+												// if (isAdd) {
+												// 	// _this.data.listAreas.push(area);
+												// 	area = new Model({label:'', icon:''});
+												// 	// pushing to the list automatically updated the DOM
+												// 	// but we have to recreate the popups on the new elements:
+												// 	_this.initAreaPopups();
+												// 	_this.initSortArea();
+												// }
 												busySave.ready();
 												$icon.click();
 											})
@@ -424,9 +445,8 @@ steal(
 
 							$.when(dfdAreas, dfdTools, dfdToolDefs).done(function(Areas, Tools, ToolDefs){
 
-								var hashTools = {};
 								Tools.forEach(function(t){
-									hashTools[t.id] = t;
+									_this.data.hashTools[t.id] = t;
 								})
 
 								var hashToolDefs = {};
@@ -435,7 +455,7 @@ steal(
 								})
 
 								// Load the Tool Editing Section
-								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:hashTools, toolDefs:ToolDefs }, function(frag){
+								can.view(_this.options.templateDOMTools, {areas:_this.data.listAreas, hashTools:_this.data.hashTools, toolDefs:ToolDefs }, function(frag){
 
 									_this.element.find('#op-masthead-sublinks').after(frag);
 									_this.dom.tools = _this.element.find('#op-navbar-edittools');
@@ -474,6 +494,14 @@ steal(
 											})
 											.then(function(results){
 
+												// At this point the Sails socket updates
+												// will alert us of changes in our Areas,
+												// and the UI view will update.
+
+												// however we want to make sure our loaded Tools
+												// are 'fully' populated, so we do a manual load 
+												// again and update our list:
+
 												// get the new Tool Instances:
 												_this.loadTools()
 												.fail(function(err){
@@ -481,29 +509,24 @@ steal(
 												})
 												.then(function(listTools){
 
+													// stop the busy spinner.
 													busyToolAdd.ready();
+
 
 													// search our hashTools and add any new ones
 													listTools.forEach(function(t){
-														if (!hashTools[t.id]) {
-															hashTools[t.id] = t;
-														}
+														// if (!_this.data.hashTools[t.id]) {
+															_this.data.hashTools[t.id] = t;
+														// }
 													})
 
-													// try to manually reload this area
-													// the updated .tools[] will trigger the 
-													// change in the display.
-													var Area = _this.selectedArea.model();
-													Area.findOne({id:_this.selectedArea.id})
-													.fail(function(err){
-														console.error('Error reloading our selected Area:', err);
-													})
-													.then(function(area){
-														console.log('... reloaded Area:', area);
-														select.val('add.new.tool');
-														_this.initToolPopups();
 
-													})
+
+													// reset select list to add entry and 
+													// verify all current entries have a popup.
+													select.val('add.new.tool');
+													_this.initToolPopups();
+
 													
 												})
 												
@@ -567,66 +590,66 @@ steal(
 						 * setup the sortable menu area
 						 * @return {deferred}
 						 */
-						initSortAreaOld:function(){
-							var _this = this;
+// 						initSortAreaOld:function(){
+// 							var _this = this;
 
-							this.dom.area.find( ".sortableMenu" ).sortable({
-								revert: true,
-								handle: '.sort-handle',
-								cursor: 'move', 
-								axis: 'y',
-								start:function(ev, ui) {
-									// mark current position in list
-									ui.item.data('start_pos', ui.item.index());
-								},
-								update:function(event, ui) {
-									var start_pos = ui.item.data('start_pos');
-									var index  = ui.item.index();
+// 							this.dom.area.find( ".sortableMenu" ).sortable({
+// 								revert: true,
+// 								handle: '.sort-handle',
+// 								cursor: 'move', 
+// 								axis: 'y',
+// 								start:function(ev, ui) {
+// 									// mark current position in list
+// 									ui.item.data('start_pos', ui.item.index());
+// 								},
+// 								update:function(event, ui) {
+// 									var start_pos = ui.item.data('start_pos');
+// 									var index  = ui.item.index();
 
-// 									var numItems = _this.dom.area.find('.sortableMenu li').length;
-// 									for(var i=1;i <= numItems; i++){
-// 							            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + i + ')').data('area');
-// 							            if (area) {
-// 							            	area.attr('weight', i);
-// console.log('    ... area:', area);
-// 							            }
-// 							        }
+// // 									var numItems = _this.dom.area.find('.sortableMenu li').length;
+// // 									for(var i=1;i <= numItems; i++){
+// // 							            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + i + ')').data('area');
+// // 							            if (area) {
+// // 							            	area.attr('weight', i);
+// // console.log('    ... area:', area);
+// // 							            }
+// // 							        }
 
-									if (start_pos < index) {
+// 									if (start_pos < index) {
 
-								        //update the items before the re-ordered item
-								        for(var i=index; i >= 0; i--){
-								            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + (i+1) + ')').data('area');
-								            if (area) {
-								            	area.attr('weight', i);
-								            	area.save()
-								            	.fail(function(err){
-								            		AD.error.log('Error updating Area Weight.', err);
-								            	})
-								            }
-								        }
+// 								        //update the items before the re-ordered item
+// 								        for(var i=index; i >= 0; i--){
+// 								            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + (i+1) + ')').data('area');
+// 								            if (area) {
+// 								            	area.attr('weight', i);
+// 								            	area.save()
+// 								            	.fail(function(err){
+// 								            		AD.error.log('Error updating Area Weight.', err);
+// 								            	})
+// 								            }
+// 								        }
 
-								    }else {
+// 								    }else {
 
-										var numItems = _this.dom.area.find('.sortableMenu li').length;
+// 										var numItems = _this.dom.area.find('.sortableMenu li').length;
 
-								        //update the items after the re-ordered item
-								        for(var i=index;i <= numItems; i++){
-								            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + (i+1) + ')').data('area');
-								            if (area) {
-								            	area.attr('weight', i);
-								            	area.save()
-								            	.fail(function(err){
-								            		AD.error.log('Error updating Area Weight.', err);
-								            	})
-								            }
-								        }
-								    }
+// 								        //update the items after the re-ordered item
+// 								        for(var i=index;i <= numItems; i++){
+// 								            var area = _this.dom.area.find('.sortableMenu li:nth-child(' + (i+1) + ')').data('area');
+// 								            if (area) {
+// 								            	area.attr('weight', i);
+// 								            	area.save()
+// 								            	.fail(function(err){
+// 								            		AD.error.log('Error updating Area Weight.', err);
+// 								            	})
+// 								            }
+// 								        }
+// 								    }
 
-								}
-							});
-						 //    this.dom.area.find( ".sortableMenu" ).disableSelection();
-						},
+// 								}
+// 							});
+// 						 //    this.dom.area.find( ".sortableMenu" ).disableSelection();
+// 						},
 
 						sortList: function( el, axis, objKey ) {
 
@@ -731,18 +754,50 @@ steal(
 							var _this = this;
 
 							var Areas = AD.Model.get('opsportal.navigation.OPConfigArea');
-							Areas.findAll({ where:{}, sort:'weight'})
-							.fail(function(err){
-								dfd.reject(err);
-							})
-							.then(function(list){
-								list.forEach(function(l){
-									if (l.translate) l.translate();
-								})
-								_this.data.listAreas = list;
-								dfd.resolve(list);
-							});
+							if (!this.data.listAreas) {
 
+								// first time through
+								Areas.findAll({ where:{}, sort:'weight'})
+								.fail(function(err){
+									dfd.reject(err);
+								})
+								.then(function(list){
+									list.forEach(function(l){
+										if (l.translate) l.translate();
+									})
+									_this.data.listAreas = list;
+									dfd.resolve(list);
+								});
+
+							} else {
+
+								// Second time through, probably an update to the Area info
+								// try to load the ones we haven't already loaded:
+								var currIDs = [];
+								_this.data.listAreas.forEach(function(area){
+									currIDs.push(area.id);
+								})
+
+								Areas.findAll({ where:{ id:{ '!': currIDs }}, sort:'weight'})
+								.fail(function(err){
+									dfd.reject(err);
+								})
+								.then(function(list){
+									list.forEach(function(l){
+										if (l.translate) l.translate();
+
+										// and push them to our current listAreas
+										_this.data.listAreas.push(l);
+									})
+
+									// make sure any new areas have their popups and sorts ready.
+									_this.initAreaPopups();
+									_this.initSortArea();
+									dfd.resolve(list);
+								});
+
+							}
+							
 							return dfd;
 						},
 

@@ -30,10 +30,10 @@ module.exports = {
                 	} else {
                 		if ((defs) && (defs.length>0)) {
                 			permissions = defs[0].permissions;
-// console.log('    -> permissions:'+permissions);
+// console.log('OPNavEditController.newTool():  -> permissions:'+permissions, defs);
                 			next();
                 		} else {
-
+// console.error('*** OPNavEditController.newTool(): no defs returned!', defs);
                 		}
                 	}
                 })

@@ -11,7 +11,9 @@ steal(function() {
 				update: 'PUT /appdev-opsportal/opconfigarea/{id}',
 				destroy: 'DELETE /appdev-opsportal/opconfigarea/{id}',
 				describe: function() { return { 'key':'string', 'icon':'string', 'isDefault':'bool', 'label':'string', 'context':'string', 'weight':'integer' };  },
-				associations:['tools'], 
+				associations:{ 
+					'tools':'opsportal.navigation.OPConfigTool' 
+				}, 
 				multilingualFields:[ 'label' ],
 				// validations: {
 				//     "role_label" : [ 'notEmpty' ],

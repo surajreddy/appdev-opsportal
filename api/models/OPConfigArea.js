@@ -57,6 +57,7 @@ migrate:'alter',
 
   afterCreate: function(record, cb) {
     ADCore.queue.publish(OPSPortal.Events.NAV_STALE, {area:record, verb:'created'});
+    ADCore.queue.publish(OPSPortal.Events.NAV_EDIT_STALE, {area:record, verb:'created'});
     cb();
   },
 
