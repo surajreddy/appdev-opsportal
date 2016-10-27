@@ -852,8 +852,8 @@ steal(
 
 
 						resetDisplay:function() {
-							this.dom.subLinks.show();
-							this.dom.tools.hide();
+							if (this.dom.subLinks) this.dom.subLinks.show();
+							if (this.dom.tools) this.dom.tools.hide();
 						},
 
 
