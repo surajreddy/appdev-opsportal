@@ -40,6 +40,8 @@ steal(
 							this.data.resize = null;	// our spacing calculations 
 							this.data.hashTools = {};
 
+							this.data.hasPendingAreaAdd = false;
+
 							this.dom = {};
 							this.dom.area = null;
 							this.dom.tools = null;
@@ -65,8 +67,11 @@ steal(
 
 							AD.comm.socket.subscribe('opsportal_navigation_editor_stale', function(message, data) {
 		                        
-		                        // reload our areas
-		                        _this.loadAreas();
+		                        // if we are not currently pending on an Area Add:
+		                        if (!_this.data.hasPendingAreaAdd) {
+			                        // reload our areas
+			                        _this.loadAreas();
+			                    }
 		                    });
 
 							// if we are told about a new Tool being created
@@ -164,14 +169,18 @@ steal(
 												values.weight = _this.data.listAreas.length;
 											}
 
+											_this.data.hasPendingAreaAdd = true;
 											area.attr(values);
 											area.save()
 											.fail(function(err){
+												_this.data.hasPendingAreaAdd = false;
 												busySave.ready();
 												AD.error.log('Error saving Area', {error:err});
 
 											})
 											.then(function(updatedArea){
+
+												_this.data.hasPendingAreaAdd = false;
 												// if (isAdd) {
 												// 	// _this.data.listAreas.push(area);
 												// 	area = new Model({label:'', icon:''});
@@ -180,6 +189,7 @@ steal(
 												// 	_this.initAreaPopups();
 												// 	_this.initSortArea();
 												// }
+												_this.loadAreas();
 												busySave.ready();
 												$icon.click();
 											})
@@ -307,10 +317,9 @@ steal(
 											var values = form.values();
 
 											// if this is an Add operation,
-											// make sure key and weight are also set.
+											// make sure weight is also set.
 											if (isAdd){
-											
-												values.weight = _this.data.listAreas.length;
+												values.weight = _this.selectedArea.tools.length;
 											}
 
 											if (typeof values.isDefault == 'undefined') {
@@ -328,7 +337,9 @@ steal(
 											.then(function(updatedTool){
 												if (isAdd) {
 													_this.data.listTools.push(tool);
-													area = new Model({label:'', icon:''});
+													var areaTools = _this.selectedArea.attr('tools');
+													areaTools.push(updatedTool);
+													// area = new Model({label:'', icon:''});
 													// pushing to the list automatically updated the DOM
 													// but we have to recreate the popups on the new elements:
 													_this.initToolPopups();
@@ -353,16 +364,12 @@ steal(
 						            		AD.error.log('Error destroying Tool', {error:err});
 						            	})
 						            	.then(function(){
-						            	
-//// LEFT OFF HERE:
-// Review:
-// - reorder Areas & auto update the display
-// - load with no entry in select, then add first entry dynamically + show the <i> 
-// 
+
 											var tools = _this.selectedArea.tools;
 											tools.replace(tools.filter(function(t) {
 											  return t.id !== tool.id;
 											}));
+											_this.selectedArea.attr('tools', tools);
 
 											_this.initToolPopups();
 											_this.initSortTools();
@@ -398,9 +405,6 @@ steal(
 							this.renderer = {}
 							this.renderer.popupArea = can.view.render(this.options.templateDOMAreaForm);
 							this.renderer.popupTool = can.view.render(this.options.templateDOMToolForm);
-//// LEFT OFF HERE:
-
-// OPConfigArea route should be protected by our opsportal.opnavedit.view permission.
 
 							var menuFooter = $(this.element.find('#op-menu-widget .op-widget-footer'));
 							menuFooter.prepend([
@@ -475,10 +479,7 @@ steal(
 											select.append($(option));
 										}
 									})
-									select.on('change', function(ev){
-
-//// LEFT OFF HERE:
-// limit opnavedit/tooldef route to permission!										
+									select.on('change', function(ev){								
 
 										busyToolAdd.busy();
 
@@ -502,6 +503,7 @@ steal(
 												// are 'fully' populated, so we do a manual load 
 												// again and update our list:
 
+
 												// get the new Tool Instances:
 												_this.loadTools()
 												.fail(function(err){
@@ -519,7 +521,6 @@ steal(
 															_this.data.hashTools[t.id] = t;
 														// }
 													})
-
 
 
 													// reset select list to add entry and 
@@ -766,6 +767,7 @@ steal(
 										if (l.translate) l.translate();
 									})
 									_this.data.listAreas = list;
+
 									dfd.resolve(list);
 								});
 
@@ -785,7 +787,6 @@ steal(
 								.then(function(list){
 									list.forEach(function(l){
 										if (l.translate) l.translate();
-
 										// and push them to our current listAreas
 										_this.data.listAreas.push(l);
 									})
