@@ -305,8 +305,21 @@ steal(
                             // io.socket.on('opsportal_navigation_stale', function(data){
 
                                 self.updateConfiguration();
-                            })
+                            });
 
+
+                            // 
+                            // Initialize Webix to send our .csrf token with it's AJAX requests
+                            // 
+                            AD.comm.csrf()
+                            .then(function(token){
+
+                                webix.attachEvent("onBeforeAjax", 
+                                    function(mode, url, data, request, headers, files, promise){
+                                        headers["X-CSRF-Token"] = token;
+                                    }
+                                );
+                            });
                         },
 
 
