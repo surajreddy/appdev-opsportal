@@ -31,42 +31,106 @@ module.exports = {
 	 */
     create:function(req, res) {
 
+
     	var params = [ 'appKey', 'permission', 'isWebix', 'imageParam' ];
-    	var options = {};
-    	params.forEach(function(p){
-    		options[p] = req.param(p) || '??';
-    	})
-console.log('... options:', options);
-
-    	var missingParams = [];
     	var requiredParams = [ 'appKey', 'permission'];
-    	requiredParams.forEach(function(r){
-    		if (options[r] == '??') {
-    			missingParams.push(r);
-    		}
-    	})
+    	var options = {};
 
-    	if (missingParams.length > 0) {
-console.log('... missingParams:', missingParams);
-    		var error = ADCore.error.fromKey('E_MISSINGPARAM');
-    		error.missingParams = missingParams;
-    		res.AD.error(error, 422);  // 422 for missing parameters ? (http://stackoverflow.com/questions/3050518/what-http-status-response-code-should-i-use-if-the-request-is-missing-a-required)
-    		return;
-    	}
 
-    	// get the parameter of our image
-    	// default : 'image'
-    	var paramImage = 'image';  // look for the file under 'image'
-		if (options.imageParam != '??') {
-			paramImage = options.imageParam
-		} 
-
-		var destPath = destinationPath(options.appKey);
+    	var tempPath = destinationPath('tmp');
+		var destPath = null; 
 		var fileEntry = null;
 		var fileRef  = null;
+		var fileName = null;
 		var uuid     = null;
 
 		async.series([
+
+			// make sure temp directory exists
+			function(next) {
+				fs.stat(tempPath, function(err, stat){
+					if (err && err.code === 'ENOENT') {
+
+						// create the directory!
+console.log('---making opimageupload TEMP path:'+tempPath);
+
+						fs.mkdir(tempPath, function(err){
+							if (err) err.code = 500;
+							next(err);
+						})
+
+					} else {
+
+						next();
+					}
+				})
+			},
+
+
+			// 1) finish downloading the file
+			function(next) {
+				req.file('image').upload({
+
+					// store the files in our TEMP path
+					dirname : tempPath,
+					maxBytes: sails.config.opsportal.opimageupload.maxBytes
+
+				}, function(err, list){
+
+					if (err) {
+						err.code = 500;
+						next(err);
+					} else {
+
+						fileEntry = list[0];    // info about file
+						fileRef = fileEntry.fd; // full path to file
+
+						next();
+console.log('... list:', list);
+console.log('... allParams(): ', req.allParams());
+
+					}
+				})
+			},
+
+
+			// ) read in the parameters
+			function(next) {
+
+		    	params.forEach(function(p){
+		    		options[p] = req.param(p) || '??';
+		    	})
+console.log('... options:', options);
+
+		    	var missingParams = [];
+		    	requiredParams.forEach(function(r){
+		    		if (options[r] == '??') {
+		    			missingParams.push(r);
+		    		}
+		    	})
+
+		    	if (missingParams.length > 0) {
+console.log('... missingParams:', missingParams);
+		    		var error = ADCore.error.fromKey('E_MISSINGPARAM');
+		    		error.missingParams = missingParams;
+		    		error.code = 422;
+		    		next(error)
+		    		return;
+		    	} 
+
+
+		    	destPath = destinationPath(options.appKey);
+		    	next();
+
+		    	// get the parameter of our image
+		    	// default : 'image'
+		  //   	var paramImage = 'image';  // look for the file under 'image'
+				// if (options.imageParam != '??') {
+				// 	paramImage = options.imageParam
+				// } 
+
+			},
+
 
 			// 1) make sure destination directory exists:
 			function(next) {
@@ -88,37 +152,21 @@ console.log('---making opimageupload path:'+destPath);
 				})
 			},
 
-			// 2) configure the download
+
+
+			// 3) get jimp to auto rotate file based upon EXIF info:
+			//    and also save it in our destination folder:
 			function(next) {
-				req.file(paramImage).upload({
 
-					// store the files in a directory under their appKey
-					dirname : destPath,
-					maxBytes: sails.config.opsportal.opimageupload.maxBytes
-
-				}, function(err, list){
-
-					if (err) {
-						err.code = 500;
-						next(err);
-					} else {
-
-						fileEntry = list[0];
-						fileRef = fileEntry.fd;
-
-						next();
-// console.log('... list:', list);
-
-					}
-				})
-			},
-
-			// 3) get jimp to auto rotate the file based upon EXIF info:
-			function(next) {
+				// fileRef:  the current file location
+				// destRef:  where we want it to be:
+				fileName = fileRef.split(path.sep).pop();
+				var destRef = path.join(destPath, fileName);
 
 				jimp.read(fileRef)
                 .then(function(image){
-                    image.write(fileRef, function(err){
+
+                    image.write(destRef, function(err){
 
                         if (err) {
                         	err.code = 500;
@@ -137,7 +185,7 @@ console.log('---making opimageupload path:'+destPath);
 			// 4) Save our OPImageUpload values:
 			function(next) {
 
-				var fileName = fileRef.split(path.sep).pop();
+				// uuid : the fileName without '.ext'
 				uuid = fileName.split('.')[0];
 
 				OPImageUpload.create({
@@ -241,7 +289,7 @@ console.log('opImage:', opImage);
 						next(err);
 						return;
 					}
-					
+
 					image = opImage[0];
 					next();
 				})
