@@ -18,6 +18,11 @@ module.exports = {
 
     // OPNavEdit routes:
     'post /opnavedit/newtool' : 'appdev-opsportal/OPNavEditController.newTool',
+
+
+    // OpsPortal Image Uploader
+    'get  /opsportal/image/:appKey/:uuid' : 'appdev-opsportal/OPImageUploadController.read',
+    'post /opsportal/image'  			  : 'appdev-opsportal/OPImageUploadController.create'
     
 
 };

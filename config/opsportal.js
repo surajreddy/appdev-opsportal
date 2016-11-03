@@ -5,6 +5,7 @@
  * for the portal.
  *
  */
+var path = require('path');
 
 module.exports.opsportal = {
 
@@ -36,148 +37,14 @@ module.exports.opsportal = {
     githubRepo: 'appdev-opsportal',
     // The GitHub repository owner.
     githubOwner: 'appdevdesigns'
-  },
+  }, 
+  
+
+  opimageupload: {
+
+    basePath: path.join('data', 'opimageupload'),
+    maxBytes: 10000000 
+  }
   
   
-  // The ops portal is broken down into specific "areas".  Each area shows up
-  // as a menu option on the Ops Portal [Menu] list.
-  areas: [
-/*
-      {
-          icon:'fa-user',   : one of the icons offered by the Font Awesome
-                              library (http://fontawesome.io/icons/).
-                              if not specified 'fa-beer' is the default.
-                              I suggest coming up with something more appropriate
-
-          key:'profile',    : a unique text key for this area. (does not have
-                              to be the same as the label)
-                              can be lowercase, uppercase, or a mix. Just make
-                              sure it is unique.
-
-          label:'Profile',  : the label that is displayed (will be translated)
-
-          isDefault: true,  : consider this the default area to display when
-                              portal is loaded.
-
-          tools:[           : which installed tools reside in this area
-
-              {
-                  controller:'[name]',  : which tool in /assets/opstools
-                                          this value == [directoryName]
-                                          so you should have a
-                                          /assets/opstools/[name]
-
-                  label:'text',         : The label displayed for this tool
-
-
-                  isDefault:true,       : consider this the default tool in an
-                                          area to display. (default : false)
-
-
-                  permissions:[         : define the actions required for a
-                                          user to be able to access this tool
-                                          each entry specifies a required permission.
-                                          However > 1 entry are optional groups.
-                                          For example, the following specifies
-                                          user must have 'hrisadmin.objects' OR ( 'opsleader AND hrleader)
-                      'hrisadmin.objects'
-                      , [ 'opsleader', 'hrleader']
-                  ]
-              }
-
-          ]
-      },
-
- */
-      ////
-      //// Administration Tools packaged with OpsPortal:
-      //// 
-      {
-          // Define the Administration Area
-          icon:'fa-cogs',
-          key:'PortalAdmin',
-          label:'opp.areaAdministration',
-          context:'opsportal',
-          tools:[{
-                  // Roles and Permissions
-                  controller:'RBAC',
-                  label:'opp.areaAdministration',
-                  context:'opsportal',
-                  isDefault: true,
-                  permissions:[
-                      'adcore.admin'
-                      , 'adcore.developer'
-                  ]
-              }
-
-              // User management Interface here...
-          ]
-      },
-
-
-      {
-          // User Profile Tool
-          icon:'fa-user',
-          key:'profile',
-          label:'Profile',
-          isDefault:false,
-          tools:[{
-                  // Hris User Profile Tool
-                  controller:'HrisUserProfile',
-                  label:'Profile',
-                  isDefault: true,
-                  permissions:[
-                      'hris.profile'
-                      , 'adcore.developer'
-                  ]
-              },
-              {
-                  // Hris Admin Objects
-                  controller:'HrisAdminObjects',
-                  label:'Configure Objects',
-                  isDefault: false,
-                  permissions:[
-                      'hrisadmin.objects'
-                      , 'adcore.developer'
-                  ]
-              }
-
-          ]
-      },
-/*      
-      {
-          // MPD Report Tool
-          icon:'fa-user',
-          key:'mpdreporttool',
-          label:'MPD Report Tool',
-          isDefault:true,
-          tools:[{
-              // Balance Report Tool
-              controller:'MPDReport',
-              label:'MPD Report Tool',
-              isDefault: true,
-              permissions:[
-                'mpdreports.balancereports',
-                'adcore.developer'
-              ]
-          }]
-      },
-      {
-          // GMA Matrix Tool
-          icon:'fa-cogs',
-          key:'opsleader',
-          label:'Ops Leader',
-          tools:[{
-              // GMA Matrix Entry tool
-              controller:'GMAMatrix',
-              label:'GMA Matrix',
-              isDefault: true,
-              permissions:[
-                  'gma.matrix'
-                  , 'adcore.developer'
-              ]
-          }]
-      },
-*/
-  ]
 };
