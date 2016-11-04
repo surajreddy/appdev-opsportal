@@ -86,8 +86,8 @@ console.log('---making opimageupload TEMP path:'+tempPath);
 						fileRef = fileEntry.fd; // full path to file
 
 						next();
-console.log('... list:', list);
-console.log('... allParams(): ', req.allParams());
+// console.log('... list:', list);
+// console.log('... allParams(): ', req.allParams());
 
 					}
 				})
@@ -100,7 +100,7 @@ console.log('... allParams(): ', req.allParams());
 		    	params.forEach(function(p){
 		    		options[p] = req.param(p) || '??';
 		    	})
-console.log('... options:', options);
+// console.log('... options:', options);
 
 		    	var missingParams = [];
 		    	requiredParams.forEach(function(r){
@@ -180,6 +180,14 @@ console.log('---making opimageupload path:'+destPath);
                 	err.code = 500;
                     next(err);
                 });
+			},
+
+			// remove our Temp file
+			function(next){
+				fs.unlink(fileRef, function(err){
+
+					next(err);
+				});
 			},
 
 			// 4) Save our OPImageUpload values:

@@ -38,11 +38,14 @@ module.exports.opsportal = {
     // The GitHub repository owner.
     githubOwner: 'appdevdesigns'
   }, 
-  
+
 
   opimageupload: {
 
+    // specified from the sails.config.appPath: [sails]/data/opimageupload
     basePath: path.join('data', 'opimageupload'),
+
+    // maximum allowed Bytes:
     maxBytes: 10000000 
   }
   
