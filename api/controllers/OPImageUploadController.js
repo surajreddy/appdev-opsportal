@@ -46,24 +46,41 @@ module.exports = {
 
 		async.series([
 
-			// make sure temp directory exists
 			function(next) {
-				fs.stat(tempPath, function(err, stat){
-					if (err && err.code === 'ENOENT') {
+				var basePath = sails.config.appPath;
+				var pathToCheck = path.join(sails.config.opsportal.opimageupload.basePath, 'tmp');
+				var pathParts = pathToCheck.split('/');
+
+				function checkPath (parts, base, cb) {
+					if (parts.length == 0) {
+						cb();
+					} else {
+						var part = parts.shift();
+						base = path.join(base, part);
+						fs.stat(base, function(err,stat) {
+
+							if (err && err.code === 'ENOENT') {
 
 						// create the directory!
-console.log('---making opimageupload TEMP path:'+tempPath);
+console.log('--- making opimageupload path:'+base);
 
-						fs.mkdir(tempPath, function(err){
-							if (err) err.code = 500;
-							next(err);
+								fs.mkdir(base, function(err){
+
+									if (err) cb(err) 
+									else checkPath(parts, base, cb);
+								})
+
+							} else {
+
+								checkPath(parts, base, cb);
+							}
+
 						})
-
-					} else {
-
-						next();
 					}
-				})
+				}
+				checkPath(pathParts, basePath, function(err) {
+					next(err);
+				});
 			},
 
 
