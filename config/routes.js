@@ -31,6 +31,8 @@ module.exports = {
     'get  /optheme' 		: 'appdev-opsportal/OPThemeController.list',
     'post /optheme' 		: 'appdev-opsportal/OPThemeController.create',
     'post /optheme/default' : 'appdev-opsportal/OPThemeController.default',
+    'post /optheme/delete'  : 'appdev-opsportal/OPThemeController.delete',
+    'post /optheme/edit'    : 'appdev-opsportal/OPThemeController.edit',
     'get  /optheme/theme'	: 'appdev-opsportal/OPThemeController.theme'
 
 };
