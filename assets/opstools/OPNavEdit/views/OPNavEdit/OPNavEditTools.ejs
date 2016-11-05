@@ -8,7 +8,7 @@
 <div id="op-navbar-edittools" class="col-lg-11 col-xs-9" style="display:none">
 
     <% can.each(areas, function(area, indx){ %>
-        <ul id="" class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none;">
+        <ul class="list-unstyled list-inline sortableMenu op-navbar-tool" area-tools="<%= area.attr('key') %>" <%= (el) -> can.data(el, 'area', area) %> style="display:none;">
             <% can.each(area.tools, function(simpleTool, indx){ %>
                 <% var tool = hashTools[simpleTool.id] %>
                 <% if (tool) { %>

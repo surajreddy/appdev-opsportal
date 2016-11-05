@@ -25,6 +25,7 @@
     "ad-utils": "appdevdesigns/ad-utils",
     "async": "^1.5.2",
     "github": "0.2.4",
+    "jimp": "^0.2.27",
     "lodash": "^4.13.1",
     "node-sass": "^3.8.0",
     "steal-tools": "^0.13.3"
