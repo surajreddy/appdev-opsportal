@@ -173,16 +173,3 @@ ul.op-navbar-tool {
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
 }
-
-#op-navbar-left .opnavedit-popup-input a {
-		display: block;
-		padding: 12px;
-		width: 14px;
-		color: #333333;
-		opacity: 1;
-		transition: none;
-}
-
-#op-navbar-left .opnavedit-popup-input i {
-		color: #333333;
-}
