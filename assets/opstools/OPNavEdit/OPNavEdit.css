@@ -174,20 +174,6 @@ ul.op-navbar-tool {
     transform: rotate(90deg);
 }
 
-/*a {
-	text-decoration: none;
-	opacity: 0.5;
-	-webkit-transition:opacity .3s ease-out;
-	-moz-transition:opacity .3s ease-out;
-	-o-transition:opacity .3s ease-out;
-	transition:opacity .3s ease-out;
-	border: 0;
-}
-a:hover, a:visited {
-	opacity: 1;
-	border: 0;
-}*/
-
 #op-navbar-left .opnavedit-popup-input a {
 		display: block;
 		padding: 12px;
