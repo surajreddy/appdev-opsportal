@@ -305,8 +305,10 @@ steal(
 
 						            var iconData = $cur_pop.find('[name="icon"]');
 						            iconData.change(function(ev){
-						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val())
-						            })
+						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val());
+						            });
+
+												iconData.iconpicker({ hideOnSelect: true });
 
 						            // process [save] click
 						            var buttonSave = $cur_pop.find('.op-nav-button-save');
