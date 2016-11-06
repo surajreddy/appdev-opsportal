@@ -37,7 +37,7 @@ steal(
 							this.data.listAreas = null;
 							this.data.listTools = null;
 							this.data.listToolDefs = null;
-							this.data.resize = null;	// our spacing calculations 
+							this.data.resize = null;	// our spacing calculations
 							this.data.hashTools = {};
 
 							this.data.hasPendingAreaAdd = false;
@@ -66,7 +66,7 @@ steal(
 
 
 							AD.comm.socket.subscribe('opsportal_navigation_editor_stale', function(message, data) {
-		                        
+
 		                        // if we are not currently pending on an Area Add:
 		                        if (!_this.data.hasPendingAreaAdd) {
 			                        // reload our areas
@@ -95,7 +95,7 @@ steal(
 
 
 							function createAreaPopup( options) {
-								
+
 								// get it's area model
 								var $icon = $(options.elIcon);
 								var Model = AD.Model.get('opsportal.navigation.OPConfigArea');
@@ -136,22 +136,24 @@ steal(
 						            form.addField('icon', 'string', { notEmpty:{} } );
 						            form.attach();
 
-						            
+
 
 						          	// process close / cancel clicks
 						            $cur_pop.find('.close').click(function(){
 						                $icon.click();
 						            });
-						          
+
 						            $cur_pop.find('.op-nav-button-cancel').click(function(){
 						               $icon.click();
 						            });
 
 						            var iconData = $cur_pop.find('[name="icon"]');
 						            iconData.change(function(ev){
-						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val())
-						            })
-						            
+						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val());
+						            });
+
+												iconData.iconpicker();
+
 						            // process [save] click
 						            var buttonSave = $cur_pop.find('.op-nav-button-save');
 						            var busySave = new AD.op.ButtonBusy(buttonSave);
@@ -209,7 +211,7 @@ steal(
 						            		AD.error.log('Error destroying Area', {error:err});
 						            	})
 						            	.then(function(){
-						            		
+
 						            		_this.initAreaPopups();
 											_this.initSortArea();
 						            		busyDelete.ready();
@@ -225,11 +227,11 @@ steal(
 
 							// for each area icon not already initialized.
 							this.dom.area.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
-								
+
 								createAreaPopup({
 									elIcon:icon
 								});
-								
+
 							});
 
 							// make sure the [+] Add button is initialized if it hasn't already been
@@ -239,7 +241,7 @@ steal(
 								})
 							})
 
-							
+
 						},
 
 
@@ -249,7 +251,7 @@ steal(
 
 
 							function createToolPopup( options) {
-								
+
 								// get it's area model
 								var $icon = $(options.elIcon);
 								var Model = AD.Model.get('opsportal.navigation.OPConfigTool');
@@ -290,13 +292,13 @@ steal(
 						            form.addField('icon', 'string', { notEmpty:{} } );
 						            form.attach();
 
-						            
+
 
 						          	// process close / cancel clicks
 						            $cur_pop.find('.close').click(function(){
 						                $icon.click();
 						            });
-						          
+
 						            $cur_pop.find('.op-nav-button-cancel').click(function(){
 						               $icon.click();
 						            });
@@ -305,7 +307,7 @@ steal(
 						            iconData.change(function(ev){
 						            	var $example = $cur_pop.find('.icon-example').removeClass().addClass('icon-example fa '+iconData.val())
 						            })
-						            
+
 						            // process [save] click
 						            var buttonSave = $cur_pop.find('.op-nav-button-save');
 						            var busySave = new AD.op.ButtonBusy(buttonSave);
@@ -386,13 +388,13 @@ steal(
 
 							// for each area icon not already initialized.
 							this.dom.tools.find('.op-navbar-item-edit:not([op-navbar-init])').each(function(indx, icon) {
-								
+
 								createToolPopup({
 									elIcon:icon
 								});
-								
+
 							});
-							
+
 						},
 
 
@@ -413,7 +415,7 @@ steal(
 '</div>'
 							].join('\n'));
 
-// 
+//
 							// Build the Editors:
 							var dfdAreas = this.loadAreas()
 							.fail(function(err){
@@ -425,7 +427,7 @@ steal(
 
 								// Load the Area Editing section
 								can.view(_this.options.templateDOMAreas, {areas:Areas}, function(frag){
-									
+
 									_this.element.find('.op-stage').append(frag);
 									_this.dom.area = _this.element.find('.op-navbar-lpanel');
 									_this.dom.area.hide(); // make sure it is hidden.
@@ -479,7 +481,7 @@ steal(
 											select.append($(option));
 										}
 									})
-									select.on('change', function(ev){								
+									select.on('change', function(ev){
 
 										busyToolAdd.busy();
 
@@ -500,7 +502,7 @@ steal(
 												// and the UI view will update.
 
 												// however we want to make sure our loaded Tools
-												// are 'fully' populated, so we do a manual load 
+												// are 'fully' populated, so we do a manual load
 												// again and update our list:
 
 
@@ -523,14 +525,14 @@ steal(
 													})
 
 
-													// reset select list to add entry and 
+													// reset select list to add entry and
 													// verify all current entries have a popup.
 													select.val('add.new.tool');
 													_this.initToolPopups();
 
-													
+
 												})
-												
+
 											})
 
 										}
@@ -553,7 +555,7 @@ steal(
 
 							this.dom.subLinks = this.element.find('#op-masthead-sublinks');
 
-							this.dom.stage = $(this.element.find('.op-stage')[0]);  
+							this.dom.stage = $(this.element.find('.op-stage')[0]);
 
 
 						},
@@ -572,7 +574,7 @@ steal(
                             AD.comm.hub.subscribe('opsportal.area.show', function (key, data) {
 
                             	// we just passively keep track of the last area.show event
-                            	// so we know which one to return to once we exit our 
+                            	// so we know which one to return to once we exit our
                             	// tool.
                             	if (data.area != 'opnavedit') {
 	                            	_this.events.lastArea = data;
@@ -597,7 +599,7 @@ steal(
 // 							this.dom.area.find( ".sortableMenu" ).sortable({
 // 								revert: true,
 // 								handle: '.sort-handle',
-// 								cursor: 'move', 
+// 								cursor: 'move',
 // 								axis: 'y',
 // 								start:function(ev, ui) {
 // 									// mark current position in list
@@ -658,7 +660,7 @@ steal(
 							$list.sortable({
 								revert: true,
 								handle: '.sort-handle',
-								cursor: 'move', 
+								cursor: 'move',
 								axis: axis,
 								start:function(ev, ui) {
 									// mark current position in list
@@ -710,7 +712,7 @@ steal(
 
 								}
 							});
-							
+
 						},
 
 
@@ -798,7 +800,7 @@ steal(
 								});
 
 							}
-							
+
 							return dfd;
 						},
 
@@ -927,7 +929,7 @@ steal(
 						 * What happens when the edit button is clicked.
 						 */
 						'.op-navbar-editbutton click': function($el, ev) {
-							
+
 							// hide all other areas
 							AD.comm.hub.publish('opsportal.area.show', { area: 'opnavedit' });
 
@@ -960,7 +962,7 @@ steal(
 							if (area) {
 
 								// remember the last selected area
-								this.selectedArea = area; 
+								this.selectedArea = area;
 
 								// hide all area-tools sections
 								this.element.find('[area-tools]').hide();
@@ -986,8 +988,8 @@ steal(
 							this.dom.stage.removeClass('op-css-nooverflow');
 							this.dom.stage.css('overflow-y', '');
 
-							this.dom.area.hide('slide', {direction: 'left'}, 400, function(){ 
-							
+							this.dom.area.hide('slide', {direction: 'left'}, 400, function(){
+
 								// repost last recorded area.show (if exists)
 								if (_this.events.lastArea) {
 									AD.comm.hub.publish('opsportal.area.show', _this.events.lastArea);
